@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title>로그인 :: DoCha Admin Web</title>
+
+    <script th:src="@{/js/encrypt/core.min.js}"></script>
+    <script th:src="@{/js/encrypt/sha256.min.js}"></script>
+</head>
+<body>
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <!-- Nested Row within Card Body -->
+            <div class="bg-login-image">
+            </div>
+            <div class="p-5">
+                <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                </div>
+                <form class="user">
+                    <div class="form-group">
+                        <label for="userId">ID</label>
+                        <input type="text" class="form-control form-control-user"
+                               id="userId" name="userId" placeholder="Id">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" class="form-control form-control-user"
+                               id="userPassword" name="userPassword" placeholder="Password">
+                    </div>
+                    <small class="m-3 text-center form-text text-muted">아이디, 비밀번호 분실 시 담당 영업사원에게 연락 부탁드립니다.</small>
+                    <button class="btn btn-primary btn-user btn-block" type="button" onclick="requestLogin()">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="main_footer::Footer"></div>
+<script th:inline="javascript">
+
+    $("form").keyup(function (e) {
+        if (e.keyCode === 13) {
+            requestLogin();
+        }
+    });
+
+    function requestLogin() {
+
+        var userId = $("input[name=userId]").val();
+        if (userId === '') {
+            alert("이메일을 입력 해 주세요");
+            userId.focus();
+            return;
+        }
+
+        var userPassword = $("input[name=userPassword]").val();
+        if (userPassword === '') {
+            alert("패스워드를 입력 해 주세요");
+            userPassword.focus();
+            return;
+        }
+
+        // userPassword = CryptoJS.SHA256(userPassword).toString();
+
+        $.ajax({
+            url: 'login',
+            dataType: "json",
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                userId: userId,
+                userPassword: userPassword
+            }),
+            processData: false,
+            success: function (res) {
+                var welcome = res.loginMemberSession.adminName + '님 반갑습니다!';
+                alert(welcome);
+                location.href = '/'
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    }
+</script>
+</body>
+</html>
