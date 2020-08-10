@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.CsdealAdminMatchingMapper">
+
+   
+    <select id="selectMatchingServiceInfoList" parameterType="matchingRequest" resultType="matchingResponse">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+				FROM ( 
+		    		SELECT 
+		     			*
+		     		FROM	
+		     			(
+							SELECT 
+			                       /* 참조키 			*/
+			                       IFNULL(T1.QU_IDX               , '' ) AS QU_IDX					 /* INDEX			*/
+			                ,      IFNULL(T1.RT_IDX               , '' ) AS RT_IDX                  /* 제휴사 IDX			*/
+			                    /*  참조키 END*/
+							,      IFNULL(T1.QUOTE_STATUS           , '' ) AS QUOTE_CODE            /* 견적구분코드		*/
+							,      GET_COMMON_CODE_VALUE('QT', T1.QUOTE_STATUS) AS QUOTE_STATUS  /* 견적상태			*/
+							,      IFNULL(T1.LONGTERM_YN          , '' ) AS LONGTERM_YN             /* 장단기구분			*/
+							,      IFNULL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       /* 검색 LIST			*/
+							,      IFNULL(T1.RENT_START_DAY       , '' ) AS RENT_START_DAY          /* 대여시작일			*/
+							,      IFNULL(T1.RENT_END_DAY         , '' ) AS RENT_END_DAY            /* 대여종료일			*/
+							,      IFNULL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+							,      IFNULL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+							,      CALC_PERIOD_DT(T1.RENT_START_DAY || T1.RENT_START_TIME, T1.RENT_END_DAY || T1.RENT_END_TIME) AS PERIOD_DT /* 사용기간 */
+							,      IFNULL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE      /* 배차방법			*/
+							,      GET_COMMON_CODE_VALUE('QT', T1.DELIVERY_TYPE_CODE) AS DELIVERY_TYPE_VALUE      /* 배차방법값			*/
+							,      IFNULL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           /* 배차주소			*/
+							,      IFNULL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        /* 반차방법			*/
+							,      IFNULL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             /* 반차주소			*/
+							,      IFNULL(T1.COMPANY_NAME         , '' ) AS COMPANY_NAME            /* 제휴사명			*/
+							,      IFNULL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       /* 운전자1 이름		*/
+							,      IFNULL(T1.UL_IDX1              , '' ) AS UL_IDX1                 /* 운전자1 IDX		*/
+							,      IFNULL(T1.SECOND_DRIVER_NAME   , '' ) AS SECOND_DRIVER_NAME      /* 운전자2 이름		*/
+							,      IFNULL(T1.UL_IDX2              , '' ) AS UL_IDX2                /* 운전자2 IDX		*/
+							,      IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                  /* 유저 IDX			*/
+							,      IFNULL(T1.REG_ID               , '' ) AS REG_ID                  /* 등록자아이디		*/
+							,      IFNULL(TO_CHAR(T1.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT    /* 등록일시             */
+							,      IFNULL(TO_CHAR(T9.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS COMPANY_REG_DT    /* 등록일시             */
+							,      IFNULL(T1.MOD_ID               , '' ) AS MOD_ID                  /* 수정자아이디		*/
+							,      IFNULL(T1.MOD_DT               , '' ) AS MOD_DT                  /* 수정일			*/
+							,      IFNULL(T1.DEL_YN               , '' ) AS DEL_YN                  /* 삭제여부 			*/
+							,      IFNULL(T2.USER_ID              , '' ) AS USER_ID                 /*  아이디			*/
+							,      IFNULL(T2.USER_NAME            , '' ) AS USER_NAME               /*  이름				*/
+							,      IFNULL(T2.USER_BIRTHDAY        , '' ) AS USER_BIRTHDAY           /*  생년월일			*/
+							,      IFNULL(T2.USER_GENDER          , '' ) AS USER_GENDER          	 /*  성별				*/
+							,	   IFNULL(T2.USER_CONTACT1        , '' ) AS USER_CONTACT1			 /* 연락처 1			*/
+							,	   IFNULL(T2.USER_CONTACT2        , '' ) AS USER_CONTACT2   	 	 /* 연락처 2			*/
+				            ,      IFNULL(CA.CARTYPE_LIST_VALUE   , '' ) AS CARTYPE_LIST_VALUE    	 /* 차량타입리스트값	*/
+			            	,      IFNULL(T10.QR_COUNT  		   , '0') AS QR_COUNT
+			            	,      IFNULL(T11.COMPANY_COUNT 	   , '0') AS COMPANY_COUNT
+			            	,      IFNULL(TRUNC(PA.PAY_AVG)       , '' ) AS PAY_AVG
+							FROM   CDT_QUOTE_USER T1
+							LEFT OUTER JOIN 
+							(
+								SELECT 
+								    A.QU_IDX
+								    , LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE
+								FROM   CDT_QUOTE_USER A
+								INNER JOIN CDT_COMMON_CODE B
+								    ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
+								    AND B.RT_CODE = 'CR'
+								    AND B.P_CODE ='CTY'
+								GROUP BY A.QU_IDX
+							) CA ON T1.QU_IDX = CA.QU_IDX
+							LEFT OUTER JOIN CDT_USER_INFO  T2
+								ON T1.UR_IDX = T2.UR_IDX
+							LEFT OUTER JOIN CDT_QUOTE_RENT_COMPANY T9
+								ON T1.QR_IDX = T9.QR_IDX
+							LEFT OUTER JOIN (
+		                    		SELECT QU_IDX 
+		                    		,      COUNT(QR_IDX) AS QR_COUNT
+		                    		FROM   CDT_QUOTE_RENT_COMPANY 
+		                    		WHERE IFNULL(DEL_YN, 'N') = 'N'
+		                    		group by QU_IDX )  T10 ON T1.QU_IDX = T10.QU_IDX
+							LEFT OUTER JOIN (
+		                    		SELECT DISTINCT
+		                    			   QU_IDX 
+		                    		,      COUNT(DISTINCT RT_IDX) AS COMPANY_COUNT
+		                    		FROM   CDT_QUOTE_RENT_COMPANY 
+		                    		WHERE IFNULL(DEL_YN, 'N') = 'N'
+		                    		group by QU_IDX )  T11 ON T1.QU_IDX = T11.QU_IDX
+							LEFT OUTER JOIN (
+		                    		SELECT DISTINCT
+		                    			   QU_IDX 
+		                    		,      AVG(replace(PAYMENT_AMOUNT, ',', '')) AS PAY_AVG
+		                    		FROM   CDT_QUOTE_RENT_COMPANY 
+		                    		GROUP BY QU_IDX )  PA ON T1.QU_IDX = PA.QU_IDX
+						) T1
+		]]>
+						WHERE 1=1
+						<if test="gbnInput != null and gbnInput != ''">
+						   	<choose>
+						   		<when test =" gbnInput == 'SEQ' and searchKeyWord != null and searchKeyWord != '' " >
+						   			AND T1.QU_IDX LIKE '%' || #{searchKeyWord} || '%'
+						   		</when>
+						   		<when test =" gbnInput == 'NM' and searchKeyWord != null and searchKeyWord != ''  " >
+						   			AND T1.USER_NAME LIKE '%' || #{searchKeyWord} || '%'
+						   		</when>
+						   		<when test =" gbnInput == 'CT' and searchKeyWord != null and searchKeyWord != ''  " >
+						   			AND T1.USER_CONTACT1 LIKE '%' || #{searchKeyWord} || '%'  
+						   		</when>
+						   		<otherwise>
+						   		</otherwise>
+						   	</choose>
+						</if>	
+						<if test=" gbnCarType != null and gbnCarType != '' " >
+							AND T1.CARTYPE_CODE_LIST LIKE '%' || #{gbnCarType} || '%'
+						</if>
+						ORDER BY T1.REG_DT DESC
+	  				) A 
+	  			) 
+				<![CDATA[	WHERE ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+    </select>
+    
+	<!-- 회원 매칭 상세 -->   
+	<select id="selectMatchingServiceInfo" parameterType="matchingDetailRequest" resultType="matchingDetailResponse">
+		<![CDATA[
+		SELECT 
+		B.USER_ID AS QUOTE_USER_ID /* 회원 아이디 */
+		, IFNULL(A.USER_NAME, B.USER_NAME) AS QUOTE_USER_NAME /* 이름 */
+		, B.USER_GENDER AS QUOTE_USER_GENDER /* 성별 */
+		, IFNULL(B.USER_CONTACT1, '') AS QUOTE_USER_CONTACT /* 전화번호 */
+		, IFNULL(B.USER_BIRTHDAY, '') AS QUOTE_USER_BIRTHDAY /* 생년월일 */
+		, TO_CHAR(A.REG_DT, 'YYYY-MM-DD HH24:MI') AS QUOTE_START_DATE /* 신청일시 */
+		, TO_CHAR(TO_DATE(A.RENT_START_DAY||A.RENT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS QUOTE_END_DATE /* 마감일시 */
+		, TO_CHAR(TO_DATE(A.RENT_START_DAY||A.RENT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS RENT_START_DATE /* 대여일시 */
+		, TO_CHAR(TO_DATE(A.RENT_END_DAY||A.RENT_END_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS RENT_END_DATE /* 반납일시 */
+		, CALC_PERIOD_DT(A.RENT_START_DAY || A.RENT_START_TIME, A.RENT_END_DAY || A.RENT_END_TIME) AS PERIOD_DT /* 사용기간 */
+		, A.QU_IDX /* 매칭 순번 */
+		, IFNULL(A.DELIVERY_ADDR, '') AS DELIVERY_ADDR /* 대여위치 */
+		, IFNULL(A.RETURN_ADDR, A.DELIVERY_ADDR) AS RETURN_ADDR /* 반납위치 */
+		, IFNULL(CA.CARTYPE_LIST_VALUE, '') AS CARTYPE_LIST_VALUE /* 차종명 리스트 */
+		, IFNULL(A.LONGTERM_YN, '') AS LONGTERM_YN /* 장단기구분 */
+		FROM CDT_QUOTE_USER A INNER JOIN CDT_USER_INFO B ON A.UR_IDX = B.UR_IDX
+							LEFT OUTER JOIN 
+							(
+								SELECT 
+								    X.QU_IDX
+								    , LISTAGG(Y.CODE_VALUE, ',') WITHIN GROUP(ORDER BY Y.CODE_VALUE) AS CARTYPE_LIST_VALUE
+								FROM   CDT_QUOTE_USER X
+								INNER JOIN CDT_COMMON_CODE Y
+								    ON ( '|' || X.CARTYPE_CODE_LIST || '|' LIKE '%' || Y.CODE || '%' )
+								    AND Y.RT_CODE = 'CR'
+								    AND Y.P_CODE ='CTY'
+								GROUP BY X.QU_IDX
+							) CA ON A.QU_IDX = CA.QU_IDX
+		WHERE A.QU_IDX = #{quIdx}
+		]]>
+	
+	</select>
+
+	<!-- 회원사 매칭 상세 -->   
+	<select id="selectMatchingCompanyServiceInfo" parameterType="matchingCompanyRequest" resultType="matchingCompanyResponse">
+		<![CDATA[
+		SELECT 
+		A.QR_IDX /* 회원사견적번호 */
+		,A.QU_IDX /* 회원견적번호 */
+		,B.COMPANY_NAME || CASE WHEN IFNULL(B.BRANCH_NAME, ' ') = ' ' THEN '' ELSE B.BRANCH_NAME END COMPANY_NAME /*회원사(지점)*/
+		,IFNULL(C.STAFF_NAME, '') AS STAFF_NAME /* 관리자명 */
+		,IFNULL(C.STAFF_CONTACT1, B.COMPANY_CONTACT1) AS STAFF_CONTACT1 /* 관리자 전화번호 */
+		,IFNULL(D.MODEL_NAME, '') || REPLACE(IFNULL(D.MODEL_DETAIL_NAME, ''), IFNULL(D.MODEL_NAME, '')) || '(' || IFNULL(D.CAR_NUMBER, '') || ')' AS CAR_NUMBER /* 모델(차량번호) */
+		,GET_COMMON_CODE_VALUE('QT', IFNULL(D.FUEL_CODE, '')) AS FUEL_NAME /* 연료 */
+--		,IFNULL(D.FUEL_CODE, '') AS FUEL_CODE /* 연료 */
+		,IFNULL(D.CAR_REG_DT, TO_CHAR(D.REG_DT, 'YYYY-MM')) AS CAR_REG_DT /* 출고연식 */
+		,IFNULL(D.COLOR_NAME, '') AS COLOR_NAME /* 색상 */
+		,IFNULL(D.MILEAGE, '0') AS MILEAGE /* 누적 KM */
+		,IFNULL(D.PERSONAL_COVER, '' ) AS    PERSONAL_COVER        /*대인보상금액*/
+		,IFNULL(D.PROPERTY_DAMAGE_COVER, '' ) AS    PROPERTY_DAMAGE_COVER /*대물보상금액*/
+		,IFNULL(D.ONSELF_DAMAGE_COVER , '' ) AS    ONSELF_DAMAGE_COVER   /*자손보상금액*/
+		,A.INSURANCE_FEE /* 보험금 */
+		--,D.INSURANCE_COPAYMENT
+		,D.CAR_DAMAGE_COVER /* 면책금 */
+		,A.RENT_FEE /* 대여금 */
+		,'0' AS DELIVERY_STANDARD_PAY /* 배달료 */
+		,A.PAYMENT_AMOUNT
+		,CAROPTION_LIST_VALUE
+		,TO_CHAR(IFNULL(A.REG_DT, ''), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT /* 입찰일시 */
+		,TO_CHAR(TO_DATE(E.RENT_START_DAY||E.RENT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS RENT_START_DATE /* 대여일시 */
+		FROM CDT_QUOTE_RENT_COMPANY A INNER JOIN CDT_RENT_COMPANY B ON A.RT_IDX = B.RT_IDX
+		                              LEFT JOIN CDT_RENT_COMPANY_STAFF C ON A.RT_IDX = C.RT_IDX AND OWNER_YN = 'Y'
+		                              INNER JOIN CDT_CAR_INFO D ON A.CR_IDX = D.CR_IDX
+		                              INNER JOIN CDT_QUOTE_USER E ON A.QU_IDX = E.QU_IDX
+									LEFT OUTER JOIN 
+									(
+										SELECT 
+										    X.CR_IDX
+										    , LISTAGG(Y.CODE_VALUE, ',') WITHIN GROUP(ORDER BY Y.CODE_VALUE) AS CAROPTION_LIST_VALUE
+										FROM CDT_CAR_INFO_OPTION X
+										INNER JOIN CDT_COMMON_CODE Y
+										    ON ( '|' || X.OPTION_DETAIL_CODE || '|' LIKE '%' || Y.CODE || '%' )
+										    AND Y.RT_CODE = 'CR'
+										GROUP BY X.CR_IDX
+									) CA ON A.CR_IDX = CA.CR_IDX
+		WHERE A.QU_IDX = #{quIdx}
+		AND IFNULL(A.DEL_YN, 'N') = 'N'
+		ORDER BY A.REG_DT DESC
+		]]>
+	
+	</select>
+
+   <update id="updateMatchingCompanyServiceInfo" parameterType="matchingCompanyRequest">
+   		UPDATE CDT_QUOTE_RENT_COMPANY
+   		SET    MOD_DT = SYSDATE
+   		<if test =" modId != null and modId != '' ">
+   			,      MOD_ID = #{modId}
+   		</if>
+     	<if test =" delYn != null and delYn != '' ">
+   			,      DEL_YN = #{delYn}
+   		</if> 
+   		WHERE  QR_IDX = #{qrIdx}
+
+   </update>
+
+   <insert id="insertMatchingCompanyServiceInfo" parameterType="matchingCompanyRequest">
+	<![CDATA[ 
+		INSERT INTO CDT_QUOTE_RENT_COMPANY (
+		QR_IDX
+		,QU_IDX
+		,CR_IDX
+		,QUOTE_STATUS
+		,RENT_FEE
+		,INSURANCE_FEE
+		,PAYMENT_AMOUNT
+		,UR_IDX
+		,USER_NAME
+		,RT_IDX
+		,DEL_YN
+		,CAR_DEPOSIT
+		,DAILY_FEE
+		,MONTHLY_FEE
+		,REG_ID
+		,REG_DT
+		 )
+		VALUES(
+		 #{qrIdx}
+		, #{quIdx}
+		, #{crIdx}
+		, 'QC'
+		, #{rentFee}
+		, #{insuranceFee}
+		, #{paymentAmount}
+		, #{urIdx}
+		, #{userName}
+		, #{rtIdx}
+		, 'N'
+		, #{longTermFee}
+		, #{deliveryStandardPay}
+		, #{monthlyStandardPay}
+		, #{regId} 
+		, SYSDATE
+		)
+	]]>
+   </insert>
+
+</mapper>
+
+    
+  
+    
+    
+    

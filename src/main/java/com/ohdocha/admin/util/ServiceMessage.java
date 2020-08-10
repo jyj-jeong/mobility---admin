@@ -1,7 +1,5 @@
 package com.ohdocha.admin.util;
 
-import com.ohdocha.admin.domain.AdminInfoDto;
-
 public class ServiceMessage extends DataMessage {
 
     @Override
@@ -10,10 +8,10 @@ public class ServiceMessage extends DataMessage {
         return this;
     }
 
-    public ServiceMessage setLoginMember(AdminInfoDto member) {
-        addData("loginMemberSession", member);
-        return this;
-    }
+//    public ServiceMessage setLoginMember(AdminInfoDto member) {
+//        addData("loginMemberSession", member);
+//        return this;
+//    }
 
     public ServiceMessage setResult(Object object) {
         put("result", object);
@@ -24,8 +22,8 @@ public class ServiceMessage extends DataMessage {
         return get("result");
     }
 
-    public AdminInfoDto getLoginMember() {
-        return getObject("loginMemberSession", AdminInfoDto.class);
-    }
+//    public AdminInfoDto getLoginMember() {
+//        return getObject("loginMemberSession", AdminInfoDto.class);
+//    }
 
 }

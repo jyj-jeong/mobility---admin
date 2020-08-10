@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.CsdealAdminPaymentInfoMapper">
+
+<!--  
+    <select id="selectPaymentInfoList" parameterType="paymentInfoRequest" resultType="paymentInfoResponse">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+				FROM ( 
+	    		SELECT 
+	     			*
+	     		FROM	
+	     			( 
+										SELECT 
+	                       /* 참조키 			*/
+	                       IFNULL(T1.QU_IDX               , '' ) AS QU_IDX					 /* INDEX			*/
+					,      IFNULL(T6.RM_IDX               , '' ) AS RM_IDX                 /* CDT_RESERVE_MASTER의 IDX*/
+					,      IFNULL(T3.QR_IDX               , '' ) AS QR_IDX
+	                ,      IFNULL(T6.RT_IDX               , '' ) AS RT_IDX                  /* 제휴사 IDX			*/
+	                ,      IFNULL(T6.CR_IDX               , '' ) AS CR_IDX                  /* CAR IDX   		*/
+	                ,      IFNULL(T4.PY_IDX               , '' ) AS PY_IDX                  /* 요금idx    		*/
+	                    /*  참조키 END*/
+					,      IFNULL(T1.QUOTE_STATUS           , '' ) AS QUOTE_CODE            /* 견적구분코드		*/
+					,      IFNULL(T8.CODE_VALUE           , '' ) AS QUOTE_STATUS            /* 견적상태			*/
+					,      IFNULL(T1.LONGTERM_YN          , '' ) AS LONGTERM_YN             /* 장단기구분			*/
+					,      IFNULL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       /* 검색 LIST			*/
+					,      IFNULL(T1.RENT_START_DAY       , '' ) AS RENT_START_DAY          /* 대여시작일			*/
+					,      IFNULL(T1.RENT_END_DAY         , '' ) AS RENT_END_DAY            /* 대여종료일			*/
+					,      IFNULL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+					,      IFNULL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+					,      IFNULL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE      /* 배차방법			*/
+					,      IFNULL(CODE.CODE_VALUE   , '' )		 AS DELIVERY_TYPE_VALUE      /* 배차방법값			*/
+					,      IFNULL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           /* 배차주소			*/
+					,      IFNULL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        /* 반차방법			*/
+					,      IFNULL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             /* 반차주소			*/
+					,      IFNULL(T6.COMPANY_NAME         , '' ) AS COMPANY_NAME            /* 제휴사명			*/
+					,      IFNULL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       /* 운전자1 이름		*/
+					,      IFNULL(T1.UL_IDX1              , '' ) AS UL_IDX1                 /* 운전자1 IDX		*/
+					,      IFNULL(T1.SECOND_DRIVER_NAME   , '' ) AS SECOND_DRIVER_NAME      /* 운전자2 이름		*/
+					,      IFNULL(T1.UL_IDX2              , '' ) AS UL_IDX2                /* 운전자2 IDX		*/
+					,      IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                  /* 유저 IDX			*/
+					,      IFNULL(T1.REG_ID               , '' ) AS REG_ID                  /* 등록자아이디		*/
+					,      IFNULL(TO_CHAR(T6.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT    /* 등록일시             */
+					,      IFNULL(T1.MOD_ID               , '' ) AS MOD_ID                  /* 수정자아이디		*/
+					,      IFNULL(T1.MOD_DT               , '' ) AS MOD_DT                  /* 수정일			*/
+					,      IFNULL(T1.DEL_YN               , '' ) AS DEL_YN                  /* 삭제여부 			*/
+					,      IFNULL(T2.USER_ID              , '' ) AS USER_ID                 /*  아이디			*/
+					,      IFNULL(T2.USER_NAME            , '' ) AS USER_NAME               /*  이름				*/
+					,      IFNULL(T2.USER_BIRTHDAY        , '' ) AS USER_BIRTHDAY           /*  생년월일			*/
+					,      IFNULL(T2.USER_GENDER          , '' ) AS USER_GENDER          	 /*  성별				*/
+					,	   IFNULL(T2.USER_CONTACT1        , '' ) AS USER_CONTACT1			 /* 연락처 1			*/
+					,	   IFNULL(T2.USER_CONTACT2        , '' ) AS USER_CONTACT2   	 	 /* 연락처 2			*/
+		            ,      IFNULL(T3.RENT_FEE             , '0' ) AS RENT_FEE				 /* 대여료			*/
+		            ,      IFNULL(T3.PAYMENT_AMOUNT       , '0' ) AS PAYMENT_AMOUNT          /* 결제금액			*/
+				    ,      IFNULL(T4.MD_IDX               , '' ) AS MD_IDX                  /* 모델상세idx 		*/
+				    ,      IFNULL(T4.MODEL_NAME           , '' ) AS MODEL_NAME              /* 모델명      			*/
+				    ,      IFNULL(T4.MODEL_DETAIL_NAME    , '' ) AS MODEL_DETAIL_NAME       /* 모델상세명 			*/
+				    ,      IFNULL(T4.FUEL_CODE            , '' ) AS FUEL_CODE               /* 연료구분 			*/
+				    ,      IFNULL(T4.TRANSMISSION_CODE    , '' ) AS TRANSMISSION_CODE       /* 변속기구분code 	*/
+				    ,      IFNULL(T4.DRIVE_TYPE_CODE      , '' ) AS DRIVE_TYPE_CODE         /* 구동방식구분code   	*/
+				    ,      IFNULL(T4.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            /* 차종code      	*/
+				    ,      IFNULL(T4.DRIVE_LICENSE_CODE   , '' ) AS DRIVE_LICENSE_CODE      /* 면허구분code   	*/
+				    ,      IFNULL(T4.MANUFACTURER_CODE    , '' ) AS MANUFACTURER_CODE       /* 제조사code    	*/
+				    ,      IFNULL(T4.COLOR_NAME           , '' ) AS COLOR_NAME              /* 색상code    		*/
+				    ,      IFNULL(GET_COMMON_CODE_VALUE('CR',T4.FUEL_CODE) , '' )  AS FUEL_NAME   /* 연료구분명         	*/
+				    ,      IFNULL(T4.DISPLACEMENT         , '' ) AS DISPLACEMENT            /* 배기량          		*/
+				    ,      IFNULL(T4.YEAR                 , '' ) AS YEAR                    /* 연식           		*/
+				    ,      IFNULL(T4.MILEAGE              , '' ) AS MILEAGE                 /* 주행거리     		*/
+				    ,      IFNULL(T4.MAXIMUM_PASSENGER    , '' ) AS MAXIMUM_PASSENGER       /* 승차인원     		*/
+				    ,      IFNULL(T4.DAILY_STANDARD_PAY        , '0' ) AS DAILY_STANDARD_PAY           /* 단기요금      		*/
+				    ,      IFNULL(T4.MONTHLY_STANDARD_PAY         , '0' ) AS MONTHLY_STANDARD_PAY            /* 장기요금     		*/
+				    /*,      IFNULL(T4.LONGTERM_DEPOSIT     , '0' ) AS LONGTERM_DEPOSIT  */      /* 장기대여보증금   		*/
+				    ,      IFNULL(T4.CAR_STATUS_CODE      , '' ) AS CAR_STATUS_CODE         /* 차량상태code 		*/
+				    ,      IFNULL(T4.RESERVE_ABLE_YN      , '' ) AS RESERVE_ABLE_YN         /* 차량예약가능여부code */
+				    ,      IFNULL(T4.CAR_REG_DT           , '' ) AS CAR_REG_DT              /* 차량등록일  		*/
+				    ,      IFNULL(T4.CAR_NUMBER           , '' ) AS CAR_NUMBER              /* 차량번호   			*/
+				    ,      IFNULL(T4.CAR_CHASSIS_NUMBER   , '' ) AS CAR_CHASSIS_NUMBER      /* 차대번호  			*/
+				    ,      IFNULL(T4.IMG_IDX              , '' ) AS IMG_IDX                 /* 이미지idx   		*/
+				    ,      IFNULL(T4.CAR_DRIVE_LIMIT      , '' ) AS CAR_DRIVE_LIMIT         /* 주행거리제한  		*/
+				    ,      IFNULL(T4.AGE_LIMIT            , '' ) AS AGE_LIMIT               /* 대여연령제한   		*/
+				    ,      IFNULL(T4.GARAGE_ADDR          , '' ) AS GARAGE_ADDR             /* 차고지주소    		*/
+				    ,      IFNULL(T4.CAR_ETC              , '' ) AS CAR_ETC                 /* 비고      			*/
+				    ,      IFNULL(GET_COMMON_CODE_VALUE('CR',T4.MANUFACTURER_CODE) , '' )  AS MANUFACTURER_NAME   /* 제조사명         	*/
+		            ,      IFNULL(T5.INSURANCE_FEE        , '0' ) AS INSURANCE_FEE           /* 보험테이블 보험요금*/
+		            ,      IFNULL(T5.CAR_DAMAGE_COVER     , '0' ) AS CAR_DAMAGE_COVER        /* 자차보상금액*/
+		            ,      IFNULL(T5.ONSELF_DAMAGE_COVER  , '0' ) AS ONSELF_DAMAGE_COVER     /* 자손보상금액*/
+		            ,      IFNULL(T5.PERSONAL_COVER       , '0' ) AS PERSONAL_COVER          /* 대인보상금액*/
+		            ,      IFNULL(T5.PROPERTY_DAMAGE_COVER, '0' ) AS PROPERTY_DAMAGE_COVER   /* 대물보상금액*/
+		            ,      IFNULL(T5.DRIVE_CAREER_LIMIT   , '' ) AS DRIVE_CAREER_LIMIT      /* 운전경력제한*/
+		            ,      IFNULL(T5.INSURANCE_COPAYMENT  , '0' ) AS INSURANCE_COPAYMENT     /* 본인부담금  */
+		            ,      IFNULL(CA.CARTYPE_LIST_VALUE   , '' ) AS CARTYPE_LIST_VALUE    	 /* 차량타입리스트값	*/
+		            ,      IFNULL(T3.CAR_DEPOSIT          , '0') AS CAR_DEPOSIT			  /* 장기대여보증금 */
+		            ,  	   IFNULL(T7.APPROVAL_NUMBER  , '' ) AS APPROVAL_NUMBER     /* 승인번호  */
+		         	,      IFNULL(T3.MONTHLY_FEE         , 0 ) AS MONTHLY_FEE
+	            	,      IFNULL(T3.DAILY_FEE         , 0 ) AS DAILY_FEE
+					FROM   CDT_QUOTE_USER T1
+					LEFT OUTER JOIN 
+					(
+						SELECT 
+							    A.QU_IDX
+							    , LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE
+						FROM   CDT_QUOTE_USER A
+						INNER JOIN CDT_COMMON_CODE B
+							     ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
+							    AND B.RT_CODE = 'CR'
+							    AND B.P_CODE ='CTY'
+						GROUP BY A.QU_IDX
+							) CA   /*END LEFT OUTER JOIN*/
+							ON T1.QU_IDX = CA.QU_IDX
+						LEFT OUTER JOIN CDT_COMMON_CODE CODE
+									 ON T1.DELIVERY_TYPE_CODE = CODE.CODE
+									AND CODE.RT_CODE ='QT' 		
+						LEFT OUTER JOIN CDT_USER_INFO  T2
+									 ON T1.UR_IDX = T2.UR_IDX
+	                    LEFT OUTER JOIN CDT_RESERVE_MASTER T6 
+	                    			 ON T1.QU_IDX = T6.QU_IDX 
+	                    LEFT OUTER JOIN CDT_QUOTE_RENT_COMPANY T3 
+	                    			 ON T3.QU_IDX = T6.QU_IDX 
+	                    			AND T3.QUOTE_STATUS IN('QC')
+						LEFT OUTER JOIN CDT_CAR_INFO T4
+									 ON T6.CR_IDX = T4.CR_IDX
+			            LEFT OUTER JOIN CDT_CAR_INFO_INSURANCE T5
+			            			 ON T4.CR_IDX = T5.CR_IDX
+		            
+	                LEFT OUTER JOIN     
+						 (
+							SELECT * FROM (	
+								SELECT 
+									* 
+								FROM CDT_PAYMENT_DETAIL
+						
+								ORDER BY PAYMENT_DATE DESC
+							) WHERE ROWNUM = 1 
+						 ) T7  /*END T7 LEFT OUTER JOIN*/
+	                    ON T6.RM_IDX = T7.RM_IDX  
+	                    AND   T1.QUOTE_STATUS NOT IN('QB')
+	                LEFT OUTER JOIN CDT_COMMON_CODE  T8
+						ON T1.QUOTE_STATUS = T8.CODE
+						AND T8.RT_CODE ='QT'
+					) T1
+					WHERE T1.RM_IDX IS NOT NULL 
+		 ]]>
+	
+					<if test=" userRole.equals('CA') and rtIdx != null and rtIdx != '' ">
+						AND T1.RT_IDX = #{rtIdx}
+					</if>
+					<if test="gbnInput != null and gbnInput != ''">
+					   	<choose>
+					   		<when test =" gbnInput == 'CT' and searchKeyWord != null and searchKeyWord != '' " >
+					   			AND T1.USER_CONTACT1 LIKE '%' || #{searchKeyWord} || '%'
+					   		</when>
+					   		<when test =" gbnInput == 'NM' and searchKeyWord != null and searchKeyWord != ''  " >
+					   			AND T1.USER_NAME LIKE '%' || #{searchKeyWord} || '%'
+					   		</when>
+					   		<when test =" gbnInput == 'CN' and searchKeyWord != null and searchKeyWord != ''  " >
+					   			AND T1.CAR_NUMBER LIKE '%' || #{searchKeyWord} || '%'  
+					   		</when>
+					   		<otherwise>
+					   		</otherwise>
+					   	</choose>
+					</if>	
+  				)   			
+  			A ) 
+		<![CDATA[	WHERE ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+
+    </select>
+
+-->    
+    
+    <select id="selectPaymentInfoList" parameterType="paymentInfoRequest" resultType="paymentInfoResponse">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+				FROM ( 
+	    		SELECT 
+	     			*
+	     		FROM	
+	     			(  
+	     			SELECT
+	     			       IFNULL(M.RM_IDX           		, '' ) AS RM_IDX           		  /* 예약 MASTER KEY */
+					,      IFNULL(M.RESERVE_USER_NAME      , '' ) AS RESERVE_USER_NAME       /* 예약자명			*/
+					,      IFNULL(IFNULL(UI.USER_NAME, M.RESERVE_USER_NAME) , '' ) AS USER_NAME /* 예약한 USER명		*/
+					,      IFNULL(UI.USER_CONTACT1			, '' ) AS USER_CONTACT1 		  /* 예약 USER 연락처	*/
+					,      IFNULL(M.RENT_START_DAY      	, '' ) AS RENT_START_DAY          /* 대여시작일		*/
+					,      IFNULL(M.RENT_END_DAY         	, '' ) AS RENT_END_DAY            /* 대여종료일		*/
+					,      IFNULL(M.RENT_START_TIME      	, '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+					,      IFNULL(M.RENT_END_TIME        	, '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+					,      IFNULL(CD1.CODE_VALUE   		, '' ) AS FUEL_NAME			      /* 연료타입값		*/
+					,      IFNULL(RC.COMPANY_NAME    		, '' ) AS COMPANY_NAME      	  /* 회원사명			*/
+					,      IFNULL(CI.MODEL_NAME            , '' ) AS MODEL_NAME              /* 차량모델명		*/
+					,      IFNULL(CI.CAR_NUMBER           	, '' ) AS CAR_NUMBER              /* 차량번호 			*/
+					,      IFNULL(M.RENT_FEE              	, '' ) AS RENT_FEE                /* 차량RENT금액		*/
+					,      IFNULL(M.PAYMENT_TOTAL_AMOUNT   , '' ) AS PAYMENT_TOTAL_AMOUNT    /* 차량예약총금액		*/
+					,      IFNULL(M.SUM_PAYMENT_AMOUNT    	, '' ) AS SUM_PAYMENT_AMOUNT      /* 총결제금액		*/
+					,      IFNULL(M.MONTHLY_FEE    		, '' ) AS MONTHLY_FEE             /* 월대여가격		*/
+					,      IFNULL(M.PAY_COUNT    			, '' ) AS PAY_COUNT               /* 납부횟수			*/
+					,      IFNULL(TO_CHAR(M.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT /* 등록일시(예약일)   */
+					,      IFNULL(TO_CHAR(M.LAST_PAY_DATE , 'YYYYMMDD')  	, ' ' ) AS LAST_PAY_DATE /* 마지막 결제일    */
+					,      IFNULL(M.BALANCE    			, '' ) AS BALANCE	              /* 잔여금액		*/
+					, 	   IFNULL(M.NEXT_PAYMENT_DAY 	    , '' ) AS NEXT_PAYMENT_DAY 		  /* 마지막 결제일  	 	*/
+				    FROM (
+				        SELECT 
+				            RM.RM_IDX
+				            , RM.REG_DT
+				            , RM.UR_IDX
+				            , RM.RT_IDX 
+				            , RM.CR_IDX
+				            , RM.RESERVE_USER_NAME
+				            , RM.RENT_START_DAY
+				            , RM.RENT_START_TIME
+				            , RM.RENT_END_DAY
+				            , RM.RENT_END_TIME
+				            , RM.RENT_FEE
+				            , RM.PAYMENT_TOTAL_AMOUNT
+				            , T2.SUM_PAYMENT_AMOUNT
+				            , T2.MONTHLY_FEE
+				            , T2.PAY_COUNT
+				            , T2.LAST_PAY_DATE
+				            , RM.PAYMENT_TOTAL_AMOUNT - T2.SUM_PAYMENT_AMOUNT AS BALANCE 
+				            , TO_CHAR(ADD_MONTHS(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYY-MM-DD') AS NEXT_PAYMENT_DAY
+				        FROM (
+					       	SELECT 
+					       		* 
+					       	FROM CDT_RESERVE_MASTER 
+					       	WHERE LONGTERM_YN = 'LT'
+				        ) RM
+				        INNER JOIN ( 
+				            SELECT
+				                PD.*
+				            FROM(
+				                SELECT 
+				                    RM_IDX
+				                    , PAYMENT_AMOUNT AS MONTHLY_FEE
+				                    , COUNT(RM_IDX) OVER (PARTITION BY RM_IDX) AS PAY_COUNT
+				                    , SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
+				                    , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
+				                    , MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
+				                FROM CDT_PAYMENT_DETAIL A
+				                WHERE A.PAYMENT_KIND_CODE = 'RT'
+				            ) PD
+				            WHERE PD.PAYMENT_ORDER = 1
+				        ) T2
+				        ON RM.RM_IDX = T2.RM_IDX
+				    ) M
+				    LEFT OUTER JOIN CDT_USER_INFO UI
+				        ON M.UR_IDX = UI.UR_IDX
+				    LEFT OUTER JOIN CDT_RENT_COMPANY RC
+				        ON M.RT_IDX = RC.RT_IDX
+				    LEFT OUTER JOIN CDT_CAR_INFO CI
+				        ON M.CR_IDX = CI.CR_IDX
+				    LEFT OUTER JOIN CDT_COMMON_CODE CD1
+				        ON CI.FUEL_CODE = CD1.CODE
+					) T1
+					WHERE T1.BALANCE > 0
+		 ]]>
+	
+					<if test=" 'CA'.equals(userRole) and rtIdx != null and rtIdx != '' ">
+						AND T1.RT_IDX = #{rtIdx}
+					</if>
+					<if test="gbnInput != null and gbnInput != ''">
+					   	<choose>
+					   		<when test =" gbnInput == 'CT' and searchKeyWord != null and searchKeyWord != '' " >
+					   			AND T1.USER_CONTACT1 LIKE '%' || #{searchKeyWord} || '%'
+					   		</when>
+					   		<when test =" gbnInput == 'NM' and searchKeyWord != null and searchKeyWord != ''  " >
+					   			AND T1.USER_NAME LIKE '%' || #{searchKeyWord} || '%'
+					   		</when>
+					   		<when test =" gbnInput == 'CM' and searchKeyWord != null and searchKeyWord != ''  " >
+					   			AND T1.COMPANY_NAME LIKE '%' || #{searchKeyWord} || '%'  
+					   		</when>
+					   		<when test =" gbnInput == 'CN' and searchKeyWord != null and searchKeyWord != ''  " >
+					   			AND T1.CAR_NUMBER LIKE '%' || #{searchKeyWord} || '%'  
+					   		</when>
+					   		<otherwise>
+					   		</otherwise>
+					   	</choose>
+					</if>	
+  				)   			
+  			A ) 
+		<![CDATA[	WHERE ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+
+    </select>
+    
+	<select id="selectPeriodPaymentInfo" parameterType="paymentInfoRequest" resultType="paymentInfoResponse">
+		<![CDATA[
+			
+			SELECT 
+					   IFNULL(RM.RM_IDX           		, '' ) AS RM_IDX           		  /* 예약 MASTER KEY */
+				,      IFNULL(RM.RENT_START_DAY      	, '' ) AS RENT_START_DAY          /* 대여시작일		*/
+				,      IFNULL(RM.RENT_END_DAY         	, '' ) AS RENT_END_DAY            /* 대여종료일		*/
+				,      IFNULL(RM.RENT_START_TIME      	, '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+				,      IFNULL(RM.RENT_END_TIME        	, '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+				,      IFNULL(RM.RENT_FEE              , '' ) AS RENT_FEE                /* 차량RENT금액		*/
+				,      IFNULL(RM.PAYMENT_TOTAL_AMOUNT  , '' ) AS PAYMENT_TOTAL_AMOUNT    /* 차량예약총금액		*/
+				,      IFNULL(T2.SUM_PAYMENT_AMOUNT   	, '' ) AS SUM_PAYMENT_AMOUNT      /* 총결제금액		*/
+				,      IFNULL(T2.MONTHLY_FEE    		, '' ) AS MONTHLY_FEE             /* 월대여가격		*/
+				,      IFNULL(T2.PAY_COUNT    			, '' ) AS PAY_COUNT               /* 납부횟수			*/
+				,      IFNULL(TO_CHAR(RM.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT /* 등록일시(예약일)   */
+				,      IFNULL(RM.PAYMENT_TOTAL_AMOUNT - T2.SUM_PAYMENT_AMOUNT, 0) AS BALANCE	              /* 잔여금액		*/
+				, 	   TO_CHAR(ADD_MONTHS(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYYMMDD') AS NEXT_PAYMENT_DAY		  /* 마지막 결제일  	 	*/
+			FROM (
+				SELECT 
+					* 
+				FROM CDT_RESERVE_MASTER 
+				WHERE RM_IDX = #{rmIdx}
+				AND LONGTERM_YN = 'LT'
+			) RM
+			INNER JOIN ( 
+				SELECT
+					PD.*
+				FROM(
+					SELECT 
+						RM_IDX
+						, PAYMENT_AMOUNT AS MONTHLY_FEE
+						, COUNT(RM_IDX) OVER (PARTITION BY RM_IDX) AS PAY_COUNT
+						, SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
+						, ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
+						, MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
+					FROM CDT_PAYMENT_DETAIL A
+					WHERE A.RM_IDX = #{rmIdx}
+					AND A.PAYMENT_KIND_CODE = 'RT'
+		    	) PD
+            	WHERE PD.PAYMENT_ORDER = 1
+        	) T2
+			ON RM.RM_IDX = T2.RM_IDX
+	]]>
+	
+		
+
+    </select>
+	
+	<!-- START  INS CDT_PAYMENT_DETAIL-->
+    <insert id="insertPaymentDetail" parameterType="paymentInfoRequest">
+	    	INSERT INTO CDT_PAYMENT_DETAIL(
+				PD_IDX
+				, RM_IDX
+				, UR_IDX
+				, PG_CODE
+				, PAYMENT_TYPE_CODE
+				, PAYMENT_KIND_CODE
+				, PAYMENT_AMOUNT
+				, APPROVAL_NUMBER
+				, PAYMENT_DATE
+				, ETC    
+	    	)VALUES (
+	    		#{pdIdx}
+	    		, #{rmIdx}
+	    		, #{urIdx}
+	    		, #{pgCode}
+             	, #{paymentTypeCode}
+             	, #{paymentKindCode}
+             	, #{paymentAmount}
+             	, #{approvalNumber}
+             	, #{paymentDate}
+             	, #{etc}
+			)
+	</insert>
+	<!-- END  INS CDT_PAYMENT_DETAIL-->
+   
+</mapper>
+
+    
+  
+    
+    
+    

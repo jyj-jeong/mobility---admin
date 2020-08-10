@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohdocha.admin.mapper.CsdealAdminBasicPlanMapper">
+
+	<!-- 기본요금제 List  -->
+	<select id="selectBasicPlan"  parameterType="basicPlanRequest" 
+      			   				  	 resultType="basicPlanResponse">
+      	<![CDATA[
+		SELECT * FROM (
+			SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+			FROM ( 
+     				SELECT
+     						T1.PY_IDX 													/* 기본요금순번 */
+      					,	IFNULL(T1.RT_IDX				, '') AS RT_IDX 				/* 회원사순번 */
+      					,	IFNULL(T2.COMPANY_NAME			, '') AS COMPANY_NAME 			/* 회원사명 */
+      					,	IFNULL(T2.BRANCH_NAME			, '') AS BRANCH_NAME 			/* 지점명 */
+      					,	IFNULL(T1.PY_ETC				, '') AS PY_ETC 				/* 제목(비고) */
+      					,	IFNULL(T1.DAILY_STANDARD_PAY	, '0') AS DAILY_STANDARD_PAY 	/* 일기본요금 */
+      					,	IFNULL(T1.MONTHLY_STANDARD_PAY	, '0') AS MONTHLY_STANDARD_PAY 	/* 월기본요금 */
+      					,	(SELECT COUNT(CR_IDX) FROM CDT_CAR_INFO WHERE PY_IDX = T1.PY_IDX) AS SETTING_CAR_CNT /* 설정차량대수 */
+      				FROM CDT_PAYMENT_INFO T1
+      				INNER JOIN CDT_RENT_COMPANY T2 
+      					    ON T1.RT_IDX = T2.RT_IDX 
+			) A
+         ]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+				1=1 
+        </trim>
+     	<if test="rtIdx != null  and rtIdx != '' ">
+	    	AND <![CDATA[    A.RT_IDX = #{rtIdx} ]]>
+		</if>
+		<if test="searchType != null and searchType != '' ">
+		    <choose>
+		    	<when test =' searchType == "companyName" ' >
+		    		AND <![CDATA[ A.COMPANY_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+		    	</when>
+		    	<when test =' searchType == "branchName" ' >
+		    		AND <![CDATA[ A.BRANCH_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+		    	</when>
+		    	<when test =' searchType == "pyIdx" ' >
+		    		AND <![CDATA[ A.PY_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+		    	</when>
+		    	<when test =' searchType == "pyEtc" ' >
+		    		AND <![CDATA[ A.PY_ETC  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+		    	</when>
+		    	<otherwise>
+		    	</otherwise>
+		    </choose>   
+		</if>
+        <![CDATA[	) X ]]> 
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+       	</trim>						  		
+	</select>
+	
+	<select id="selectBasicPlanDetail"  parameterType="basicPlanDetailRequest" 
+      			   				  	 resultType="basicPlanDetailResponse">
+      	<![CDATA[
+    				SELECT
+    						T1.PY_IDX 													/* 기본요금순번 */
+     					,	IFNULL(T1.RT_IDX				, '') AS RT_IDX 				/* 회원사순번 */
+     					,	IFNULL(T2.COMPANY_NAME			, '') AS COMPANY_NAME 			/* 회원사명 */
+     					,	IFNULL(T2.BRANCH_NAME			, '') AS BRANCH_NAME 			/* 지점명 */
+     					,	IFNULL(T1.PY_ETC				, '') AS PY_ETC 				/* 제목(비고) */
+     					,	IFNULL(T1.DAILY_STANDARD_PAY	, '0') AS DAILY_STANDARD_PAY 	/* 일기본요금 */
+     					,	IFNULL(T1.MONTHLY_STANDARD_PAY, '0') AS MONTHLY_STANDARD_PAY 	/* 월기본요금 */
+						,	IFNULL(T1.PY_IDX                , '') AS PY_IDX                /*요금idx*/
+						,	IFNULL(T1.RT_IDX                , '') AS RT_IDX                /*회원사idx*/
+						,	IFNULL(T1.MD_IDX                , '') AS MD_IDX                /*모델상세idx*/
+						,	IFNULL(T1.DAILY_STANDARD_PAY    , '') AS DAILY_STANDARD_PAY    /*일기본요금*/
+						,	IFNULL(T1.MONTHLY_STANDARD_PAY  , '') AS MONTHLY_STANDARD_PAY  /*월기본요금*/
+						,	IFNULL(T1.DAILY_MAX_RATE        , '') AS DAILY_MAX_RATE        /*일대여최대할인율*/
+						,	IFNULL(T1.MONTHLY_MAX_RATE      , '') AS MONTHLY_MAX_RATE      /*월대여최대할인율*/
+						,	IFNULL(T1.MONTH3_DEPOSIT        , '') AS MONTH3_DEPOSIT        /*3개월보증금*/
+						,	IFNULL(T1.MONTH6_DEPOSIT        , '') AS MONTH6_DEPOSIT        /*6개월보증금*/
+						,	IFNULL(T1.MONTH9_DEPOSIT        , '') AS MONTH9_DEPOSIT        /*9개월보증금*/
+						,	IFNULL(T1.MONTH12_DEPOSIT       , '') AS MONTH12_DEPOSIT       /*12개월보증금*/
+						,	IFNULL(T1.DELIVERY_STANDARD_PAY , '') AS DELIVERY_STANDARD_PAY /*배달기본요금*/
+						,	IFNULL(T1.DELIVERY_ADD_PAY      , '') AS DELIVERY_ADD_PAY      /*배달10KM단위추가요금*/
+						,	IFNULL(T1.DELIVERY_MAX_RATE     , '') AS DELIVERY_MAX_RATE     /*배달최대할인율*/
+						,	IFNULL(T1.PY_ETC     			 , '') AS PY_ETC     			/*비고(제목)*/
+     					,	(SELECT COUNT(CR_IDX) FROM CDT_CAR_INFO WHERE PY_IDX = T1.PY_IDX) AS SETTING_CAR_CNT /* 설정차량대수 */
+     				FROM CDT_PAYMENT_INFO T1
+     				INNER JOIN CDT_RENT_COMPANY T2 
+     					    ON T1.RT_IDX = T2.RT_IDX 
+         ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         		<if test="rtIdx != null  and rtIdx != '' ">
+			      <![CDATA[ T1.RT_IDX = #{rtIdx} ]]>
+				</if>
+         		<if test="pyIdx != null  and pyIdx != '' ">
+			      AND <![CDATA[ T1.PY_IDX = #{pyIdx} ]]>
+				</if>
+       	</trim>						  		
+	</select>
+
+    <update  id="updateBasicPlanInfo" parameterType="basicPlanDetailRequest">
+    	<![CDATA[ UPDATE CDT_PAYMENT_INFO ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="dailyStandardPay		!= null"><![CDATA[    DAILY_STANDARD_PAY	= #{dailyStandardPay}  		]]></if>	<!-- 일 기본요금 -->
+			<if test="dailyMaxRate			!= null"><![CDATA[  , DAILY_MAX_RATE		= #{dailyMaxRate}  			]]></if>	<!-- 일대여 최대 할인율 -->
+			<if test="monthlyStandardPay	!= null"><![CDATA[  , MONTHLY_STANDARD_PAY	= #{monthlyStandardPay}  	]]></if>	<!-- 월 기본 요금 -->
+			<if test="monthlyMaxRate 		!= null"><![CDATA[  , MONTHLY_MAX_RATE		= #{monthlyMaxRate}  		]]></if>	<!-- 월대여 최대 할인율 -->
+			<if test="month3Deposit 		!= null"><![CDATA[  , MONTH3_DEPOSIT		= #{month3Deposit}  		]]></if>	<!-- 3개월 보증금 -->
+			<if test="month6Deposit 		!= null"><![CDATA[  , MONTH6_DEPOSIT		= #{month6Deposit}  		]]></if>	<!-- 6개월 보증금 -->
+ 			<if test="month9Deposit 		!= null"><![CDATA[  , MONTH9_DEPOSIT		= #{month9Deposit}  		]]></if>	<!-- 9개월 보증금 -->
+ 			<if test="month12Deposit 		!= null"><![CDATA[  , MONTH12_DEPOSIT		= #{month12Deposit} 		]]></if>	<!-- 12개월 보증금 -->
+ 			<if test="pyEtc					!= null"><![CDATA[  , PY_ETC 				= #{pyEtc}  				]]></if> 	<!-- 제목 -->		
+ 			<if test="deliveryStandardPay	!= null"><![CDATA[  , DELIVERY_STANDARD_PAY = #{deliveryStandardPay}  	]]></if> 	<!-- 배달기본요금 -->		
+ 			<if test="deliveryAddPay		!= null"><![CDATA[  , DELIVERY_ADD_PAY 		= #{deliveryAddPay}  		]]></if> 	<!-- 배달10KM단위추가요금 -->		
+ 			<if test="deliveryMaxRate		!= null"><![CDATA[  , DELIVERY_MAX_RATE 	= #{deliveryMaxRate}  		]]></if> 	<!-- 배달최대할인율 -->		
+ 			<if test="modId					!= null"><![CDATA[  , MOD_ID 				= #{modId}  				]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="pyIdx != null and pyIdx != ''">
+	     		<![CDATA[ PY_IDX = #{pyIdx} ]]>
+	        </if>
+		</trim>		
+    </update>
+
+    <!-- 사용자 면허정보 INSERT -->
+    <insert  id="insertBasicPlanInfo" parameterType="basicPlanDetailRequest">			
+	<![CDATA[ 
+	     INSERT INTO CDT_PAYMENT_INFO ( 
+	     	   RT_IDX
+			,  PY_ETC
+			,  DAILY_STANDARD_PAY
+			,  DAILY_MAX_RATE
+			,  MONTHLY_STANDARD_PAY
+			,  MONTHLY_MAX_RATE
+			,  MONTH3_DEPOSIT
+			,  MONTH6_DEPOSIT
+			,  MONTH9_DEPOSIT
+			,  MONTH12_DEPOSIT
+			,  DELIVERY_STANDARD_PAY
+			,  DELIVERY_ADD_PAY
+			,  DELIVERY_MAX_RATE
+			,  REG_ID
+			,  REG_DT
+		) VALUES (
+				#{rtIdx}
+			,	#{pyEtc}              
+			,  	#{dailyStandardPay}    
+			,  	#{dailyMaxRate}
+			,  	#{monthlyStandardPay}
+			,  	#{monthlyMaxRate}
+			,  	#{month3Deposit}
+			,  	#{month6Deposit} 
+			,  	#{month9Deposit}
+			,  	#{month12Deposit}			
+			,  	#{deliveryStandardPay}			
+			,  	#{deliveryAddPay}			
+			,  	#{deliveryMaxRate}			
+			,  	#{regId}
+			,	SYSDATE			
+		)
+	]]>
+    </insert>
+	
+</mapper>

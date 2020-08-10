@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohdocha.admin.mapper.CsdealAdminCarModelMapper">
+
+	<!-- 차량모델  -->
+	<select id="selectCarModelInfo"  parameterType="carModelRequest" 
+      			   				  	 resultType="carModelResponse">
+      	<![CDATA[
+-- 		SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.*
+-- 			FROM (
+					SELECT     			  
+							   IFNULL(T1.MD_IDX              , '') AS MD_IDX                                        		/*모델idx*/
+							,  IFNULL(T1.MODEL_NAME          , '') AS MODEL_NAME                                    		/*모델명*/
+							,  IFNULL(T1.MODEL_DETAIL_NAME   , '') AS MODEL_DETAIL_NAME                             		/*모델상세명*/
+							,  IFNULL(T1.MANUFACTURER_CODE   , '') AS MANUFACTURER_CODE                             		/*제조사code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('CR', T1.MANUFACTURER_CODE) , '' ) AS MANUFACTURER_NAME 		/*제조사명*/
+							,  IFNULL(T1.COUNTRY_CODE        , '') AS COUNTRY_CODE                                  		/*국가code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('CN',T1.COUNTRY_CODE) , '' ) AS CONTURY_NAME            		/*국가명*/
+							,  IFNULL(T1.IMPORT_CODE         , '') AS IMPORT_CODE                                   		/*국내 해외구분*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('IM',T1.IMPORT_CODE) , '' ) AS IMPORT_NAME              		/*국내 해외 명*/
+							,  IFNULL(T1.CARTYPE_CODE        , '') AS CARTYPE_CODE                                  		/*차종 코드*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('CTY',T1.CARTYPE_CODE) , '' ) AS CARTYPE_NAME           		/*차종명*/
+							,  IFNULL(T1.FUEL_CODE           , '') AS FUEL_CODE                                     		/*연료code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('FL', T1.FUEL_CODE)    , '') AS FUEL_NAME               		/*연료명*/
+							,  IFNULL(T1.TRANSMISSION_CODE   , '') AS TRANSMISSION_CODE                             		/*변속기구분code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('TM', T1.TRANSMISSION_CODE)    , '') AS TRANSMISSION_NAME     /*변속기명*/
+							,  IFNULL(T1.DRIVE_TYPE_CODE     , '') AS DRIVE_TYPE_CODE                               		/*구동방식구분code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('TM', T1.DRIVE_TYPE_CODE)     , '') AS DRIVE_TYPE_NAME  		/*구동방식구분명*/
+							,  IFNULL(T1.DRIVE_LICENSE_CODE  , '') AS DRIVE_LICENSE_CODE                            		/*면허구분code*/
+-- 							,  IFNULL(GET_COMMON_CODE_VALUE('DL', T1.DRIVE_LICENSE_CODE)     , '') AS DRIVE_LICENSE_NAME  /*면허구분 이름*/
+							,  IFNULL(T1.MAXIMUM_PASSENGER   , '') AS MAXIMUM_PASSENGER                             		/*승차인원*/
+							,  IFNULL(T1.DISPLACEMENT        , '') AS DISPLACEMENT                                  		/*배기량*/
+							,  IFNULL(T1.YEAR                , '') AS YEAR                                          		/*연식*/
+							,  IFNULL(T1.COLOR_NAME          , '') AS COLOR_NAME                                    		/*색상*/
+							,  IFNULL(T1.PY_IDX              , '') AS PY_IDX                                        		/*요금IDX*/
+							,  IFNULL(T1.REG_ID              , '') AS REG_ID                                        		/*등록자*/
+							,  IFNULL(T1.REG_DT              , '') AS REG_DT                                        		/*등록일시*/
+							,  IFNULL(T1.MOD_ID              , '') AS MOD_ID                                        		/*수정자*/
+							,  IFNULL(T1.MOD_DT              , '') AS MOD_DT                                        		/*수정일시*/
+							,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                        		/*삭제여부*/
+							,  IFNULL(T1.IMG_IDX				, '') AS IMG_IDX						              		/*이미지IDX*/
+					FROM CDT_CAR_MODEL T1
+					WHERE 1=1
+			]]>  	
+			<if test="searchType != null and searchType != '' ">
+			    <choose>
+			    	<when test =' searchType == "mdIdx" ' >
+			    		
+			    		AND <![CDATA[ T1.MD_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    	</when>
+			    	<when test =' searchType == "country" ' >
+			    		<![CDATA[ AND  IFNULL(GET_COMMON_CODE_VALUE('CN',T1.COUNTRY_CODE) , '' )  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    	</when>
+			    	<when test =' searchType == "manufacturer" ' >
+			    		<![CDATA[ AND IFNULL(GET_COMMON_CODE_VALUE('CR', T1.MANUFACTURER_CODE) , '' ) LIKE '%'	||  #{searchKeyWord} || '%'  ]]>
+			    	</when>
+			    	<when test =' searchType == "year" ' >
+			    		<![CDATA[ AND T1.YEAR  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    	</when>
+					<when test =' searchType == "modelName" ' >
+						<![CDATA[ AND T1.MODEL_NAME LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    	</when>
+					<when test =' searchType == "modelDetailName" ' >
+						<![CDATA[ AND T1.MODEL_DETAIL_NAME LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    	</when>					    				    	
+			    	<otherwise>
+			    	</otherwise>
+			    </choose>   
+			</if>
+<!--			<![CDATA[ 	) A )  ]]>-->
+<!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
+<!--         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>-->
+<!--       	</trim>						  		-->
+	</select>    
+	
+	
+	<!-- 차량모델 Detail -->
+	<select id="selectCarModelDetail"  parameterType="carModelDetailRequest" 
+      			   				  	 resultType="CarModelDetailResponse">
+      	<![CDATA[
+					SELECT     
+							 IFNULL(T1.MD_IDX              , '') AS MD_IDX                                        		/*모델idx*/
+						 ,  IFNULL(T1.MODEL_NAME          , '') AS MODEL_NAME                                    		/*모델명*/
+						 ,  IFNULL(T1.MODEL_DETAIL_NAME   , '') AS MODEL_DETAIL_NAME                             		/*모델상세명*/
+						 ,  IFNULL(T1.MANUFACTURER_CODE   , '') AS MANUFACTURER_CODE                             		/*제조사code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('CR', T1.MANUFACTURER_CODE) , '' ) AS MANUFACTURER_NAME 		/*제조사명*/  
+						 ,  IFNULL(T1.COUNTRY_CODE        , '') AS COUNTRY_CODE                                  		/*국가code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('CN',T1.COUNTRY_CODE) , '' ) AS CONTURY_NAME            		/*국가명*/
+						 ,  IFNULL(T1.IMPORT_CODE         , '') AS IMPORT_CODE                                   		/*국내 해외구분*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('IM',T1.IMPORT_CODE) , '' ) AS IMPORT_NAME              		/*국내 해외 명*/
+						 ,  IFNULL(T1.CARTYPE_CODE        , '') AS CARTYPE_CODE                                  		/*차종 코드*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('CTY',T1.CARTYPE_CODE) , '' ) AS CARTYPE_NAME           		/*차종명*/  
+						 ,  IFNULL(T1.FUEL_CODE           , '') AS FUEL_CODE                                     		/*연료code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('FL', T1.FUEL_CODE)    , '') AS FUEL_NAME               		/*연료명*/
+						 ,  IFNULL(T1.TRANSMISSION_CODE   , '') AS TRANSMISSION_CODE                             		/*변속기구분code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('TM', T1.TRANSMISSION_CODE)    , '') AS TRANSMISSION_NAME     /*변속기명*/
+						 ,  IFNULL(T1.DRIVE_TYPE_CODE     , '') AS DRIVE_TYPE_CODE                               		/*구동방식구분code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('TM', T1.DRIVE_TYPE_CODE)     , '') AS DRIVE_TYPE_NAME  		/*구동방식구분명*/
+						 ,  IFNULL(T1.DRIVE_LICENSE_CODE  , '') AS DRIVE_LICENSE_CODE                            		/*면허구분code*/
+						 ,  IFNULL(GET_COMMON_CODE_VALUE('DL', T1.DRIVE_LICENSE_CODE)     , '') AS DRIVE_LICENSE_NAME  /*면허구분 이름*/						 
+						 ,  IFNULL(T1.MAXIMUM_PASSENGER   , '') AS MAXIMUM_PASSENGER                             		/*승차인원*/
+						 ,  IFNULL(T1.DISPLACEMENT        , '') AS DISPLACEMENT                                  		/*배기량*/
+						 ,  IFNULL(T1.YEAR                , '') AS YEAR                                          		/*연식*/
+						 ,  IFNULL(T1.COLOR_NAME          , '') AS COLOR_NAME                                    		/*색상*/
+						 ,  IFNULL(T1.PY_IDX              , '') AS PY_IDX                                        		/*요금IDX*/
+						 ,  IFNULL(T1.REG_ID              , '') AS REG_ID                                        		/*등록자*/
+						 ,  IFNULL(T1.REG_DT              , '') AS REG_DT                                        		/*등록일시*/
+						 ,  IFNULL(T1.MOD_ID              , '') AS MOD_ID                                        		/*수정자*/
+						 ,  IFNULL(T1.MOD_DT              , '') AS MOD_DT                                        		/*수정일시*/
+						 ,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                        		/*삭제여부*/
+						 ,  IFNULL(T1.IMG_IDX				, '') AS IMG_IDX                                                     /* 이미지 등록 여부 */
+						  FROM 
+						  		CDT_CAR_MODEL T1
+         ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<if test="mdIdx != null and mdIdx != '' ">
+				<![CDATA[	      T1.MD_IDX = #{mdIdx}	]]>
+			</if>
+         	<if test="manufacturerCode != null and manufacturerCode != '' ">
+				<![CDATA[   ,      T1.MANUFACTURER_CODE = #{manufacturerCode}]]>
+			</if>			
+       	</trim>						  		
+	</select>
+	
+	<!-- 차량모델 select box 용 -->
+	<select id="selectCarModelForSelectBox"  parameterType="carModelDetailRequest" 
+      			   				  	 resultType="CarModelDetailResponse">
+      	<![CDATA[
+					SELECT     
+							DISTINCT
+						  	IFNULL(T1.MODEL_NAME          , '') AS MODEL_NAME /*모델명*/
+					FROM 
+							CDT_CAR_MODEL T1
+         ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<if test="modelName != null and modelName != '' ">
+				<![CDATA[	T1.MODEL_NAME = #{modelName}	]]>
+			</if>
+         	<if test="manufacturerCode != null and manufacturerCode != '' ">
+				<![CDATA[   ,      T1.MANUFACTURER_CODE = #{manufacturerCode}]]>
+			</if>
+			<![CDATA[ AND T1.MODEL_NAME IS NOT NULL ]]>
+       	</trim>						  		
+	</select>
+	
+	<!-- 차량모델 Detail -->
+	<select id="selectCarModelDetailForSelectBox"  parameterType="carModelDetailRequest" 
+      			   				  	 resultType="CarModelDetailResponse">
+      	<![CDATA[
+					SELECT     
+							T1.MD_IDX AS MD_IDX
+						  	,IFNULL(T1.MODEL_DETAIL_NAME , '') AS MODEL_DETAIL_NAME /*모델상세*/
+						  	--, MODEL_DETAIL_NAME
+						  	, TRANSMISSION_CODE
+						  	, DRIVE_TYPE_CODE
+						  	, CARTYPE_CODE
+						  	, DRIVE_LICENSE_CODE
+						  	, MANUFACTURER_CODE
+						  	, DISPLACEMENT
+						  	, MAXIMUM_PASSENGER, FUEL_CODE
+					FROM 
+							CDT_CAR_MODEL T1
+         ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<if test="modelName != null and modelName != '' ">
+				<![CDATA[	T1.MODEL_NAME = #{modelName}	]]>
+			</if>
+       	 </trim>						  		
+
+	</select>
+
+	<!-- 차량정보 UPDATE -->
+    <update  id="updateCarModelInfo" parameterType="carModelDetailRequest">
+    	<![CDATA[ UPDATE CDT_CAR_MODEL ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<!-- 차량 기본정보 -->
+			<if test="modelName 		!= null"><![CDATA[   MODEL_NAME			= #{modelName}  		]]></if>	<!-- 차종명 -->
+ 			<if test="modelDetailName	!= null"><![CDATA[  , MODEL_DETAIL_NAME		= #{modelDetailName}  	]]></if>	<!-- 차종상세명 -->
+ 			<if test="manufacturerCode	!= null"><![CDATA[  , MANUFACTURER_CODE 	= #{manufacturerCode}  	]]></if> 	<!-- 제조사code -->		
+ 			<if test="countryCode		!= null"><![CDATA[  , COUNTRY_CODE 			= #{countryCode}  		]]></if> 	<!-- 제조국가code -->
+ 			<if test="importCode		!= null"><![CDATA[  , IMPORT_CODE 			= #{importCode}  		]]></if> 	<!-- 국내/해외구분code -->		
+ 			<if test="cartypeCode		!= null"><![CDATA[  , CARTYPE_CODE 			= #{cartypeCode}  		]]></if> 	<!-- 차등급code -->		
+ 			<if test="fuelCode			!= null"><![CDATA[  , FUEL_CODE 			= #{fuelCode}  			]]></if> 	<!-- 연료code -->		
+ 			<if test="transmissionCode	!= null"><![CDATA[  , TRANSMISSION_CODE 	= #{transmissionCode}  	]]></if> 	<!-- 변속기구분code -->		
+ 			<if test="driveTypeCode		!= null"><![CDATA[  , DRIVE_TYPE_CODE 		= #{driveTypeCode}  	]]></if> 	<!-- 구동방식구분code -->		
+ 			<if test="driveLicenseCode	!= null"><![CDATA[  , DRIVE_LICENSE_CODE 	= #{driveLicenseCode}  	]]></if> 	<!-- 면허구분code -->		
+ 			<if test="displacement		!= null"><![CDATA[  , DISPLACEMENT 			= #{displacement}  		]]></if> 	<!-- 배기량 -->		
+ 			<if test="maximumPassenger	!= null"><![CDATA[  , MAXIMUM_PASSENGER 	= #{maximumPassenger}  	]]></if> 	<!-- 승차인원 -->		
+ 			<if test="delYn				!= null"><![CDATA[  , DEL_YN 				= #{delYn}  			]]></if> 	<!-- 삭제여부 -->
+ 			<if test="modId				!= null"><![CDATA[  , MOD_ID 				= #{modId}  			]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="mdIdx != null and mdIdx != ''">
+	     		<![CDATA[ MD_IDX = #{mdIdx} ]]>
+	        </if>
+		</trim>		
+    </update>
+
+    <!-- 차량정보 INSERT -->
+    <insert  id="insertCarModelInfo" parameterType="carModelDetailRequest">	
+	<![CDATA[ 
+	     INSERT INTO CDT_CAR_MODEL (
+			   MODEL_NAME
+			,  MODEL_DETAIL_NAME
+			,  MANUFACTURER_CODE
+			,  COUNTRY_CODE
+			,  IMPORT_CODE
+			,  CARTYPE_CODE
+			,  FUEL_CODE
+			,  TRANSMISSION_CODE
+			,  DRIVE_TYPE_CODE
+			,  DRIVE_LICENSE_CODE
+			,  DISPLACEMENT
+			,  MAXIMUM_PASSENGER
+			,  DEL_YN
+			,  REG_ID
+			,  REG_DT
+		) VALUES (
+				#{modelName}
+			,  	#{modelDetailName}    
+			,  	#{manufacturerCode}    
+			,  	#{countryCode}
+			,  	#{importCode}
+			,  	#{cartypeCode}
+			,  	#{fuelCode}
+			,  	#{transmissionCode} 
+			,  	#{driveTypeCode}
+			,  	#{driveLicenseCode}			
+			,  	#{displacement}			
+			,  	#{maximumPassenger}			
+			,   'N'		
+			,  	#{regId}
+			,	SYSDATE			
+		)
+	]]>
+    </insert>
+	
+</mapper>

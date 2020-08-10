@@ -1,8 +1,7 @@
 package com.ohdocha.admin.controller;
 
 import com.ohdocha.admin.config.Properties;
-import com.ohdocha.admin.domain.AdminInfoDto;
-import com.ohdocha.admin.domain.CsdealAdminCdtUserInfoRequest;
+import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoRequest;
 import com.ohdocha.admin.service.MainService;
 import com.ohdocha.admin.util.ServiceMessage;
 import com.ohdocha.admin.util.TextUtils;
@@ -35,11 +34,11 @@ public class MainController extends ControllerExtension {
     public String getLoginView(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
         Object adminObj = request.getSession().getAttribute("LOGIN_SESSION");
 
-        if (adminObj instanceof AdminInfoDto) {
-            String redirectUrl = getRequestParam(request, "redirectUrl");
-            if (!TextUtils.isEmpty(redirectUrl)) sendRedirect(response, redirectUrl);
-            else sendRedirect(response, request.getContextPath() + "/");
-        }
+//        if (adminObj instanceof AdminInfoDto) {
+//            String redirectUrl = getRequestParam(request, "redirectUrl");
+//            if (!TextUtils.isEmpty(redirectUrl)) sendRedirect(response, redirectUrl);
+//            else sendRedirect(response, request.getContextPath() + "/");
+//        }
 
         modelMap.addAttribute("serverVersion", properties.getServerVersion());
         modelMap.addAttribute("serverName", properties.getServerName());
