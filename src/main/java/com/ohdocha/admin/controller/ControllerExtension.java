@@ -1,6 +1,5 @@
 package com.ohdocha.admin.controller;
 
-import com.ohdocha.admin.domain.AdminInfoDto;
 import com.ohdocha.admin.util.ServiceMessage;
 import com.ohdocha.admin.util.TextUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ public class ControllerExtension {
 
     public ServiceMessage createServiceMessage(HttpServletRequest request) {
         ServiceMessage serviceMessage = new ServiceMessage();
-        serviceMessage.setLoginMember(getLoginMember(request));
+//        serviceMessage.setLoginMember(getLoginMember(request));
 
         String realIp = request.getHeader("X-Real-IP");
         if (TextUtils.isEmpty(realIp))
@@ -29,11 +28,11 @@ public class ControllerExtension {
         return serviceMessage;
     }
 
-    public AdminInfoDto getLoginMember(HttpServletRequest request) {
-        Object memberObject = request.getSession().getAttribute("LOGIN_SESSION");
-        if (memberObject instanceof AdminInfoDto) return (AdminInfoDto) memberObject;
-        else return null;
-    }
+//    public AdminInfoDto getLoginMember(HttpServletRequest request) {
+//        Object memberObject = request.getSession().getAttribute("LOGIN_SESSION");
+//        if (memberObject instanceof AdminInfoDto) return (AdminInfoDto) memberObject;
+//        else return null;
+//    }
 
     String getRequestParam(HttpServletRequest request, String key) {
         return TextUtils.clear(request.getParameter(key));

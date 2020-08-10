@@ -1,9 +1,8 @@
 package com.ohdocha.admin.service;
 
-import com.ohdocha.admin.Mapper.CsdealAdminLoginMapper;
-import com.ohdocha.admin.domain.AdminInfoRepository;
-import com.ohdocha.admin.domain.CsdealAdminCdtUserInfoRequest;
-import com.ohdocha.admin.domain.CsdealAdminCdtUserInfoResponse;
+import com.ohdocha.admin.mapper.CsdealAdminLoginMapper;
+import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoRequest;
+import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoResponse;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MainServiceImpl extends ServiceExtension implements MainService {
 
-    private final AdminInfoRepository adminInfoRepository;
     private final CsdealAdminLoginMapper mapper;
 
     @Override

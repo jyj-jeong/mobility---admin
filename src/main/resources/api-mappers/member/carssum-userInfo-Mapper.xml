@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.CsdealAdminUserInfoMntMapper">
+
+
+    <select id="selectUserInfo" parameterType="userInfoRequest" 
+      							resultType="userInfoResponse">
+		<![CDATA[
+				SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+					FROM ( 
+  							SELECT 
+								        IFNULL(A.UR_IDX                  , '' )  AS UR_IDX					 /*  회원IDX 		*/
+								    ,	IFNULL(A.USER_ID                 , '' )  AS USER_ID                 /*  회원ID 		*/
+								    ,	IFNULL(A.USER_NAME               , '' )  AS USER_NAME               /*  이름 		*/
+								    ,	IFNULL(A.USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY           /*  생년월일 		*/
+								    ,	IFNULL(A.USER_CONTACT1           , '' )  AS USER_CONTACT1           /*  연락처1 		*/
+								    , 	IFNULL(A.USER_STATUS_CODE		  , '' )  AS USER_STATUS_CODE		 /*  상태			*/
+									,	IFNULL(TO_CHAR(A.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' )  AS REG_DT 				 /*  등록일시         */
+					        		,	(SELECT COUNT(*) reserveCnt FROM CDT_RESERVE_MASTER 
+					        									   WHERE UR_IDX = A.UR_IDX
+					        									     AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
+					        									     --AND RESERVE_STATUS_CODE='QC'
+					        									     --AND RESERVE_STATUS_CODE != 'CC' 
+					        			) AS RESERVE_CNT   /*대여횟수*/
+										FROM CDT_USER_INFO A
+		                                LEFT OUTER JOIN CDT_COMMON_CODE B
+		                                             ON B.RT_CODE='RL'
+		                                            AND A.USER_ROLE = B.CODE
+		                                            
+		                     
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+				1=1 
+        </trim>
+        
+        <if test="searchType != null and searchType != '' ">
+			<choose>
+				<when test =' searchType == "urIdx" '>
+			    	AND <![CDATA[ A.UR_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    </when>			
+				<when test =' searchType == "userId" '>
+			    	AND <![CDATA[ A.USER_ID  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    </when>
+			    <when test =' searchType == "userName" '>
+			    	AND <![CDATA[ A.USER_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    </when>
+			    <when test =' searchType == "userBirthDay" '>
+			    	AND <![CDATA[ A.USER_BIRTHDAY  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    </when>
+			    <when test =' searchType == "userContact1" '>
+			    	AND <![CDATA[ A.USER_CONTACT1  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+			    </when>
+			    <otherwise>
+			    </otherwise>
+			</choose>
+		</if>
+		<![CDATA[	ORDER BY A.REG_DT DESC]]>   
+		<![CDATA[	) A )]]> 
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+	        <if test="userPassword != null and userPassword != ''">
+	     		<![CDATA[	AND USER_PASSWORD = #{userPassword}]]>
+	        </if>
+       	</trim>
+    </select>
+   
+	<select id="selectUserInfoDetail" parameterType="userInfoRequest" 
+      								  resultType="userInfoDetailResponse">
+		<![CDATA[
+					SELECT 
+						       IFNULL(A.UR_IDX                  , '' )  AS UR_IDX					/* 	회원IDX 			*/
+						    ,  IFNULL(A.USER_ID                 , '' )  AS USER_ID                  /*  회원ID 			*/
+						    ,  IFNULL(A.USER_PASSWORD           , '' )  AS USER_PASSWORD            /* 	비밀번호 			*/
+						    ,  IFNULL(A.USER_STATUS_CODE        , '' )  AS USER_STATUS_CODE         /* 	회원상태코드 		*/
+						    ,  IFNULL(A.USER_NAME               , '' )  AS USER_NAME                /* 	이름 				*/
+						    ,  IFNULL(A.USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY            /* 	생년월일 			*/
+						    ,  IFNULL(A.USER_CONTACT1           , '' )  AS USER_CONTACT1            /* 	연락처1 			*/
+						    ,  IFNULL(A.USER_CONTACT2           , '' )  AS USER_CONTACT2            /* 	연락처2 			*/
+						    ,  IFNULL(A.USER_GENDER             , '' )  AS USER_GENDER              /* 	성별CODE 			*/
+						    ,  IFNULL(A.USER_ZIPCODE            , '' )  AS USER_ZIPCODE             /* 	우편번호 			*/
+						    ,  IFNULL(A.USER_ADDRESS            , '' )  AS USER_ADDRESS             /* 	주소 				*/
+						    ,  IFNULL(A.USER_ADDRESS_DETAIL     , '' )  AS USER_ADDRESS_DETAIL      /* 	상세주소 			*/
+						    ,  IFNULL(A.USER_IDENTITY_AUTH_YN   , '' )  AS USER_IDENTITY_AUTH_YN    /* 	본인인증여부 		*/
+						    ,  IFNULL(A.USER_IDENTITY_AUTH_DATE , '' )  AS USER_IDENTITY_AUTH_DATE  /* 	인증일자 			*/
+						    ,  IFNULL(A.USER_CI                 , '' )  AS USER_CI                  /* 	USER_CI 		*/
+						    ,  IFNULL(A.USER_DI                 , '' )  AS USER_DI                  /* 	USER_DI 		*/
+						    ,  IFNULL(A.USER_NATIONAL_CODE      , '' )  AS USER_NATIONAL_CODE       /*  내/외국인 구분 		*/
+						    ,  IFNULL(A.USER_CERT_TYPE          , '' )  AS USER_CERT_TYPE           /* 	인증서유형 			*/
+						    ,  IFNULL(A.USER_GRADE_CODE         , '' )  AS USER_GRADE_CODE          /* 	회원등급 			*/
+						    ,  IFNULL(A.USER_ROLE               , '' )  AS USER_ROLE                /* 	멤버역할(ROLE) 	*/
+						    ,  IFNULL(A.RT_IDX                  , '' )  AS RT_IDX                   /* 	회원사DIX 		*/
+						    ,  IFNULL(A.USER_GROUP_CODE         , '' )  AS USER_GROUP_CODE          /* 	회원분류코드 		*/
+						    ,  IFNULL(A.USER_LICENSE_OWN_YN     , '' )  AS USER_LICENSE_OWN_YN      /* 	면허소유여부 		*/
+						    ,  IFNULL(A.USER_PAY_REGISTER_YN    , '' )  AS USER_PAY_REGISTER_YN     /* 	결제수단등록여부 	*/
+						    ,  IFNULL(A.CORPORATION_IDX         , '' )  AS CORPORATION_IDX          /* 	법인IDX 			*/
+						    ,  IFNULL(A.USER_PUSH_AGREE_YN      , '' )  AS USER_PUSH_AGREE_YN       /* 	PUSH동의여부 		*/
+						    ,  IFNULL(A.JOIN_CHANNEL            , '' )  AS JOIN_CHANNEL             /* 	가입경로 			*/
+						    ,  IFNULL(A.SOCIAL_LOGIN_PATH       , '' )  AS SOCIAL_LOGIN_PATH        /* 	연동로그인경로 		*/
+						    ,  IFNULL(A.SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL       /* 	연동로그인메일 		*/
+						    ,  IFNULL(A.USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE       /* 	회원탈퇴일시 		*/
+						    ,  IFNULL(A.LOGIN_FAIL_COUNT        , '' )  AS LOGIN_FAIL_COUNT         /* 	로그인시도횟수 		*/
+							,  TO_CHAR(A.REG_DT              ,  'YYYYMMDDHHMISS')  AS    REG_DT  /*   등록일시                    */
+							,  IFNULL(A.REG_ID                  , '' )  AS  				REG_ID   /*   등록자                       */
+							,  TO_CHAR(A.MOD_DT              ,  'YYYYMMDDHHMISS')  AS    MOD_DT  /*   수정일시                     */
+							,  IFNULL(A.MOD_ID				   , '' )  AS  				MOD_ID       /*   수정자                       */
+							,  IFNULL(C.UL_IDX             , '' )  AS UL_IDX					         /*   면허정보idx         */
+							,  IFNULL(C.LICENSE_NUMBER     , '' )  AS LICENSE_NUMBER                  /*   면허번호                     */
+							,  IFNULL(C.LICENSE_CODE       , '' )  AS LICENSE_CODE                    /*   면허코드                     */
+							,  IFNULL(C.LICENSE_LOCATION   , '' )  AS LICENSE_LOCATION                /*   면허지역                     */
+							,  IFNULL(C.LICENSE_EXPIRATION , '' )  AS LICENSE_EXPIRATION              /*   갱신기간                     */
+							,  IFNULL(C.LICENSE_ISSUE_DT   , '' )  AS LICENSE_ISSUE_DT                /*   발급일                        */
+							,  IFNULL(C.LICENSE_OWNER_NAME , '' )  AS LICENSE_OWNER_NAME              /*   면허소유자명                 */
+							,  IFNULL(C.USE_YN             , '' )  AS USE_YN                          /*   CDT_USER_LICENSE_INFO 사용여부   */
+			        		, (SELECT COUNT(*) reserveCnt FROM CDT_RESERVE_MASTER 
+			        					        		 WHERE UR_IDX = A.UR_IDX
+					        							   AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
+			        									   --AND RESERVE_STATUS_CODE='QC'
+			        									   --AND RESERVE_STATUS_CODE != 'CC' 
+			        			) AS RESERVE_CNT   /*대여횟수*/
+								FROM CDT_USER_INFO A
+                                LEFT OUTER JOIN CDT_COMMON_CODE B
+                                                 ON B.RT_CODE='RL'
+                                                AND A.USER_ROLE = B.CODE
+								LEFT OUTER JOIN CDT_USER_LICENSE_INFO C
+											 ON A.UR_IDX = 	C.UR_IDX
+			]]>			
+			<trim prefix="WHERE" prefixOverrides="AND|OR">
+				<!-- 검색조건 START -->
+	         	<!-- 회원번호 -->
+		    	<if test="urIdx != null and urIdx != ''">
+		    		<![CDATA[	AND A.UR_IDX = #{urIdx} ]]>
+		       	</if>
+		       	<!-- 아이디 -->         		
+		        <if test="userId != null and userId != ''">
+		     		<![CDATA[	AND A.USER_ID = #{userId} ]]>
+		        </if>
+		       	<!-- 이름 -->
+		        <if test="userName != null and userName != ''">
+		     		<![CDATA[	AND A.USER_NAME = #{userName} ]]>
+		        </if>
+		       	<!-- 생년월일 -->
+		        <if test="userBirthDay != null and userBirthDay != ''">
+		     		<![CDATA[	AND A.USER_BIRTHDAY = #{userBirthDay} ]]>
+		        </if>	        
+		        <!-- 연락처 -->
+		    	<if test="userContact1 != null and userContact1 != ''">
+		    		<![CDATA[	AND A.USER_CONTACT1 = #{userContact1} ]]>
+		       	</if>
+		       	<!-- USERCI(로그인시) -->
+		    	<if test="userCi != null and userCi != ''">
+		    		<![CDATA[	AND A.USER_CI = #{userCi} ]]>
+		       	</if>
+		       	<!-- 비밀번호(로그인시) -->
+		        <if test="userPassword != null and userPassword != ''">
+		     		<![CDATA[	AND A.USER_PASSWORD = #{userPassword}]]>
+		        </if>
+       		</trim>
+    </select>
+    
+    <!-- 통합회원 정보 UPDATE OR INSERT
+    	 1. CDT_USER_INFO
+    	 2. CDT_USER_LICENSE_INFO -->
+    <update  id="updateUserInfoDetail" parameterType="userInfoRequest">
+    	<![CDATA[ UPDATE CDT_USER_INFO ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="userId 			!= null"><![CDATA[    USER_ID				= #{userId}  		]]></if>	<!-- 아이디 -->
+			<if test="userName 			!= null"><![CDATA[  , USER_NAME				= #{userName}  		]]></if>	<!-- 이름 -->
+			<if test="joinChannel 		!= null"><![CDATA[  , Join_Channel			= #{joinChannel}  	]]></if>	<!-- 계정타임 -->
+			<if test="userBirthDay 		!= null"><![CDATA[  , USER_BIRTHDAY			= #{userBirthDay}  	]]></if>	<!-- 생녀월일 -->
+			<if test="userContact1 		!= null"><![CDATA[  , USER_CONTACT1			= #{userContact1}  	]]></if>	<!-- 연락처 -->
+			<if test="userGender 		!= null"><![CDATA[  , USER_GENDER			= #{userGender}  	]]></if>	<!-- 성별 -->
+ 			<if test="userRole 			!= null"><![CDATA[  , USER_ROLE				= #{userRole}  		]]></if>	<!-- 권한 -->
+ 			<if test="userStatusCode 	!= null"><![CDATA[  , USER_STATUS_CODE		= #{userStatusCode} ]]></if>	<!-- 회원상태 -->
+ 			<if test="userLicenseOwnYn 	!= null"><![CDATA[  , USER_LICENSE_OWN_YN 	= #{userLicenseOwnYn}  	]]></if> 	<!-- 면허정보 사용 여부 -->		
+ 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 				= #{modId}			]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="urIdx != null and urIdx != ''">
+	     		<![CDATA[ UR_IDX = #{urIdx} ]]>
+	        </if>
+		</trim>		
+    </update>
+    
+    <!-- 사욛자 면허정보 UPDATE -->
+    <update  id="updateUserLicenseInfo" parameterType="userLicenseInfoRequest">
+    <![CDATA[ UPDATE CDT_USER_LICENSE_INFO ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+			<if test="licenseNumber    	!= null"><![CDATA[     LICENSE_NUMBER		= #{licenseNumber}  	]]></if>
+			<if test="licenseCode      	!= null"><![CDATA[  ,  LICENSE_CODE			= #{licenseCode}  		]]></if>
+			<if test="licenseLocation  	!= null"><![CDATA[  ,  LICENSE_LOCATION		= #{licenseLocation}  	]]></if>
+			<if test="licenseExpiration	!= null"><![CDATA[  ,  LICENSE_EXPIRATION	= #{licenseExpiration}  ]]></if>
+			<if test="licenseIssueDt   	!= null"><![CDATA[  ,  LICENSE_ISSUE_DT		= #{licenseIssueDt}  	]]></if>
+ 			<if test="licenseOwnerName 	!= null"><![CDATA[  ,  LICENSE_OWNER_NAME	= #{licenseOwnerName}   ]]></if>
+ 			<if test="useYn				!= null"><![CDATA[  ,  USE_YN				= #{useYn}  			]]></if>	
+ 			<if test="modId 			!= null"><![CDATA[  ,  MOD_ID 				= #{modId}				]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="urIdx != null and urIdx != ''">
+	     		<![CDATA[ UR_IDX = #{urIdx} ]]>
+	        </if>
+		</trim>
+    </update>
+    
+    <!-- 사용자 면허정보 INSERT -->
+    <insert  id="insertUserLicenseInfo" parameterType="userLicenseInfoRequest">			
+	<![CDATA[ 
+	     INSERT INTO CDT_USER_LICENSE_INFO ( 
+	     	   UL_IDX
+			,  UR_IDX
+			,  LICENSE_NUMBER
+			,  LICENSE_CODE
+			,  LICENSE_LOCATION
+			,  LICENSE_EXPIRATION
+			,  LICENSE_ISSUE_DT
+			,  LICENSE_OWNER_NAME
+			,  REG_DT
+			,  REG_ID
+			,  USE_YN
+		) VALUES (
+				#{ulIdx}
+			,	#{urIdx}              
+			,  	#{licenseNumber}    
+			,  	#{licenseCode}
+			,  	#{licenseLocation}
+			,  	#{licenseExpiration}
+			,  	#{licenseIssueDt}
+			,  	#{licenseOwnerName} 
+			,  	SYSDATE
+			,  	#{regId}
+			,  	#{useYn}			
+		)
+	]]>
+    </insert>
+
+
+	<select id="selectLicenseInfo" parameterType="userLicenseInfoRequest" 
+      								  resultType="userLicenseInfoResponse">
+		<![CDATA[
+					SELECT 						       
+							   IFNULL(T1.LICENSE_CODE         , '' ) AS LICENSE_CODE           /*면허종류CODE*/
+							,  IFNULL(T1.LICENSE_EXPIRATION   , '' ) AS LICENSE_EXPIRATION     /*갱신기간*/
+							,  IFNULL(T1.LICENSE_ISSUE_DT     , '' ) AS LICENSE_ISSUE_DT       /*발급일*/
+							,  IFNULL(T1.LICENSE_LOCATION     , '' ) AS LICENSE_LOCATION       /*면허지역*/
+							,  IFNULL(T1.LICENSE_NUMBER       , '' ) AS LICENSE_NUMBER         /*면허번호*/
+							,  IFNULL(T1.LICENSE_OWNER_NAME   , '' ) AS LICENSE_OWNER_NAME     /*면허소유자명*/
+							,  IFNULL(T1.MOD_DT               , '' ) AS MOD_DT                 /*수정일시*/
+							,  IFNULL(T1.MOD_ID               , '' ) AS MOD_ID                 /*수정자*/
+							,  IFNULL(T1.REG_DT               , '' ) AS REG_DT                 /*등록일시*/
+							,  IFNULL(T1.REG_ID               , '' ) AS REG_ID                 /*등록자*/
+							,  IFNULL(T1.UL_IDX               , '' ) AS UL_IDX                 /*면허idx*/
+							,  IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                 /*회원iDX*/
+							,  IFNULL(T1.USE_YN			   , '' ) AS USE_YN					/*사용여부*/
+					FROM 
+					CDT_USER_LICENSE_INFO T1
+			]]>			
+			<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    	<if test="urIdx != null and urIdx != ''">
+		    		<![CDATA[	AND T1.UR_IDX = #{urIdx} ]]>
+		       	</if>
+       		</trim>
+    </select>
+    <select id="selectDuplicateLicenseInfo" parameterType="userLicenseInfoRequest" 
+      								  	    resultType="int">
+		<![CDATA[
+					SELECT 						       
+							 COUNT(T1.T1.LICENSE_CODE)
+					FROM 
+					CDT_USER_LICENSE_INFO T1
+			]]>			
+			<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    	<if test="urIdx != null and urIdx != ''">
+		    		<![CDATA[	AND T1.UR_IDX = #{urIdx} ]]>
+		       	</if>
+       		</trim>
+    </select>
+    
+    <!-- 사용자 면허정보 INSERT -->
+    <insert  id="insertUserInfo" parameterType="insertUserInfoRequest">			
+	<![CDATA[ 
+				INSERT INTO CDT_USER_INFO
+				(
+				   UR_IDX                 
+				,  USER_ID                
+				,  USER_PASSWORD          
+				,  USER_STATUS_CODE       
+				,  USER_NAME              
+				,  USER_BIRTHDAY          
+				,  USER_CONTACT1          
+				,  USER_CONTACT2          
+				,  USER_GENDER            
+				,  USER_ZIPCODE           
+				,  USER_ADDRESS           
+				,  USER_ADDRESS_DETAIL    
+				,  USER_IDENTITY_AUTH_YN  
+				,  USER_IDENTITY_AUTH_DATE
+				,  USER_CI                
+				,  USER_DI                
+				,  USER_NATIONAL_CODE     
+				,  USER_CERT_TYPE         
+				,  USER_GRADE_CODE        
+				,  USER_ROLE              
+				,  RT_IDX                 
+				,  USER_GROUP_CODE        
+				,  USER_LICENSE_OWN_YN    
+				,  USER_PAY_REGISTER_YN   
+				,  CORPORATION_IDX        
+				,  USER_PUSH_AGREE_YN     
+				,  JOIN_CHANNEL           
+				,  SOCIAL_LOGIN_PATH      
+				,  SOCIAL_LOGIN_EMAIL     
+				,  USER_WITHDRAW_DATE     
+				,  LOGIN_FAIL_COUNT       
+				,  REG_DT             
+				,  REG_ID                 
+				,  MOD_DT             
+				,  MOD_ID				  
+				)
+				VALUES
+				(
+				   #{urIdx}		    	
+				,  #{userId}				
+				,  #{userPassword}		
+				,  #{userStatusCode}		
+				,  #{userName}			
+				,  #{userBirthDay}		
+				,  #{userContact1}		
+				,  #{userContact2}		
+				,  #{userGender}			
+				,  #{userZipCode}			
+				,  #{userAddress}			
+				,  #{userAddressDetail}	
+				,  #{userIdentityAuthYn}	
+				,  #{userIdentityAuthDate}
+				,  #{userCi}				
+				,  #{userDi}				
+				,  #{userNationalCode}	
+				,  #{userCertType}		
+				,  #{userGradeCode}		
+				,  #{userRole}			
+				,  #{rtIdx}				
+				,  #{userGroupCode}		
+				,  #{userLicenseOwnYn}	
+				,  #{userPayRegisterYn}	
+				,  #{corporationIdx}		
+				,  #{userPushAgreeYn}		
+				,  #{joinChannel}			
+				,  #{socialLoginPath}		
+				,  #{socialLoginEmail}	
+				,  #{userWithdrawDate}    
+				,  #{loginFailCount}		
+				,  SYSTIMESTAMP				
+				,  #{regId}				
+				,  SYSTIMESTAMP		
+				,  #{modId}											
+				)	    	
+	]]>
+    </insert>
+
+</mapper>

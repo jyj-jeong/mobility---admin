@@ -1,14 +1,16 @@
 package com.ohdocha.admin.service;
 
-import com.ohdocha.admin.domain.CarModelInfo;
-import com.ohdocha.admin.domain.CarModelInfoRepository;
+import com.ohdocha.admin.domain.car.model.CsdealAdminCarModelRequest;
+import com.ohdocha.admin.domain.car.model.CsdealAdminCarModelResponse;
+import com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarRequest;
+import com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarResponse;
+import com.ohdocha.admin.mapper.CsdealAdminCarModelMapper;
+import com.ohdocha.admin.mapper.CsdealAdminRegCarMapper;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -16,13 +18,27 @@ import java.util.List;
 @AllArgsConstructor
 public class CarServiceImpl extends ServiceExtension implements CarService {
 
-    private CarModelInfoRepository carModelInfoRepository;
+    private final CsdealAdminCarModelMapper carModelMapper;
+    private final CsdealAdminRegCarMapper regCarMapper;
 
     @Override
-    public void getCarModelInfo(ServiceMessage message) {
+    public void getCarList(ServiceMessage message) {
+        CsdealAdminRegCarRequest reqParam = message.getObject("reqParam", CsdealAdminRegCarRequest.class);
 
-        List<CarModelInfo> carModelInfoList = carModelInfoRepository.findAll();
+        List<CsdealAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(reqParam);
 
-        message.addData("carModelInfoList", carModelInfoList);
+        message.addData("carRegList", responseDto);
+
+    }
+
+    @Override
+    public void getCarModelList(ServiceMessage message) {
+        CsdealAdminCarModelRequest reqParam = message.getObject("reqParam", CsdealAdminCarModelRequest.class);
+
+        List<CsdealAdminCarModelResponse> responseDto = carModelMapper.selectCarModelInfo(reqParam);
+
+        message.addData("carModelInfoList", responseDto);
+
+
     }
 }

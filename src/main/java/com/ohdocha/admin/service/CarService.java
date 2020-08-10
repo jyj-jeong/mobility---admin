@@ -4,6 +4,8 @@ import com.ohdocha.admin.util.ServiceMessage;
 
 public interface CarService {
 
-    void getCarModelInfo(ServiceMessage message);
+    void getCarList(ServiceMessage message);
+
+    void getCarModelList(ServiceMessage message);
 
 }
