@@ -2,7 +2,12 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>회원사 :: DoCha Admin Web</title>
+    <title>관리자 관리 :: DoCha Admin Web</title>
+    <style>
+        .cursor-point{
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body id="page-top">
 
@@ -27,46 +32,44 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">회원사</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">관리자 관리</h6>
+                        <button class="btn btn-secondary">등록</button>
+                        <button class="btn btn-secondary">삭제</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable">
+                            <table class="table table-bordered cursor-point" id="dataTable">
                                 <thead>
                                 <tr>
-                                    <th>회원사번호</th>
-                                    <th>회사명</th>
-                                    <th>지점</th>
-                                    <th>지역</th>
-                                    <th>주소</th>
-                                    <th>관리자</th>
+                                    <th></th>
+                                    <th>회원번호</th>
+                                    <th>이름</th>
+                                    <th>아이디</th>
                                     <th>연락처</th>
-                                    <th>보유</th>
-                                    <th>등록</th>
+                                    <th>가입일시</th>
+                                    <th>권한</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>회원사번호</th>
-                                    <th>회사명</th>
-                                    <th>지점</th>
-                                    <th>지역</th>
-                                    <th>주소</th>
-                                    <th>관리자</th>
+                                    <th></th>
+                                    <th>회원번호</th>
+                                    <th>이름</th>
+                                    <th>아이디</th>
                                     <th>연락처</th>
-                                    <th>보유</th>
-                                    <th>등록</th>
+                                    <th>가입일시</th>
+                                    <th>권한</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">
-                                    <td th:text="${carModelInfo.getCdIdx()}"></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>
-                                    <td th:text="${carModelInfo.getCdYear()}"></td>
+                                <tr th:each="adminInfo, index : ${adminUserInfoList}" style="cursor: pointer" th:data-value="${adminInfo.getAdIdx()}">
                                     <td ></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td ></td>
+                                    <td th:text="${adminInfo.getAdIdx()}"></td>
+                                    <td th:text="${adminInfo.getAdminName()}"></td>
+                                    <td th:text="${adminInfo.getAdminId()}"></td>
+                                    <td th:text="${adminInfo.getUserContact1()}"></td>
+                                    <td th:text="${adminInfo.getRegDt()}"></td>
+                                    <td th:text="${adminInfo.getRole()}"></td>
                                 </tr>
                                 </tbody>
                             </table>

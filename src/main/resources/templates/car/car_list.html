@@ -66,9 +66,9 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="car, index : ${carRegList}" th:data-value="${car.getCrIdx()}">
+                                <tr th:each="car, index : ${carRegList}" style="cursor: pointer" th:data-value="${car.getCrIdx()}">
                                     <td th:text="${car.getCrIdx()}"></td>
-                                    <td th:text="${car.getRtIdx()}"></td>
+                                    <td th:text="${car.getRtIdx() + '(' + car.getBranchName() + ')'}"></td>
                                     <td th:text="${car.getModelName() + '(' + car.getCarNumber() + ')'}"></td>
                                     <td th:text="${car.getMileage()}"></td>
                                     <td th:text="${car.getYear()}"></td>
@@ -128,7 +128,7 @@
         // Setup - add a text input to each footer cell
         $('#example tfoot th').each( function () {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="'+title+'" />' );
         } );
 
         // DataTable
@@ -149,6 +149,18 @@
             }
         });
     } );
+
+    // 상세보기 이동
+    $('#example > tbody > tr >').click(function () {
+        var crIdx = $(this).parent().attr('data-value');
+        if (crIdx === "") return;
+
+        var url = "/detail/" + crIdx;
+        var name = "test";
+        var option = "width = 500, height =800 ,location=no, left=500, top=50";
+
+        window.open(url, name, option);
+    });
 
 </script>
 </body>

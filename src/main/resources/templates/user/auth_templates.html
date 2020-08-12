@@ -2,7 +2,7 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>관리자 관리 :: DoCha Admin Web</title>
+    <title>권한 템플릿 :: DoCha Admin Web</title>
 </head>
 <body id="page-top">
 
@@ -27,7 +27,9 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">관리자 관리</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">권한 템플릿</h6>
+                        <button class="btn btn-secondary">등록</button>
+                        <button class="btn btn-secondary">삭제</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -35,34 +37,31 @@
                                 <thead>
                                 <tr>
                                     <th></th>
-                                    <th>회원번호</th>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>연락처</th>
-                                    <th>가입일시</th>
-                                    <th>권한</th>
+                                    <th>권한번호</th>
+                                    <th>템플릿명</th>
+                                    <th>설명</th>
+                                    <th>설정회원</th>
+                                    <th>등록일시</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th></th>
-                                    <th>회원번호</th>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>연락처</th>
-                                    <th>가입일시</th>
-                                    <th>권한</th>
+                                    <th>권한번호</th>
+                                    <th>템플릿명</th>
+                                    <th>설명</th>
+                                    <th>설정회원</th>
+                                    <th>등록일시</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">
-                                    <td th:text="${carModelInfo.getCaIdx()}"></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>
-                                    <td th:text="${carModelInfo.getCdYear()}"></td>
+                                <tr th:each="authTemplate, index : ${authTemplateList}" th:data-value="${authTemplate.getTemplateCd()}">
                                     <td ></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td ></td>
+                                    <td th:text="${authTemplate.getTemplateCd()}"></td>
+                                    <td th:text="${authTemplate.getTemplateNm()}"></td>
+                                    <td th:text="${authTemplate.getTemplateMemo()}"></td>
+                                    <td th:text="${authTemplate.getRegId()}"></td>
+                                    <td th:text="${authTemplate.getRegDt()}"></td>
                                 </tr>
                                 </tbody>
                             </table>

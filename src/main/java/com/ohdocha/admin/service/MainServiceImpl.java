@@ -1,8 +1,8 @@
 package com.ohdocha.admin.service;
 
-import com.ohdocha.admin.mapper.CsdealAdminLoginMapper;
-import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoRequest;
-import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoResponse;
+import com.ohdocha.admin.mapper.DochaAdminLoginMapper;
+import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest;
+import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoResponse;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class MainServiceImpl extends ServiceExtension implements MainService {
 
-    private final CsdealAdminLoginMapper mapper;
+    private final DochaAdminLoginMapper mapper;
 
     @Override
     public void login(ServiceMessage message) {
-        CsdealAdminCdtUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", CsdealAdminCdtUserInfoRequest.class);
+        DochaAdminCdtUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminCdtUserInfoRequest.class);
 
-        CsdealAdminCdtUserInfoResponse userInfoResponse = mapper.chkLoginUserInfo(userInfoRequest);
+        DochaAdminCdtUserInfoResponse userInfoResponse = mapper.chkLoginUserInfo(userInfoRequest);
 
 //        AdminInfo adminInfo = memberOptional.get();
 //        if (TextUtils.isEmpty(adminInfo.getAdminPassword()))

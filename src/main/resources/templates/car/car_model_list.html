@@ -55,9 +55,9 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getMdIdx()}">
+                                <tr th:each="carModelInfo, index : ${carModelInfoList}" style="cursor: pointer" th:data-value="${carModelInfo.getMdIdx()}">
                                     <td th:text="${carModelInfo.getMdIdx()}"></td>
-                                    <td th:text="${carModelInfo.getConturyCode()}"></td>
+                                    <td th:text="${carModelInfo.getCountryCode()}"></td>
                                     <td th:text="${carModelInfo.getManufacturerCode()}"></td>
                                     <td th:text="${carModelInfo.getYear()}"></td>
                                     <td th:text="${carModelInfo.getCarTypeCode()}"></td>

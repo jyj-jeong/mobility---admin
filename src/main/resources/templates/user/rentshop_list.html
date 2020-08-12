@@ -2,7 +2,7 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>통합 회원 :: DoCha Admin Web</title>
+    <title>회원사 :: DoCha Admin Web</title>
 </head>
 <body id="page-top">
 
@@ -27,42 +27,50 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">통합 회원</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">회원사</h6>
+                        <button class="btn btn-secondary">등록</button>
+                        <button class="btn btn-secondary" onclick="window.open('rentshop/hoilday','_blank')">전체휴일 등록</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
-                                    <th>회원번호</th>
-                                    <th>아이디</th>
-                                    <th>이름</th>
+                                    <th>회원사번호</th>
+                                    <th>회사명</th>
+                                    <th>지점</th>
+                                    <th>지역</th>
+                                    <th>주소</th>
+                                    <th>관리자</th>
                                     <th>연락처</th>
-                                    <th>평점</th>
-                                    <th>대여횟수</th>
-                                    <th>가입일시</th>
+                                    <th>보유</th>
+                                    <th>등록</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>회원번호</th>
-                                    <th>아이디</th>
-                                    <th>이름</th>
+                                    <th>회원사번호</th>
+                                    <th>회사명</th>
+                                    <th>지점</th>
+                                    <th>지역</th>
+                                    <th>주소</th>
+                                    <th>관리자</th>
                                     <th>연락처</th>
-                                    <th>평점</th>
-                                    <th>대여횟수</th>
-                                    <th>가입일시</th>
+                                    <th>보유</th>
+                                    <th>등록</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="member, index : ${IntegratedMemberList}" th:data-value="${member.getUrIdx()}">
-                                    <td th:text="${member.getUrIdx()}"></td>
-                                    <td th:text="${member.getUserId()}"></td>
-                                    <td th:text="${member.getUserName()}"></td>
-                                    <td th:text="${'010' + '-' + member.getUserContact1() + '-' + member.getUserContact2()}"></td>
-                                    <td>0</td>
-                                    <td></td>
-                                    <td th:text="${member.getRegDt()}"></td>
+                                <tr th:each="rentCompany, index : ${rentCompanyInfoList}" style="cursor: pointer" th:data-value="${rentCompany.getRtIdx()}">
+                                    <td th:text="${rentCompany.getRtIdx()}"></td>
+                                    <td th:text="${rentCompany.getCompanyName()}"></td>
+                                    <td th:text="${rentCompany.getBranchName()}"></td>
+                                    <td th:text="${rentCompany.getCompanyAddress()}"></td>
+                                    <td th:text="${rentCompany.getCompanyAddressDetail()}"></td>
+                                    <td th:text="${rentCompany.getStaffName()}"></td>
+                                    <td th:text="${rentCompany.getStaffContact1() + rentCompany.getStaffContact2()}"></td>
+                                    <td th:text="${rentCompany.getCarCount()}"></td>
+                                    <td th:text="${rentCompany.getRtIdx()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -110,6 +118,28 @@
     </div>
 </div>
 <script>
+
+    $('#dataTable').DataTable( {
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'csvHtml5',
+            text: 'Export CSV',
+            footer: true,
+            className: 'exportBtn'
+        }]
+    } );
+
+    /* 회원사 상세 페이지 이동 */
+    $('table > tbody > tr').click(function () {
+        let urIdx = $(this).attr('data-value');
+        if (urIdx === "") return;
+
+        var url = "/mem/rentshop/" + urIdx;
+        var name = "test";
+        var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+
+        window.open(url, name, option);
+    });
 
 </script>
 </body>
