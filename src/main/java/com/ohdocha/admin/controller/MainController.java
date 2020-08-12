@@ -1,10 +1,9 @@
 package com.ohdocha.admin.controller;
 
 import com.ohdocha.admin.config.Properties;
-import com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoRequest;
+import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest;
 import com.ohdocha.admin.service.MainService;
 import com.ohdocha.admin.util.ServiceMessage;
-import com.ohdocha.admin.util.TextUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -48,7 +47,7 @@ public class MainController extends ControllerExtension {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public Object loginAsync(@RequestBody CsdealAdminCdtUserInfoRequest userInfoRequest, HttpServletRequest request) {
+    public Object loginAsync(@RequestBody DochaAdminCdtUserInfoRequest userInfoRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request).addData("userInfoRequest", userInfoRequest);
         mainService.login(serviceMessage);
 

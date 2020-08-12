@@ -1,11 +1,11 @@
 package com.ohdocha.admin.service;
 
-import com.ohdocha.admin.domain.car.model.CsdealAdminCarModelRequest;
-import com.ohdocha.admin.domain.car.model.CsdealAdminCarModelResponse;
-import com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarRequest;
-import com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarResponse;
-import com.ohdocha.admin.mapper.CsdealAdminCarModelMapper;
-import com.ohdocha.admin.mapper.CsdealAdminRegCarMapper;
+import com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest;
+import com.ohdocha.admin.domain.car.model.DochaAdminCarModelResponse;
+import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest;
+import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse;
+import com.ohdocha.admin.mapper.DochaAdminCarModelMapper;
+import com.ohdocha.admin.mapper.DochaAdminRegCarMapper;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 public class CarServiceImpl extends ServiceExtension implements CarService {
 
-    private final CsdealAdminCarModelMapper carModelMapper;
-    private final CsdealAdminRegCarMapper regCarMapper;
+    private final DochaAdminCarModelMapper carModelMapper;
+    private final DochaAdminRegCarMapper regCarMapper;
 
     @Override
     public void getCarList(ServiceMessage message) {
-        CsdealAdminRegCarRequest reqParam = message.getObject("reqParam", CsdealAdminRegCarRequest.class);
+        DochaAdminRegCarRequest reqParam = message.getObject("reqParam", DochaAdminRegCarRequest.class);
 
-        List<CsdealAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(reqParam);
+        List<DochaAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(reqParam);
 
         message.addData("carRegList", responseDto);
 
@@ -33,9 +33,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
     @Override
     public void getCarModelList(ServiceMessage message) {
-        CsdealAdminCarModelRequest reqParam = message.getObject("reqParam", CsdealAdminCarModelRequest.class);
+        DochaAdminCarModelRequest reqParam = message.getObject("reqParam", DochaAdminCarModelRequest.class);
 
-        List<CsdealAdminCarModelResponse> responseDto = carModelMapper.selectCarModelInfo(reqParam);
+        List<DochaAdminCarModelResponse> responseDto = carModelMapper.selectCarModelInfo(reqParam);
 
         message.addData("carModelInfoList", responseDto);
 

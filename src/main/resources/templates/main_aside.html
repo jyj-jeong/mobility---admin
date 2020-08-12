@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <ul th:fragment="mainAside" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-    class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    style="background: #008080" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href=""
@@ -61,9 +61,9 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="collapseTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">예약 관리</a>
-                <a class="collapse-item" href="utilities-border.html">역경매</a>
-                <a class="collapse-item" href="utilities-animation.html">정기 결제</a>
+                <a class="collapse-item" href="#">예약 관리</a>
+                <a class="collapse-item" href="#">역경매</a>
+                <a class="collapse-item" href="#">정기 결제</a>
             </div>
         </div>
     </li>
@@ -78,7 +78,7 @@
         <div id="collapseThree" class="collapse" aria-labelledby="collapseThree" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/'}">등록 차량</a>
+                <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car'}">등록 차량</a>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/control'}">차량 관제</a>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/model'}">차량 모델</a>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/property'}">차량 속성</a>

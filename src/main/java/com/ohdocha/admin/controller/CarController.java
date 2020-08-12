@@ -19,7 +19,7 @@ public class CarController extends ControllerExtension {
 
     private final CarService carService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     public String carList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarList(serviceMessage);
