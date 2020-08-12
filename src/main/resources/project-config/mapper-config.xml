@@ -1,163 +1,163 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
-  
-<configuration>
-  	<settings>
-	    <setting name="cacheEnabled" value="true" />
-	    <setting name="useGeneratedKeys" value="true" />
-	    <setting name="mapUnderscoreToCamelCase" value="true"/>
-	    <setting name="jdbcTypeForNull" value="NULL" />    
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
-	    <!-- 
-	    BATCH = 일괄처리       
-	    RESUE = 순차적처리    
-	     -->
-		<!-- <setting name="defaultExecutorType" value="BATCH" />  --> 
-	    <setting name="defaultExecutorType" value="REUSE" />
-	    <setting name="defaultStatementTimeout" value="3000" />
-  	</settings>
-  	<typeAliases>
-  	
-  		<!-- primitive type -->
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL" />
+
+		<!--
+        BATCH = 일괄처리
+        RESUE = 순차적처리
+         -->
+		<!-- <setting name="defaultExecutorType" value="BATCH" />  -->
+		<setting name="defaultExecutorType" value="REUSE" />
+		<setting name="defaultStatementTimeout" value="3000" />
+	</settings>
+	<typeAliases>
+
+		<!-- primitive type -->
 		<typeAlias type="java.lang.Integer" alias="int" />
 		<typeAlias type="java.lang.Long" alias="long" />
 		<typeAlias type="java.lang.String" alias="string" />
-		<typeAlias type="com.ohdocha.admin.util.CarssumMap" alias="CarssumMap" />
+		<typeAlias type="com.ohdocha.admin.util.DochaMap" alias="CarssumMap" />
 
 		<!-- 통합회원 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUserInfoRequest" alias="userInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUserInfoResponse" alias="userInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUserInfoRequest" alias="userInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUserInfoResponse" alias="userInfoResponse" />
 
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUpdateUserInfoRequest" alias="updateUserInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminInsertUserInfoRequest" alias="insertUserInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUserInfoDetailResponse" alias="userInfoDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUpdateUserInfoRequest" alias="updateUserInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminInsertUserInfoRequest" alias="insertUserInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUserInfoDetailResponse" alias="userInfoDetailResponse" />
 
 
 
 		<!-- 회원사 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyInfoRequest" alias="rentCompanyInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyInfoResponse" alias="rentCompanyInfoResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyDetailRequest" alias="rentCompanyDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyDetailResponse" alias="rentCompanyDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyInfoRequest" alias="rentCompanyInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyInfoResponse" alias="rentCompanyInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyDetailRequest" alias="rentCompanyDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyDetailResponse" alias="rentCompanyDetailResponse" />
 
 		<!-- CDT_RENT_COMPANY_STAFF -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayStaffRequest" alias="cdtRentCompanyStaffRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayStaffResponse" alias="cdtRentCompanyStaffResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayStaffRequest" alias="cdtRentCompanyStaffRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayStaffResponse" alias="cdtRentCompanyStaffResponse" />
 
 		<!-- CDT_RENT_COMPANY_COMISSION -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayComissionRequest" alias="cdtRentCompanyComissionRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayComissionResponse" alias="cdtRentCompanyComissionResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayComissionRequest" alias="cdtRentCompanyComissionRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayComissionResponse" alias="cdtRentCompanyComissionResponse" />
 
 		<!-- CDT_RENT_COMPANY_TIME -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayTimeRequest" alias="cdtRentCompanyTimeRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayTimeResponse" alias="cdtRentCompanyTimeResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayTimeRequest" alias="cdtRentCompanyTimeRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayTimeResponse" alias="cdtRentCompanyTimeResponse" />
 
 		<!-- CDT_RENT_COMPANY_RESERVE_MIN -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompanyReseveMinRequest" alias="cdtRentCompanyReseveMinRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompanyReseveMinResponse" alias="cdtRentCompanyReseveMinResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompanyReseveMinRequest" alias="cdtRentCompanyReseveMinRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompanyReseveMinResponse" alias="cdtRentCompanyReseveMinResponse" />
 
 		<!-- CDT_HOLIDAYS : 회원사 상세 정보 추가 -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyHolidayRequest" alias="RentCompanyHolidayRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminRentCompanyHolidayResponse" alias="RentCompanyHolidayResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyHolidayRequest" alias="RentCompanyHolidayRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyHolidayResponse" alias="RentCompanyHolidayResponse" />
 
 		<!-- CDT_RENT_COMPANY_ABLEAREA -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayAbleareaRequest" alias="CdtRentCompanyAbleareaRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.CsdealAdminCdtRentCompnayAbleareaResponse" alias="CdtRentCompanyAbleareaResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayAbleareaRequest" alias="CdtRentCompanyAbleareaRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayAbleareaResponse" alias="CdtRentCompanyAbleareaResponse" />
 
 		<!-- 관리자 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.admin.CsdealAdminAdminUserInfoRequest" alias="adminUserInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.admin.CsdealAdminAdminUserInfoResponse" alias="adminUserInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoRequest" alias="adminUserInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoResponse" alias="adminUserInfoResponse" />
 
 		<!--  메뉴 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.menu.CsdealAdminMenuRequest" alias="menuRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.menu.CsdealAdminMenuResponse" alias="menuResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.menu.DochaAdminMenuRequest" alias="menuRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.menu.DochaAdminMenuResponse" alias="menuResponse" />
 
 		<!--  로그인 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoRequest" alias="cdtUserInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminCdtUserInfoResponse" alias="cdtUserInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest" alias="cdtUserInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoResponse" alias="cdtUserInfoResponse" />
 
 
 		<!--  예약 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealAdminReserveInfoRequest" alias="reserveInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealAdminReserveInfoResponse" alias="reserveInfoResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealAdminReserveInfoDetailRequest" alias="reserveInfoDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealAdminReserveInfoDetailResponse" alias="reserveInfoDetailResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealReserveInfoDto" alias="CsdealReserveInfoDto" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealRentCompanyDto" alias="CsdealRentCompanyDto" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.CsdealCarDto" alias="CsdealCarDto" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest" alias="reserveInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoResponse" alias="reserveInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoDetailRequest" alias="reserveInfoDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoDetailResponse" alias="reserveInfoDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaReserveInfoDto" alias="DocahReserveInfoDto" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto" alias="DocahRentCompanyDto" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaCarDto" alias="DocahCarDto" />
 
 		<!-- 매칭서비스 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingRequest" alias="matchingRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingResponse" alias="matchingResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingDetailRequest" alias="matchingDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingDetailResponse" alias="matchingDetailResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingCompanyRequest" alias="matchingCompanyRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.CsdealAdminMatchingCompanyResponse" alias="matchingCompanyResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingRequest" alias="matchingRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingResponse" alias="matchingResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingDetailRequest" alias="matchingDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingDetailResponse" alias="matchingDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingCompanyRequest" alias="matchingCompanyRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.matchingService.DochaAdminMatchingCompanyResponse" alias="matchingCompanyResponse" />
 
 		<!-- payment alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.reserve.payment.CsdealAdminPaymentInfoRequest" alias="paymentInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.reserve.payment.CsdealAdminPaymentInfoResponse" alias="paymentInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.payment.DochaAdminPaymentInfoRequest" alias="paymentInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.reserve.payment.DochaAdminPaymentInfoResponse" alias="paymentInfoResponse" />
 
 
 		<!--  등록 차량 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarRequest" alias="regCarRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarResponse" alias="regCarResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarDetailRequest" alias="regCarDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.CsdealAdminRegCarDetailResponse" alias="regCarDetailResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.CsdealAdminCdtCarInfoOption" alias="cdtCarInfoOption" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest" alias="regCarRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse" alias="regCarResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest" alias="regCarDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailResponse" alias="regCarDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminCdtCarInfoOption" alias="cdtCarInfoOption" />
 
 		<!--  차량 -차량모델  등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.model.CsdealAdminCarModelRequest" alias="carModelRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.model.CsdealAdminCarModelResponse" alias="carModelResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.model.CsdealAdminCarModelDetailRequest" alias="carModelDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.model.CsdealAdminCarModelDetailResponse" alias="carModelDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest" alias="carModelRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.model.DochaAdminCarModelResponse" alias="carModelResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest" alias="carModelDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailResponse" alias="carModelDetailResponse" />
 
 
 
 		<!--  차량  속성 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.property.CsdealAdminCarPropertyRequest"  alias="carPropertyRequest"/>
-		<typeAlias type="com.ohdocha.admin.domain.car.property.CsdealAdminCarPropertyResponse" alias="carPropertyResponse"/>
+		<typeAlias type="com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyRequest"  alias="carPropertyRequest"/>
+		<typeAlias type="com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyResponse" alias="carPropertyResponse"/>
 
 		<!--  공통코드  속성 -->
-		<typeAlias type="com.ohdocha.admin.domain.common.code.CsdealAdminCommonCodeRequest"  alias="commonCodeRequest"/>
-		<typeAlias type="com.ohdocha.admin.domain.common.code.CsdealAdminCommonCodeResponse" alias="commonCodeResponse"/>
+		<typeAlias type="com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeRequest"  alias="commonCodeRequest"/>
+		<typeAlias type="com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeResponse" alias="commonCodeResponse"/>
 
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUserInfoUserLicenseInfoRequest" alias="userLicenseInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.member.CsdealAdminUserInfoUserLicenseInfoResponse" alias="userLicenseInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUserInfoUserLicenseInfoRequest" alias="userLicenseInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminUserInfoUserLicenseInfoResponse" alias="userLicenseInfoResponse" />
 
-		<typeAlias type="com.ohdocha.admin.domain.calculateMnt.CsdealAdminCalculateRequest" alias="calculateRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.calculateMnt.CsdealAdminCalculateResponse" alias="calculateResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.calculateMnt.DochaAdminCalculateRequest" alias="calculateRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.calculateMnt.DochaAdminCalculateResponse" alias="calculateResponse" />
 
 		<!--  메뉴 Template 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.menu.CsdealAdminMenuTemplateRequest" alias="adminMenuTemplateRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.menu.CsdealAdminMenuTemplateResponse" alias="adminMenuTemplateResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.menu.DochaAdminMenuTemplateRequest" alias="adminMenuTemplateRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.menu.DochaAdminMenuTemplateResponse" alias="adminMenuTemplateResponse" />
 
 		<!--  auth Template List 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.authTemplate.CsdealAdminAuthTemplateRequest" alias="adminAuthTemplateRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.authTemplate.CsdealAdminAuthTemplateResponse" alias="adminAuthTemplateResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateRequest" alias="adminAuthTemplateRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateResponse" alias="adminAuthTemplateResponse" />
 
 		<!-- 차량-요금제 기본요금제  -->
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.CsdealAdminBaiscPlanRequest" alias="basicPlanRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.CsdealAdminBasicPlanResponse" alias="basicPlanResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.CsdealAdminBaiscPlanDetailRequest" alias="basicPlanDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.CsdealAdminBasicPlanDetailResponse" alias="basicPlanDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanRequest" alias="basicPlanRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanResponse" alias="basicPlanResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanDetailRequest" alias="basicPlanDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanDetailResponse" alias="basicPlanDetailResponse" />
 
 		<!-- 차량-요금제 기간요금제설정 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.CsdealAdminPeriodPlanSettingRequest" alias="periodPlanRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.CsdealAdminPeriodPlanSettingResponse" alias="periodPlanResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingRequest" alias="periodPlanRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingResponse" alias="periodPlanResponse" />
 
 
 		<!-- 차량-요금제 기간요금제 상세설정 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.CsdealAdminPeriodPlanSettingDetailRequest" alias="periodPlanDetailRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.CsdealAdminPeriodPlanSettingDetailResponse" alias="periodPlanDetailResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingDetailRequest" alias="periodPlanDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingDetailResponse" alias="periodPlanDetailResponse" />
 
 
 		<!-- 차량-요금제 보험템플릿 -->
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.CsdealAdminInsuranceTemplateRequest" alias="insuranceTemplateRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.CsdealAdminInsuranceTemplateResponse" alias="insuranceTemplateResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.CsdealAdminInsuranceTemplateDetailRequest" alias="insuranceTemplateDetailRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest" alias="insuranceTemplateRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateResponse" alias="insuranceTemplateResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest" alias="insuranceTemplateDetailRequest" />
 
-  	</typeAliases>
+	</typeAliases>
 
 </configuration>

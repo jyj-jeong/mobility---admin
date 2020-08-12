@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.DochaAdminRentCompanyInfoMapper">
+
+
+    <select id="selectRentCompanyInfo" parameterType="rentCompanyInfoRequest"
+    								   resultType="rentCompanyInfoResponse">
+		<!-- 
+		RA	시스템관리자
+		RU	일반 사용자
+		MU	회원사 사용자
+		MA	제휴사 관리자
+		CU	렌트카회사 사용자
+		CA	렌트카회사 관리자
+		GN	일반회원
+		WD	탈퇴회원
+		 -->
+		<![CDATA[
+					SELECT
+								IFNULL(T1.RT_IDX 											, '' ) AS RT_IDX			                                        /* 회원사idx*/
+							,	IFNULL(T1.RT_P_IDX											, '' ) AS RT_P_IDX                                                  /* 부모제휴사idx */
+							,	IFNULL(T1.COMPANY_NAME 										, '' ) AS COMPANY_NAME                                              /* 부모제휴사idx*/
+							,	IFNULL(T1.COMPANY_ADDRESS									, '' ) AS COMPANY_ADDRESS                                         	/* 주소  */
+							,	IFNULL(T2.STAFF_NAME 	  									, '' ) AS STAFF_NAME                                         	    /* 이름  */
+							,	IFNULL(T2.STAFF_CONTACT1 									, '' ) AS STAFF_CONTACT1                                         	/* 연락처  */
+							,	IFNULL(T1.CAR_COUNT											, '0') AS CAR_COUNT                                                 /* 보유한 차량 카운트*/
+							,	IFNULL(T3.REG_CAR_COUNT		     							, '0') AS REG_CAR_COUNT 											/* 등록 차량 카운트*/
+							,	IFNULL(T1.COMPANY_REGISTRATION_NAME 						, '' ) AS COMPANY_REGISTRATION_NAME  								/* 법인명		  */
+							,	IFNULL(T1.BRANCH_NAME               						, '' ) AS BRANCH_NAME                								/* 지점명               */
+							,	IFNULL(T1.ACCESS_YN                 						, '' ) AS ACCESS_YN                  								/* 접속허용 여부       */
+							,   IFNULL(DATE_FORMAT(T1.REG_DT , '%Y%M%d%H%i%s')           	, '' ) AS REG_DT
+					FROM CDT_RENT_COMPANY T1
+					LEFT OUTER JOIN
+					(
+					    SELECT IFNULL( STAFF_NAME  , '' ) AS STAFF_NAME
+					     ,      IFNULL(STAFF_CONTACT1, '' ) AS STAFF_CONTACT1
+					     ,      IFNULL(STAFF_CONTACT2, '' ) AS STAFF_CONTACT2
+					     ,      IFNULL( STAFF_EMAIL  , '' ) AS STAFF_EMAIL
+					     ,      RT_IDX
+					     ,      OWNER_YN
+					     FROM   CDT_RENT_COMPANY_STAFF
+					     WHERE  OWNER_YN IN('Y')
+					) T2 ON T1.RT_IDX = T2.RT_IDX
+					LEFT OUTER JOIN
+                    (
+                      SELECT IFNULL(COUNT(CI.CR_IDX), '0') AS REG_CAR_COUNT
+                      ,      CI.RT_IDX AS RT_IDX
+                      FROM   CDT_CAR_INFO CI GROUP BY CI.RT_IDX
+                    ) T3 ON T1.RT_IDX = T3.RT_IDX
+        ]]>
+<!--				<trim prefix="WHERE" prefixOverrides="AND|OR">-->
+<!--					1=1-->
+<!--					<if test="userRole.equals('CA') and rtIdx != null and rtIdx != '' ">-->
+<!--			         		AND <![CDATA[ A.RT_IDX = #{rtIdx}  ]]>-->
+<!--		         	</if>-->
+<!--		        </trim>-->
+		        <if test="searchType != null and searchType != '' ">
+					<choose>
+						<when test =' searchType == "rtIdx" '>
+							<if test="searchKeyWord != null and searchKeyWord != '' ">
+					    		AND <![CDATA[ A.RT_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+					    	</if>
+					    </when>
+					    <when test =' searchType == "companyName" '>
+					    	<if test="searchKeyWord != null and searchKeyWord != '' ">
+					    		AND <![CDATA[ A.COMPANY_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+					    	</if>
+					    </when>
+					    <when test =' searchType == "branchName" '>
+					    	<if test="searchKeyWord != null and searchKeyWord != '' ">
+					    		AND <![CDATA[ A.BRANCH_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+					    	</if>
+					    </when>
+					    <when test =' searchType == "staffName" '>
+					    	<if test="searchKeyWord != null and searchKeyWord != '' ">
+					    		AND <![CDATA[ A.STAFF_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+					    	</if>
+					    </when>
+					    <when test =' searchType == "staffContact1" '>
+					    	<if test="searchKeyWord != null and searchKeyWord != '' ">
+					    		AND <![CDATA[ A.STAFF_CONTACT1  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
+					    	</if>
+					    </when>
+					    <otherwise>
+					    </otherwise>
+					</choose>
+				</if>
+				ORDER BY T1.REG_DT DESC
+-- 		 )
+    </select>
+
+ 	<select id="selectRentCompanyDetailInfo" parameterType="rentCompanyDetailRequest"
+    								   resultType="rentCompanyDetailResponse">
+		<![CDATA[
+		SELECT
+		1 AS ROW_NUMBER
+		, IFNULL(T1.RT_IDX                      	, '') AS RT_IDX                         /*제휴사idx*/
+		, IFNULL(T1.RT_P_IDX                    	, '') AS RT_P_IDX                       /*부모제휴사idx*/
+		, IFNULL(T1.COMPANY_NAME                	, '') AS COMPANY_NAME                   /*제휴사명*/
+		, IFNULL(T1.COMPANY_ZIPCODE             	, '') AS COMPANY_ZIPCODE                /*우편번호*/
+		, IFNULL(T1.COMPANY_ADDRESS             	, '') AS COMPANY_ADDRESS                /*주소*/
+		, IFNULL(T1.COMPANY_ADDRESS_DETAIL      	, '') AS COMPANY_ADDRESS_DETAIL         /*상세주소*/
+		, IFNULL(T1.LAT                         	, '') AS LAT                            /*위도*/
+		, IFNULL(T1.LNG                         	, '') AS LNG                            /*경도*/
+		, IFNULL(T1.ESTABLISHED_DATE            	, '') AS ESTABLISHED_DATE               /*설립일*/
+		, IFNULL(T1.COMPANY_REGISTRATION_NUMBER 	, '') AS COMPANY_REGISTRATION_NUMBER    /*사업자등록번호*/
+		, IFNULL(T1.COMPANY_REGISTRATION_IMG    	, '') AS COMPANY_REGISTRATION_IMG       /*사업자등록증이미지idx*/
+		, IFNULL(T1.ACCOUNT_BANK                	, '') AS ACCOUNT_BANK                   /*정산계좌은행*/
+		, IFNULL(T1.ACCOUNT_NUMBER              	, '') AS ACCOUNT_NUMBER                 /*정산계좌번호*/
+		, IFNULL(T1.ACCOUNT_HOLDER              	, '') AS ACCOUNT_HOLDER                 /*정산계좌예금주*/
+		, IFNULL(T1.ACCOUNT_IMG_IDX             	, '') AS ACCOUNT_IMG_IDX                /*정산통장이미지idx*/
+		, IFNULL(T1.LONGTERM_RENT_YN            	, '') AS LONGTERM_RENT_YN               /*장기렌트이용여부*/
+		, IFNULL(T1.SHORTTERM_RENT_YN           	, '') AS SHORTTERM_RENT_YN              /*단기렌트이용여부*/
+		, IFNULL(T1.ALLIANCE_STATUS             	, '') AS ALLIANCE_STATUS                /*제휴상태*/
+		, IFNULL(T1.BRANCH_ABLE_YN              	, '') AS BRANCH_ABLE_YN                 /*지점보유가능여부*/
+		, IFNULL(T1.CAR_COUNT                   	, '') AS CAR_COUNT                      /*보유차량대수*/
+		, IFNULL(T1.ETC                         	, '') AS ETC                            /*비고*/
+		, IFNULL(T1.REG_ID                      	, '') AS REG_ID                         /*등록자*/
+		, IFNULL(T1.REG_DT                      	, '') AS REG_DT                         /*등록일시*/
+		, IFNULL(T1.MOD_ID                      	, '') AS MOD_ID                         /*수정자*/
+		, IFNULL(T1.MOD_DT                      	, '') AS MOD_DT                         /*수정일시*/
+		, IFNULL(T1.DEL_YN                      	, '') AS DEL_YN                         /*삭제여부*/
+		, IFNULL(T1.COMPANY_CONTACT1            	, '') AS COMPANY_CONTACT1               /*회사대표번호*/
+		, IFNULL(T1.COMPANY_CONTACT2            	, '') AS COMPANY_CONTACT2               /*회사번호*/
+		, IFNULL(T1.ALARM_YN                    	, '') AS ALARM_YN                       /*알림톡수신여부*/
+		, IFNULL(T1.COMPANY_REGISTRATION_NAME   	, '') AS COMPANY_REGISTRATION_NAME      /*법인명*/
+		, IFNULL(T1.BRANCH_NAME                 	, '') AS BRANCH_NAME                    /*지점명*/
+		, IFNULL(T1.ACCESS_YN                   	, '') AS ACCESS_YN                      /*접속허용여부*/
+		, IFNULL(T1.CAR_COUNT				  	 	, 0)  AS CAR_COUNT                      /* 보유한 차량 카운트*/
+		, (SELECT COUNT(RT_IDX) FROM CDT_CAR_INFO WHERE RT_IDX = T1.RT_IDX) AS REG_CAR_COUNT  /* 보유한 차량 카운트*/
+		, IFNULL(T2.COMMISSION_PER					, '') AS COMMISSION_PER					/*수수료윯*/
+		, IFNULL(T2.TAX_INVOICE_CODE				, '') AS TAX_INVOICE_CODE				/*세금계산서 발행주체*/
+		, IFNULL(T3.WEEKDAY_OPEN_START				, '') AS WEEKDAY_OPEN_START				/*평일영업시작시간*/
+		, IFNULL(T3.WEEKDAY_OPEN_END				, '') AS WEEKDAY_OPEN_END				/*평일영업종료시간*/
+		, IFNULL(T3.WEEKEND_OPEN_START				, '') AS WEEKEND_OPEN_START				/*주말영업시작시간*/
+		, IFNULL(T3.WEEKEND_OPEN_END				, '') AS WEEKEND_OPEN_END				/*주말영업종료시간*/
+		, IFNULL(T3.WEEKDAY_DELIVERY_START			, '') AS WEEKDAY_DELIVERY_START			/*평일배달시작시간*/
+		, IFNULL(T3.WEEKDAY_DELIVERY_END			, '') AS WEEKDAY_DELIVERY_END			/*평일배달종료시간*/
+		, IFNULL(T3.WEEKEND_DELIVERY_START			, '') AS WEEKEND_DELIVERY_START			/*주말배달시작시간*/
+		, IFNULL(T3.WEEKEND_DELIVERY_END			, '') AS WEEKEND_DELIVERY_END			/*주말배달종료시간*/
+		, IFNULL(T3.RETURN_INSPECTION_TIME			, '') AS RETURN_INSPECTION_TIME			/*반납정비시간*/
+		, IFNULL(T3.VISIT_ABLE_TIME				, '') AS VISIT_ABLE_TIME				/*방문예약가능시간*/
+		, IFNULL(T3.DELIVERY_ABLE_TIME				, '') AS DELIVERY_ABLE_TIME				/*배달예약가능시간*/
+		, IFNULL(T3.WEEKEND_RESERVE_MINIMUM_TIME	, '') AS WEEKEND_RESERVE_MINIMUM_TIME	/*주말공휴일최소예약시간*/
+		, IFNULL(T3.WEEKDAY_ABLE_DELIVERY_TIME		, '') AS WEEKDAY_ABLE_DELIVERY_TIME		/*평일왕복배달가능시간시작*/
+		, IFNULL(T3.WEEKEND_ABLE_DELIVERY_TIME		, '') AS WEEKEND_ABLE_DELIVERY_TIME		/*주말왕복배달가능시간시작*/
+		, IFNULL(T3.WEEKEND_RESERVE_MINIMUM_RATE	, '') AS WEEKEND_RESERVE_MINIMUM_RATE	/*주말공휴일할증율*/
+	    , IFNULL(T4.RA_GBN_LT, '0') AS RA_GBN_LT /* 배달가능지역 장기 카운트 */
+	    , IFNULL(T4.RA_GBN_ST, '0') AS RA_GBN_ST /* 배달가능지역 단기 카운트 */
+		FROM CDT_RENT_COMPANY T1
+								LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T2 
+								ON  T1.RT_IDX = T2.RT_IDX
+								LEFT OUTER JOIN CDT_RENT_COMPANY_TIME T3 
+								ON T1.RT_IDX = T3.RT_IDX
+				                LEFT JOIN (
+				                SELECT 
+				                RT_IDX
+				                ,SUM(CASE WHEN RA_GBN_CODE = 'LT' THEN 1 ELSE 0 END) AS RA_GBN_LT
+				                ,SUM(CASE WHEN RA_GBN_CODE = 'ST' THEN 1 ELSE 0 END) AS RA_GBN_ST
+				                FROM CDT_RENT_COMPANY_ABLEAREA
+				                GROUP BY RT_IDX
+				                ) T4 ON T1.RT_IDX = T4.RT_IDX
+		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != '' ">
+	        	<![CDATA[ T1.RT_IDX = #{rtIdx}  ]]>
+         	</if> 
+        </trim>
+    </select>
+    
+     <!-- 회원사 정보 UPDATE OR INSERT
+    	 1. CDT_USER_INFO
+    	 2. CDT_USER_LICENSE_INFO -->
+    <!-- <update  id="updateRentCompanyDetailInfo" parameterType="userInfoRequest">
+    	<![CDATA[ UPDATE CDT_USER_INFO ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="userId 			!= null"><![CDATA[    USER_ID				= #{userId}  		]]></if>	아이디
+			<if test="userName 			!= null"><![CDATA[  , USER_NAME				= #{userName}  		]]></if>	이름
+			<if test="joinChannel 		!= null"><![CDATA[  , Join_Channel			= #{joinChannel}  	]]></if>	계정타임
+			<if test="userBirthDay 		!= null"><![CDATA[  , USER_BIRTHDAY			= #{userBirthDay}  	]]></if>	생녀월일
+			<if test="userContact1 		!= null"><![CDATA[  , USER_CONTACT1			= #{userContact1}  	]]></if>	연락처
+			<if test="userGender 		!= null"><![CDATA[  , USER_GENDER			= #{userGender}  	]]></if>	성별
+ 			<if test="userRole 			!= null"><![CDATA[  , USER_ROLE				= #{userRole}  		]]></if>	권한
+ 			<if test="userStatusCode 	!= null"><![CDATA[  , USER_STATUS_CODE		= #{userStatusCode} ]]></if>	회원상태
+ 			<if test="userLicenseOwnYn 	!= null"><![CDATA[  , USER_LICENSE_OWN_YN 	= #{userLicenseOwnYn}  	]]></if> 	면허정보 사용 여부		
+ 			<if test="urIdx 			!= null"><![CDATA[  , MOD_ID 				= #{urIdx}  		]]></if> 	수정자
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="urIdx != null and urIdx != ''">
+	     		<![CDATA[ UR_IDX = #{urIdx} ]]>
+	        </if>
+		</trim>
+	</update> -->
+
+
+    <update  id="updateCdtRentCompany" parameterType="rentCompanyDetailRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="companyName         		!= null"><![CDATA[    COMPANY_NAME					= #{companyName}				]]></if>	
+			<if test="companyZipcode      		!= null"><![CDATA[  , COMPANY_ZIPCODE				= #{companyZipcode}				]]></if>	
+			<if test="companyAddress      		!= null"><![CDATA[  , COMPANY_ADDRESS				= #{companyAddress}				]]></if>	
+			<if test="companyAddressDetail		!= null"><![CDATA[  , COMPANY_ADDRESS_DETAIL		= #{companyAddressDetail}		]]></if>	
+			<if test="companyRegistrationNumber	!= null"><![CDATA[  , COMPANY_REGISTRATION_NUMBER	= #{companyRegistrationNumber}	]]></if>	
+			<if test="accountBank  				!= null"><![CDATA[  , ACCOUNT_BANK					= #{accountBank}				]]></if>	
+ 			<if test="accountNumber				!= null"><![CDATA[  , ACCOUNT_NUMBER				= #{accountNumber}				]]></if>	
+ 			<if test="accountHolder				!= null"><![CDATA[  , ACCOUNT_HOLDER				= #{accountHolder}				]]></if>	
+ 			<if test="accessYn 					!= null"><![CDATA[  , ALARM_YN 						= #{alarmYn}					]]></if> 		
+ 			<if test="companyRegistrationName 	!= null"><![CDATA[  , COMPANY_REGISTRATION_NAME 	= #{companyRegistrationName}	]]></if>
+ 			<if test="companyContact1 			!= null"><![CDATA[  , COMPANY_CONTACT1 				= #{companyContact1}			]]></if>
+ 			<if test="branchName 				!= null"><![CDATA[  , BRANCH_NAME 					= #{branchName}					]]></if> 		
+ 			<if test="alarmYn 					!= null"><![CDATA[  , ACCESS_YN 					= #{accessYn}					]]></if> 				
+ 			<if test="carCount 					!= null"><![CDATA[  , CAR_COUNT 					= #{carCount}  					]]></if> 	<!-- 총 차량수 -->		
+ 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 						= #{modId}  					]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != ''">
+	     		<![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>
+		</trim>
+	</update>
+
+    <insert  id="insertCdtRentCompany" parameterType="rentCompanyDetailRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_RENT_COMPANY 
+			   	(
+			   		RT_IDX
+			   	,	COMPANY_NAME					
+				,	COMPANY_ZIPCODE				
+				,   COMPANY_ADDRESS				
+				,	COMPANY_ADDRESS_DETAIL		
+				,	COMPANY_REGISTRATION_NUMBER	
+				,	ACCOUNT_BANK					
+				,	ACCOUNT_NUMBER				
+				,	ACCOUNT_HOLDER				
+				,	ALARM_YN 						
+				,	COMPANY_REGISTRATION_NAME 	
+				,	BRANCH_NAME 					
+				,	ACCESS_YN
+				,	REG_ID
+				,	REG_DT
+				,	DEL_YN 
+				)
+				VALUES(		
+					#{rtIdx}
+				,	#{companyName}				
+				,	#{companyZipcode}				
+				,	#{companyAddress}				
+				,	#{companyAddressDetail}		
+				,	#{companyRegistrationNumber}	
+				,	#{accountBank}				
+				,	#{accountNumber}				
+				,	#{accountHolder}				
+				,	#{accessYn}					
+				,	#{companyRegistrationName}	
+				,	#{branchName}					
+				,	#{alarmYn}
+				,   #{regId}
+				,   SYSDATE
+				,   'N'
+				)				
+    ]]>
+    </insert>
+
+    <!-- 직원 리스트 조회
+			RA	시스템관리자
+			RU	일반 사용자
+			MU	회원사 사용자
+			MA	제휴사 관리자
+			CU	렌트카회사 사용자
+			CA	렌트카회사 관리자
+			GN	일반회원
+			WD	탈퇴회원
+     -->
+    <select id="selectrentCompanyStaffList" parameterType="cdtRentCompanyStaffRequest"
+    								   		resultType="cdtRentCompanyStaffResponse">
+		<![CDATA[
+		SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* FROM ( 
+			SELECT
+						IFNULL(T2.RS_IDX          , '') AS RS_IDX             /*제휴사직원idsx*/
+					,	IFNULL(T2.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
+					,	IFNULL(T2.STAFF_NAME      , '') AS STAFF_NAME         /*직원명*/
+					,	IFNULL(T2.STAFF_CONTACT1  , '') AS STAFF_CONTACT1     /*연락처1*/
+					,	IFNULL(T2.STAFF_CONTACT2  , '') AS STAFF_CONTACT2     /*연락처2*/
+					,	IFNULL(T2.STAFF_EMAIL     , '') AS STAFF_EMAIL        /*이메일*/
+					,	IFNULL(T2.STAFF_TITLE     , '') AS STAFF_TITLE        /*직위*/
+					,	IFNULL(T2.OWNER_YN        , '') AS OWNER_YN           /*대표여부*/
+					,	IFNULL(T2.STAFF_TYPE_CODE , '') AS STAFF_TYPE_CODE    /*직원분류code*/
+					,	IFNULL(T2.REG_ID          , '') AS REG_ID             /*등록자*/
+					,	IFNULL(T2.REG_DT          , '') AS REG_DT             /*등록일시*/
+					,	IFNULL(T2.MOD_ID          , '') AS MOD_ID             /*수정자*/
+					,	IFNULL(T2.MOD_DT          , '') AS MOD_DT             /*수정일시*/
+					,	IFNULL(T2.DEL_YN          , '') AS DEL_YN             /*삭제여부*/			
+					,	IFNULL(T2.UR_IDX          , '') AS UR_IDX             /*회원순번*/			
+			FROM CDT_USER_INFO T1
+			LEFT JOIN CDT_RENT_COMPANY_STAFF T2
+             	   ON T1.UR_IDX = T2.UR_IDX
+            	  -- AND T1.RT_IDX = T2.RT_IDX
+			WHERE 1=1
+              AND T2.RS_IDX IS NOT NULL
+              AND 'N' = IFNULL(T2.DEL_YN, 'N')
+		) A )
+		  ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<![CDATA[	1=1  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+         	<if test="urIdx != null and urIdx != ''">
+	    		AND <![CDATA[ UR_IDX = #{urIdx} ]]>
+	       	</if>
+			<if test="rsIdx != null and rsIdx != ''">
+	    		AND <![CDATA[ RS_IDX = #{rsIdx} ]]>
+	       	</if>	       	
+         	<if test="staffName != null and staffName != ''">
+	    		AND <![CDATA[ STAFF_NAME = #{staffName} ]]>
+	       	</if>
+         	<if test="staffEmail != null and staffEmail != ''">
+	    		AND <![CDATA[ STAFF_EMAIL = #{staffEmail} ]]>
+	       	</if>	       	
+         	<if test="staffContact1 != null and staffContact1 != ''">
+	    		AND <![CDATA[ STAFF_CONTACT1 = #{staffContact1} ]]>
+	       	</if>	       	
+       	</trim>
+    </select>
+
+    <update  id="updateCdtRentStaff" parameterType="cdtRentCompanyStaffRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY_STAFF ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+    		<if test="staffName          		!= null"><![CDATA[    STAFF_NAME		= #{staffName}		]]></if>	
+			<if test="staffContact1      		!= null"><![CDATA[  , STAFF_CONTACT1	= #{staffContact1}	]]></if>
+			<!-- <if test="staffContact2      		!= null"><![CDATA[  , STAFF_CONTACT2	= #{staffContact2}	]]></if> -->	
+			<if test="staffEmail         		!= null"><![CDATA[  , STAFF_EMAIL		= #{staffEmail}		]]></if>
+			<if test="staffTitle         		!= null"><![CDATA[  , STAFF_TITLE		= #{staffTitle}		]]></if>
+			<if test="ownerYn            		!= null"><![CDATA[  , OWNER_YN			= #{ownerYn}		]]></if>
+			<!-- <if test="staffTypeCode            	!= null"><![CDATA[  , STAFF_TYPE_CODE	= #{staffTypeCode}	]]></if> -->
+ 			<if test="delYn 					!= null"><![CDATA[  , DEL_YN 			= #{delYn}  		]]></if> 	<!-- 사용여부 -->
+ 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 			= #{modId}  		]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != ''">
+	     		<![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>
+			<if test="rsIdx != null and rsIdx != ''">
+	     		AND <![CDATA[ RS_IDX = #{rsIdx} ]]>
+	        </if>	        
+		</trim>			
+    </update>
+
+    <update  id="updateCdtRentStaffUserinfo" parameterType="cdtRentCompanyStaffRequest">
+	   	<![CDATA[ UPDATE CDT_USER_INFO ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+    		RT_IDX		= #{rtIdx}
+    		<if test="userRole          		!= null"><![CDATA[  , USER_ROLE		= #{userRole}		]]></if>	
+ 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 		= #{modId}  		]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="urIdx != null and urIdx != ''">
+	     		AND <![CDATA[ UR_IDX = #{urIdx} ]]>
+	        </if>	        
+		</trim>			
+    </update>
+
+ 	<insert  id="insertCdtRentCompanyStaff" parameterType="cdtRentCompanyStaffRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_RENT_COMPANY_STAFF 
+			   	(
+					RS_IDX
+				,	RT_IDX
+				,	STAFF_NAME
+				,	STAFF_CONTACT1
+				,	STAFF_CONTACT2
+				,	STAFF_EMAIL
+				,	STAFF_TITLE
+				,	OWNER_YN
+				,	STAFF_TYPE_CODE
+				,	REG_ID
+				,	REG_DT
+				,	DEL_YN
+				,	UR_IDX
+				)
+				VALUES(		
+					(SELECT IFNULL(MAX(RS_IDX)+1,0) FROM CDT_RENT_COMPANY_STAFF)				
+				,	#{rtIdx}				
+				,	#{staffName}
+				,	#{staffContact1}
+				,	#{staffContact2}
+				,	#{staffEmail}
+				,	#{staffTitle}
+				,	#{ownerYn}
+				,	#{staffTypeCode}
+				,	#{regId}
+				,	SYSDATE
+				,	#{delYn}
+				, 	#{urIdx}
+				)				
+    ]]>
+    </insert>
+
+	<!-- 
+	회원사별 최소예약정보 [일시 FR~TO, 최소예약 시간]
+	 -->
+    <select id="selectCdtRentCompanyReseveMinList" parameterType="cdtRentCompanyReseveMinRequest"
+    								   		resultType="cdtRentCompanyReseveMinResponse">
+		<![CDATA[
+		SELECT * FROM (
+						SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
+						FROM ( 
+								SELECT
+											IFNULL(MIN_IDX          	, '') AS MIN_IDX            /*특정기간idx*/
+										,	IFNULL(RT_IDX          	, '') AS RT_IDX             /*제휴사idx*/
+										,	IFNULL(MINIMUM_START_DT    , '') AS MINIMUM_START_DT	/*최소예약시간시작일*/
+										,	IFNULL(MINIMUM_END_DT  	, '') AS MINIMUM_END_DT     /*최소예약시간종료일*/
+										,	IFNULL(MINIMUM_TIME  		, '') AS MINIMUM_TIME     	/*최소시간*/
+										,	IFNULL(DEL_YN     			, '') AS DEL_YN        		/*삭제여부*/
+								FROM CDT_RENT_COMPANY_RESERVE_MIN
+								WHERE 'N' = IFNULL(DEL_YN, 'N')
+						) A 
+		)
+		]]>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+			<![CDATA[	1=1  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+         	<if test="minIdx != null and minIdx != ''">
+	    		AND <![CDATA[ MIN_IDX = #{minIdx} ]]>
+	       	</if>
+         	<if test="tminIdx != null and tminIdx != ''">
+	    		AND <![CDATA[ MIN_IDX != #{tminIdx} ]]>
+	       	</if>
+         	<if test="minimumStartDt != null and minimumStartDt != ''">
+	    		AND <![CDATA[ 
+	    		( MINIMUM_START_DT between #{minimumStartDt} and #{minimumEndDt} 
+	    		OR MINIMUM_END_DT between #{minimumStartDt} and #{minimumEndDt} 
+	    		OR #{minimumStartDt} BETWEEN MINIMUM_START_DT AND MINIMUM_END_DT
+	    		OR #{minimumEndDt} BETWEEN MINIMUM_START_DT AND MINIMUM_END_DT
+	    		) 
+	    		]]>
+	       	</if>
+		</trim>
+    </select>
+    
+    <update  id="updateCdtRentCompanyReserveMin" parameterType="cdtRentCompanyReseveMinRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY_RESERVE_MIN ]]>
+    	<trim prefix="set" prefixOverrides=",">
+    		<if test="minimumStartDt	!= null"><![CDATA[    MINIMUM_START_DT	= #{minimumStartDt}]]></if>	
+			<if test="minimumEndDt  	!= null"><![CDATA[  , MINIMUM_END_DT	= #{minimumEndDt}]]></if>
+			<if test="minimumTime       != null"><![CDATA[  , MINIMUM_TIME		= #{minimumTime}]]></if>
+  			<if test="delYn 			!= null"><![CDATA[  , DEL_YN 			= #{delYn}]]></if> 	<!-- 사용여부 -->
+ 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if>
+ 			, MOD_DT = SYSDATE		
+		</trim>
+
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="minIdx != null and minIdx != ''">
+	     		<![CDATA[ MIN_IDX = #{minIdx} ]]>
+	        </if>
+			<if test="rtIdx != null and rtIdx != ''">
+	     		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>	        
+		</trim>			
+    </update>
+ 
+	<insert  id="insertCdtRentCompanyReserveMin" parameterType="cdtRentCompanyReseveMinRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_RENT_COMPANY_RESERVE_MIN 
+			   	(
+					RT_IDX
+				,	MINIMUM_START_DT
+				,	MINIMUM_END_DT
+				,	MINIMUM_TIME
+				,	REG_ID
+				,	REG_DT
+				,	DEL_YN
+				)
+				VALUES(
+					#{rtIdx}				
+				,	#{minimumStartDt}
+				,	#{minimumEndDt}
+				,	#{minimumTime}
+				,	#{regId}
+				,	SYSDATE
+				,	#{delYn}
+				)				
+    ]]>
+    </insert>
+
+ 	<select id="selectRentCompanyComission" parameterType="cdtRentCompanyComissionRequest"
+    								   resultType="cdtRentCompanyComissionResponse">
+		<![CDATA[
+			SELECT	IFNULL(T1.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
+			FROM CDT_RENT_COMPANY_COMMISSION T1
+		
+		  ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         		<![CDATA[	1=1  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+       	</trim>
+    </select>
+
+    <update  id="updateCdtRentCompanyComission" parameterType="cdtRentCompanyComissionRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY_COMMISSION ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+    		<if test="commissionPer	      		!= null"><![CDATA[    COMMISSION_PER	= #{commissionPer}]]></if>	
+			<if test="taxInvoiceCode      		!= null"><![CDATA[  , TAX_INVOICE_CODE	= #{taxInvoiceCode}]]></if>
+ 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 			= #{modId}  		]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != ''">
+	     		<![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>
+		</trim>			
+    </update>
+
+ 	<insert  id="insertCdtRentCompanyComission" parameterType="cdtRentCompanyComissionRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_RENT_COMPANY_COMMISSION 
+			   	(
+					RT_IDX
+				,	COMMISSION_PER
+				,	TAX_INVOICE_CODE
+				,	REG_ID
+				,	REG_DT
+				)
+				VALUES(					
+					#{rtIdx}				
+				,	#{commissionPer}
+				,	#{taxInvoiceCode}
+				,	#{regId}
+				,	SYSDATE
+				)				
+    ]]>
+    </insert>    
+
+ 	<select id="selectRentCompanyTime" parameterType="cdtRentCompanyTimeRequest"
+    								   resultType="cdtRentCompanyTimeResponse">
+		<![CDATA[
+			SELECT	IFNULL(T1.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
+			FROM CDT_RENT_COMPANY_TIME T1
+		
+		  ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<![CDATA[	1=1  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+       	</trim>
+    </select>
+
+    <update  id="updateCdtRentCompanyTime" parameterType="cdtRentCompanyTimeRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY_TIME ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+	    	<if test="weekdayOpenStart			!= null"><![CDATA[    WEEKDAY_OPEN_START			= #{weekdayOpenStart}]]></if>	
+			<if test="weekdayOpenEnd			!= null"><![CDATA[  , WEEKDAY_OPEN_END				= #{weekdayOpenEnd}]]></if>
+			<if test="weekendOpenStart          != null"><![CDATA[  , WEEKEND_OPEN_START			= #{weekendOpenStart}]]></if>
+			<if test="weekendOpenEnd            != null"><![CDATA[  , WEEKEND_OPEN_END				= #{weekendOpenEnd}]]></if>
+			<if test="weekdayDeliveryStart      != null"><![CDATA[  , WEEKDAY_DELIVERY_START		= #{weekdayDeliveryStart}]]></if>
+			<if test="weekdayDeliveryEnd        != null"><![CDATA[  , WEEKDAY_DELIVERY_END			= #{weekdayDeliveryEnd}]]></if>
+			<if test="weekendDeliveryStart		!= null"><![CDATA[  , WEEKEND_DELIVERY_START		= #{weekendDeliveryStart}]]></if>
+			<if test="weekendDeliveryEnd		!= null"><![CDATA[  , WEEKEND_DELIVERY_END			= #{weekendDeliveryEnd}]]></if>
+			<if test="weekdayAbleDeliveryTime   != null"><![CDATA[  , WEEKDAY_ABLE_DELIVERY_TIME	= #{weekdayAbleDeliveryTime}]]></if>
+			<if test="weekendAbleDeliveryTime   != null"><![CDATA[  , WEEKEND_ABLE_DELIVERY_TIME	= #{weekendAbleDeliveryTime}]]></if>
+			<if test="returnInspectionTime      != null"><![CDATA[  , RETURN_INSPECTION_TIME		= #{returnInspectionTime}]]></if>
+			<if test="weekendReserveMinimumTime != null"><![CDATA[  , WEEKEND_RESERVE_MINIMUM_TIME	= #{weekendReserveMinimumTime}]]></if>
+			<if test="weekendReserveMinimumRate != null"><![CDATA[  , WEEKEND_RESERVE_MINIMUM_RATE	= #{weekendReserveMinimumRate}]]></if>
+ 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 						= #{modId}]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != ''">
+	     		<![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>
+		</trim>			
+    </update>
+
+  	<insert  id="insertCdtRentCompanyTime" parameterType="cdtRentCompanyTimeRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_RENT_COMPANY_TIME 
+			   	(
+					RT_IDX
+				,	WEEKDAY_OPEN_START
+				,	WEEKDAY_OPEN_END
+				,	WEEKEND_OPEN_START
+				,	WEEKEND_OPEN_END
+				,	WEEKDAY_DELIVERY_START
+				,	WEEKDAY_DELIVERY_END
+				,	WEEKEND_DELIVERY_START
+				,	WEEKEND_DELIVERY_END
+				,	WEEKDAY_ABLE_DELIVERY_TIME
+				,	WEEKEND_ABLE_DELIVERY_TIME
+				,	RETURN_INSPECTION_TIME
+				,	WEEKEND_RESERVE_MINIMUM_TIME
+				,	WEEKEND_RESERVE_MINIMUM_RATE
+				,	REG_ID
+				,	REG_DT
+				)
+				VALUES(					
+					#{rtIdx}				
+				,	#{weekdayOpenStart}
+				,	#{weekdayOpenEnd}
+				,	#{weekendOpenStart}
+				,	#{weekendOpenEnd}
+				,	#{weekdayDeliveryStart}
+				,	#{weekdayDeliveryEnd}
+				,	#{weekendDeliveryStart}
+				,	#{weekendDeliveryEnd}
+				,	#{weekdayAbleDeliveryTime}
+				,	#{weekendAbleDeliveryTime}
+				,	#{returnInspectionTime}
+				,	#{weekendReserveMinimumTime}
+				,	#{weekendReserveMinimumRate}
+				,	#{regId}
+				,	SYSDATE
+				)				
+    ]]>
+    </insert>   
+
+ 	<select id="selectRentCompanyHoliday" parameterType="RentCompanyHolidayRequest"
+    								   resultType="RentCompanyHolidayResponse">
+		<![CDATA[
+			SELECT	
+				IFNULL(HOL_IDX				, '') AS HOL_IDX            /*휴일idx*/
+			, 	IFNULL(RT_IDX          	, '') AS RT_IDX             /*제휴사idx*/
+			, 	IFNULL(HOLIDAY_START_DT	, '') AS HOLIDAY_START_DT   /*공휴일시작일*/
+			, 	IFNULL(HOLIDAY_END_DT		, '') AS HOLIDAY_END_DT     /*공휴일종료일*/
+			, 	IFNULL(HOLIDAY_NAME		, '') AS HOLIDAY_NAME       /*휴일명*/
+			, 	IFNULL(DEL_YN          	, '') AS DEL_YN             /*삭제여부*/
+			FROM CDT_HOLIDAYS
+		
+		  ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<![CDATA[	IFNULL(DEL_YN, 'N') = 'N'  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+         	<if test="holIdx != null and holIdx != ''">
+	    		AND <![CDATA[ HOL_IDX = #{holIdx} ]]>
+	       	</if>
+         	<if test="tholIdx != null and tholIdx != ''">
+	    		AND <![CDATA[ HOL_IDX != #{tholIdx} ]]>
+	       	</if>
+         	<if test="holidayStartDt != null and holidayStartDt != ''">
+	    		AND <![CDATA[ 
+	    		( HOLIDAY_START_DT between #{holidayStartDt} and #{holidayEndDt} 
+	    		OR HOLIDAY_END_DT between #{holidayStartDt} and #{holidayEndDt} 
+	    		OR #{holidayStartDt} BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT
+	    		OR #{holidayEndDt} BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT
+	    		) 
+	    		]]>
+	       	</if>
+       	</trim>
+    </select>
+
+    <update  id="updateRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">
+    	<![CDATA[ UPDATE CDT_HOLIDAYS ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+	    	<if test="rtIdx				!= null"><![CDATA[    RT_IDX			= #{rtIdx}]]></if>	
+			<if test="holidayStartDt	!= null"><![CDATA[  , HOLIDAY_START_DT	= #{holidayStartDt}]]></if>
+			<if test="holidayEndDt      != null"><![CDATA[  , HOLIDAY_END_DT	= #{holidayEndDt}]]></if>
+			<if test="holidayName       != null"><![CDATA[  , HOLIDAY_NAME		= #{holidayName}]]></if>
+  			<if test="delYn 			!= null"><![CDATA[  , DEL_YN 			= #{delYn}]]></if> 	<!-- 사용여부 -->
+ 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="holIdx != null and holIdx != ''">
+	     		<![CDATA[ HOL_IDX = #{holIdx} ]]>
+	        </if>
+		</trim>			
+    </update>
+
+  	<insert  id="insertRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">
+    <![CDATA[
+			   	INSERT INTO CDT_HOLIDAYS 
+			   	(
+					RT_IDX
+				,	HOLIDAY_START_DT
+				,	HOLIDAY_END_DT
+				,	HOLIDAY_NAME
+				,	DEL_YN
+				,	REG_ID
+				,	REG_DT
+				)
+				VALUES(					
+					#{rtIdx}				
+				,	#{holidayStartDt}
+				,	#{holidayEndDt}
+				,	#{holidayName}
+				,	#{delYn}
+				,	#{regId}
+				,	SYSDATE
+				)				
+    ]]>
+    </insert>   
+
+ 	<select id="selectCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest"
+    								   resultType="CdtRentCompanyAbleareaResponse">
+		<![CDATA[
+			SELECT	
+				IFNULL(LAT				, '') AS LAT            /*위도*/
+			, 	IFNULL(LNG          	, '') AS LNG             /*경도*/
+			FROM CDT_RENT_COMPANY_ABLEAREA
+		  ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+         	<![CDATA[	IFNULL(DEL_YN, 'N') = 'N'  ]]>         
+         	<if test="rtIdx != null and rtIdx != ''">
+	    		AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+	       	</if>
+         	<if test="raGbnCode != null and raGbnCode != ''">
+	    		AND <![CDATA[ RA_GBN_CODE = #{raGbnCode} ]]>
+	       	</if>
+	       	order by RA_IDX
+       	</trim>
+    </select>
+
+    <update  id="updateCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest">
+    	<![CDATA[ UPDATE CDT_RENT_COMPANY_ABLEAREA ]]>
+    	<trim prefix="SET" prefixOverrides=",">
+  			, DEL_YN 			= 'Y'
+ 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if> 	<!-- 수정자 -->
+ 			, MOD_DT = SYSDATE		
+		</trim>
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rtIdx != null and rtIdx != ''">
+	     		<![CDATA[ RT_IDX = #{rtIdx} ]]>
+	        </if>
+         	<if test="raGbnCode != null and raGbnCode != ''">
+	    		AND <![CDATA[ RA_GBN_CODE = #{raGbnCode} ]]>
+	       	</if>
+	       	AND DEL_YN = 'N'
+		</trim>			
+    </update>
+
+  	<update  id="insertCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest">
+    <![CDATA[
+   	INSERT INTO CDT_RENT_COMPANY_ABLEAREA 
+   	(
+		RT_IDX
+	,	LAT
+	,	LNG
+	,	RA_GBN_CODE
+	,	DEL_YN
+	,	REG_ID
+	,	REG_DT
+	)
+	SELECT
+	#{rtIdx} as RT_IDX
+	,replace(SUBSTR(TXT, 0, INSTR(TXT,'|LNG:')-1), 'LAT:', '') as LAT
+	,replace(SUBSTR(TXT, INSTR(TXT,'|LNG:')+1), 'LNG:', '') as LAT
+	,#{raGbnCode} as RA_GBN_CODE
+	,'N' AS DEL_YN
+	,#{regId} as REG_ID
+	,SYSDATE as REG_DT
+	FROM (
+	    SELECT ROWNUM AS ID,
+	    trim(regexp_substr(#{latlng}, '[^,]+', 1, LEVEL)) TXT
+	    FROM dual
+	    CONNECT BY LEVEL <= length(#{latlng}) - length(REPLACE(#{latlng}, ',', ''))+1
+	) X
+	ORDER BY ID
+    ]]>
+    </update>   
+     
+</mapper>
