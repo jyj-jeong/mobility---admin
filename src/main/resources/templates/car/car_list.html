@@ -36,7 +36,17 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="example" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <button class="btn btn-info" onclick="addRegCar()">차량 등록</button>
+                                <script th:inline="javascript">
+                                    /* 차량 등록 */
+                                    function addRegCar() {
+                                        var url = "/car/add";
+                                        var name = "차량 등록";
+                                        var specs = "width=1200, height=800, location=no, left=500, top=50";
+                                        window.open(url, name, specs);
+                                    }
+                                </script>
                                 <thead>
                                 <tr>
                                     <th>등록차량번호</th>
@@ -124,31 +134,31 @@
     </div>
 </div>
 <script th:inline="javascript">
-    $(document).ready(function() {
-        // Setup - add a text input to each footer cell
-        $('#example tfoot th').each( function () {
-            var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="'+title+'" />' );
-        } );
-
-        // DataTable
-        var table = $('#example').DataTable({
-            initComplete: function () {
-                // Apply the search
-                this.api().columns().every( function () {
-                    var that = this;
-
-                    $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                        if ( that.search() !== this.value ) {
-                            that
-                                .search( this.value )
-                                .draw();
-                        }
-                    } );
-                } );
-            }
-        });
-    } );
+    // $(document).ready(function() {
+    //     // Setup - add a text input to each footer cell
+    //     $('#example tfoot th').each( function () {
+    //         var title = $(this).text();
+    //         $(this).html( '<input type="text" placeholder="'+title+'" />' );
+    //     } );
+    //
+    //     // DataTable
+    //     var table = $('#example').DataTable({
+    //         initComplete: function () {
+    //             // Apply the search
+    //             this.api().columns().every( function () {
+    //                 var that = this;
+    //
+    //                 $( 'input', this.footer() ).on( 'keyup change clear', function () {
+    //                     if ( that.search() !== this.value ) {
+    //                         that
+    //                             .search( this.value )
+    //                             .draw();
+    //                     }
+    //                 } );
+    //             } );
+    //         }
+    //     });
+    // } );
 
     // 상세보기 이동
     $('#example > tbody > tr >').click(function () {

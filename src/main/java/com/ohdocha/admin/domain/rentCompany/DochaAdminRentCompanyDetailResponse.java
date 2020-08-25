@@ -9,7 +9,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("rentCompanyDetailResponse")
 public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	
-	//CDT_RETNCOMPANYINFO
+	//DC_RETNCOMPANYINFO
 	private String rtIdx                     ; //제휴사idx
 	private String rtPIdx                    ; //부모제휴사idx
 	private String companyName               ; //제휴사명
@@ -43,7 +43,7 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	private String branchName                ; //지점명
 	private String accessYn                  ; //접속허용여부
 	
-	//CDT_RENTCOMPANY_STAFF 담당자정보
+	//DC_RENTCOMPANY_STAFF 담당자정보
 //	private String rsIdx                     ; //제휴사직원idsx
 //	private String staffName                 ; //직원명
 //	private String staffContact1             ; //연락처1
@@ -53,11 +53,11 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 //	private String ownerYn                   ; //대표여부
 //	private String staffTypeCode             ; //직원분류code
 	
-	//CDT_RENT_COMPANY_COMMISSION 수수료율
+	//DC_RENT_COMPANY_COMMISSION 수수료율
 	private String commissionPer			 ; //수수료율
 	private String taxInvoiceCode			 ; //세금계산서발행주체
 	
-	//CDT_RENT_COMPANY_TIME	예약정보
+	//DC_RENT_COMPANY_TIME	예약정보
 	private String weekdayOpenStart				             ; //평일영업시작시간
 	private String weekdayOpenEnd							 ; //평일영업종료시간
 	private String weekendOpenStart                          ; //주말영업시작시간
@@ -74,7 +74,7 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	private String weekendAbleDeliveryTime                   ; //주말왕복배달가능시간
 	private String weekendReserveMinimumRate                 ; //주말/공휴일 할증율
 	
-	//CDT_RENT_COMPANY_RESERVE_MIN 특정기간 최소 예약시간 설정
+	//DC_RENT_COMPANY_RESERVE_MIN 특정기간 최소 예약시간 설정
 //	private String minIdx                                     ; // 특정기간idx
 //	private String minimumStartDt                             ; // 최소예약시간시작일
 //	private String minimumEndDt                               ; // 최소에약시간종료일

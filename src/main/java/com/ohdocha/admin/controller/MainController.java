@@ -1,7 +1,7 @@
 package com.ohdocha.admin.controller;
 
 import com.ohdocha.admin.config.Properties;
-import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest;
+import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest;
 import com.ohdocha.admin.service.MainService;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
@@ -47,7 +47,7 @@ public class MainController extends ControllerExtension {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public Object loginAsync(@RequestBody DochaAdminCdtUserInfoRequest userInfoRequest, HttpServletRequest request) {
+    public Object loginAsync(@RequestBody DochaAdminDcUserInfoRequest userInfoRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request).addData("userInfoRequest", userInfoRequest);
         mainService.login(serviceMessage);
 

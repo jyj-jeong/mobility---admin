@@ -23,16 +23,16 @@ public interface DochaAdminRegCarMapper {
     public List<DochaAdminRegCarMapper> selectRegCarDetailOption(DochaAdminRegCarDetailRequest reqParam);
 
     //등록차량 저장
-    public int insertCdtCarInfo(DochaAdminRegCarDetailRequest reqParam);
+    public int insertDcCarInfo(DochaAdminRegCarDetailRequest reqParam);
 
     //등록차량 수정
-    public int updateCdtCarInfo(DochaAdminRegCarDetailRequest reqParam);
+    public int updateDcCarInfo(DochaAdminRegCarDetailRequest reqParam);
 
     //등록차량 요금계산기
     public List<DochaAdminRegCarDetailResponse> selectReserveAmt(DochaAdminRegCarDetailRequest reqParam);
 
     //등록차량 휴차일등록
-    public int insertCdtCarInfoSuspend(DochaAdminRegCarDetailRequest reqParam);
+    public int insertDcCarInfoSuspend(DochaAdminRegCarDetailRequest reqParam);
 
 }
 

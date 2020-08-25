@@ -8,4 +8,5 @@ public interface CarService {
 
     void getCarModelList(ServiceMessage message);
 
+    void regCarAdd(ServiceMessage message);
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="test@drjins.sharenshare.kr" uuid="805795c6-08b5-43d7-8ff8-ab415cc4ff0d">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://drjins.sharenshare.kr:3306/test</jdbc-url>
+    </data-source>
+  </component>
+</project>

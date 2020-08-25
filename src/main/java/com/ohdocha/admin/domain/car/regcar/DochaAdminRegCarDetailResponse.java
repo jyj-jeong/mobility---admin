@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("regCarDetailResponse")
 public class DochaAdminRegCarDetailResponse {
 	
-	//CDT_CAR_INRO
+	//DC_CAR_INRO
 	private String crIdx              ; //차량idx
 	private String rtIdx              ; //제휴사idx
     private String companyName        ; //회사명

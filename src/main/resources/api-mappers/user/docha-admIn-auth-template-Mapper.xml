@@ -16,8 +16,8 @@
 								,  IFNULL(T1.MOD_DT        , '') AS MOD_DT          /*수정자*/
 								,  IFNULL(T1.MOD_ID        , '') AS MOD_ID          /*수정자*/
 								,  IFNULL(T1.ROLE          , '') AS ROLE            /*역할*/
-								,(SELECT COUNT(AD_IDX) FROM CDT_ADMIN_INFO WHERE ROLE = T1.TEMPLATE_CD) AS USE_CNT /* 사용한 숫자 카운트 */
-							FROM CDT_MENU_TEMPLATE T1
+								,(SELECT COUNT(AD_IDX) FROM DC_ADMIN_INFO WHERE ROLE = T1.TEMPLATE_CD) AS USE_CNT /* 사용한 숫자 카운트 */
+							FROM DC_MENU_TEMPLATE T1
          ]]>
 <!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
 <!--         	<![CDATA[	ROWNUM <= #{displayPageNum} AND ROWNUM > (#{page}-1) * #{displayPageNum} ]]>-->

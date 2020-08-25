@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("regCarResponse")
 public class DochaAdminRegCarResponse extends CommonResponseDto {
 
-	//CDT_CAR_INRO
+	//DC_CAR_INRO
 	private String crIdx              	; //차량idx
 	private String rtIdx              	; //제휴사idx
 	private String companyName        	; //제휴사명

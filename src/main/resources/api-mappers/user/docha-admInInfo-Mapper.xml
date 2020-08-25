@@ -22,8 +22,8 @@
 								,  IFNULL(T1.MOD_DT               , '') AS MOD_DT
 								,  IFNULL(T1.MOD_ID               , '') AS MOD_ID
 								,  IFNULL(T1.DEL_YN               , '') AS DEL_YN
-							FROM CDT_ADMIN_INFO T1
-			     			LEFT OUTER JOIN CDT_MENU_TEMPLATE T2
+							FROM DC_ADMIN_INFO T1
+			     			LEFT OUTER JOIN DC_MENU_TEMPLATE T2
 			                  				 ON T1.ADMIN_ROLE = T2.TEMPLATE_CD
          ]]>
         <!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
@@ -55,8 +55,8 @@
 								,  IFNULL(T1.MOD_DT               , '') AS MOD_DT
 								,  IFNULL(T1.MOD_ID               , '') AS MOD_ID
 								,  IFNULL(T1.DEL_YN               , '') AS DEL_YN
-							FROM CDT_ADMIN_INFO T1
-			     			LEFT OUTER JOIN CDT_MENU_TEMPLATE T2
+							FROM DC_ADMIN_INFO T1
+			     			LEFT OUTER JOIN DC_MENU_TEMPLATE T2
 			                  				 ON T1.USER_ROLE = T2.TEMPLATE_CD
          ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -67,7 +67,7 @@
     </select>
 
     <update id="updateAdminUserInfoDetail" parameterType="adminUserInfoRequest">
-        <![CDATA[ UPDATE CDT_ADMIN_INFO ]]>
+        <![CDATA[ UPDATE DC_ADMIN_INFO ]]>
         <trim prefix="SET" suffixOverrides=",">
             <if test="adminId 		!= null"><![CDATA[   ADMIN_ID		= #{adminId}  		]]></if>
             <if test="adminPassword != null"><![CDATA[ , ADMIN_PASSWORD	= #{adminPassword} 	]]></if>
@@ -89,7 +89,7 @@
     <insert id="insertAdminUserInfo" parameterType="adminUserInfoRequest">
     
     <![CDATA[
-         INSERT CDT_ADMIN_INFO
+         INSERT DC_ADMIN_INFO
             (
                    AD_IDX
                 ,  ADMIN_ID
@@ -134,7 +134,7 @@
                                     ,  IFNULL(MOD_DT        , '') AS MOD_DT         /*수정자*/
                                     ,  IFNULL(MOD_ID        , '') AS MOD_ID         /*수정자*/
                                     ,  IFNULL(ROLE          , '') AS ROLE           /**/
-                          FROM CDT_MENU_TEMPLATE
+                          FROM DC_MENU_TEMPLATE
 
         ]]>
     </select>

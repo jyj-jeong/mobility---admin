@@ -25,9 +25,9 @@
 						,	IFNULL(T1.MOD_ID                    , '') AS MOD_ID                     					/*수정자*/
 						,	IFNULL(T1.MOD_DT                    , '') AS MOD_DT                     					/*수정일시*/
 						,	IFNULL(T1.DEL_YN				     , '') AS DEL_YN				     					/*삭제여부*/
-				     	,	(SELECT COUNT(CR_IDX) FROM CDT_CAR_INFO WHERE PER_IDX = T1.PER_IDX) AS SETTING_CAR_CNT 	/* 설정차량대수 */				     
-				     FROM CDT_PAYMENT_PERIOD T1 
-				     INNER JOIN CDT_RENT_COMPANY T2 
+				     	,	(SELECT COUNT(CR_IDX) FROM DC_CAR_INFO WHERE PER_IDX = T1.PER_IDX) AS SETTING_CAR_CNT 	/* 설정차량대수 */
+				     FROM DC_PAYMENT_PERIOD T1
+				     INNER JOIN DC_RENT_COMPANY T2
 				     		 ON T1.RT_IDX = T2.RT_IDX
 					) A		     		 
          ]]>
@@ -84,8 +84,8 @@
 						,	IFNULL(T1.MOD_DT                    , '') AS MOD_DT                     					/*수정일시*/
 						,	IFNULL(T1.DEL_YN				     , '') AS DEL_YN				     					/*삭제여부*/
 				     	,	IFNULL(T1.PERIOD_ETC				     , '') AS PERIOD_ETC				     			/*내용*/
-				     FROM CDT_PAYMENT_PERIOD T1 
-				     INNER JOIN CDT_RENT_COMPANY T2 
+				     FROM DC_PAYMENT_PERIOD T1
+				     INNER JOIN DC_RENT_COMPANY T2
 				     		 ON T1.RT_IDX = T2.RT_IDX
 		]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -101,7 +101,7 @@
 	
 	<!-- 기간요금설정 UPDATE -->
 	<update  id="updatePlanSettingDetail" parameterType="periodPlanDetailRequest">
-    	<![CDATA[ UPDATE CDT_PAYMENT_PERIOD ]]>
+    	<![CDATA[ UPDATE DC_PAYMENT_PERIOD ]]>
     	<trim prefix="SET" suffixOverrides=",">
     		<if test="perIdx                 	!= null"><![CDATA[    PER_IDX					= #{perIdx}  				]]></if>	<!--기간요금idx --> 
 			<if test="rtIdx                  	!= null"><![CDATA[  , RT_IDX					= #{rtIdx}  				]]></if>	<!--회원사idx --> 
@@ -124,7 +124,7 @@
     <!-- 기간요금설정 INSERT -->
     <insert  id="insertPlanSettingDetail" parameterType="periodPlanDetailRequest">			
 	<![CDATA[ 
-	     INSERT INTO CDT_PAYMENT_PERIOD ( 
+	     INSERT INTO DC_PAYMENT_PERIOD (
 	     	   RT_IDX
 			,  PERIOD_ETC
 			,  PERIOD_START_DT

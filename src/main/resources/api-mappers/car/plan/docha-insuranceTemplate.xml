@@ -39,9 +39,9 @@
 							,   IFNULL(T1.CI_ETC				, '') AS CI_ETC                 /*비고(템플릿제목)*/
       						,   IFNULL(T2.COMPANY_NAME		 	, '') AS COMPANY_NAME /* 회원사명 */
       						,   IFNULL(T2.BRANCH_NAME			, '') AS BRANCH_NAME /* 지점명 */
-      						,   (SELECT COUNT(CR_IDX) FROM CDT_CAR_INFO WHERE CI_IDX = T1.CI_IDX) AS SETTING_CAR_CNT /* 설정차량대수 */
-      				FROM CDT_CAR_INFO_INSURANCE T1 
-      				INNER JOIN CDT_RENT_COMPANY T2
+      						,   (SELECT COUNT(CR_IDX) FROM DC_CAR_INFO WHERE CI_IDX = T1.CI_IDX) AS SETTING_CAR_CNT /* 설정차량대수 */
+      				FROM DC_CAR_INFO_INSURANCE T1
+      				INNER JOIN DC_RENT_COMPANY T2
       						ON T1.RT_IDX = T2.RT_IDX
 				) A 
          ]]>
@@ -108,8 +108,8 @@
 							,   IFNULL(T1.CI_ETC				, '') AS CI_ETC                 /*비고(템플릿제목)*/
       						,   IFNULL(T2.COMPANY_NAME		 	, '') AS COMPANY_NAME /* 회원사명 */
       						,   IFNULL(T2.BRANCH_NAME			, '') AS BRANCH_NAME /* 지점명 */
-      				FROM CDT_CAR_INFO_INSURANCE T1 
-      				INNER JOIN CDT_RENT_COMPANY T2
+      				FROM DC_CAR_INFO_INSURANCE T1
+      				INNER JOIN DC_RENT_COMPANY T2
       						ON T1.RT_IDX = T2.RT_IDX
          ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -123,7 +123,7 @@
 	</select>
 
     <update  id="updateInsuranceTemplate" parameterType="insuranceTemplateDetailRequest">
-    	<![CDATA[ UPDATE CDT_CAR_INFO_INSURANCE ]]>
+    	<![CDATA[ UPDATE DC_CAR_INFO_INSURANCE ]]>
     	<trim prefix="SET" suffixOverrides=",">
     		<if test="onselfDamageCover 	!= null"><![CDATA[    ONSELF_DAMAGE_COVER	= #{onselfDamageCover}		]]></if>	<!-- 자손보상금액 -->
 			<if test="personalCover 		!= null"><![CDATA[  , PERSONAL_COVER		= #{personalCover}  		]]></if>	<!-- 대인보상금액 -->
@@ -155,7 +155,7 @@
     <!-- 사용자 면허정보 INSERT -->
     <insert  id="insertInsuranceTemplate" parameterType="insuranceTemplateDetailRequest">			
 	<![CDATA[ 
-	     INSERT INTO CDT_CAR_INFO_INSURANCE ( 
+	     INSERT INTO DC_CAR_INFO_INSURANCE (
 	     	   RT_IDX
 			,  ONSELF_DAMAGE_COVER
 			,  PERSONAL_COVER

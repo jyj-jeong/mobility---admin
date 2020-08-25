@@ -39,7 +39,7 @@
                      ,  IFNULL(T1.MOD_DT              , '') AS MOD_DT                                              /*수정일시*/
                      ,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                              /*삭제여부*/
                      ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                      /*이미지IDX*/
-               FROM CDT_CAR_MODEL T1
+               FROM DC_CAR_MODEL T1
                WHERE 1=1
          ]]>
 		<if test="searchType != null and searchType != '' ">
@@ -110,7 +110,7 @@
                    ,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                              /*삭제여부*/
                    ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                                     /* 이미지 등록 여부 */
                     FROM
-                          CDT_CAR_MODEL T1
+                          DC_CAR_MODEL T1
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="mdIdx != null and mdIdx != '' ">
@@ -130,7 +130,7 @@
                      DISTINCT
                        IFNULL(T1.MODEL_NAME          , '') AS MODEL_NAME /*모델명*/
                FROM
-                     CDT_CAR_MODEL T1
+                     DC_CAR_MODEL T1
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="modelName != null and modelName != '' ">
@@ -159,7 +159,7 @@
                        , DISPLACEMENT
                        , MAXIMUM_PASSENGER, FUEL_CODE
                FROM
-                     CDT_CAR_MODEL T1
+                     DC_CAR_MODEL T1
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="modelName != null and modelName != '' ">
@@ -171,7 +171,7 @@
 
 	<!-- 차량정보 UPDATE -->
 	<update  id="updateCarModelInfo" parameterType="carModelDetailRequest">
-		<![CDATA[ UPDATE CDT_CAR_MODEL ]]>
+		<![CDATA[ UPDATE DC_CAR_MODEL ]]>
 		<trim prefix="SET" suffixOverrides=",">
 			<!-- 차량 기본정보 -->
 			<if test="modelName       != null"><![CDATA[   MODEL_NAME         = #{modelName}        ]]></if>   <!-- 차종명 -->
@@ -200,7 +200,7 @@
 	<!-- 차량정보 INSERT -->
 	<insert  id="insertCarModelInfo" parameterType="carModelDetailRequest">
    <![CDATA[
-        INSERT INTO CDT_CAR_MODEL (
+        INSERT INTO DC_CAR_MODEL (
             MODEL_NAME
          ,  MODEL_DETAIL_NAME
          ,  MANUFACTURER_CODE

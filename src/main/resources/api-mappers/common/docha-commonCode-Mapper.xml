@@ -16,7 +16,7 @@
 							,  IFNULL(SORT        , '' ) AS SORT
 							,  IFNULL(ROOT_YN     , '' ) AS ROOT_YN
 					FROM 
-							CDT_COMMON_CODE	
+							DC_COMMON_CODE
          ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
          	<if test="codeIdx != null and codeIdx != ''">
@@ -41,7 +41,7 @@
 	</select>    
 	
 	<update id="updateCommonCodeInfo" parameterType="commonCodeRequest" >
-		<![CDATA[  UPDATE CDT_COMMON_CODE  ]]>
+		<![CDATA[  UPDATE DC_COMMON_CODE  ]]>
 			<trim prefix="SET" suffixOverrides=",">
 				<if test="code 		!= null"><![CDATA[  CODE		= #{code},  		]]></if>
 				<if test="codeValue != null"><![CDATA[  CODE_VALUE	= #{codeValue},  	]]></if>
@@ -55,7 +55,7 @@
 
     <insert  id="insertCommonCodeInfo" parameterType="commonCodeRequest">			
 	<![CDATA[ 
-	     INSERT INTO CDT_COMMON_CODE ( 
+	     INSERT INTO DC_COMMON_CODE (
 	     	   RT_CODE
 			,  P_CODE
 			,  CODE

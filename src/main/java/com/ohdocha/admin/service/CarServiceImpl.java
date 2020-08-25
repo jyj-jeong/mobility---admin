@@ -2,6 +2,7 @@ package com.ohdocha.admin.service;
 
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelResponse;
+import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse;
 import com.ohdocha.admin.mapper.DochaAdminCarModelMapper;
@@ -29,6 +30,13 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         message.addData("carRegList", responseDto);
 
+    }
+
+    @Override
+    public void regCarAdd(ServiceMessage message) {
+        DochaAdminRegCarDetailRequest regCarRequest = message.getObject("regCarRequest", DochaAdminRegCarDetailRequest.class);
+
+        int res = regCarMapper.insertDcCarInfo(regCarRequest);
     }
 
     @Override
