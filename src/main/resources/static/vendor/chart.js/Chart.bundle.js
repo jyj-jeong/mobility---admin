@@ -17003,7 +17003,7 @@ var moment = createCommonjsModule(function (module, exports) {
         GMT: 0,
         EDT: -4 * 60,
         EST: -5 * 60,
-        CDT: -5 * 60,
+        DC: -5 * 60,
         CST: -6 * 60,
         MDT: -6 * 60,
         MST: -7 * 60,
