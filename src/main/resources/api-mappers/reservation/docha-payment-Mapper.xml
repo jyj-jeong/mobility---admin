@@ -15,7 +15,7 @@
                                   SELECT
                               /* 참조키          */
                               IFNULL(T1.QU_IDX               , '' ) AS QU_IDX                /* INDEX         */
-                   ,      IFNULL(T6.RM_IDX               , '' ) AS RM_IDX                 /* CDT_RESERVE_MASTER의 IDX*/
+                   ,      IFNULL(T6.RM_IDX               , '' ) AS RM_IDX                 /* DC_RESERVE_MASTER의 IDX*/
                    ,      IFNULL(T3.QR_IDX               , '' ) AS QR_IDX
                        ,      IFNULL(T6.RT_IDX               , '' ) AS RT_IDX                  /* 제휴사 IDX         */
                        ,      IFNULL(T6.CR_IDX               , '' ) AS CR_IDX                  /* CAR IDX         */
@@ -94,33 +94,33 @@
                       ,        IFNULL(T7.APPROVAL_NUMBER  , '' ) AS APPROVAL_NUMBER     /* 승인번호  */
                       ,      IFNULL(T3.MONTHLY_FEE         , 0 ) AS MONTHLY_FEE
                       ,      IFNULL(T3.DAILY_FEE         , 0 ) AS DAILY_FEE
-                   FROM   CDT_QUOTE_USER T1
+                   FROM   DC_QUOTE_USER T1
                    LEFT OUTER JOIN
                    (
                       SELECT
                              A.QU_IDX
                              , LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE
-                      FROM   CDT_QUOTE_USER A
-                      INNER JOIN CDT_COMMON_CODE B
+                      FROM   DC_QUOTE_USER A
+                      INNER JOIN DC_COMMON_CODE B
                               ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
                              AND B.RT_CODE = 'CR'
                              AND B.P_CODE ='CTY'
                       GROUP BY A.QU_IDX
                          ) CA   /*END LEFT OUTER JOIN*/
                          ON T1.QU_IDX = CA.QU_IDX
-                      LEFT OUTER JOIN CDT_COMMON_CODE CODE
+                      LEFT OUTER JOIN DC_COMMON_CODE CODE
                                 ON T1.DELIVERY_TYPE_CODE = CODE.CODE
                                AND CODE.RT_CODE ='QT'
-                      LEFT OUTER JOIN CDT_USER_INFO  T2
+                      LEFT OUTER JOIN DC_USER_INFO  T2
                                 ON T1.UR_IDX = T2.UR_IDX
-                           LEFT OUTER JOIN CDT_RESERVE_MASTER T6
+                           LEFT OUTER JOIN DC_RESERVE_MASTER T6
                                      ON T1.QU_IDX = T6.QU_IDX
-                           LEFT OUTER JOIN CDT_QUOTE_RENT_COMPANY T3
+                           LEFT OUTER JOIN DC_QUOTE_RENT_COMPANY T3
                                      ON T3.QU_IDX = T6.QU_IDX
                                     AND T3.QUOTE_STATUS IN('QC')
-                      LEFT OUTER JOIN CDT_CAR_INFO T4
+                      LEFT OUTER JOIN DC_CAR_INFO T4
                                 ON T6.CR_IDX = T4.CR_IDX
-                         LEFT OUTER JOIN CDT_CAR_INFO_INSURANCE T5
+                         LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T5
                                    ON T4.CR_IDX = T5.CR_IDX
 
                        LEFT OUTER JOIN
@@ -128,14 +128,14 @@
                          SELECT * FROM (
                             SELECT
                                *
-                            FROM CDT_PAYMENT_DETAIL
+                            FROM DC_PAYMENT_DETAIL
 
                             ORDER BY PAYMENT_DATE DESC
                          ) WHERE ROWNUM = 1
                        ) T7  /*END T7 LEFT OUTER JOIN*/
                            ON T6.RM_IDX = T7.RM_IDX
                            AND   T1.QUOTE_STATUS NOT IN('QB')
-                       LEFT OUTER JOIN CDT_COMMON_CODE  T8
+                       LEFT OUTER JOIN DC_COMMON_CODE  T8
                       ON T1.QUOTE_STATUS = T8.CODE
                       AND T8.RT_CODE ='QT'
                    ) T1
@@ -221,7 +221,7 @@
                     FROM (
                          SELECT
                             *
-                         FROM CDT_RESERVE_MASTER
+                         FROM DC_RESERVE_MASTER
                          WHERE LONGTERM_YN = 'LT'
                     ) RM
                     INNER JOIN (
@@ -235,20 +235,20 @@
                                 , SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
                                 , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
                                 , MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
-                            FROM CDT_PAYMENT_DETAIL A
+                            FROM DC_PAYMENT_DETAIL A
                             WHERE A.PAYMENT_KIND_CODE = 'RT'
                         ) PD
                         WHERE PD.PAYMENT_ORDER = 1
                     ) T2
                     ON RM.RM_IDX = T2.RM_IDX
                 ) M
-                LEFT OUTER JOIN CDT_USER_INFO UI
+                LEFT OUTER JOIN DC_USER_INFO UI
                     ON M.UR_IDX = UI.UR_IDX
-                LEFT OUTER JOIN CDT_RENT_COMPANY RC
+                LEFT OUTER JOIN DC_RENT_COMPANY RC
                     ON M.RT_IDX = RC.RT_IDX
-                LEFT OUTER JOIN CDT_CAR_INFO CI
+                LEFT OUTER JOIN DC_CAR_INFO CI
                     ON M.CR_IDX = CI.CR_IDX
-                LEFT OUTER JOIN CDT_COMMON_CODE CD1
+                LEFT OUTER JOIN DC_COMMON_CODE CD1
                     ON CI.FUEL_CODE = CD1.CODE
                ) T1
                WHERE T1.BALANCE > 0
@@ -301,7 +301,7 @@
          FROM (
             SELECT
                *
-            FROM CDT_RESERVE_MASTER
+            FROM DC_RESERVE_MASTER
             WHERE RM_IDX = #{rmIdx}
             AND LONGTERM_YN = 'LT'
          ) RM
@@ -316,7 +316,7 @@
                   , SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
                   , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
                   , MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
-               FROM CDT_PAYMENT_DETAIL A
+               FROM DC_PAYMENT_DETAIL A
                WHERE A.RM_IDX = #{rmIdx}
                AND A.PAYMENT_KIND_CODE = 'RT'
              ) PD
@@ -329,9 +329,9 @@
 
     </select>
 
-	<!-- START  INS CDT_PAYMENT_DETAIL-->
+	<!-- START  INS DC_PAYMENT_DETAIL-->
 	<insert id="insertPaymentDetail" parameterType="paymentInfoRequest">
-          INSERT INTO CDT_PAYMENT_DETAIL(
+          INSERT INTO DC_PAYMENT_DETAIL(
             PD_IDX
             , RM_IDX
             , UR_IDX
@@ -355,7 +355,7 @@
                 , #{etc}
          )
    </insert>
-	<!-- END  INS CDT_PAYMENT_DETAIL-->
+	<!-- END  INS DC_PAYMENT_DETAIL-->
 
 </mapper>
 

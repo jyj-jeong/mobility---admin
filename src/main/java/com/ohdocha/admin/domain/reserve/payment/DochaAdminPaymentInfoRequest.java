@@ -20,7 +20,7 @@ public class DochaAdminPaymentInfoRequest  implements Serializable {
     private String userRole;
     private String crIdx;
     
-    //CDT_PAYMENT_DETAIL
+    //DC_PAYMENT_DETAIL
     private String pdIdx;
     private String urIdx;
     private String pgCode;
@@ -31,7 +31,7 @@ public class DochaAdminPaymentInfoRequest  implements Serializable {
     private String paymentDate;
     private String etc;
 
-    //CDT_RESERVE_LOG
+    //DC_RESERVE_LOG
     
     private String reIdx;
 	private String reserveStatusCode;

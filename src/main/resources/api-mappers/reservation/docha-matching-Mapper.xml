@@ -53,41 +53,41 @@
                         ,      IFNULL(T10.QR_COUNT           , '0') AS QR_COUNT
                         ,      IFNULL(T11.COMPANY_COUNT       , '0') AS COMPANY_COUNT
                         ,      IFNULL(TRUNC(PA.PAY_AVG)       , '' ) AS PAY_AVG
-                     FROM   CDT_QUOTE_USER T1
+                     FROM   DC_QUOTE_USER T1
                      LEFT OUTER JOIN
                      (
                         SELECT
                             A.QU_IDX
                             , LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE
-                        FROM   CDT_QUOTE_USER A
-                        INNER JOIN CDT_COMMON_CODE B
+                        FROM   DC_QUOTE_USER A
+                        INNER JOIN DC_COMMON_CODE B
                             ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
                             AND B.RT_CODE = 'CR'
                             AND B.P_CODE ='CTY'
                         GROUP BY A.QU_IDX
                      ) CA ON T1.QU_IDX = CA.QU_IDX
-                     LEFT OUTER JOIN CDT_USER_INFO  T2
+                     LEFT OUTER JOIN DC_USER_INFO  T2
                         ON T1.UR_IDX = T2.UR_IDX
-                     LEFT OUTER JOIN CDT_QUOTE_RENT_COMPANY T9
+                     LEFT OUTER JOIN DC_QUOTE_RENT_COMPANY T9
                         ON T1.QR_IDX = T9.QR_IDX
                      LEFT OUTER JOIN (
                                 SELECT QU_IDX
                                 ,      COUNT(QR_IDX) AS QR_COUNT
-                                FROM   CDT_QUOTE_RENT_COMPANY
+                                FROM   DC_QUOTE_RENT_COMPANY
                                 WHERE IFNULL(DEL_YN, 'N') = 'N'
                                 group by QU_IDX )  T10 ON T1.QU_IDX = T10.QU_IDX
                      LEFT OUTER JOIN (
                                 SELECT DISTINCT
                                       QU_IDX
                                 ,      COUNT(DISTINCT RT_IDX) AS COMPANY_COUNT
-                                FROM   CDT_QUOTE_RENT_COMPANY
+                                FROM   DC_QUOTE_RENT_COMPANY
                                 WHERE IFNULL(DEL_YN, 'N') = 'N'
                                 group by QU_IDX )  T11 ON T1.QU_IDX = T11.QU_IDX
                      LEFT OUTER JOIN (
                                 SELECT DISTINCT
                                       QU_IDX
                                 ,      AVG(replace(PAYMENT_AMOUNT, ',', '')) AS PAY_AVG
-                                FROM   CDT_QUOTE_RENT_COMPANY
+                                FROM   DC_QUOTE_RENT_COMPANY
                                 GROUP BY QU_IDX )  PA ON T1.QU_IDX = PA.QU_IDX
                   ) T1
       ]]>
@@ -135,14 +135,14 @@
       , IFNULL(A.RETURN_ADDR, A.DELIVERY_ADDR) AS RETURN_ADDR /* 반납위치 */
       , IFNULL(CA.CARTYPE_LIST_VALUE, '') AS CARTYPE_LIST_VALUE /* 차종명 리스트 */
       , IFNULL(A.LONGTERM_YN, '') AS LONGTERM_YN /* 장단기구분 */
-      FROM CDT_QUOTE_USER A INNER JOIN CDT_USER_INFO B ON A.UR_IDX = B.UR_IDX
+      FROM DC_QUOTE_USER A INNER JOIN DC_USER_INFO B ON A.UR_IDX = B.UR_IDX
                      LEFT OUTER JOIN
                      (
                         SELECT
                             X.QU_IDX
                             , LISTAGG(Y.CODE_VALUE, ',') WITHIN GROUP(ORDER BY Y.CODE_VALUE) AS CARTYPE_LIST_VALUE
-                        FROM   CDT_QUOTE_USER X
-                        INNER JOIN CDT_COMMON_CODE Y
+                        FROM   DC_QUOTE_USER X
+                        INNER JOIN DC_COMMON_CODE Y
                             ON ( '|' || X.CARTYPE_CODE_LIST || '|' LIKE '%' || Y.CODE || '%' )
                             AND Y.RT_CODE = 'CR'
                             AND Y.P_CODE ='CTY'
@@ -180,17 +180,17 @@
       ,CAROPTION_LIST_VALUE
       ,TO_CHAR(IFNULL(A.REG_DT, ''), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT /* 입찰일시 */
       ,TO_CHAR(TO_DATE(E.RENT_START_DAY||E.RENT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AS RENT_START_DATE /* 대여일시 */
-      FROM CDT_QUOTE_RENT_COMPANY A INNER JOIN CDT_RENT_COMPANY B ON A.RT_IDX = B.RT_IDX
-                                    LEFT JOIN CDT_RENT_COMPANY_STAFF C ON A.RT_IDX = C.RT_IDX AND OWNER_YN = 'Y'
-                                    INNER JOIN CDT_CAR_INFO D ON A.CR_IDX = D.CR_IDX
-                                    INNER JOIN CDT_QUOTE_USER E ON A.QU_IDX = E.QU_IDX
+      FROM DC_QUOTE_RENT_COMPANY A INNER JOIN DC_RENT_COMPANY B ON A.RT_IDX = B.RT_IDX
+                                    LEFT JOIN DC_RENT_COMPANY_STAFF C ON A.RT_IDX = C.RT_IDX AND OWNER_YN = 'Y'
+                                    INNER JOIN DC_CAR_INFO D ON A.CR_IDX = D.CR_IDX
+                                    INNER JOIN DC_QUOTE_USER E ON A.QU_IDX = E.QU_IDX
                            LEFT OUTER JOIN
                            (
                               SELECT
                                   X.CR_IDX
                                   , LISTAGG(Y.CODE_VALUE, ',') WITHIN GROUP(ORDER BY Y.CODE_VALUE) AS CAROPTION_LIST_VALUE
-                              FROM CDT_CAR_INFO_OPTION X
-                              INNER JOIN CDT_COMMON_CODE Y
+                              FROM DC_CAR_INFO_OPTION X
+                              INNER JOIN DC_COMMON_CODE Y
                                   ON ( '|' || X.OPTION_DETAIL_CODE || '|' LIKE '%' || Y.CODE || '%' )
                                   AND Y.RT_CODE = 'CR'
                               GROUP BY X.CR_IDX
@@ -203,7 +203,7 @@
    </select>
 
 	<update id="updateMatchingCompanyServiceInfo" parameterType="matchingCompanyRequest">
-		UPDATE CDT_QUOTE_RENT_COMPANY
+		UPDATE DC_QUOTE_RENT_COMPANY
 		SET    MOD_DT = SYSDATE
 		<if test =" modId != null and modId != '' ">
 			,      MOD_ID = #{modId}
@@ -217,7 +217,7 @@
 
 	<insert id="insertMatchingCompanyServiceInfo" parameterType="matchingCompanyRequest">
    <![CDATA[
-      INSERT INTO CDT_QUOTE_RENT_COMPANY (
+      INSERT INTO DC_QUOTE_RENT_COMPANY (
       QR_IDX
       ,QU_IDX
       ,CR_IDX

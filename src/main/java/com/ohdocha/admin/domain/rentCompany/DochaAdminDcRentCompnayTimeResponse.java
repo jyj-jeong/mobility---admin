@@ -5,8 +5,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtRentCompanyTimeResponse")
-public class DochaAdminCdtRentCompnayTimeResponse extends CommonResponseDto {
+@Alias("dcRentCompanyTimeResponse")
+public class DochaAdminDcRentCompnayTimeResponse extends CommonResponseDto {
 	private String rtIdx; 						//제휴사idx
 	private String weekdayOpenStart;			// 평일 영업시간 시작
 	private String weekdayOpenEnd;				// 평일 영업시간 종료

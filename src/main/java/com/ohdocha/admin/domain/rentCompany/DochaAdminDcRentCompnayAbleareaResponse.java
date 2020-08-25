@@ -5,8 +5,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("CdtRentCompanyAbleareaResponse")
-public class DochaAdminCdtRentCompnayAbleareaResponse extends CommonResponseDto {
+@Alias("DcRentCompanyAbleareaResponse")
+public class DochaAdminDcRentCompnayAbleareaResponse extends CommonResponseDto {
 	private String raIdx;			/*배달지역idx*/
 	private String rtIdx;			/*제휴사idx*/
 	private String lat;				/*위도*/

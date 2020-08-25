@@ -18,14 +18,14 @@
 								    ,	IFNULL(A.USER_CONTACT2           , '' )  AS USER_CONTACT2           /*  연락처2 		*/
 								    , 	IFNULL(A.USER_STATUS_CODE		  , '' )  AS USER_STATUS_CODE		 /*  상태			*/
 									,	IFNULL(DATE_FORMAT(A.REG_DT , '%Y%M%d%H%i%s')  	, ' ' )  AS REG_DT 				 /*  등록일시         */
-					        		,	(SELECT COUNT(*) reserveCnt FROM CDT_RESERVE_MASTER 
+					        		,	(SELECT COUNT(*) reserveCnt FROM DC_RESERVE_MASTER
 					        									   WHERE UR_IDX = A.UR_IDX
 					        									     AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
 -- 					        									     AND RESERVE_STATUS_CODE='QC'
 -- 					        									     AND RESERVE_STATUS_CODE != 'CC'
 					        			) AS RESERVE_CNT   /*대여횟수*/
-										FROM CDT_USER_INFO A
-		                                LEFT OUTER JOIN CDT_COMMON_CODE B
+										FROM DC_USER_INFO A
+		                                LEFT OUTER JOIN DC_COMMON_CODE B
 		                                             ON B.RT_CODE='RL'
 		                                            AND A.USER_ROLE = B.CODE
 		                                            
@@ -112,16 +112,16 @@
 							,  IFNULL(C.LICENSE_EXPIRATION , '' )  AS LICENSE_EXPIRATION              /*   갱신기간                     */
 							,  IFNULL(C.LICENSE_ISSUE_DT   , '' )  AS LICENSE_ISSUE_DT                /*   발급일                        */
 							,  IFNULL(C.LICENSE_OWNER_NAME , '' )  AS LICENSE_OWNER_NAME              /*   면허소유자명                 */
-							,  IFNULL(C.USE_YN             , '' )  AS USE_YN                          /*   CDT_USER_LICENSE_INFO 사용여부   */
-			        		, (SELECT COUNT(*) reserveCnt FROM CDT_RESERVE_MASTER 
+							,  IFNULL(C.USE_YN             , '' )  AS USE_YN                          /*   DC_USER_LICENSE_INFO 사용여부   */
+			        		, (SELECT COUNT(*) reserveCnt FROM DC_RESERVE_MASTER
 			        					        		 WHERE UR_IDX = A.UR_IDX
 					        							   AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
 			        			) AS RESERVE_CNT   /*대여횟수*/
-								FROM CDT_USER_INFO A
-                                LEFT OUTER JOIN CDT_COMMON_CODE B
+								FROM DC_USER_INFO A
+                                LEFT OUTER JOIN DC_COMMON_CODE B
                                                  ON B.RT_CODE='RL'
                                                 AND A.USER_ROLE = B.CODE
-								LEFT OUTER JOIN CDT_USER_LICENSE_INFO C
+								LEFT OUTER JOIN DC_USER_LICENSE_INFO C
 											 ON A.UR_IDX = 	C.UR_IDX
 			]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -158,10 +158,10 @@
 	</select>
 
 	<!-- 통합회원 정보 UPDATE OR INSERT
-         1. CDT_USER_INFO
-         2. CDT_USER_LICENSE_INFO -->
+         1. DC_USER_INFO
+         2. DC_USER_LICENSE_INFO -->
 	<update  id="updateUserInfoDetail" parameterType="userInfoRequest">
-		<![CDATA[ UPDATE CDT_USER_INFO ]]>
+		<![CDATA[ UPDATE DC_USER_INFO ]]>
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="userId 			!= null"><![CDATA[    USER_ID				= #{userId}  		]]></if>	<!-- 아이디 -->
 			<if test="userName 			!= null"><![CDATA[  , USER_NAME				= #{userName}  		]]></if>	<!-- 이름 -->
@@ -185,7 +185,7 @@
 
 	<!-- 사욛자 면허정보 UPDATE -->
 	<update  id="updateUserLicenseInfo" parameterType="userLicenseInfoRequest">
-		<![CDATA[ UPDATE CDT_USER_LICENSE_INFO ]]>
+		<![CDATA[ UPDATE DC_USER_LICENSE_INFO ]]>
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="licenseNumber    	!= null"><![CDATA[     LICENSE_NUMBER		= #{licenseNumber}  	]]></if>
 			<if test="licenseCode      	!= null"><![CDATA[  ,  LICENSE_CODE			= #{licenseCode}  		]]></if>
@@ -207,7 +207,7 @@
 	<!-- 사용자 면허정보 INSERT -->
 	<insert  id="insertUserLicenseInfo" parameterType="userLicenseInfoRequest">
 	<![CDATA[ 
-	     INSERT INTO CDT_USER_LICENSE_INFO ( 
+	     INSERT INTO DC_USER_LICENSE_INFO (
 	     	   UL_IDX
 			,  UR_IDX
 			,  LICENSE_NUMBER
@@ -254,7 +254,7 @@
 							,  IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                 /*회원iDX*/
 							,  IFNULL(T1.USE_YN			   , '' ) AS USE_YN					/*사용여부*/	       
 					FROM 
-					CDT_USER_LICENSE_INFO T1
+					DC_USER_LICENSE_INFO T1
 			]]>
 		WhERE
 		<if test="urIdx != null and urIdx != ''">
@@ -267,7 +267,7 @@
 					SELECT 						       
 							 COUNT(T1.T1.LICENSE_CODE)
 					FROM 
-					CDT_USER_LICENSE_INFO T1
+					DC_USER_LICENSE_INFO T1
 			]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="urIdx != null and urIdx != ''">
@@ -279,7 +279,7 @@
 	<!-- 사용자 면허정보 INSERT -->
 	<insert  id="insertUserInfo" parameterType="insertUserInfoRequest">
 	<![CDATA[ 
-				INSERT INTO CDT_USER_INFO
+				INSERT INTO DC_USER_INFO
 				(
 				   UR_IDX                 
 				,  USER_ID                

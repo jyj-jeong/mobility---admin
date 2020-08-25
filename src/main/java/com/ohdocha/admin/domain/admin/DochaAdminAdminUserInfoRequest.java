@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("adminUserInfoRequest")
 public class DochaAdminAdminUserInfoRequest {
 
-	//cdt_user_info dto setting 시작
+	//dc_user_info dto setting 시작
 	private String urIdx;						// 회원idx
 	private String userId;						// 회원ID
 	private String userPassword;				// 비밀번호

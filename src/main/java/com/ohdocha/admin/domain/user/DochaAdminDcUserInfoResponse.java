@@ -5,8 +5,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtUserInfoResponse")
-public class DochaAdminCdtUserInfoResponse {
+@Alias("dcUserInfoResponse")
+public class DochaAdminDcUserInfoResponse {
 	
 	
     private String urIdx;						// 회원idx

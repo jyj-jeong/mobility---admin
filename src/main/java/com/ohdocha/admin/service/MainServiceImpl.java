@@ -1,8 +1,8 @@
 package com.ohdocha.admin.service;
 
 import com.ohdocha.admin.mapper.DochaAdminLoginMapper;
-import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest;
-import com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoResponse;
+import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest;
+import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoResponse;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,9 @@ public class MainServiceImpl extends ServiceExtension implements MainService {
 
     @Override
     public void login(ServiceMessage message) {
-        DochaAdminCdtUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminCdtUserInfoRequest.class);
+        DochaAdminDcUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminDcUserInfoRequest.class);
 
-        DochaAdminCdtUserInfoResponse userInfoResponse = mapper.chkLoginUserInfo(userInfoRequest);
+        DochaAdminDcUserInfoResponse userInfoResponse = mapper.chkLoginUserInfo(userInfoRequest);
 
 //        AdminInfo adminInfo = memberOptional.get();
 //        if (TextUtils.isEmpty(adminInfo.getAdminPassword()))

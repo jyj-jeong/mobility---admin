@@ -30,7 +30,7 @@
 							,	IFNULL(T1.BRANCH_NAME               						, '' ) AS BRANCH_NAME                								/* 지점명               */
 							,	IFNULL(T1.ACCESS_YN                 						, '' ) AS ACCESS_YN                  								/* 접속허용 여부       */
 							,   IFNULL(DATE_FORMAT(T1.REG_DT , '%Y%M%d%H%i%s')           	, '' ) AS REG_DT
-					FROM CDT_RENT_COMPANY T1
+					FROM DC_RENT_COMPANY T1
 					LEFT OUTER JOIN
 					(
 					    SELECT IFNULL( STAFF_NAME  , '' ) AS STAFF_NAME
@@ -39,14 +39,14 @@
 					     ,      IFNULL( STAFF_EMAIL  , '' ) AS STAFF_EMAIL
 					     ,      RT_IDX
 					     ,      OWNER_YN
-					     FROM   CDT_RENT_COMPANY_STAFF
+					     FROM   DC_RENT_COMPANY_STAFF
 					     WHERE  OWNER_YN IN('Y')
 					) T2 ON T1.RT_IDX = T2.RT_IDX
 					LEFT OUTER JOIN
                     (
                       SELECT IFNULL(COUNT(CI.CR_IDX), '0') AS REG_CAR_COUNT
                       ,      CI.RT_IDX AS RT_IDX
-                      FROM   CDT_CAR_INFO CI GROUP BY CI.RT_IDX
+                      FROM   DC_CAR_INFO CI GROUP BY CI.RT_IDX
                     ) T3 ON T1.RT_IDX = T3.RT_IDX
         ]]>
 <!--				<trim prefix="WHERE" prefixOverrides="AND|OR">-->
@@ -128,7 +128,7 @@
 		, IFNULL(T1.BRANCH_NAME                 	, '') AS BRANCH_NAME                    /*지점명*/
 		, IFNULL(T1.ACCESS_YN                   	, '') AS ACCESS_YN                      /*접속허용여부*/
 		, IFNULL(T1.CAR_COUNT				  	 	, 0)  AS CAR_COUNT                      /* 보유한 차량 카운트*/
-		, (SELECT COUNT(RT_IDX) FROM CDT_CAR_INFO WHERE RT_IDX = T1.RT_IDX) AS REG_CAR_COUNT  /* 보유한 차량 카운트*/
+		, (SELECT COUNT(RT_IDX) FROM DC_CAR_INFO WHERE RT_IDX = T1.RT_IDX) AS REG_CAR_COUNT  /* 보유한 차량 카운트*/
 		, IFNULL(T2.COMMISSION_PER					, '') AS COMMISSION_PER					/*수수료윯*/
 		, IFNULL(T2.TAX_INVOICE_CODE				, '') AS TAX_INVOICE_CODE				/*세금계산서 발행주체*/
 		, IFNULL(T3.WEEKDAY_OPEN_START				, '') AS WEEKDAY_OPEN_START				/*평일영업시작시간*/
@@ -148,17 +148,17 @@
 		, IFNULL(T3.WEEKEND_RESERVE_MINIMUM_RATE	, '') AS WEEKEND_RESERVE_MINIMUM_RATE	/*주말공휴일할증율*/
 	    , IFNULL(T4.RA_GBN_LT, '0') AS RA_GBN_LT /* 배달가능지역 장기 카운트 */
 	    , IFNULL(T4.RA_GBN_ST, '0') AS RA_GBN_ST /* 배달가능지역 단기 카운트 */
-		FROM CDT_RENT_COMPANY T1
-								LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T2 
+		FROM DC_RENT_COMPANY T1
+								LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T2
 								ON  T1.RT_IDX = T2.RT_IDX
-								LEFT OUTER JOIN CDT_RENT_COMPANY_TIME T3 
+								LEFT OUTER JOIN DC_RENT_COMPANY_TIME T3
 								ON T1.RT_IDX = T3.RT_IDX
 				                LEFT JOIN (
 				                SELECT 
 				                RT_IDX
 				                ,SUM(CASE WHEN RA_GBN_CODE = 'LT' THEN 1 ELSE 0 END) AS RA_GBN_LT
 				                ,SUM(CASE WHEN RA_GBN_CODE = 'ST' THEN 1 ELSE 0 END) AS RA_GBN_ST
-				                FROM CDT_RENT_COMPANY_ABLEAREA
+				                FROM DC_RENT_COMPANY_ABLEAREA
 				                GROUP BY RT_IDX
 				                ) T4 ON T1.RT_IDX = T4.RT_IDX
 		]]>
@@ -170,10 +170,10 @@
     </select>
     
      <!-- 회원사 정보 UPDATE OR INSERT
-    	 1. CDT_USER_INFO
-    	 2. CDT_USER_LICENSE_INFO -->
+    	 1. DC_USER_INFO
+    	 2. DC_USER_LICENSE_INFO -->
     <!-- <update  id="updateRentCompanyDetailInfo" parameterType="userInfoRequest">
-    	<![CDATA[ UPDATE CDT_USER_INFO ]]>
+    	<![CDATA[ UPDATE DC_USER_INFO ]]>
     	<trim prefix="SET" suffixOverrides=",">
     		<if test="userId 			!= null"><![CDATA[    USER_ID				= #{userId}  		]]></if>	아이디
 			<if test="userName 			!= null"><![CDATA[  , USER_NAME				= #{userName}  		]]></if>	이름
@@ -195,8 +195,8 @@
 	</update> -->
 
 
-    <update  id="updateCdtRentCompany" parameterType="rentCompanyDetailRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY ]]>
+    <update  id="updateDcRentCompany" parameterType="rentCompanyDetailRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY ]]>
     	<trim prefix="SET" suffixOverrides=",">
     		<if test="companyName         		!= null"><![CDATA[    COMPANY_NAME					= #{companyName}				]]></if>	
 			<if test="companyZipcode      		!= null"><![CDATA[  , COMPANY_ZIPCODE				= #{companyZipcode}				]]></if>	
@@ -222,9 +222,9 @@
 		</trim>
 	</update>
 
-    <insert  id="insertCdtRentCompany" parameterType="rentCompanyDetailRequest">
+    <insert  id="insertDcRentCompany" parameterType="rentCompanyDetailRequest">
     <![CDATA[
-			   	INSERT INTO CDT_RENT_COMPANY 
+			   	INSERT INTO DC_RENT_COMPANY
 			   	(
 			   		RT_IDX
 			   	,	COMPANY_NAME					
@@ -274,8 +274,8 @@
 			GN	일반회원
 			WD	탈퇴회원
      -->
-    <select id="selectrentCompanyStaffList" parameterType="cdtRentCompanyStaffRequest"
-    								   		resultType="cdtRentCompanyStaffResponse">
+    <select id="selectrentCompanyStaffList" parameterType="dcRentCompanyStaffRequest"
+    								   		resultType="dcRentCompanyStaffResponse">
 		<![CDATA[
 		SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* FROM ( 
 			SELECT
@@ -294,8 +294,8 @@
 					,	IFNULL(T2.MOD_DT          , '') AS MOD_DT             /*수정일시*/
 					,	IFNULL(T2.DEL_YN          , '') AS DEL_YN             /*삭제여부*/			
 					,	IFNULL(T2.UR_IDX          , '') AS UR_IDX             /*회원순번*/			
-			FROM CDT_USER_INFO T1
-			LEFT JOIN CDT_RENT_COMPANY_STAFF T2
+			FROM DC_USER_INFO T1
+			LEFT JOIN DC_RENT_COMPANY_STAFF T2
              	   ON T1.UR_IDX = T2.UR_IDX
             	  -- AND T1.RT_IDX = T2.RT_IDX
 			WHERE 1=1
@@ -326,8 +326,8 @@
        	</trim>
     </select>
 
-    <update  id="updateCdtRentStaff" parameterType="cdtRentCompanyStaffRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY_STAFF ]]>
+    <update  id="updateDcRentStaff" parameterType="dcRentCompanyStaffRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY_STAFF ]]>
     	<trim prefix="SET" prefixOverrides=",">
     		<if test="staffName          		!= null"><![CDATA[    STAFF_NAME		= #{staffName}		]]></if>	
 			<if test="staffContact1      		!= null"><![CDATA[  , STAFF_CONTACT1	= #{staffContact1}	]]></if>
@@ -350,8 +350,8 @@
 		</trim>			
     </update>
 
-    <update  id="updateCdtRentStaffUserinfo" parameterType="cdtRentCompanyStaffRequest">
-	   	<![CDATA[ UPDATE CDT_USER_INFO ]]>
+    <update  id="updateDcRentStaffUserinfo" parameterType="dcRentCompanyStaffRequest">
+	   	<![CDATA[ UPDATE DC_USER_INFO ]]>
     	<trim prefix="SET" prefixOverrides=",">
     		RT_IDX		= #{rtIdx}
     		<if test="userRole          		!= null"><![CDATA[  , USER_ROLE		= #{userRole}		]]></if>	
@@ -365,9 +365,9 @@
 		</trim>			
     </update>
 
- 	<insert  id="insertCdtRentCompanyStaff" parameterType="cdtRentCompanyStaffRequest">
+ 	<insert  id="insertDcRentCompanyStaff" parameterType="dcRentCompanyStaffRequest">
     <![CDATA[
-			   	INSERT INTO CDT_RENT_COMPANY_STAFF 
+			   	INSERT INTO DC_RENT_COMPANY_STAFF
 			   	(
 					RS_IDX
 				,	RT_IDX
@@ -384,7 +384,7 @@
 				,	UR_IDX
 				)
 				VALUES(		
-					(SELECT IFNULL(MAX(RS_IDX)+1,0) FROM CDT_RENT_COMPANY_STAFF)				
+					(SELECT IFNULL(MAX(RS_IDX)+1,0) FROM DC_RENT_COMPANY_STAFF)
 				,	#{rtIdx}				
 				,	#{staffName}
 				,	#{staffContact1}
@@ -404,8 +404,8 @@
 	<!-- 
 	회원사별 최소예약정보 [일시 FR~TO, 최소예약 시간]
 	 -->
-    <select id="selectCdtRentCompanyReseveMinList" parameterType="cdtRentCompanyReseveMinRequest"
-    								   		resultType="cdtRentCompanyReseveMinResponse">
+    <select id="selectDcRentCompanyReseveMinList" parameterType="dcRentCompanyReseveMinRequest"
+    								   		resultType="dcRentCompanyReseveMinResponse">
 		<![CDATA[
 		SELECT * FROM (
 						SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
@@ -417,7 +417,7 @@
 										,	IFNULL(MINIMUM_END_DT  	, '') AS MINIMUM_END_DT     /*최소예약시간종료일*/
 										,	IFNULL(MINIMUM_TIME  		, '') AS MINIMUM_TIME     	/*최소시간*/
 										,	IFNULL(DEL_YN     			, '') AS DEL_YN        		/*삭제여부*/
-								FROM CDT_RENT_COMPANY_RESERVE_MIN
+								FROM DC_RENT_COMPANY_RESERVE_MIN
 								WHERE 'N' = IFNULL(DEL_YN, 'N')
 						) A 
 		)
@@ -445,8 +445,8 @@
 		</trim>
     </select>
     
-    <update  id="updateCdtRentCompanyReserveMin" parameterType="cdtRentCompanyReseveMinRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY_RESERVE_MIN ]]>
+    <update  id="updateDcRentCompanyReserveMin" parameterType="dcRentCompanyReseveMinRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY_RESERVE_MIN ]]>
     	<trim prefix="set" prefixOverrides=",">
     		<if test="minimumStartDt	!= null"><![CDATA[    MINIMUM_START_DT	= #{minimumStartDt}]]></if>	
 			<if test="minimumEndDt  	!= null"><![CDATA[  , MINIMUM_END_DT	= #{minimumEndDt}]]></if>
@@ -466,9 +466,9 @@
 		</trim>			
     </update>
  
-	<insert  id="insertCdtRentCompanyReserveMin" parameterType="cdtRentCompanyReseveMinRequest">
+	<insert  id="insertDcRentCompanyReserveMin" parameterType="dcRentCompanyReseveMinRequest">
     <![CDATA[
-			   	INSERT INTO CDT_RENT_COMPANY_RESERVE_MIN 
+			   	INSERT INTO DC_RENT_COMPANY_RESERVE_MIN
 			   	(
 					RT_IDX
 				,	MINIMUM_START_DT
@@ -490,11 +490,11 @@
     ]]>
     </insert>
 
- 	<select id="selectRentCompanyComission" parameterType="cdtRentCompanyComissionRequest"
-    								   resultType="cdtRentCompanyComissionResponse">
+ 	<select id="selectRentCompanyComission" parameterType="dcRentCompanyComissionRequest"
+    								   resultType="dcRentCompanyComissionResponse">
 		<![CDATA[
 			SELECT	IFNULL(T1.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
-			FROM CDT_RENT_COMPANY_COMMISSION T1
+			FROM DC_RENT_COMPANY_COMMISSION T1
 		
 		  ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -505,8 +505,8 @@
        	</trim>
     </select>
 
-    <update  id="updateCdtRentCompanyComission" parameterType="cdtRentCompanyComissionRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY_COMMISSION ]]>
+    <update  id="updateDcRentCompanyComission" parameterType="dcRentCompanyComissionRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY_COMMISSION ]]>
     	<trim prefix="SET" prefixOverrides=",">
     		<if test="commissionPer	      		!= null"><![CDATA[    COMMISSION_PER	= #{commissionPer}]]></if>	
 			<if test="taxInvoiceCode      		!= null"><![CDATA[  , TAX_INVOICE_CODE	= #{taxInvoiceCode}]]></if>
@@ -520,9 +520,9 @@
 		</trim>			
     </update>
 
- 	<insert  id="insertCdtRentCompanyComission" parameterType="cdtRentCompanyComissionRequest">
+ 	<insert  id="insertDcRentCompanyComission" parameterType="dcRentCompanyComissionRequest">
     <![CDATA[
-			   	INSERT INTO CDT_RENT_COMPANY_COMMISSION 
+			   	INSERT INTO DC_RENT_COMPANY_COMMISSION
 			   	(
 					RT_IDX
 				,	COMMISSION_PER
@@ -540,11 +540,11 @@
     ]]>
     </insert>    
 
- 	<select id="selectRentCompanyTime" parameterType="cdtRentCompanyTimeRequest"
-    								   resultType="cdtRentCompanyTimeResponse">
+ 	<select id="selectRentCompanyTime" parameterType="dcRentCompanyTimeRequest"
+    								   resultType="dcRentCompanyTimeResponse">
 		<![CDATA[
 			SELECT	IFNULL(T1.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
-			FROM CDT_RENT_COMPANY_TIME T1
+			FROM DC_RENT_COMPANY_TIME T1
 		
 		  ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -555,8 +555,8 @@
        	</trim>
     </select>
 
-    <update  id="updateCdtRentCompanyTime" parameterType="cdtRentCompanyTimeRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY_TIME ]]>
+    <update  id="updateDcRentCompanyTime" parameterType="dcRentCompanyTimeRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY_TIME ]]>
     	<trim prefix="SET" prefixOverrides=",">
 	    	<if test="weekdayOpenStart			!= null"><![CDATA[    WEEKDAY_OPEN_START			= #{weekdayOpenStart}]]></if>	
 			<if test="weekdayOpenEnd			!= null"><![CDATA[  , WEEKDAY_OPEN_END				= #{weekdayOpenEnd}]]></if>
@@ -581,9 +581,9 @@
 		</trim>			
     </update>
 
-  	<insert  id="insertCdtRentCompanyTime" parameterType="cdtRentCompanyTimeRequest">
+  	<insert  id="insertDcRentCompanyTime" parameterType="dcRentCompanyTimeRequest">
     <![CDATA[
-			   	INSERT INTO CDT_RENT_COMPANY_TIME 
+			   	INSERT INTO DC_RENT_COMPANY_TIME
 			   	(
 					RT_IDX
 				,	WEEKDAY_OPEN_START
@@ -633,7 +633,7 @@
 			, 	IFNULL(HOLIDAY_END_DT		, '') AS HOLIDAY_END_DT     /*공휴일종료일*/
 			, 	IFNULL(HOLIDAY_NAME		, '') AS HOLIDAY_NAME       /*휴일명*/
 			, 	IFNULL(DEL_YN          	, '') AS DEL_YN             /*삭제여부*/
-			FROM CDT_HOLIDAYS
+			FROM DC_HOLIDAYS
 		
 		  ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -660,7 +660,7 @@
     </select>
 
     <update  id="updateRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">
-    	<![CDATA[ UPDATE CDT_HOLIDAYS ]]>
+    	<![CDATA[ UPDATE DC_HOLIDAYS ]]>
     	<trim prefix="SET" prefixOverrides=",">
 	    	<if test="rtIdx				!= null"><![CDATA[    RT_IDX			= #{rtIdx}]]></if>	
 			<if test="holidayStartDt	!= null"><![CDATA[  , HOLIDAY_START_DT	= #{holidayStartDt}]]></if>
@@ -679,7 +679,7 @@
 
   	<insert  id="insertRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">
     <![CDATA[
-			   	INSERT INTO CDT_HOLIDAYS 
+			   	INSERT INTO DC_HOLIDAYS
 			   	(
 					RT_IDX
 				,	HOLIDAY_START_DT
@@ -701,13 +701,13 @@
     ]]>
     </insert>   
 
- 	<select id="selectCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest"
-    								   resultType="CdtRentCompanyAbleareaResponse">
+ 	<select id="selectDcRentCompanyAblearea" parameterType="DcRentCompanyAbleareaRequest"
+    								   resultType="DcRentCompanyAbleareaResponse">
 		<![CDATA[
 			SELECT	
 				IFNULL(LAT				, '') AS LAT            /*위도*/
 			, 	IFNULL(LNG          	, '') AS LNG             /*경도*/
-			FROM CDT_RENT_COMPANY_ABLEAREA
+			FROM DC_RENT_COMPANY_ABLEAREA
 		  ]]>
          <trim prefix="WHERE" prefixOverrides="AND|OR">
          	<![CDATA[	IFNULL(DEL_YN, 'N') = 'N'  ]]>         
@@ -721,8 +721,8 @@
        	</trim>
     </select>
 
-    <update  id="updateCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest">
-    	<![CDATA[ UPDATE CDT_RENT_COMPANY_ABLEAREA ]]>
+    <update  id="updateDcRentCompanyAblearea" parameterType="DcRentCompanyAbleareaRequest">
+    	<![CDATA[ UPDATE DC_RENT_COMPANY_ABLEAREA ]]>
     	<trim prefix="SET" prefixOverrides=",">
   			, DEL_YN 			= 'Y'
  			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if> 	<!-- 수정자 -->
@@ -739,9 +739,9 @@
 		</trim>			
     </update>
 
-  	<update  id="insertCdtRentCompanyAblearea" parameterType="CdtRentCompanyAbleareaRequest">
+  	<update  id="insertDcRentCompanyAblearea" parameterType="DcRentCompanyAbleareaRequest">
     <![CDATA[
-   	INSERT INTO CDT_RENT_COMPANY_ABLEAREA 
+   	INSERT INTO DC_RENT_COMPANY_ABLEAREA
    	(
 		RT_IDX
 	,	LAT

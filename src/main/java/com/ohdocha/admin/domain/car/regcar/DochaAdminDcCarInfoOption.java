@@ -1,22 +1,20 @@
-package com.ohdocha.admin.domain.rentCompany;
+package com.ohdocha.admin.domain.car.regcar;
 
-import com.ohdocha.admin.domain.common.CommonRequestDto;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtRentCompanyComissionRequest")
-public class DochaAdminCdtRentCompnayComissionRequest extends CommonRequestDto {
+@Alias("dcCarInfoOption")
+public class DochaAdminDcCarInfoOption {
 	
-	private String rtIdx         ; //제휴사idx
-	private String commissionPer ; //수수료윯
-	private String taxInvoiceCode; //세금계산서 발행주체
-	private String regId         ; //등록일
-	private String regDt         ; //등록일시
-	private String modId         ; //수정자
-	private String modDt         ; //수정일시
-	private String delYn         ; //사용유무
-	
+	private String rtIdx			;
+	private String commissionPer    ;
+	private String taxInvoiceCode   ;
+	private String regId            ;
+	private String regDt            ;
+	private String modId            ;
+	private String modDt            ;
+	private String delYn            ;
 	public String getRtIdx() {
 		return rtIdx;
 	}
@@ -65,7 +63,4 @@ public class DochaAdminCdtRentCompnayComissionRequest extends CommonRequestDto {
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
 	}
-	
-	
-	
 }

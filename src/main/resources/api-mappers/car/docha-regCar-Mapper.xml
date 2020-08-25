@@ -22,21 +22,21 @@
                           ,   IFNULL(T1.LONGTERM_FEE, '0')      AS MONTHLY_STANDARD_PAY       /* 월 기본요금*/
                             ,   CASE WHEN IFNULL(RESERVE_ABLE_YN, 'Y') = 'N' THEN 'UnableReserve'
                                       WHEN ( SELECT COUNT(CR_IDX)
-                                          FROM CDT_RESERVE_MASTER
+                                          FROM DC_RESERVE_MASTER
                                           WHERE CR_IDX = T1.CR_IDX
                                           AND RESERVE_STATUS_CODE = 'RS'
 --                                           AND DATE_FORMAT(IFNULL(SYSDATE, ''), 'YYYY-MM-DD HH24:mi') >= DATE_FORMAT(TO_DATE(RENT_START_DAY||RENT_START_TIME, 'YYYY-MM-DD HH24:mi'), 'YYYY-MM-DD HH24:mi')
 --                                           AND DATE_FORMAT(IFNULL(SYSDATE, ''), 'YYYY-MM-DD HH24:mi') <= DATE_FORMAT(TO_DATE(RENT_END_DAY||RENT_END_TIME, 'YYYY-MM-DD HH24:mi'), 'YYYY-MM-DD HH24:mi')
                                         ) > 0 THEN 'rantal'
                                        WHEN ( SELECT COUNT(CR_IDX)
-                                          FROM CDT_RESERVE_MASTER
+                                          FROM DC_RESERVE_MASTER
                                           WHERE CR_IDX = T1.CR_IDX
                                           AND RESERVE_STATUS_CODE = 'RS'
 --                                           AND DATE_FORMAT(IFNULL(SYSDATE, ''), 'YYYY-MM-DD HH24:mi') >= DATE_FORMAT(RESERVE_DATE-(IFNULL(T3.RETURN_INSPECTION_TIME, 0)/24), 'YYYY-MM-DD HH24:mi')
 --                                           AND DATE_FORMAT(IFNULL(SYSDATE, ''), 'YYYY-MM-DD HH24:mi') < DATE_FORMAT(TO_DATE(RENT_START_DAY||RENT_START_TIME, 'YYYY-MM-DD HH24:mi'), 'YYYY-MM-DD HH24:mi')
                                         ) > 0 THEN 'booking'
                                        WHEN ( SELECT COUNT(CR_IDX)
-                                          FROM CDT_RESERVE_MASTER
+                                          FROM DC_RESERVE_MASTER
                                           WHERE CR_IDX = T1.CR_IDX
                                           AND RESERVE_STATUS_CODE = 'RS'
 --                                           AND DATE_FORMAT(IFNULL(SYSDATE, ''), 'YYYY-MM-DD HH24:mi') >= DATE_FORMAT(TO_DATE(RENT_END_DAY||RENT_END_TIME, 'YYYY-MM-DD HH24:mi')+(IFNULL(T3.RETURN_INSPECTION_TIME, 0)/24), 'YYYY-MM-DD HH24:mi')
@@ -45,11 +45,11 @@
                                  ELSE 'waiting' END AS RESERVE_STATUS       /* 상태 */
 --                         ,   IFNULL(DAILY_YN, 'Y') AS DAILY_YN            /* 일대여 사용유무 */
 --                         ,   IFNULL(MONTHLY_YN, 'Y') AS MONTHLY_YN         /* 월대여 사용유무 */
---                         ,   (SELECT COUNT(SU_IDX) FROM CDT_CAR_INFO_SUSPEND WHERE CR_IDX = T1.CR_IDX AND DEL_YN != 'Y') AS  SUSPEND_CNT      /* 휴차일 카운트 */
-                  FROM   CDT_CAR_INFO T1
-                  INNER JOIN CDT_RENT_COMPANY T2
+--                         ,   (SELECT COUNT(SU_IDX) FROM DC_CAR_INFO_SUSPEND WHERE CR_IDX = T1.CR_IDX AND DEL_YN != 'Y') AS  SUSPEND_CNT      /* 휴차일 카운트 */
+                  FROM   DC_CAR_INFO T1
+                  INNER JOIN DC_RENT_COMPANY T2
                                   ON T1.RT_IDX = T2.RT_IDX
-                  LEFT JOIN CDT_RENT_COMPANY_TIME T3
+                  LEFT JOIN DC_RENT_COMPANY_TIME T3
                                   ON T1.RT_IDX = T3.RT_IDX
 --                    ) A
              ]]>
@@ -159,7 +159,7 @@
                         ,   IFNULL(T1.MONTHLY_YN             , '' ) AS    MONTHLY_YN            /*월대여사용유무*/
                         ,   IFNULL(T1.CLOSEDVEHICLE_YN       , '' ) AS    CLOSEDVEHICLE_YN      /*휴차일사용유무*/
                         ,   IFNULL(T1.PER_IDX              , '' ) AS      PER_IDX               /*기간요금idx*/
-                  FROM   CDT_CAR_INFO T1 INNER JOIN CDT_RENT_COMPANY T2 ON T1.RT_IDX = T2.RT_IDX
+                  FROM   DC_CAR_INFO T1 INNER JOIN DC_RENT_COMPANY T2 ON T1.RT_IDX = T2.RT_IDX
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<!-- <![CDATA[   T1.DEL_YN='N' ]]> -->
@@ -180,7 +180,7 @@
                ,   IFNULL(T1.CR_IDX              , '' ) AS CR_IDX               /*차량idx*/
                ,   IFNULL(T1.OPTION_DETAIL_CODE  , '' ) AS OPTION_DETAIL_CODE   /*옵션상세code*/
                ,   IFNULL(T1.DEL_YN              , '' ) AS DEL_YN               /*삭제여부*/
-            FROM   CDT_CAR_INFO_OPTION T1
+            FROM   DC_CAR_INFO_OPTION T1
 
      ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -192,8 +192,8 @@
 	</select>
 
 	<!-- 차량정보 UPDATE -->
-	<update  id="updateCdtCarInfo" parameterType="regCarDetailRequest">
-		<![CDATA[ UPDATE CDT_CAR_INFO ]]>
+	<update  id="updateDcCarInfo" parameterType="regCarDetailRequest">
+		<![CDATA[ UPDATE DC_CAR_INFO ]]>
 		<trim prefix="SET" suffixOverrides=",">
 			<!-- 차량 기본정보 -->
 			<if test="rtIdx          != null"><![CDATA[    RT_IDX            = #{rtIdx}            ]]></if>   <!-- 회원사순번 -->
@@ -261,9 +261,9 @@
 	</update>
 
 	<!-- 차량정보 INSERT -->
-	<insert  id="insertCdtCarInfo" parameterType="regCarDetailRequest">
+	<insert  id="insertDcCarInfo" parameterType="regCarDetailRequest">
    <![CDATA[
-        INSERT INTO CDT_CAR_INFO (
+        INSERT INTO DC_CAR_INFO (
               CR_IDX
            ,  RT_IDX
          ,  CAR_NUMBER
@@ -271,7 +271,7 @@
          ,  YEAR
          ,  CAR_REG_DT
          ,  MODEL_NAME
-         ,  MODEL_DETAIL_NAME
+         ,  MODEL_DETAILE_NAME
          ,  MD_IDX
          ,  FUEL_CODE
          ,  COLOR_NAME
@@ -336,8 +336,8 @@
        , IFNULL(DELIVERY_ADD_PAY, '0') AS DELIVERY_ADD_PAY   /* 배달10KM단위추가요금 */
       , CALC_PERIOD_DT(#{calRentStartDt}, #{calRentEndDt}) AS CALC_PERIOD_DT /* 사용기간 */
       , B.PERIOD_MM /* 개월수 */
-      FROM CDT_CAR_INFO A INNER JOIN TABLE(FN_RESERVE_AMT(#{calRentStartDt}, #{calRentEndDt}, #{crIdx}, #{insuranceCopayment})) B ON A.CR_IDX = B.CR_IDX
-                          LEFT JOIN CDT_RENT_COMPANY_COMMISSION C ON A.RT_IDX = C.RT_IDX
+      FROM DC_CAR_INFO A INNER JOIN TABLE(FN_RESERVE_AMT(#{calRentStartDt}, #{calRentEndDt}, #{crIdx}, #{insuranceCopayment})) B ON A.CR_IDX = B.CR_IDX
+                          LEFT JOIN DC_RENT_COMPANY_COMMISSION C ON A.RT_IDX = C.RT_IDX
      ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="crIdx != null and crIdx != ''">
@@ -347,9 +347,9 @@
 	</select>
 
 	<!-- 차량정보 INSERT -->
-	<insert  id="insertCdtCarInfoSuspend" parameterType="regCarDetailRequest">
+	<insert  id="insertDcCarInfoSuspend" parameterType="regCarDetailRequest">
    <![CDATA[
-        INSERT INTO CDT_CAR_INFO_SUSPEND (
+        INSERT INTO DC_CAR_INFO_SUSPEND (
               CR_IDX
            ,  SUSPEND_START_DT
          ,  SUSPEND_END_DT

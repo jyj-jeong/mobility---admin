@@ -1,12 +1,12 @@
 package com.ohdocha.admin.domain.rentCompany;
 
-import com.ohdocha.admin.domain.common.CommonRequestDto;
+import com.ohdocha.admin.domain.common.CommonResponseDto;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtRentCompanyReseveMinRequest")
-public class DochaAdminCdtRentCompanyReseveMinRequest extends CommonRequestDto {
+@Alias("dcRentCompanyReseveMinResponse")
+public class DochaAdminDcRentCompanyReseveMinResponse extends CommonResponseDto {
 	private String minIdx;			/*특정기간idx*/
 	private String rtIdx;			/*제휴사idx*/
 	private String minimumStartDt;	/*최소예약시간시작일*/
@@ -15,8 +15,7 @@ public class DochaAdminCdtRentCompanyReseveMinRequest extends CommonRequestDto {
 	private String regId;			/*등록자*/
 	private String modId;			/*수정자*/
 	private String delYn; 			/*삭제여부*/
-	private String tminIdx;			/*중복 검색시 특정기간idx*/
-	
+
 	public String getMinIdx() {
 		return minIdx;
 	}
@@ -65,12 +64,5 @@ public class DochaAdminCdtRentCompanyReseveMinRequest extends CommonRequestDto {
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
 	}
-	public String getTminIdx() {
-		return tminIdx;
-	}
-	public void setTminIdx(String tminIdx) {
-		this.tminIdx = tminIdx;
-	}
-	
-	
+
 }

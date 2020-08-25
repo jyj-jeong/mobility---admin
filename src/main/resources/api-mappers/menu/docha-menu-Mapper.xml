@@ -21,10 +21,10 @@
 					,	T1.MENU_ORDER		AS MENU_ORDER											/* ORDER BY 순서*/
 					,	T1.MENU_DC			AS MENU_DC												/* 메뉴 설명*/
 					,	T1.MENU_LEVEL  AS MENU_LEVEL												/* 메뉴 LEVEL*/
-			FROM CDT_MENU T1
-			LEFT JOIN CDT_MENU_TEMPLATE_LIST T2
+			FROM DC_MENU T1
+			LEFT JOIN DC_MENU_TEMPLATE_LIST T2
        			   ON T1.MENU_CD = T2.MENU_CD
-			LEFT JOIN CDT_MENU_TEMPLATE T3
+			LEFT JOIN DC_MENU_TEMPLATE T3
        			   ON T2.TEMPLATE_CD = T3.TEMPLATE_CD
 	    ]]>
 	    <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -53,8 +53,8 @@
 	                    , A.MENU_ORDER		AS MENU_ORDER											/* ORDER BY 순서*/
 	                    , A.MENU_DC			AS MENU_DC												/* 메뉴 설명*/
 	                    , A.MENU_LEVEL  AS MENU_LEVEL												/* 메뉴 LEVEL*/
-				  FROM CDT_MENU A
-	         LEFT JOIN CDT_MENU_AUTH B
+				  FROM DC_MENU A
+	         LEFT JOIN DC_MENU_AUTH B
                     ON A.MENU_CD = B.MENU_CD   ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
         	<![CDATA[   A.USE_YN='Y'             ]]>
@@ -86,7 +86,7 @@
 							,  IFNULL(MOD_DT        , '') AS MOD_DT         /*수정자*/
 							,  IFNULL(MOD_ID        , '') AS MOD_ID         /*수정자*/
 							,  IFNULL(ROLE          , '') AS ROLE           /**/
-				  FROM CDT_MENU_TEMPLATE
+				  FROM DC_MENU_TEMPLATE
                       ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
         	<if test="templateCd != null and templateCd != ''">
@@ -114,8 +114,8 @@
 	                    , A.MENU_ORDER		AS MENU_ORDER											/* ORDER BY 순서*/
 	                    , A.MENU_DC			AS MENU_DC												/* 메뉴 설명*/
 	                    , A.MENU_LEVEL  AS MENU_LEVEL												/* 메뉴 LEVEL*/
-				  FROM CDT_MENU A
-	         LEFT JOIN CDT_MENU_AUTH B
+				  FROM DC_MENU A
+	         LEFT JOIN DC_MENU_AUTH B
                     ON A.MENU_CD = B.MENU_CD   ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
         	<![CDATA[	 A.USE_YN='Y'             

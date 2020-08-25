@@ -34,14 +34,14 @@
                                         WHEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') > TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') THEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
                                         ELSE TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD')
                                       END AS ACCOUNT_EXP_BASE_DT
-                                  FROM CDT_PAYMENT_DETAIL PD
-                                  INNER JOIN CDT_RESERVE_MASTER RM
+                                  FROM DC_PAYMENT_DETAIL PD
+                                  INNER JOIN DC_RESERVE_MASTER RM
                                   ON PD.RM_IDX = RM.RM_IDX
                             ) T1
-                       --LEFT OUTER JOIN CDT_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
-                          LEFT OUTER JOIN CDT_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
+                       --LEFT OUTER JOIN DC_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
                           GROUP BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6)--, T1.RM_IDX
                           ORDER BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6) DESC
                   ) A
@@ -115,22 +115,22 @@
                                         WHEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') > TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') THEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
                                         ELSE TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD')
                                       END AS ACCOUNT_EXP_BASE_DT
-                                  FROM CDT_PAYMENT_DETAIL PD
-                                  INNER JOIN CDT_RESERVE_MASTER RM
+                                  FROM DC_PAYMENT_DETAIL PD
+                                  INNER JOIN DC_RESERVE_MASTER RM
                                   ON PD.RM_IDX = RM.RM_IDX
                             ) T1
-                       --LEFT OUTER JOIN CDT_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
-                          LEFT OUTER JOIN CDT_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
+                       --LEFT OUTER JOIN DC_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
                           WHERE #{accountExpDt} = NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6)
                           GROUP BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6), T1.RT_IDX
                           ORDER BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6) DESC
 
                      ) Z
-                     INNER JOIN CDT_RENT_COMPANY B
+                     INNER JOIN DC_RENT_COMPANY B
                         ON Z.RT_IDX = B.RT_IDX
-                     LEFT OUTER JOIN CDT_COMMON_CODE C
+                     LEFT OUTER JOIN DC_COMMON_CODE C
                         ON B.ACCOUNT_BANK = C.CODE
                         AND RT_CODE = 'BK'
                ) A
@@ -207,25 +207,25 @@
                                         WHEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') > TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') THEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
                                         ELSE TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD')
                                       END AS ACCOUNT_EXP_BASE_DT
-                                  FROM CDT_PAYMENT_DETAIL PD
-                                  INNER JOIN CDT_RESERVE_MASTER RM
+                                  FROM DC_PAYMENT_DETAIL PD
+                                  INNER JOIN DC_RESERVE_MASTER RM
                                   ON PD.RM_IDX = RM.RM_IDX
                             ) T1
-                       --LEFT OUTER JOIN CDT_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
-                       LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
-                          LEFT OUTER JOIN CDT_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
+                       --LEFT OUTER JOIN DC_RESERVE_MASTER T2 ON T1.RM_IDX = T2.RM_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
+                       LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T4 ON T3.RT_IDX = T4.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_ACCOUNTS T5 ON T1.PD_IDX = T5.PD_IDX
                           WHERE #{accountExpDt} = NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6)
                           GROUP BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6), T1.RM_IDX
                           ORDER BY NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6) DESC
                   ) Z
-                  INNER JOIN CDT_RESERVE_MASTER B
+                  INNER JOIN DC_RESERVE_MASTER B
                         ON Z.RM_IDX = B.RM_IDX
-                     LEFT OUTER JOIN CDT_RENT_COMPANY C
+                     LEFT OUTER JOIN DC_RENT_COMPANY C
                         ON B.RT_IDX = C.RT_IDX
-                     LEFT OUTER JOIN CDT_CAR_INFO D
+                     LEFT OUTER JOIN DC_CAR_INFO D
                         ON B.CR_IDX = D.CR_IDX
-                  LEFT OUTER JOIN CDT_COMMON_CODE E
+                  LEFT OUTER JOIN DC_COMMON_CODE E
                         ON D.FUEL_CODE = E.CODE
                         AND RT_CODE = 'CR'
 
@@ -273,13 +273,13 @@
 		WHEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD') > TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') THEN TO_DATE(TO_CHAR(PD.PAYMENT_DATE, 'YYYY-MM-DD'), 'YYYY-MM-DD')
 		ELSE TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD')
 		END AS ACCOUNT_EXP_BASE_DT
-		FROM CDT_PAYMENT_DETAIL PD
-		INNER JOIN CDT_RESERVE_MASTER RM
+		FROM DC_PAYMENT_DETAIL PD
+		INNER JOIN DC_RESERVE_MASTER RM
 		ON PD.RM_IDX = RM.RM_IDX
 		) T1
-		LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T2 ON T1.RT_IDX = T2.RT_IDX
+		LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T2 ON T1.RT_IDX = T2.RT_IDX
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			AND NOT EXISTS ( SELECT * FROM CDT_RENT_ACCOUNTS T2 WHERE T1.PD_IDX = T2.PD_IDX )
+			AND NOT EXISTS ( SELECT * FROM DC_RENT_ACCOUNTS T2 WHERE T1.PD_IDX = T2.PD_IDX )
 			<if test="accountExpDt != null and accountExpDt != ''">
 				AND #{accountExpDt} = NEXT_DAY(TO_DATE(T1.ACCOUNT_EXP_BASE_DT), 6)
 			</if>
@@ -293,7 +293,7 @@
 	</select>
 
 	<insert id="insertRentAccounts" parameterType="calculateRequest">
-       INSERT INTO CDT_RENT_ACCOUNTS(
+       INSERT INTO DC_RENT_ACCOUNTS(
          AC_DT
          , RT_IDX
          , RM_IDX
@@ -356,15 +356,15 @@
                           ,      IFNULL(((T1.RENT_FEE + T1.INSURANCE_FEE)-IFNULL(T1.DISCOUNT_FEE,0)),0)   AS TOTAL_FEE
                           ,      IFNULL(T4.AC_PAY, 0)                                     AS SUCCESS_FEE
                           ,      IFNULL(T2.PAYMENT_AMOUNT, 0 )                                       AS PAYMENT_AMOUNT
-                          FROM   CDT_RESERVE_MASTER T1
+                          FROM   DC_RESERVE_MASTER T1
                           LEFT OUTER JOIN
                           (
                              SELECT TT.RM_IDX AS RM_IDX ,SUM(TT.PAYMENT_AMOUNT)OVER(PARTITION BY TT.RM_IDX) AS PAYMENT_AMOUNT
-                             FROM   CDT_PAYMENT_DETAIL TT
+                             FROM   DC_PAYMENT_DETAIL TT
                           ) T2 ON T1.RM_IDX = T2.RM_IDX
-                          LEFT OUTER JOIN CDT_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
-                          LEFT OUTER JOIN CDT_RENT_ACCOUNTS T4 ON T3.RT_IDX = T4.RT_IDX
-                          LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T5 ON T3.RT_IDX = T5.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_ACCOUNTS T4 ON T3.RT_IDX = T4.RT_IDX
+                          LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T5 ON T3.RT_IDX = T5.RT_IDX
                       ) A
                          WHERE A.RENT_GBN_DT = #{gbnDt}
                       GROUP BY A.RENT_GBN_DT, A.COMPANY_NAME, A.ACCOUNT_BANK , A.ACCOUNT_NUMBER
@@ -430,17 +430,17 @@
                                 ,      IFNULL(T6.CAR_NUMBER , '')                                          AS CAR_NUMBER
                                 ,      IFNULL(T6.YEAR , '')                                                AS YEAR
                                 ,      SUM(T2.PAYMENT_AMOUNT)OVER(PARTITION BY T1.RM_IDX)               AS PAYMENT_AMOUNT
-                             FROM   CDT_RESERVE_MASTER T1
+                             FROM   DC_RESERVE_MASTER T1
                              LEFT OUTER JOIN
                              (
                                 SELECT TT.RM_IDX AS RM_IDX ,SUM(TT.PAYMENT_AMOUNT) AS PAYMENT_AMOUNT
-                                FROM   CDT_PAYMENT_DETAIL TT GROUP BY TT.RM_IDX
+                                FROM   DC_PAYMENT_DETAIL TT GROUP BY TT.RM_IDX
                              ) T2 ON T1.RM_IDX = T2.RM_IDX
-                             LEFT OUTER JOIN CDT_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
-                             LEFT OUTER JOIN CDT_RENT_ACCOUNTS T4 ON T3.RT_IDX = T4.RT_IDX
-                             LEFT OUTER JOIN CDT_RENT_COMPANY_COMMISSION T5 ON T3.RT_IDX = T5.RT_IDX
-                                LEFT OUTER JOIN CDT_CAR_INFO T6 ON T1.CR_IDX = T6.CR_IDX
-                                LEFT OUTER JOIN CDT_USER_INFO T7 ON T1.UR_IDX = T7.UR_IDX
+                             LEFT OUTER JOIN DC_RENT_COMPANY T3 ON T1.RT_IDX = T3.RT_IDX
+                             LEFT OUTER JOIN DC_RENT_ACCOUNTS T4 ON T3.RT_IDX = T4.RT_IDX
+                             LEFT OUTER JOIN DC_RENT_COMPANY_COMMISSION T5 ON T3.RT_IDX = T5.RT_IDX
+                                LEFT OUTER JOIN DC_CAR_INFO T6 ON T1.CR_IDX = T6.CR_IDX
+                                LEFT OUTER JOIN DC_USER_INFO T7 ON T1.UR_IDX = T7.UR_IDX
                          ) A
                             WHERE A.RENT_GBN_DT = #{gbnDt}
                    ) MT

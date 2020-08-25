@@ -41,29 +41,29 @@
 		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyDetailRequest" alias="rentCompanyDetailRequest" />
 		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyDetailResponse" alias="rentCompanyDetailResponse" />
 
-		<!-- CDT_RENT_COMPANY_STAFF -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayStaffRequest" alias="cdtRentCompanyStaffRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayStaffResponse" alias="cdtRentCompanyStaffResponse" />
+		<!-- DC_RENT_COMPANY_STAFF -->
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayStaffRequest" alias="dcRentCompanyStaffRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayStaffResponse" alias="dcRentCompanyStaffResponse" />
 
-		<!-- CDT_RENT_COMPANY_COMISSION -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayComissionRequest" alias="cdtRentCompanyComissionRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayComissionResponse" alias="cdtRentCompanyComissionResponse" />
+		<!-- DC_RENT_COMPANY_COMISSION -->
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayComissionRequest" alias="dcRentCompanyComissionRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayComissionResponse" alias="dcRentCompanyComissionResponse" />
 
-		<!-- CDT_RENT_COMPANY_TIME -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayTimeRequest" alias="cdtRentCompanyTimeRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayTimeResponse" alias="cdtRentCompanyTimeResponse" />
+		<!-- DC_RENT_COMPANY_TIME -->
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayTimeRequest" alias="dcRentCompanyTimeRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayTimeResponse" alias="dcRentCompanyTimeResponse" />
 
-		<!-- CDT_RENT_COMPANY_RESERVE_MIN -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompanyReseveMinRequest" alias="cdtRentCompanyReseveMinRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompanyReseveMinResponse" alias="cdtRentCompanyReseveMinResponse" />
+		<!-- DC_RENT_COMPANY_RESERVE_MIN -->
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompanyReseveMinRequest" alias="dcRentCompanyReseveMinRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompanyReseveMinResponse" alias="dcRentCompanyReseveMinResponse" />
 
-		<!-- CDT_HOLIDAYS : 회원사 상세 정보 추가 -->
+		<!-- DC_HOLIDAYS : 회원사 상세 정보 추가 -->
 		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyHolidayRequest" alias="RentCompanyHolidayRequest" />
 		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyHolidayResponse" alias="RentCompanyHolidayResponse" />
 
-		<!-- CDT_RENT_COMPANY_ABLEAREA -->
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayAbleareaRequest" alias="CdtRentCompanyAbleareaRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminCdtRentCompnayAbleareaResponse" alias="CdtRentCompanyAbleareaResponse" />
+		<!-- DC_RENT_COMPANY_ABLEAREA -->
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayAbleareaRequest" alias="DcRentCompanyAbleareaRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompnayAbleareaResponse" alias="DcRentCompanyAbleareaResponse" />
 
 		<!-- 관리자 alias 등록 -->
 		<typeAlias type="com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoRequest" alias="adminUserInfoRequest" />
@@ -74,8 +74,8 @@
 		<typeAlias type="com.ohdocha.admin.domain.menu.DochaAdminMenuResponse" alias="menuResponse" />
 
 		<!--  로그인 alias 등록 -->
-		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoRequest" alias="cdtUserInfoRequest" />
-		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminCdtUserInfoResponse" alias="cdtUserInfoResponse" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest" alias="dcUserInfoRequest" />
+		<typeAlias type="com.ohdocha.admin.domain.user.DochaAdminDcUserInfoResponse" alias="dcUserInfoResponse" />
 
 
 		<!--  예약 alias 등록 -->
@@ -105,7 +105,7 @@
 		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse" alias="regCarResponse" />
 		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest" alias="regCarDetailRequest" />
 		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailResponse" alias="regCarDetailResponse" />
-		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminCdtCarInfoOption" alias="cdtCarInfoOption" />
+		<typeAlias type="com.ohdocha.admin.domain.car.regcar.DochaAdminDcCarInfoOption" alias="dcCarInfoOption" />
 
 		<!--  차량 -차량모델  등록 -->
 		<typeAlias type="com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest" alias="carModelRequest" />

@@ -17,8 +17,8 @@
 								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.CONTURY_CODE
 					WHERE T1.RT_CODE='CN' AND T1.P_CODE ='CN'
 					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
@@ -30,8 +30,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.MANUFACTURER_CODE  
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='MF'
 					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
@@ -43,8 +43,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						  ON T1.CODE =  T2.CARTYPE_CODE  
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='CTY'
 					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
@@ -56,8 +56,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.FUEL_CODE  
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='FL'  --연료
 					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
@@ -72,8 +72,8 @@
 								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-						FROM CDT_COMMON_CODE T1
-						LEFT JOIN CDT_MODEL  T2
+						FROM DC_COMMON_CODE T1
+						LEFT JOIN DC_MODEL  T2
 							   ON T1.CODE =  T2.CONTURY_CODE  
 						WHERE T1.RT_CODE='CN' AND T1.P_CODE ='CN'
 						<if test="searchKeyWord != null and searchKeyWord != ''">
@@ -90,8 +90,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.MANUFACTURER_CODE
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='MF'  
 					<if test="searchKeyWord != null and searchKeyWord != ''">
@@ -108,8 +108,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.CARTYPE_CODE
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='CTY'
 					<if test="searchKeyWord != null and searchKeyWord != ''">
@@ -126,8 +126,8 @@
 							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
 							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
 							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM CDT_COMMON_CODE T1
-					LEFT JOIN CDT_MODEL  T2
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_MODEL  T2
 						   ON T1.CODE =  T2.CARTYPE_CODE
 					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='FL'
 					<if test="searchKeyWord != null and searchKeyWord != ''">

@@ -62,10 +62,10 @@
                                     , IFNULL(A.DELIVERY_TYPE_CODE, '') AS DELIVERY_TYPE_CODE /* 대여방법 코드 */
                                     , GET_COMMON_CODE_VALUE('QT', IFNULL(A.DELIVERY_TYPE_CODE, '')) AS DELIVERY_TYPE_NAME /* 대여 방법 명 */
                                       , PAYMENT_TOTAL_AMOUNT as PAYMENT_TOTAL_AMOUNT
-                                    , (SELECT SUM(IFNULL(PAYMENT_AMOUNT, '0')) FROM CDT_PAYMENT_DETAIL WHERE RM_IDX = A.RM_IDX) AS PAYMENT_AMOUNT /* 총 결제금액 */
+                                    , (SELECT SUM(IFNULL(PAYMENT_AMOUNT, '0')) FROM DC_PAYMENT_DETAIL WHERE RM_IDX = A.RM_IDX) AS PAYMENT_AMOUNT /* 총 결제금액 */
                                     , CASE WHEN INSTR(D.COMPANY_ADDRESS||D.COMPANY_ADDRESS_DETAIL, '제주') > 0 THEN 'JJ' ELSE 'IL' END AS LAND_CODE /* 내륙/제주 구분 [JJ:제주,IL:내륙,IS:제주 제외한 섬] */
-                                 FROM CDT_RESERVE_MASTER A INNER JOIN CDT_CAR_INFO C ON A.CR_IDX = C.CR_IDX
-                                                     INNER JOIN CDT_RENT_COMPANY D ON A.RT_IDX = D.RT_IDX
+                                 FROM DC_RESERVE_MASTER A INNER JOIN DC_CAR_INFO C ON A.CR_IDX = C.CR_IDX
+                                                     INNER JOIN DC_RENT_COMPANY D ON A.RT_IDX = D.RT_IDX
                               ) X
                               ORDER BY RESERVE_DATE DESC
                         ) Y
@@ -185,11 +185,11 @@
       , IFNULL(A.PAYMENT_TOTAL_AMOUNT, '0') AS PAYMENT_TOTAL_AMOUNT /* 총 대여금액 */
       , CASE WHEN LONGTERM_YN = 'LT' THEN C.MONTHLY_STANDARD_PAY ELSE IFNULL(A.PAYMENT_TOTAL_AMOUNT, '0') END AS PAYMENT_AMOUNT /* 결제금액 */
       , IFNULL(A.REFUND_FEE, '0') AS REFUND_FEE /* 환불금액 */
-      , IFNULL(A.PAYMENT_TOTAL_AMOUNT, '0') - (SELECT SUM(PAYMENT_AMOUNT) FROM CDT_PAYMENT_DETAIL WHERE RM_IDX = A.RM_IDX) AS MISU /* 미납금 */
-      FROM CDT_RESERVE_MASTER A LEFT JOIN CDT_USER_INFO B ON A.UR_IDX = B.UR_IDX
-                                INNER JOIN CDT_CAR_INFO C ON A.CR_IDX = C.CR_IDX
-                                INNER JOIN CDT_RENT_COMPANY D ON A.RT_IDX = D.RT_IDX
-                                LEFT JOIN CDT_RENT_COMPANY_STAFF E ON A.RT_IDX = E.RT_IDX AND E.OWNER_YN = 'Y'
+      , IFNULL(A.PAYMENT_TOTAL_AMOUNT, '0') - (SELECT SUM(PAYMENT_AMOUNT) FROM DC_PAYMENT_DETAIL WHERE RM_IDX = A.RM_IDX) AS MISU /* 미납금 */
+      FROM DC_RESERVE_MASTER A LEFT JOIN DC_USER_INFO B ON A.UR_IDX = B.UR_IDX
+                                INNER JOIN DC_CAR_INFO C ON A.CR_IDX = C.CR_IDX
+                                INNER JOIN DC_RENT_COMPANY D ON A.RT_IDX = D.RT_IDX
+                                LEFT JOIN DC_RENT_COMPANY_STAFF E ON A.RT_IDX = E.RT_IDX AND E.OWNER_YN = 'Y'
       WHERE A.RM_IDX = #{rmIdx}
       ]]>
 
@@ -211,7 +211,7 @@
          ,      IFNULL(T1.PAYMENT_DATE        , '' ) AS PAYMENT_DATE
          ,      IFNULL(T1.ETC                 , '' ) AS ETC
          ,      IFNULL(T1.UR_IDX              , '' ) AS UR_IDX
-         FROM   CDT_PAYMENT_DETAIL T1
+         FROM   DC_PAYMENT_DETAIL T1
          WHERE  T1.RM_IDX = #{rmIdx}
          AND IFNULL(T1.PAYMENT_AMOUNT, '0' ) > 0
       ]]>
@@ -220,7 +220,7 @@
 
 
 	<update id="updateReserveInfo" parameterType="reserveInfoDetailRequest">
-		UPDATE CDT_RESERVE_MASTER
+		UPDATE DC_RESERVE_MASTER
 		SET    MOD_DT = SYSDATE
 		<if test =" modId != null and modId != '' ">
 			,      MOD_ID = #{modId}
@@ -349,7 +349,7 @@
 
 	<insert id="insertReserveInfo" parameterType="reserveInfoDetailRequest">
    <![CDATA[
-      INSERT INTO CDT_RESERVE_MASTER (
+      INSERT INTO DC_RESERVE_MASTER (
       RM_IDX
       , RESERVE_TYPE_CODE
       , RESERVE_STATUS_CODE
@@ -498,7 +498,7 @@
          )
             SELECT '예약' AS FLAG,
             CASE WHEN COUNT(RM_IDX) > 0 THEN '선택하신 대여시간에 해당 회원님의 예약건이 존재합니다.' ELSE 'Y' END AS MSG
-            FROM CDT_RESERVE_MASTER A, T_RESVER B
+            FROM DC_RESERVE_MASTER A, T_RESVER B
             WHERE A.RESERVE_STATUS_CODE = 'RS'
             AND (
             TO_CHAR(TO_DATE(A.RENT_START_DAY||A.RENT_START_TIME, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') BETWEEN TO_CHAR(TO_DATE(T_START_RENT_DAY, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI') AND TO_CHAR(TO_DATE(T_END_RENT_DAY, 'YYYYMMDDHH24MI'), 'YYYY-MM-DD HH24:MI')
@@ -514,7 +514,7 @@
             UNION ALL
             SELECT '예약' AS FLAG,
             CASE WHEN COUNT(RM_IDX) > 0 THEN '선택하신 대여시간에 해당 차량의 예약건이 존재합니다.' ELSE 'Y' END AS MSG
-            FROM CDT_RESERVE_MASTER A, T_RESVER B
+            FROM DC_RESERVE_MASTER A, T_RESVER B
             WHERE A.CR_IDX = B.T_CR_IDX
             AND A.RESERVE_STATUS_CODE = 'RS'
             AND (
@@ -537,8 +537,8 @@
             SELECT
             CASE WHEN TO_CHAR(TO_DATE(T_RESVER.T_START_RENT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') BETWEEN SUSPEND_START_DT AND SUSPEND_END_DT THEN 1 ELSE 0 END AS S_SUSPEND
             ,CASE WHEN TO_CHAR(TO_DATE(T_RESVER.T_END_RENT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') BETWEEN SUSPEND_START_DT AND SUSPEND_END_DT THEN 1 ELSE 0 END AS E_SUSPEND
-            FROM CDT_CAR_INFO_SUSPEND, T_RESVER
-            WHERE CDT_CAR_INFO_SUSPEND.CR_IDX = T_RESVER.T_CR_IDX
+            FROM DC_CAR_INFO_SUSPEND, T_RESVER
+            WHERE DC_CAR_INFO_SUSPEND.CR_IDX = T_RESVER.T_CR_IDX
             )
             UNION ALL
             SELECT '차량' AS FLAG,
@@ -549,13 +549,13 @@
                    END AS MSG
             FROM (
             SELECT
-            CASE WHEN TO_CHAR(TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(T_RESVER.BIRTH,'YYYYMMDD')) / 12)) >= IFNULL(CDT_CAR_INFO.AGE_LIMIT, '21') THEN 0 ELSE 1 END AS AGENT_LIMIT
+            CASE WHEN TO_CHAR(TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(T_RESVER.BIRTH,'YYYYMMDD')) / 12)) >= IFNULL(DC_CAR_INFO.AGE_LIMIT, '21') THEN 0 ELSE 1 END AS AGENT_LIMIT
             ,CASE WHEN DM_CNT = 0 AND IFNULL(DAILY_YN,'Y') = 'Y' THEN 0
                   WHEN DM_CNT >= 1 AND IFNULL(MONTHLY_YN,'Y') = 'Y' THEN 0
              ELSE 1 END AS DAILY_MONTHLY_YN
             ,DM_CNT
-            FROM CDT_CAR_INFO, T_RESVER
-            WHERE CDT_CAR_INFO.CR_IDX = T_RESVER.T_CR_IDX
+            FROM DC_CAR_INFO, T_RESVER
+            WHERE DC_CAR_INFO.CR_IDX = T_RESVER.T_CR_IDX
             ) X
             UNION ALL
             SELECT '휴무일' AS FLAG,
@@ -567,7 +567,7 @@
             SELECT
             CASE WHEN TO_CHAR(TO_DATE(T_RESVER.T_START_RENT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT THEN 1 ELSE 0 END AS S_HOLIDAYS
             ,CASE WHEN TO_CHAR(TO_DATE(T_RESVER.T_END_RENT_DT, 'YYYYMMDD'), 'YYYY-MM-DD') BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT THEN 1 ELSE 0 END AS E_HOLIDAYS
-            FROM CDT_HOLIDAYS, T_RESVER
+            FROM DC_HOLIDAYS, T_RESVER
             WHERE RT_IDX = T_RESVER.T_RT_IDX
             )
             UNION ALL
@@ -658,7 +658,7 @@
               ELSE 0
               END
               AS DELIVERYABLE
-               FROM CDT_RENT_COMPANY_TIME, T_RESVER
+               FROM DC_RENT_COMPANY_TIME, T_RESVER
                WHERE RT_IDX = T_RESVER.T_RT_IDX
             )
       ]]>
@@ -673,7 +673,7 @@
       ,      IFNULL(USER_CONTACT1 , '' ) AS USER_CONTACT1
       ,      IFNULL(USER_GENDER   , '' ) AS USER_GENDER
       ,      IFNULL(USER_NAME     , '' ) AS USER_NAME
-      FROM   CDT_USER_INFO
+      FROM   DC_USER_INFO
       WHERE  USER_ID = #{userId}
 
    </select>
@@ -712,7 +712,7 @@
       ,      IFNULL(COMPANY_REGISTRATION_NAME    , '' ) AS COMPANY_REGISTRATION_NAME
       ,      IFNULL(BRANCH_NAME                  , '' ) AS BRANCH_NAME
       ,      IFNULL(ACCESS_YN                    , '' ) AS ACCESS_YN
-      FROM   CDT_RENT_COMPANY
+      FROM   DC_RENT_COMPANY
       ORDER BY COMPANY_NAME
 
    </select>
@@ -755,8 +755,8 @@
       ,      IFNULL(T2.STAFF_CONTACT1            , '' ) AS STAFF_CONTACT1
       ,      IFNULL(T2.OWNER_YN                     , '' ) AS OWNER_YN
       ,      IFNULL(T2.STAFF_TITLE               , '' ) AS STAFF_TITLE
-      FROM   CDT_RENT_COMPANY T1
-      LEFT OUTER JOIN CDT_RENT_COMPANY_STAFF T2
+      FROM   DC_RENT_COMPANY T1
+      LEFT OUTER JOIN DC_RENT_COMPANY_STAFF T2
           ON T1.RT_IDX = T2.RT_IDX
           AND T2.OWNER_YN = 'Y'
       WHERE  T1.RT_IDX = #{rtIdx}
@@ -821,15 +821,15 @@
          ,      IFNULL(T1.INSURANCE_COPAYMENT4      ,  '' ) AS INSURANCE_COPAYMENT4     /*보험료4      */
          ,      IFNULL(T1.CAR_DAMAGE_COVER4      ,  '' ) AS CAR_DAMAGE_COVER4        /*면책금4      */
          ,      IFNULL(CA.CAROPTION_LIST_VALUE, '') AS OPTION_CODE_VALUE /* 옵션정보*/
-         FROM   CDT_CAR_INFO T1
-         --LEFT OUTER JOIN CDT_CAR_INFO_INSURANCE T2 ON T1.CR_IDX = T2.CR_IDX
+         FROM   DC_CAR_INFO T1
+         --LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T2 ON T1.CR_IDX = T2.CR_IDX
                            LEFT OUTER JOIN
                            (
                               SELECT
                                   X.CR_IDX
                                   , LISTAGG(Y.CODE_VALUE, ',') WITHIN GROUP(ORDER BY Y.CODE_VALUE) AS CAROPTION_LIST_VALUE
-                              FROM CDT_CAR_INFO_OPTION X
-                              INNER JOIN CDT_COMMON_CODE Y
+                              FROM DC_CAR_INFO_OPTION X
+                              INNER JOIN DC_COMMON_CODE Y
                                   ON ( '|' || X.OPTION_DETAIL_CODE || '|' LIKE '%' || Y.CODE || '%' )
                                   AND Y.RT_CODE = 'CR'
                               GROUP BY X.CR_IDX
@@ -839,7 +839,7 @@
 		<if test="rentStartDay != null and rentStartDay != '' and rentEndDay != null and rentEndDay != ''">
 			AND T1.CR_IDX NOT IN    (
 			SELECT CR_IDX
-			FROM CDT_RESERVE_MASTER
+			FROM DC_RESERVE_MASTER
 			WHERE RESERVE_STATUS_CODE = 'RS'
 			AND RM_IDX != #{rmIdx}
 			AND (
@@ -905,15 +905,15 @@
          ,      IFNULL(T3.AGE_LIMIT             ,  '' ) AS AGE_LIMIT               /*연령제한      */
          ,      IFNULL(T3.DRIVE_CAREER_LIMIT    ,  '' ) AS DRIVE_CAREER_LIMIT      /*운전경력제한   */
          ,      IFNULL(T3.INSURANCE_COPAYMENT   ,  '0' ) AS INSURANCE_COPAYMENT     /*고객부담금   */
-         FROM   CDT_CAR_INFO T1
+         FROM   DC_CAR_INFO T1
          LEFT OUTER JOIN (
                 SELECT CR_IDX
                 ,      LISTAGG(OPTION_DETAIL_CODE , ',') WITHIN GROUP(ORDER BY CR_IDX) AS OPTION_CODE
                 ,      LISTAGG(GET_COMMON_CODE_VALUE('CO',OPTION_DETAIL_CODE) , ',') WITHIN GROUP(ORDER BY CR_IDX) AS OPTION_CODE_VALUE
-                FROM   CDT_CAR_INFO_OPTION
+                FROM   DC_CAR_INFO_OPTION
                 GROUP BY CR_IDX
              ) T2 ON T1.CR_IDX = T2.CR_IDX
-         LEFT OUTER JOIN CDT_CAR_INFO_INSURANCE T3 ON T1.CR_IDX = T3.CR_IDX
+         LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3 ON T1.CR_IDX = T3.CR_IDX
          WHERE  T1.CR_IDX = #{crIdx}
       ]]>
 
@@ -953,7 +953,7 @@
          ,      IFNULL(CAR_DAMAGE3_YN           , '' ) AS CAR_DAMAGE3_YN
          ,      IFNULL(CAR_DAMAGE4_YN           , '' ) AS CAR_DAMAGE4_YN
          ,      IFNULL(CI_ETC                   , '' ) AS CI_ETC
-         FROM   CDT_CAR_INFO_INSURANCE
+         FROM   DC_CAR_INFO_INSURANCE
          WHERE  CR_IDX = #{crIdx}
 
       ]]>

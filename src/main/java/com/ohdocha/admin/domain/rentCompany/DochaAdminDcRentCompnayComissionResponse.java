@@ -5,8 +5,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtRentCompanyComissionResponse")
-public class DochaAdminCdtRentCompnayComissionResponse extends CommonResponseDto {
+@Alias("dcRentCompanyComissionResponse")
+public class DochaAdminDcRentCompnayComissionResponse extends CommonResponseDto {
 	
 	private String rtIdx         ; //제휴사idx
 	private String commissionPer ; //수수료윯

@@ -5,10 +5,10 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("cdtRentCompanyStaffRequest")
-public class DochaAdminCdtRentCompnayStaffRequest extends CommonRequestDto {
+@Alias("dcRentCompanyStaffRequest")
+public class DochaAdminDcRentCompnayStaffRequest extends CommonRequestDto {
 	
-	//CDT_RENTCOMPANY_STAFF 담당자정보
+	//DC_RENTCOMPANY_STAFF 담당자정보
 	private String rtIdx					 ;
 	private String rsIdx                     ; //제휴사직원idsx
 	private String staffName                 ; //직원명
