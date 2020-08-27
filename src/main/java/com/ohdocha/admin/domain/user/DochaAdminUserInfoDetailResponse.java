@@ -1,10 +1,11 @@
 package com.ohdocha.admin.domain.user;
 
 import com.ohdocha.admin.domain.common.CommonResponseDto;
-import com.sun.istack.internal.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
