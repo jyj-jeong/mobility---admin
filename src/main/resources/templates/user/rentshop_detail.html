@@ -2,7 +2,10 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>회원사 상세 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'insert'}">회원사 등록 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'modify'}">회원사 수정 :: DoCha Admin Web</title>
+
+    <script src="/js/rentCompany.js" th:src="@{/js/rentCompany.js}"></script>
 </head>
 <body id="page-top">
 
@@ -20,106 +23,398 @@
                         <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">회원사 - 00렌트카 / 00지점</h6>
                     </div>
 
-                    <!--region 회원사 정보 카드  -->
-                    <div id="userInfoCard" class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="main-card mb-3 card">
 
-                        <!-- 회원사 정보 -->
-                        <div class="row">
-                            <input type="text" class="form-control d-none" name="urIdx" id="urIdx" />
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">회사명</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">지정명</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
+                                <div class="card-body"><h5 class="card-title">회원사정보</h5>
+                                    <div class="row mt-2">
+                                        <input type="hidden" id="rtIdx" name="rtIdx" />
+                                        <div class="col-md-6" >
+                                            <label>회사명</label>
+                                            <input type="text" class="form-control" placeholder="회사명" value="" id="companyName" name="companyName" required/>
+                                        </div>
+                                        <div class="col-md-6" >
+                                            <label>지점명</label>
+                                            <input type="text" class="form-control" placeholder="지점명" value="" id="branchName" />
+                                        </div>
+                                        <div class="col-lg-6 float-l " >
+                                            <label>법인명</label>
+                                            <input type="text" class="form-control" placeholder="법인명"  value="" id="companyRegistrationName" >
+                                        </div>
+                                        <div class="col-lg-6 float-l " >
+                                            <label>사업자등록번호</label>
+                                            <input type="text" class="form-control" placeholder="사업자등록번호"  value="" id="companyRegistrationNumber" onkeypress="inNumber();"/>
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1">
+                                            <label>총 차량 대수</label>
+                                            <input type="text"  class="form-control" placeholder="총 차량 대수"  value="" id="carCount">
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1">
+                                            <label>등록 차량 대수</label>
+                                            <input type="text"  class="form-control" placeholder="등록 차량 대수"  value="" id="regCarCount" readonly>
+                                        </div>
+                                        <div class="col-lg-12 float-l" >
+                                            <label>주소</label>
+                                            <div class="input-group">
+                                                <input type="text"  class="form-control" placeholder="주소"  id="companyAddress">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" onclick="openDaumAddrApi('companyAddress');" >주소찾기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 float-l flex-1">
+                                            <label>상세주소</label>
+                                            <input type="text"  class="form-control" placeholder="상세주소" id="companyAddressDetail">
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1" >
+                                            <label>은행</label>
+                                            <select id="sel_bank" name="sel_bank" class="custom-select" >
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 float-l " >
+                                            <label>계좌번호</label>
+                                            <input type="text" class="form-control" placeholder="계좌번호" value="" id="accountNumber" onkeypress="inNumber();"/>
+                                        </div>
+                                        <div class="col-lg-6 float-l " >
+                                            <label>예금주</label>
+                                            <input type="text"  class="form-control" placeholder="예금주" value="" id="accountHolder" />
+                                        </div>
 
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">법인명</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">사업자등록번호</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
+                                        <!--
+                                        <div class="col-lg-3 float-l " >
+                                            <label>대표번호</label>
+                                            <input type="text" class="form-control" placeholder="대표번호" value="" id="companyContact1" onkeypress="inNumber();"/>
+                                        </div>
+                                        <div class="col-lg-3 float-l flex-1" >
+                                            <label>알림톡 설정 여부</label>
+                                            <select id="sel_alarmYn" name="sel_alarmYn" class="custom-select" >
+                                                <option value="0">선택</option>
+                                                <option value="Y">사용</option>
+                                                <option value="N">미사용</option>
+                                            </select>
+                                        </div>
+                                        -->
 
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">총 차량 대수</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">등록 차량 대수</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
+                                        <div class="col-lg-6 float-l flex-1" >
+                                            <label>접속 허용 여부</label>
+                                            <select id="sel_accessYn" name="sel_accessYn" class="custom-select" >
+                                                <option value="0">선택</option>
+                                                <option value="Y">예</option>
+                                                <option value="N">아니요</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-12 mt-2 float-l flex-1 text-right">
+                                            <div class="p-b-20 p-r-40">
+                                                <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyInfo')">회원사 저장</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end 회원사 -->
+                        </div>
+                        <div class="col-6">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body"><h5 class="card-title">담당자 정보</h5>
+                                    <div class="row mt-2">
+                                        <input type="hidden" id="staffurIdx" />
+                                        <input type="hidden" id="rsIdx" />
+                                        <div class="col-lg-12 float-l">
+                                            <label>이메일(검색시 회원ID)</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control"  placeholder="이메일" value="" id="staffEmail" />
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" onclick="serachUserInfo();" id="btnstaffEmail">회원검색</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1">
+                                            <label>이름</label>
+                                            <input type="text" class="form-control" placeholder="이름" value="" id="staffName" readonly />
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1" >
+                                            <label>직위</label>
+                                            <!-- <select id="sel_staffTypeCode" name="sel_staffTypeCode" class="custom-select" >
+                                            </select> -->
+                                            <input type="text" class="form-control" placeholder="직위" value="" id="staffTitle" />
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1" >
+                                            <label>대표여부</label>
+                                            <select id="sel_ownerYn" name="sel_ownerYn" class="custom-select" >
+                                                <option value="0">선택</option>
+                                                <option value="Y">예</option>
+                                                <option value="N">아니요</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 float-l">
+                                            <label>연락처</label>
+                                            <input type="text" class="form-control"  placeholder="연락처" value="" id="staffContact1" readonly onkeypress="inNumber();"/>
+                                        </div>
+                                        <div class="col-lg-6 float-l flex-1" >
+                                            <label>사용유무</label>
+                                            <select id="sel_staffdelYn" name="sel_staffdelYn" class="custom-select" >
+                                                <option value="N">예</option>
+                                                <option value="Y">아니요</option>
+                                            </select>
+                                        </div>
+                                        <!-- <div class="col-lg-3 float-l">
+                                             <label>비밀번호</label>
+                                        </div>	 -->
+                                        <input type="hidden" class="form-control"  placeholder="비밀번호" value="" id="userPassword" />
+                                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                                            <br><p>
+                                            <button class="btn btn-primary" type="button" onclick="detailValidation('saveStaff');">담당자정보 저장</button>
+                                            <button class="btn btn-danger" type="button"  onclick="cancelData('saveStaff')">취소</button>
+                                        </div>
+                                        <div class="col-lg-12 float-l">
+                                            <table id="rentStaffList" class="table table-hover" data-show-toggle="false" data-sorting="true">
+                                                <thead>
 
-                            <div class="col-12 mb-3">
-                                <label class="form-label" for="userId">주소</label>
-                               <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
+                                                </thead>
+                                                <tbody>
 
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">은행</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">계좌번호</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
-                            </div>
-
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="userId">예금주</label>
-                                <input type="text" class="form-control" name="userId" id="userId"/>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end 담당자 정보 -->
+                            <div class="main-card mb-3 card">
+                                <div class="card-body"><h5 class="card-title">수수료 (%)</h5>
+                                    <div class="col-lg-12 float-l flex-1">
+                                        <label>부가세 포함 수수료</label>
+                                        <input type="text" class="form-control" placeholder="부가세 포함 수수료" value="" id="commissionPer" />
+                                    </div>
+                                    <!-- <div class="col-lg-3 float-l flex-1">
+                                         <label>세금계산서 발행주체</label>
+                                         <input type="text" class="form-control"  placeholder="세금계산서발행주체" value="" id="taxInvoiceCode"/>
+                                    </div> -->
+                                    <div class="col-lg-12 mt-2 float-l text-right">
+                                        <div class="p-t-30">
+                                            <button class="btn btn-primary" type="button" onclick="detailValidation('updateCommission');">수수료정보 저장</button>
+                                            <!-- <button class="btn btn-danger" type="button" >취소</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end 수수료-->
+                        </div>
+                    </div>
+                    <div class="main-card mb-3 card">
+                        <div class="card-body"><h5 class="card-title">예약정보</h5>
+                            <div class="row mt-2">
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>평일 영업시간 시작</label>
+                                    <select id="sel_weekdayOpenStart" name="sel_weekdayOpenStart" class="custom-select" ></select>
+                                    <!-- <input type="text" class="form-control " placeholder="평일 영업시간 시작  예) 09:00 or 0009" id="weekdayOpenStart" > -->
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>종료</label>
+                                    <select id="sel_weekdayOpenEnd" name="sel_weekdayOpenEnd" class="custom-select" ></select>
+                                    <!-- <input type="text" class="form-control " placeholder="평일 영업시간 종료  예) 23:00 or 2300" id="weekdayOpenEnd" > -->
+                                </div>
+                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                    평일 영업시간<br>
+                                    00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>주말/공휴일 영업시간 시작</label>
+                                    <select id="sel_weekendOpenStart" name="sel_weekendOpenStart" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="주말/공휴일 영업시간 시작  예) 09:00 or 0009" id="weekendOpenStart"  class="form-control"> -->
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>종료</label>
+                                    <select id="sel_weekendOpenEnd" name="sel_weekendOpenEnd" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="주말/공휴일 영업시간 종료 예) 23:00 or 2300" id="weekendOpenEnd"  class="form-control"> -->
+                                </div>
+                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                    주말/공휴일 영업시간<br>
+                                    00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
+                                </div>
+                                <div class="col-lg-3 float-l flex-1">
+                                    <label>평일 왕복배달가능 시간 시작</label>
+                                    <select id="sel_weekdayDeliveryStart" name="sel_weekdayDeliveryStart" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="평일 왕복배달가능 시간 시작  예) 09:00 or 0009" id="weekdayDeliveryStart"   class="form-control"> -->
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>종료</label>
+                                    <select id="sel_weekdayDeliveryEnd" name="sel_weekdayDeliveryEnd" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="평일 왕복배달가능 시간 종료 예) 23:00 or 2300" id="weekdayDeliveryEnd"  class="form-control"> -->
+                                </div>
+                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                    평일 왕복배달가능 시간<br>
+                                    00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>주말/공휴일 왕복배달가능 시작</label>
+                                    <select id="sel_weekendDeliveryStart" name="sel_weekendDeliveryStart" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="주말/공휴일 왕복배달가능시간 시작 예) 09:00 or 0009" id="weekendDeliveryStart"    class="form-control"> -->
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>종료</label>
+                                    <select id="sel_weekendDeliveryEnd" name="sel_weekendDeliveryEnd" class="custom-select" ></select>
+                                    <!-- <input type="text" placeholder="주말/공휴일 왕복배달가능시간 종료 예) 23:00 or 2300" id="weekendDeliveryEnd"  class="form-control"> -->
+                                </div>
+                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                    주말/공휴일 왕복배달가능 시간<br>
+                                    00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
+                                </div>
+                                <div class="col-lg-3 float-l " >
+                                    <br><p>
+                                    <label>평일 왕복배달가능 시간대 설정</label>
+                                    <select id="sel_weekdayAbleDeliveryTime" name="sel_weekdayAbleDeliveryTime" class="custom-select" >
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 float-l " >
+                                    <br><p>
+                                    <label>주말  왕복배달가능 시간대 설정</label>
+                                    <select id="sel_weekendAbleDeliveryTime" name="sel_weekendAbleDeliveryTime" class="custom-select" >
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <br><p>
+                                    <label>반납정비 시간 시간대 설정</label>
+                                    <select id="sel_returnInspectionTime" name="sel_returnInspectionTime" class="custom-select" >
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <br><p>
+                                    <label>주말/공휴일 최소 예약 시간</label>
+                                    <select id="sel_weekendReserveMinimumTime" name="sel_weekendReserveMinimumTime" class="custom-select" >
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>주말/공휴일 할증율</label>
+                                    <input type="text" placeholder="15%" id="weekendReserveMinimumRate"  class="form-control">
+                                </div>
+                                <div class="col-lg-12 float-l text-right">
+                                    <div class="p-t-20 p-b-20 text-right">
+                                        <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyTime');">예약정보 저장</button>
+                                        <button class="btn btn-danger" type="button" onclick="cancelData('saveRentCompanyTime')">취소</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div><!-- end 예약정보 -->
+                    <div class="main-card mb-3 card">
+                        <div class="card-body"><h5 class="card-title">예약정보(선택 입력 항목) - 특정 기간 최소 예약 시간</h5>
+                            <div class="row mt-2">
+                                <input type="hidden" id="minIdx" name="minIdx" />
+                                <div class="col-lg-3 float-l flex-1">
+                                    <label>시작일</label>
+                                    <input type="date" id="minimumStartDt" class="form-control" />
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>종료일</label>
+                                    <input type="date" id="minimumEndDt" placeholder="종료일" value="" class="form-control" />
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>최소시간</label>
+                                    <select id="sel_minimumTime" name="sel_minimumTime" class="custom-select" >
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>사용유무</label>
+                                    <select id="sel_mindelYn" name="sel_mindelYn" class="custom-select" >
+                                        <option value="N">예</option>
+                                        <option value="Y">아니요</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="col-lg-12 float-l text-right">
+                                <div class="p-t-20 p-b-20 text-right">
+                                    <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyMin');">특정기간 저장</button>
+                                    <button class="btn btn-danger" type="button"  onclick="cancelData('saveRentCompanyMin')">취소</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 float-l">
+                                <table id="rentReserveMinList" class="table table-hover" data-show-toggle="false" data-sorting="true">
+                                    <thead>
 
-                    </div>
-                    <!-- #endregion -->
+                                    </thead>
+                                    <tbody>
 
-                    <!--region 후기 카드-->
-                    <div id="userReviewCard" class="card-body d-none" style="height: 500px">
-                        <h1>서비스 준비중입니다.</h1>
-                    </div>
-                    <!-- endregion -->
-
-                    <!--region 예약내역 카드-->
-                    <div id="userReservationHisCard" class="card-body d-none" style="height: 500px">
-                        <h1>서비스 준비중입니다.</h1>
-                    </div>
-                    <!-- endregion -->
-
-                    <!--region 쿠폰발급내역 카드-->
-                    <div id="userCouponCard" class="card-body d-none" style="height: 500px">
-                        <h1>서비스 준비중입니다.</h1>
-                    </div>
-                    <!-- endregion -->
-
-                    <!--region 포인트 적립내역 카드-->
-                    <div id="userPointHisCard" class="card-body d-none" style="height: 500px">
-                        <h1>서비스 준비중입니다.</h1>
-                    </div>
-                    <!-- endregion -->
-
-                    <!--region 고객평점 카드-->
-                    <div id="userGradeCard" class="card-body d-none" style="height: 500px">
-                        <h1>서비스 준비중입니다.</h1>
-                    </div>
-                    <!-- endregion -->
-
-                    <div class="card-footer">
-                        <div class="text-right">
-                            <div class="row">
-                                <div class="mr-2 font-weight-bold" style="cursor: pointer" onclick="changeCardView('userReviewCard')">정산관리</div>
-                                <div class="mr-2 font-weight-bold" style="cursor: pointer" onclick="changeCardView('userReservationHisCard')">등록차량</div>
-                                <div class="mr-2 font-weight-bold" style="cursor: pointer" onclick="changeCardView('userCouponCard')">예약내역</div>
-                                <div class="mr-2 font-weight-bold" style="cursor: pointer" onclick="changeCardView('userPointHisCard')">후기</div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <button id="btnSave" class="btn btn-secondary" type="button" onclick="updateUserInfo()">저장</button>
-                            <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
+                    </div><!-- end 예약정보(선택입력항목) -->
+                    <div class="main-card mb-3 card">
+                        <div class="card-body"><h5 class="card-title">예약정보(선택 입력 항목) - 자체휴무일</h5>
+                            <div class="row mt-2">
+                                <input type="hidden" id="holIdx" name="minIdx" />
+                                <div class="col-lg-3 float-l flex-1">
+                                    <label>시작일</label>
+                                    <input type="date" id="holidayStartDt" placeholder="시작일" value="" class="form-control" />
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>종료일</label>
+                                    <input type="date" id="holidayEndDt" placeholder="종료일" value="" class="form-control" />
+                                </div>
+                                <div class="col-lg-3 float-l flex-1" >
+                                    <label>휴일명</label>
+                                    <input type="text" id="holidayName" placeholder="휴일명" value="" class="form-control" />
+                                </div>
+                                <div class="col-lg-2 float-l flex-1" >
+                                    <label>사용유무</label>
+                                    <select id="sel_holidaydelYn" name="sel_holidaydelYn" class="custom-select" >
+                                        <option value="N">예</option>
+                                        <option value="Y">아니요</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="col-lg-12 float-l text-right">
+                                <div class="p-t-20 p-b-20 text-right">
+                                    <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyHoliday');">자체휴무일 저장</button>
+                                    <button class="btn btn-danger" type="button"  onclick="cancelData('saveRentCompanyHoliday')">취소</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 float-l">
+                                <table id="holidayList" class="table table-hover" data-show-toggle="false" data-sorting="true">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div><!-- end 예약정보(선택입력항목) -->
+                    <div class="main-card mb-3 card">
+                        <div class="card-body"><h5 class="card-title">왕복 배달지역 설정</h5>
+                            <div class="col-lg-6 float-l flex-1">
+                                <label>일대여</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  id="raGbnSt" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" onclick="openDaumPolygon('ST');">일대여 설정하기</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 float-l flex-1">
+                                <label>월대여</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  id="raGbnLt" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" onclick="openDaumPolygon('LT');">월대여 설정하기</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div><!-- end 왕복 배달지역 설정-->
+                    <div class="main-card mb-3 card">
+                        <div class="card-body text-right">
+                            <button class="btn btn-primary" type="button" onclick="movieMenu('calculate');" id="btnCalculate">정산관리</button>
+                            <button class="btn btn-primary" type="button" onclick="movieMenu('regCar');">등록차량</button>
+                            <button class="btn btn-primary" type="button" onclick="movieMenu('reserveMnt');">예약내역</button>
+                            <button class="btn btn-primary" type="button" onclick="movieMenu('');">후기</button>
+                            <button class="btn btn-danger" type="button" data-izimodal-close="">닫기</button>
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -163,221 +458,11 @@
 </div>
 <script th:inline="javascript">
 
-    /* 카드 뷰 교체 */
-    function changeCardView(cardViewName) {
-        let cards = $('.card-body');
+    CRUD = /*[[${CRUD}]]*/'';
 
-        switch (cardViewName) {
-            case 'userInfoCard':
-                cards.addClass('d-none');
-                $('#userInfoCard').removeClass('d-none');
-                break;
-            case 'userReviewCard':
-                cards.addClass('d-none');
-                $('#userReviewCard').removeClass('d-none');
-                break;
-            case 'userReservationHisCard':
-                cards.addClass('d-none');
-                $('#userReservationHisCard').removeClass('d-none');
-                break;
-            case 'userCouponCard':
-                cards.addClass('d-none');
-                $('#userCouponCard').removeClass('d-none');
-                break;
-            case 'userPointHisCard':
-                cards.addClass('d-none');
-                $('#userPointHisCard').removeClass('d-none');
-                break;
-            case 'userLicenseCard':
-                cards.addClass('d-none');
-                $('#userLicenseCard').removeClass('d-none');
-                break;
-            case 'userGradeCard':
-                cards.addClass('d-none');
-                $('#userGradeCard').removeClass('d-none');
-                break;
-            default:
-                break;
-        }
-    }
-
-    /* 회원 정보 수정 */
-    function updateUserInfo(){
-
-        // region [ validation check ]
-
-        let urIdx = $("input[name=urIdx]");
-        let userId = $("input[name=userId]");
-        let userName = $("input[name=userName]");
-        let userAccountType = $("input[name=userAccountType]");
-        let userBirthday = $("input[name=userBirthday]");
-        let userContact = $("input[name=userContact]");
-        let userRegDt = $("input[name=userRegDt]");
-        let userGender = $("input[name=userGender]");
-        let userPoint = $("input[name=userPoint]");
-        let userGradeCode = $("input[name=userGradeCode]");
-        let userRating = $("input[name=userRating]");
-
-        let licenseCode = $("input[name=licenseCode]");
-        let licenseNumber = $("input[name=licenseNumber]");
-        let licenseExpiration = $("input[name=licenseExpiration]");
-        let licenseIssueDt = $("input[name=licenseIssueDt]");
-
-        /* 아이디 체크 */
-        if (userId.val() === '') {
-            alert("아이디를 입력 해 주세요");
-            userId.focus();
-            return;
-        }
-
-        /* 이름 체크 */
-        if (userName.val() === '') {
-            alert("아이디를 입력 해 주세요");
-            userName.focus();
-            return;
-        }
-
-        /* 아이디 체크 */
-        if (userAccountType.val() === '') {
-            alert("계정타입을 입력 해 주세요");
-            userAccountType.focus();
-            return;
-        }
-
-        /* 생년월일 체크 */
-        if (userBirthday.val() === '') {
-            alert("생년월일을 입력 해 주세요");
-            userBirthday.focus();
-            return;
-        }
-
-        /* 연락처 체크 */
-        if (userContact.val() === '') {
-            alert("연락처를 입력 해 주세요");
-            userContact.focus();
-            return;
-        }
-
-        /* 가입일시 체크 */
-        if (userRegDt.val() === '') {
-            alert("가입일시를 입력 해 주세요");
-            userRegDt.focus();
-            return;
-        }
-
-        /* 성별 체크 */
-        if (userGender.val() === '') {
-            alert("성별을 입력 해 주세요");
-            userGender.focus();
-            return;
-        }
-
-        /* 포인트 체크 */
-        if (userPoint.val() === '') {
-            alert("포인트를 입력 해 주세요");
-            userPoint.focus();
-            return;
-        }
-
-        /* 회원등급 체크 */
-        if (userGradeCode.val() === '') {
-            alert("회원등급을 입력 해 주세요");
-            userGradeCode.focus();
-            return;
-        }
-
-        /* 평점 체크 */
-        if (userRating.val() === '') {
-            alert("평점을 입력 해 주세요");
-            userRating.focus();
-            return;
-        }
-
-        /* 면허종류 체크 */
-        if (licenseCode.val() === '') {
-            alert("면허종류를 입력 해 주세요");
-            licenseCode.focus();
-            return;
-        }
-
-        /* 면허번호 체크 */
-        if (licenseNumber.val() === '') {
-            alert("면허번호를 입력 해 주세요");
-            licenseNumber.focus();
-            return;
-        }
-
-        /* 적성검사 만료일 체크 */
-        if (licenseExpiration.val() === '') {
-            alert("적성검사 만료일을 입력 해 주세요");
-            licenseExpiration.focus();
-            return;
-        }
-
-        /* 발급일 체크 */
-        if (licenseIssueDt.val() === '') {
-            alert("발급일을을 입력 해 주요");
-            licenseIssueDt.focus();
-            return;
-        }
-
-        // endregion
-
-        // region [ 회원정보 수정 ]
-
-        $.ajax({
-            url: '../mem/userInfoUpdate.json',
-            dataType: "json",
-            method: 'post',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({
-                urIdx : urIdx.val(),
-                userId : userId.val(),
-                userName : userName.val(),
-                userAccountType : userAccountType.val(),
-                userBirthDay : userBirthday.val(),
-                userContact : userContact.val(),
-                userRegDt : userRegDt.val(),
-                userGender : userGender.val(),
-                userPoint : userPoint.val(),
-                userGradeCode : userGradeCode.val(),
-                userRating : userRating.val()
-            }),
-            processData: false,
-            success: function (res) {
-                location.reload();
-                alert("회원 정보가 저장되었습니다.");
-            },
-            error: function (err) {
-                alert(err);
-            }
-        });
-
-        // endregion
-
-        // region [ 면허정보 수정 ]
-
-        $.ajax({
-            url: '../mem/userLicenseUpdate.json',
-            dataType: "json",
-            method: 'post',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({
-                licenseCode : licenseCode.val(),
-                licenseNumber : licenseNumber.val(),
-                licenseExpiration : licenseExpiration.val(),
-                licenseIssueDt : licenseIssueDt.val()
-            }),
-            processData: false,
-            success: function (res) {
-
-            },
-            error: function (err) {
-                alert(err);
-            }
-        });
-
-        // endregion
+    if(CRUD === "insert"){
+        openCreateRentCompany();
+    }else if (CRUD === "modify"){
 
     }
 

@@ -3,6 +3,8 @@
 <head th:replace="header :: mainHead"></head>
 <head>
     <title>회원사 :: DoCha Admin Web</title>
+
+    <script src="/js/rentCompany.js" th:src="@{/js/rentCompany.js}"></script>
 </head>
 <body id="page-top">
 
@@ -28,8 +30,8 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">회원사</h6>
-                        <button class="btn btn-secondary">등록</button>
-                        <button class="btn btn-secondary" onclick="window.open('rentshop/hoilday','_blank')">전체휴일 등록</button>
+                        <button class="btn btn-secondary" onclick="registerRentShop()">등록</button>
+                        <button class="btn btn-secondary" onclick="window.open('rentshop/hoilday','_blank', 'width = 1000, height =800 ,location=no, left=500, top=50')">전체휴일 등록</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -68,7 +70,7 @@
                                     <td th:text="${rentCompany.getCompanyAddress()}"></td>
                                     <td th:text="${rentCompany.getCompanyAddressDetail()}"></td>
                                     <td th:text="${rentCompany.getStaffName()}"></td>
-                                    <td th:text="${rentCompany.getStaffContact1() + rentCompany.getStaffContact2()}"></td>
+                                    <td th:text="${rentCompany.getStaffContact1()}"></td>
                                     <td th:text="${rentCompany.getCarCount()}"></td>
                                     <td th:text="${rentCompany.getRtIdx()}"></td>
                                 </tr>
@@ -140,6 +142,14 @@
 
         window.open(url, name, option);
     });
+
+    function registerRentShop() {
+        var url = 'rentshop/register';
+        var name = "test";
+        var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+
+        window.open(url, name, option);
+    }
 
 </script>
 </body>
