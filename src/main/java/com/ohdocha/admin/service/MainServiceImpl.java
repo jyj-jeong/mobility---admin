@@ -18,14 +18,14 @@ import java.util.List;
 @Service
 public class MainServiceImpl extends ServiceExtension implements MainService {
 
-    private final DochaAdminLoginMapper mapper;
+    private final DochaAdminLoginMapper loginMapper;
     private final DochaAdminCommonCodeMapper commonCodeMapper;
 
     @Override
     public void login(ServiceMessage message) {
         DochaAdminDcUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminDcUserInfoRequest.class);
 
-        DochaAdminDcUserInfoResponse userInfoResponse = mapper.chkLoginUserInfo(userInfoRequest);
+        DochaAdminDcUserInfoResponse userInfoResponse = loginMapper.chkLoginUserInfo(userInfoRequest);
 
 //        AdminInfo adminInfo = memberOptional.get();
 //        if (TextUtils.isEmpty(adminInfo.getAdminPassword()))

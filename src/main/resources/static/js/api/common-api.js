@@ -3,7 +3,7 @@
  * common-api.js
  */
 
-var apiVersion = "api/v1.0/";
+var apiVersion = "/api/v1.0/";
 
 // API 타임아웃을 설정한다.
 Timeout = 300000;

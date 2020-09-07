@@ -59,7 +59,7 @@ public class MainController extends ControllerExtension {
     }
 
     /* 공통 코드 리스트 */
-    @PostMapping(value = "/car/model/api/v1.0/commonCodeInfo.json")
+    @PostMapping(value = "/api/v1.0/commonCodeInfo.json")
     @ResponseBody
     public Object userInfoDetail(@RequestBody DochaAdminCommonCodeRequest commonCodeRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request);

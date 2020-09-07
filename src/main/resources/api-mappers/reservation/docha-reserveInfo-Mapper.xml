@@ -306,8 +306,8 @@
 		<if test =" reserveUserContact1 != null and reserveUserContact1 != '' ">
 			,      RESERVE_USER_CONTACT1 = #{reserveUserContact1}
 		</if>
-		<if test =" reserveUserBirthDay != null and reserveUserBirthDay != '' ">
-			,      RESERVE_USER_BIRTHDAY = #{reserveUserBirthDay}
+		<if test =" reserveUserBirthday != null and reserveUserBirthday != '' ">
+			,      RESERVE_USER_BIRTHDAY = #{reserveUserBirthday}
 		</if>
 		<if test =" reserveUserGender != null and reserveUserGender != '' ">
 			,      RESERVE_USER_GENDER = #{reserveUserGender}
@@ -417,7 +417,7 @@
       , #{reserveUserName}
       , #{reserveUserEmail}
       , #{reserveUserContact1}
-      , #{reserveUserBirthDay}
+      , #{reserveUserBirthday}
       , #{reserveUserGender}
       , #{rentStartDay}
       , #{rentStartTime}
@@ -477,7 +477,7 @@
       <![CDATA[
          WITH T_RESVER AS (
          SELECT
-         #{reserveUserBirthDay} AS BIRTH
+         #{reserveUserBirthday} AS BIRTH
          ,#{crIdx} AS T_CR_IDX
          ,#{rentStartDt} AS T_START_RENT_DAY
          ,#{rentEndDt} AS T_END_RENT_DAY

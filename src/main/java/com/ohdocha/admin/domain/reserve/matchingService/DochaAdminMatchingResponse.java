@@ -96,7 +96,7 @@ public class DochaAdminMatchingResponse extends CommonResponseDto {
 	private String reserveUserName;
 	private String reserveUserEmail;
 	private String reserveUserContact1;
-	private String reserveuserBirthday;
+	private String reserveUserBirthday;
 	private String reserveUserGender;
 	private String cartypeCode;
 	private String reserveDate;
@@ -674,11 +674,11 @@ public class DochaAdminMatchingResponse extends CommonResponseDto {
 	public void setReserveUserContact1(String reserveUserContact1) {
 		this.reserveUserContact1 = reserveUserContact1;
 	}
-	public String getReserveuserBirthday() {
-		return reserveuserBirthday;
+	public String getreserveUserBirthday() {
+		return reserveUserBirthday;
 	}
-	public void setReserveuserBirthday(String reserveuserBirthday) {
-		this.reserveuserBirthday = reserveuserBirthday;
+	public void setreserveUserBirthday(String reserveUserBirthday) {
+		this.reserveUserBirthday = reserveUserBirthday;
 	}
 	public String getReserveUserGender() {
 		return reserveUserGender;
