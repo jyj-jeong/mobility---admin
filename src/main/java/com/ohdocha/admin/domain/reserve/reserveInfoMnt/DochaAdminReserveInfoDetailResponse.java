@@ -17,7 +17,7 @@ public class DochaAdminReserveInfoDetailResponse extends CommonResponseDto {
 	private String reserveUserGender;
 	private String reserveUserEmail;
 	private String reserveUserContact1;
-	private String reserveUserBirthDay;
+	private String reserveUserBirthday;
 
 	// 운전자 정보
 	private String userFlag;
@@ -129,11 +129,11 @@ public class DochaAdminReserveInfoDetailResponse extends CommonResponseDto {
 	public void setReserveUserContact1(String reserveUserContact1) {
 		this.reserveUserContact1 = reserveUserContact1;
 	}
-	public String getReserveUserBirthDay() {
-		return reserveUserBirthDay;
+	public String getreserveUserBirthday() {
+		return reserveUserBirthday;
 	}
-	public void setReserveUserBirthDay(String reserveUserBirthDay) {
-		this.reserveUserBirthDay = reserveUserBirthDay;
+	public void setreserveUserBirthday(String reserveUserBirthday) {
+		this.reserveUserBirthday = reserveUserBirthday;
 	}
 	public String getUserFlag() {
 		return userFlag;

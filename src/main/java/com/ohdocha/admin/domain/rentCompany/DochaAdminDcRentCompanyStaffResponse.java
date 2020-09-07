@@ -6,7 +6,7 @@ import org.apache.ibatis.type.Alias;
 
 @Data
 @Alias("dcRentCompanyStaffResponse")
-public class DochaAdminDcRentCompnayStaffResponse extends CommonResponseDto {
+public class DochaAdminDcRentCompanyStaffResponse extends CommonResponseDto {
 	
 	//DC_RENTCOMPANY_STAFF 담당자정보
 		private String rtIdx					 ; //회사Idx

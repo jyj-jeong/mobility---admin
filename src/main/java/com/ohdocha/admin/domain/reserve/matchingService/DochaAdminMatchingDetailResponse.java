@@ -12,7 +12,7 @@ public class DochaAdminMatchingDetailResponse extends CommonResponseDto {
 	private String quoteUserName;
 	private String quoteUserContact;
 	private String quoteUserGender;
-	private String quoteUserBirthday;
+	private String quoteuserBirthday;
 	private String quoteStartDate;
 	private String quoteEndDate;
 	private String rentStartDate;
@@ -48,11 +48,11 @@ public class DochaAdminMatchingDetailResponse extends CommonResponseDto {
 	public void setQuoteUserGender(String quoteUserGender) {
 		this.quoteUserGender = quoteUserGender;
 	}
-	public String getQuoteUserBirthday() {
-		return quoteUserBirthday;
+	public String getQuoteuserBirthday() {
+		return quoteuserBirthday;
 	}
-	public void setQuoteUserBirthday(String quoteUserBirthday) {
-		this.quoteUserBirthday = quoteUserBirthday;
+	public void setQuoteuserBirthday(String quoteuserBirthday) {
+		this.quoteuserBirthday = quoteuserBirthday;
 	}
 	public String getQuoteStartDate() {
 		return quoteStartDate;

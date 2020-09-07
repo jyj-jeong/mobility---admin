@@ -651,10 +651,10 @@ public class DochaCarDto extends CommonResponseDto {
 	public void setDailyFee(String dailyFee) {
 		this.dailyFee = dailyFee;
 	}
-	public String getUserBirthday() {
+	public String getuserBirthday() {
 		return userBirthday;
 	}
-	public void setUserBirthday(String userBirthday) {
+	public void setuserBirthday(String userBirthday) {
 		this.userBirthday = userBirthday;
 	}
 	public String getUserGender() {

@@ -346,7 +346,7 @@ function locationDetail(seq){
 			let quoteUserName = nullCheck(data.quoteUserName);
 			let quoteUserContact = nullCheck(data.quoteUserContact) == ''?'':phoneFomatter(data.quoteUserContact);
 			let quoteUserGender = nullCheck(data.quoteUserGender);
-			let quoteUserBirthday = nullCheck(data.quoteUserBirthday) == ''?'':dateFormatter(data.quoteUserBirthday);
+			let quoteuserBirthday = nullCheck(data.quoteuserBirthday) == ''?'':dateFormatter(data.quoteuserBirthday);
 			let quoteStartDate = nullCheck(data.quoteStartDate);
 			let quoteEndDate = nullCheck(data.quoteEndDate);
 			let rentStartDate = nullCheck(data.rentStartDate);
@@ -362,7 +362,7 @@ function locationDetail(seq){
 			$("#quoteUserName").val(quoteUserName);
 			$("#quoteUserContact").val(quoteUserContact);
 			$("#sel_quoteUserGender").val(quoteUserGender).prop("selected", true);
-			$("#quoteUserBirthDay").val(quoteUserBirthday);
+			$("#quoteuserBirthday").val(quoteuserBirthday);
 			$("#quoteStartDate").val(quoteStartDate);
 			$("#quoteEndDate").val(quoteEndDate);
 			$("#rentStartDate").val(rentStartDate);

@@ -39,7 +39,7 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	private String delYn                ;
 	private String userId               ;
 	private String userName             ;
-	private String userBirthDay         ;
+	private String userBirthday         ;
 	private String userGender           ;
 	private String userContact1         ;
 	private String userContact2         ;
@@ -96,7 +96,7 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	private String reserveUserName;
 	private String reserveUserEmail;
 	private String reserveUserContact1;
-	private String reserveUserBirthDay;
+	private String reserveUserBirthday;
 	private String reserveUserGender;
 	private String cartypeCode;
 	private String reserveDate;
@@ -354,11 +354,11 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserBirthDay() {
-		return userBirthDay;
+	public String getuserBirthday() {
+		return userBirthday;
 	}
-	public void setUserBirthDay(String userBirthDay) {
-		this.userBirthDay = userBirthDay;
+	public void setuserBirthday(String userBirthday) {
+		this.userBirthday = userBirthday;
 	}
 	public String getUserGender() {
 		return userGender;
@@ -678,11 +678,11 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	public void setReserveUserContact1(String reserveUserContact1) {
 		this.reserveUserContact1 = reserveUserContact1;
 	}
-	public String getReserveUserBirthDay() {
-		return reserveUserBirthDay;
+	public String getreserveUserBirthday() {
+		return reserveUserBirthday;
 	}
-	public void setReserveUserBirthDay(String reserveUserBirthDay) {
-		this.reserveUserBirthDay = reserveUserBirthDay;
+	public void setreserveUserBirthday(String reserveUserBirthday) {
+		this.reserveUserBirthday = reserveUserBirthday;
 	}
 	public String getReserveUserGender() {
 		return reserveUserGender;

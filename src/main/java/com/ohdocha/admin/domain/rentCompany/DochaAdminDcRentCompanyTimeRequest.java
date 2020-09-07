@@ -1,12 +1,12 @@
 package com.ohdocha.admin.domain.rentCompany;
 
-import com.ohdocha.admin.domain.common.CommonResponseDto;
+import com.ohdocha.admin.domain.common.CommonRequestDto;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("dcRentCompanyTimeResponse")
-public class DochaAdminDcRentCompnayTimeResponse extends CommonResponseDto {
+@Alias("dcRentCompanyTimeRequest")
+public class DochaAdminDcRentCompanyTimeRequest extends CommonRequestDto {
 	private String rtIdx; 						//제휴사idx
 	private String weekdayOpenStart;			// 평일 영업시간 시작
 	private String weekdayOpenEnd;				// 평일 영업시간 종료
@@ -121,4 +121,5 @@ public class DochaAdminDcRentCompnayTimeResponse extends CommonResponseDto {
 		this.modId = modId;
 	}
 
+	
 }

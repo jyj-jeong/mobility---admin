@@ -210,7 +210,7 @@ function initDetailInfo(seq){
 			let adminName = data.adminName;
 			let adminPassword = data.adminPassword;
 			let userContact1 = phoneFomatter(data.userContact1);
-			let userBirthDay = data.userBirthDay;
+			let userBirthday = data.userBirthday;
 			let userRole  = data.userRole;
 			
 			let regDt = dateFormatter(data.regDt , "-");	
@@ -219,7 +219,7 @@ function initDetailInfo(seq){
 			$("#adminName").val(adminName);
 			$("#adminPassword").val(adminPassword);
 			$("#userContact1").val(userContact1);
-			$("#userBirthDay").val(userBirthDay);
+			$("#userBirthday").val(userBirthday);
 			$("#regDt").val(regDt);
 			
 			// 권한셋팅
