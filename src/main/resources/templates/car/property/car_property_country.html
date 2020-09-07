@@ -27,45 +27,22 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">차량 속성</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">국가 속성</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>모델번호</th>
-                                    <th>국가</th>
-                                    <th>제조사</th>
-                                    <th>연식</th>
-                                    <th>차종</th>
-                                    <th>등급</th>
-                                    <th>차량 이미지</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>모델번호</th>
-                                    <th>국가</th>
-                                    <th>제조사</th>
-                                    <th>연식</th>
-                                    <th>차종</th>
-                                    <th>등급</th>
-                                    <th>차량 이미지</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">
-                                    <td th:text="${carModelInfo.getCdIdx()}"></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>
-                                    <td th:text="${carModelInfo.getCdYear()}"></td>
-                                    <td ></td>
-                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td ></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="text" class="form-control" id="property" aria-describedby="property" placeholder="국가명">
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="propertyAdd">등록</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

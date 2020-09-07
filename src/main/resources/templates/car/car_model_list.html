@@ -32,6 +32,16 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <button class="btn btn-info" onclick="addCarModel()">차종 등록</button>
+                                <script th:inline="javascript">
+                                    /* 차량 등록 */
+                                    function addCarModel() {
+                                        var url = "/car/model/add";
+                                        var name = "차종 등록";
+                                        var specs = "width=1200, height=950, location=no, left=500, top=50";
+                                        window.open(url, name, specs);
+                                    }
+                                </script>
                                 <thead>
                                 <tr>
                                     <th>모델번호</th>
@@ -109,7 +119,16 @@
         </div>
     </div>
 </div>
-<script>
+<script th:inline="javascript">
+    $('#dataTable').DataTable( {
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'csvHtml5',
+            text: 'Export CSV',
+            footer: true,
+            className: 'exportBtn'
+        }]
+    } );
 
 </script>
 </body>

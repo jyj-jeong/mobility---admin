@@ -81,7 +81,14 @@
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car'}">등록 차량</a>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/control'}">차량 관제</a>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/model'}">차량 모델</a>
-                <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/property'}">차량 속성</a>
+                <a class="collapse-item collapsed" href="#" data-toggle="collapse" data-target="#collapseAdmin" aria-expanded="true" aria-controls="collapseAdmin">차량 속성</a>
+                <div id="collapseAdmin" class="collapse" aria-labelledby="collapseAdmin" data-parent="#collapseAdmin">
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/country'}">국가</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/manufacturer'}">제조사</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/cartype'}">등급</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/option'}">옵션</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/fuel'}">연료</a></div>
+                </div>
                 <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/payment'}">요금제</a>
             </div>
         </div>
@@ -97,7 +104,7 @@
         <div id="collapseFour" class="collapse" aria-labelledby="collapseFour" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">정산</a>
+                <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/settlement'}">정산</a>
             </div>
         </div>
     </li>

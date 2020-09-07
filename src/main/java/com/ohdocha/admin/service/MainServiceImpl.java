@@ -1,12 +1,17 @@
 package com.ohdocha.admin.service;
 
-import com.ohdocha.admin.mapper.DochaAdminLoginMapper;
+import com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeRequest;
+import com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeResponse;
 import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest;
 import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoResponse;
+import com.ohdocha.admin.mapper.DochaAdminCommonCodeMapper;
+import com.ohdocha.admin.mapper.DochaAdminLoginMapper;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -14,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class MainServiceImpl extends ServiceExtension implements MainService {
 
     private final DochaAdminLoginMapper mapper;
+    private final DochaAdminCommonCodeMapper commonCodeMapper;
 
     @Override
     public void login(ServiceMessage message) {
@@ -34,5 +40,14 @@ public class MainServiceImpl extends ServiceExtension implements MainService {
 //        adminInfoDto.setAdminPassword("");
 //
 //        message.addData("adminLoginInfo", adminInfoDto);
+    }
+
+    @Override
+    public void selectCommonCodeInfo(ServiceMessage message) {
+        DochaAdminCommonCodeRequest commonCodeRequest = message.getObject("commonCodeRequest", DochaAdminCommonCodeRequest.class);
+
+        List<DochaAdminCommonCodeResponse> commonCodeResponseList = commonCodeMapper.selectCommonCodeInfo(commonCodeRequest);
+
+        message.addData("result", commonCodeResponseList);
     }
 }

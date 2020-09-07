@@ -80,7 +80,7 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	private String personalCover        ;
 	private String propertyDamageCover  ;
 	private String driveCareerLimit     ;
-	private String insuranceCopayment   ;
+	private String insuranceCompanyment   ;
 	private String carDeposit           ;
 	private String approvalNumber       ;
 	private String monthlyFee           ;
@@ -600,11 +600,11 @@ public class DochaAdminPaymentInfoResponse extends CommonResponseDto {
 	public void setDriveCareerLimit(String driveCareerLimit) {
 		this.driveCareerLimit = driveCareerLimit;
 	}
-	public String getInsuranceCopayment() {
-		return insuranceCopayment;
+	public String getInsuranceCompanyment() {
+		return insuranceCompanyment;
 	}
-	public void setInsuranceCopayment(String insuranceCopayment) {
-		this.insuranceCopayment = insuranceCopayment;
+	public void setInsuranceCompanyment(String insuranceCompanyment) {
+		this.insuranceCompanyment = insuranceCompanyment;
 	}
 	public String getCarDeposit() {
 		return carDeposit;

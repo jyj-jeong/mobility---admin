@@ -2,7 +2,7 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>차량 요금제 :: DoCha Admin Web</title>
+    <title>차량 속성 :: DoCha Admin Web</title>
 </head>
 <body id="page-top">
 
@@ -27,45 +27,22 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">차량 요금제</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">등급 속성</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>기간요금번호</th>
-                                    <th>회원사<br>(지점)</th>
-                                    <th>시작일<br>종료일</th>
-                                    <th>할증금액/일</th>
-                                    <th>할인금액/일</th>
-                                    <th>설정차량대수</th>
-                                    <th>내용</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>기간요금번호</th>
-                                    <th>회원사<br>(지점)</th>
-                                    <th>시작일<br>종료일</th>
-                                    <th>할증금액/일</th>
-                                    <th>할인금액/일</th>
-                                    <th>설정차량대수</th>
-                                    <th>내용</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-<!--                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">-->
-<!--                                    <td th:text="${carModelInfo.getCdIdx()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCdYear()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                </tr>-->
-                                </tbody>
-                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="text" class="form-control" id="property" aria-describedby="property" placeholder="등급명">
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="propertyAdd">등록</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

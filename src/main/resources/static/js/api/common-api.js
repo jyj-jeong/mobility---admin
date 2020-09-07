@@ -22,15 +22,15 @@ var fn_callApi = function fn_callApi(method, target, reqParam, finish_callback) 
 	var url = "";
 	var makeUrl = '';
 		
-	if(method == 'select'){
+	if(method === 'select'){
 		makeUrl = apiVersion + target + '.json';
-	}else if(method == 'insert'){
+	}else if(method === 'insert'){
 		makeUrl = apiVersion + target + '.do';
-	}else if(method == 'update'){
+	}else if(method === 'update'){
 		makeUrl = apiVersion + target + '.do';
-	}else if(method == 'delete'){
+	}else if(method === 'delete'){
 		makeUrl = apiVersion + target + '.do';
-	}else if(method == 'login'){
+	}else if(method === 'login'){
 		makeUrl = apiVersion + target + '.do';
 	}
 	

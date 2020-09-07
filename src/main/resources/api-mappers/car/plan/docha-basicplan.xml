@@ -3,12 +3,12 @@
 <mapper namespace="com.ohdocha.admin.mapper.DochaAdminBasicPlanMapper">
 
 	<!-- 기본요금제 List  -->
-	<select id="selectBasicPlan"  parameterType="basicPlanRequest" 
+	<select id="selectBasicPlan"  parameterType="basicPlanRequest"
       			   				  	 resultType="basicPlanResponse">
       	<![CDATA[
-		SELECT * FROM (
-			SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
-			FROM ( 
+-- 		SELECT * FROM (
+-- 			SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.*
+-- 			FROM (
      				SELECT
      						T1.PY_IDX 													/* 기본요금순번 */
       					,	IFNULL(T1.RT_IDX				, '') AS RT_IDX 				/* 회원사순번 */
@@ -21,7 +21,7 @@
       				FROM DC_PAYMENT_INFO T1
       				INNER JOIN DC_RENT_COMPANY T2
       					    ON T1.RT_IDX = T2.RT_IDX 
-			) A
+-- 			) A
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 				1=1 
@@ -47,9 +47,11 @@
 		    	</otherwise>
 		    </choose>   
 		</if>
-        <![CDATA[	) X ]]> 
+        <![CDATA[
+-- 			) X
+			 ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
-         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+<!--         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>-->
        	</trim>						  		
 	</select>
 	

@@ -5,9 +5,9 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
 </head>
 <head>
-    <title>차량 등록 :: DoCha Admin Web</title>
+    <title>정산 :: DoCha Admin Web</title>
 
-    <script src="/js/regCar.js" th:src="@{/js/regCar.js}"></script>
+    <script src="/js/payment.js" th:src="@{/js/payment.js}"></script>
 </head>
 <body id="page-top">
 
@@ -32,64 +32,53 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">차량 등록</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">정산</h6>
                         <div class="ml-auto align-bottom">
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <button class="btn btn-info" onclick="addRegCar()">차량 등록</button>
-                                <script th:inline="javascript">
-                                    /* 차량 등록 */
-                                    function addRegCar() {
-                                        initDetailData('insert');
-                                        var url = "/car/add";
-                                        var name = "차량 등록";
-                                        var specs = "width=1200, height=800, location=no, left=500, top=50";
-                                        window.open(url, name, specs);
-                                    }
-                                </script>
                                 <thead>
                                 <tr>
-                                    <th>등록차량번호</th>
-                                    <th>회원사<br/>(지점)</th>
-                                    <th>모델<br/>(차량번호)</th>
-                                    <th>누적km</th>
-                                    <th>출고년도</th>
-                                    <th>일 기본요금</th>
-                                    <th>월 기본요금</th>
-                                    <th>상태</th>
-                                    <th>정비</th>
-                                    <th>비고</th>
+                                    <th>정산일</th>
+                                    <th>회원사</th>
+                                    <th>예약</th>
+                                    <th>결제금액</th>
+                                    <th>할인액</th>
+                                    <th>총 금액</th>
+                                    <th>MOBILITY-K 수수료</th>
+                                    <th>정산예정금액</th>
+                                    <th>정산완료금액</th>
+                                    <th>미정산금액</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>등록차량번호</th>
-                                    <th>회원사<br/>(지점)</th>
-                                    <th>모델<br/>(차량번호)</th>
-                                    <th>누적km</th>
-                                    <th>출고년도</th>
-                                    <th>일 기본요금</th>
-                                    <th>월 기본요금</th>
-                                    <th>상태</th>
-                                    <th>정비</th>
-                                    <th>비고</th>
+                                    <th>정산일</th>
+                                    <th>회원사</th>
+                                    <th>예약</th>
+                                    <th>결제금액</th>
+                                    <th>할인액</th>
+                                    <th>총 금액</th>
+                                    <th>MOBILITY-K 수수료</th>
+                                    <th>정산예정금액</th>
+                                    <th>정산완료금액</th>
+                                    <th>미정산금액</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="car, index : ${carRegList}" style="cursor: pointer" th:data-value="${car.getCrIdx()}">
-                                    <td th:text="${car.getCrIdx()}"></td>
-                                    <td th:text="${car.getRtIdx() + '(' + car.getBranchName() + ')'}"></td>
-                                    <td th:text="${car.getModelName() + '(' + car.getCarNumber() + ')'}"></td>
-                                    <td th:text="${car.getMileage()}"></td>
-                                    <td th:text="${car.getYear()}"></td>
-                                    <td th:text="${car.getDailyStandardPay()}"></td>
-                                    <td th:text="${car.getMonthlyStandardPay()}"></td>
-                                    <td th:text="${car.getReserveStatus()}"></td>
-                                    <td th:text="${car.getReserveStatus()}"></td>
-                                    <td th:text="${car.getReserveStatus()}"></td>
+                                <tr th:each="payment, index : ${paymentInfoList}" style="cursor: pointer" th:data-value="${payment.getRmIdx()}">
+                                    <td th:text="${payment.getPaymentDate()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
+                                    <td th:text="${payment.getRtIdx()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -172,18 +161,6 @@
             className: 'exportBtn'
         }]
     } );
-
-    // 상세보기 이동
-    $('#example > tbody > tr >').click(function () {
-        var crIdx = $(this).parent().attr('data-value');
-        if (crIdx === "") return;
-
-        var url = "/detail/" + crIdx;
-        var name = "test";
-        var option = "width = 500, height =800 ,location=no, left=500, top=50";
-
-        window.open(url, name, option);
-    });
 
 </script>
 </body>

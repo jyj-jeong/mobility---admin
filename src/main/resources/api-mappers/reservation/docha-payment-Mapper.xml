@@ -88,7 +88,7 @@
                       ,      IFNULL(T5.PERSONAL_COVER       , '0' ) AS PERSONAL_COVER          /* 대인보상금액*/
                       ,      IFNULL(T5.PROPERTY_DAMAGE_COVER, '0' ) AS PROPERTY_DAMAGE_COVER   /* 대물보상금액*/
                       ,      IFNULL(T5.DRIVE_CAREER_LIMIT   , '' ) AS DRIVE_CAREER_LIMIT      /* 운전경력제한*/
-                      ,      IFNULL(T5.INSURANCE_COPAYMENT  , '0' ) AS INSURANCE_COPAYMENT     /* 본인부담금  */
+                      ,      IFNULL(T5.INSURANCE_COMPANYMENT  , '0' ) AS INSURANCE_COMPANYMENT     /* 본인부담금  */
                       ,      IFNULL(CA.CARTYPE_LIST_VALUE   , '' ) AS CARTYPE_LIST_VALUE        /* 차량타입리스트값   */
                       ,      IFNULL(T3.CAR_DEPOSIT          , '0') AS CAR_DEPOSIT           /* 장기대여보증금 */
                       ,        IFNULL(T7.APPROVAL_NUMBER  , '' ) AS APPROVAL_NUMBER     /* 승인번호  */
@@ -170,14 +170,10 @@
 
 	<select id="selectPaymentInfoList" parameterType="paymentInfoRequest" resultType="paymentInfoResponse">
 		<![CDATA[
-         SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.*
-            FROM (
-             SELECT
-                 *
-              FROM
-                 (
+             SELECT *  FROM (
                  SELECT
-                        IFNULL(M.RM_IDX                 , '' ) AS RM_IDX                   /* 예약 MASTER KEY */
+                      IFNULL(M.RM_IDX                 , '' ) AS RM_IDX                   /* 예약 MASTER KEY */
+               ,      IFNULL(M.RT_IDX     			 , '' ) 	AS RT_IDX      			 /*  제휴사 IDX        */
                ,      IFNULL(M.RESERVE_USER_NAME      , '' ) AS RESERVE_USER_NAME       /* 예약자명         */
                ,      IFNULL(IFNULL(UI.USER_NAME, M.RESERVE_USER_NAME) , '' ) AS USER_NAME /* 예약한 USER명      */
                ,      IFNULL(UI.USER_CONTACT1         , '' ) AS USER_CONTACT1         /* 예약 USER 연락처   */
@@ -194,10 +190,10 @@
                ,      IFNULL(M.SUM_PAYMENT_AMOUNT       , '' ) AS SUM_PAYMENT_AMOUNT      /* 총결제금액      */
                ,      IFNULL(M.MONTHLY_FEE          , '' ) AS MONTHLY_FEE             /* 월대여가격      */
                ,      IFNULL(M.PAY_COUNT             , '' ) AS PAY_COUNT               /* 납부횟수         */
-               ,      IFNULL(TO_CHAR(M.REG_DT , 'YYYYMMDDHH24MISS')     , ' ' ) AS REG_DT /* 등록일시(예약일)   */
-               ,      IFNULL(TO_CHAR(M.LAST_PAY_DATE , 'YYYYMMDD')     , ' ' ) AS LAST_PAY_DATE /* 마지막 결제일    */
+               ,      IFNULL(DATE_FORMAT(M.REG_DT , 'YYYYMMDDHH24MISS')     , ' ' ) AS REG_DT /* 등록일시(예약일)   */
+               ,      IFNULL(DATE_FORMAT(M.LAST_PAY_DATE , 'YYYYMMDD')     , ' ' ) AS LAST_PAY_DATE /* 마지막 결제일    */
                ,      IFNULL(M.BALANCE             , '' ) AS BALANCE                 /* 잔여금액      */
-               ,       IFNULL(M.NEXT_PAYMENT_DAY        , '' ) AS NEXT_PAYMENT_DAY         /* 마지막 결제일         */
+--                ,      IFNULL(M.NEXT_PAYMENT_DAY        , '' ) AS NEXT_PAYMENT_DAY         /* 마지막 결제일         */
                 FROM (
                     SELECT
                         RM.RM_IDX
@@ -217,7 +213,7 @@
                         , T2.PAY_COUNT
                         , T2.LAST_PAY_DATE
                         , RM.PAYMENT_TOTAL_AMOUNT - T2.SUM_PAYMENT_AMOUNT AS BALANCE
-                        , TO_CHAR(ADD_MONTHS(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYY-MM-DD') AS NEXT_PAYMENT_DAY
+--                         , DATE_FORMAT(DATE_ADD(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYY-MM-DD') AS NEXT_PAYMENT_DAY
                     FROM (
                          SELECT
                             *
@@ -233,12 +229,12 @@
                                 , PAYMENT_AMOUNT AS MONTHLY_FEE
                                 , COUNT(RM_IDX) OVER (PARTITION BY RM_IDX) AS PAY_COUNT
                                 , SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
-                                , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
+--                                 , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
                                 , MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
                             FROM DC_PAYMENT_DETAIL A
                             WHERE A.PAYMENT_KIND_CODE = 'RT'
                         ) PD
-                        WHERE PD.PAYMENT_ORDER = 1
+--                         WHERE PD.PAYMENT_ORDER = 1
                     ) T2
                     ON RM.RM_IDX = T2.RM_IDX
                 ) M
@@ -257,27 +253,24 @@
 		<if test=" 'CA'.equals(userRole) and rtIdx != null and rtIdx != '' ">
 			AND T1.RT_IDX = #{rtIdx}
 		</if>
-		<if test="gbnInput != null and gbnInput != ''">
-			<choose>
-				<when test =" gbnInput == 'CT' and searchKeyWord != null and searchKeyWord != '' " >
-					AND T1.USER_CONTACT1 LIKE '%' || #{searchKeyWord} || '%'
-				</when>
-				<when test =" gbnInput == 'NM' and searchKeyWord != null and searchKeyWord != ''  " >
-					AND T1.USER_NAME LIKE '%' || #{searchKeyWord} || '%'
-				</when>
-				<when test =" gbnInput == 'CM' and searchKeyWord != null and searchKeyWord != ''  " >
-					AND T1.COMPANY_NAME LIKE '%' || #{searchKeyWord} || '%'
-				</when>
-				<when test =" gbnInput == 'CN' and searchKeyWord != null and searchKeyWord != ''  " >
-					AND T1.CAR_NUMBER LIKE '%' || #{searchKeyWord} || '%'
-				</when>
-				<otherwise>
-				</otherwise>
-			</choose>
-		</if>
-		)
-		A )
-		<![CDATA[   WHERE ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
+<!--		<if test="gbnInput != null and gbnInput != ''">-->
+<!--			<choose>-->
+<!--				<when test =" gbnInput == 'CT' and searchKeyWord != null and searchKeyWord != '' " >-->
+<!--					AND T1.USER_CONTACT1 LIKE '%' || #{searchKeyWord} || '%'-->
+<!--				</when>-->
+<!--				<when test =" gbnInput == 'NM' and searchKeyWord != null and searchKeyWord != ''  " >-->
+<!--					AND T1.USER_NAME LIKE '%' || #{searchKeyWord} || '%'-->
+<!--				</when>-->
+<!--				<when test =" gbnInput == 'CM' and searchKeyWord != null and searchKeyWord != ''  " >-->
+<!--					AND T1.COMPANY_NAME LIKE '%' || #{searchKeyWord} || '%'-->
+<!--				</when>-->
+<!--				<when test =" gbnInput == 'CN' and searchKeyWord != null and searchKeyWord != ''  " >-->
+<!--					AND T1.CAR_NUMBER LIKE '%' || #{searchKeyWord} || '%'-->
+<!--				</when>-->
+<!--				<otherwise>-->
+<!--				</otherwise>-->
+<!--			</choose>-->
+<!--		</if>-->
 
 	</select>
 
@@ -297,7 +290,7 @@
             ,      IFNULL(T2.PAY_COUNT             , '' ) AS PAY_COUNT               /* 납부횟수         */
             ,      IFNULL(TO_CHAR(RM.REG_DT , 'YYYYMMDDHH24MISS')     , ' ' ) AS REG_DT /* 등록일시(예약일)   */
             ,      IFNULL(RM.PAYMENT_TOTAL_AMOUNT - T2.SUM_PAYMENT_AMOUNT, 0) AS BALANCE                 /* 잔여금액      */
-            ,       TO_CHAR(ADD_MONTHS(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYYMMDD') AS NEXT_PAYMENT_DAY        /* 마지막 결제일         */
+--             ,       TO_CHAR(ADD_MONTHS(TO_DATE(RM.RENT_START_DAY, 'YYYY-MM-DD') , T2.PAY_COUNT),'YYYYMMDD') AS NEXT_PAYMENT_DAY        /* 마지막 결제일         */
          FROM (
             SELECT
                *
@@ -314,13 +307,13 @@
                   , PAYMENT_AMOUNT AS MONTHLY_FEE
                   , COUNT(RM_IDX) OVER (PARTITION BY RM_IDX) AS PAY_COUNT
                   , SUM(PAYMENT_AMOUNT) OVER (PARTITION BY RM_IDX) AS SUM_PAYMENT_AMOUNT
-                  , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
+--                   , ROW_NUMBER() OVER (PARTITION BY RM_IDX ORDER BY PAYMENT_DATE) PAYMENT_ORDER
                   , MAX(PAYMENT_DATE) OVER (PARTITION BY RM_IDX) AS LAST_PAY_DATE
                FROM DC_PAYMENT_DETAIL A
                WHERE A.RM_IDX = #{rmIdx}
                AND A.PAYMENT_KIND_CODE = 'RT'
              ) PD
-               WHERE PD.PAYMENT_ORDER = 1
+--                WHERE PD.PAYMENT_ORDER = 1
            ) T2
          ON RM.RM_IDX = T2.RM_IDX
    ]]>

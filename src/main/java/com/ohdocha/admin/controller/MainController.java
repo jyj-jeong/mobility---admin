@@ -1,6 +1,7 @@
 package com.ohdocha.admin.controller;
 
 import com.ohdocha.admin.config.Properties;
+import com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeRequest;
 import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest;
 import com.ohdocha.admin.service.MainService;
 import com.ohdocha.admin.util.ServiceMessage;
@@ -55,5 +56,17 @@ public class MainController extends ControllerExtension {
 //        request.getSession().setAttribute("LOGIN_SESSION", adminInfoDto);
 
         return createServiceMessage(request).addData("result", "success");
+    }
+
+    /* 공통 코드 리스트 */
+    @PostMapping(value = "/car/model/api/v1.0/commonCodeInfo.json")
+    @ResponseBody
+    public Object userInfoDetail(@RequestBody DochaAdminCommonCodeRequest commonCodeRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("commonCodeRequest", commonCodeRequest);
+
+        mainService.selectCommonCodeInfo(serviceMessage);
+
+        return serviceMessage.get("result");
     }
 }
