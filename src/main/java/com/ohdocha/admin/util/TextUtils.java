@@ -60,6 +60,17 @@ public class TextUtils {
         return originUUID.substring(0, bound).toUpperCase();
     }
 
+    public static String getKeyDefault(String header) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmsss");
+
+        StringBuffer key = new StringBuffer();
+        key.append(header);
+        key.append(sdf.format(cal.getTime()));
+
+        return key.toString();
+    }
+
     public static LocalDateTime longToLocalDateTime(long time) {
         Date date = new Date(time);
 
