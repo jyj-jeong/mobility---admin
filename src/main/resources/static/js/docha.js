@@ -628,9 +628,9 @@ function YMDFormatter(num){
 }
 
 //모달창 열기
-function openIziModal(modalName){
-	$("#" + modalName).iziModal('open');
-}
+// function openIziModal(modalName){
+// 	$("#" + modalName).iziModal('open');
+// }
 
 
 /*function initDatePicker(_target,_date){   

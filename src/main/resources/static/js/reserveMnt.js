@@ -466,7 +466,7 @@ function initDetailInfo(seq){
 			let reserveUserGender = nullCheck(data.reserveUserGender);
 			let reserveUserEmail = nullCheck(data.reserveUserEmail);
 			let reserveUserContact1 = nullCheck(data.reserveUserContact1);
-			let reserveUserBirthDay = nullCheck(data.reserveUserBirthDay) == ''?'':dateFormatter(data.reserveUserBirthDay);
+			let reserveUserBirthday = nullCheck(data.reserveUserBirthday) == ''?'':dateFormatter(data.reserveUserBirthday);
 
 			// 예약자 정보
 			$("#urIdx").val(urIdx);
@@ -474,7 +474,7 @@ function initDetailInfo(seq){
 			$("#sel_reserveUserGender").val(reserveUserGender).prop("selected", true);
 			$("#reserveUserEmail").val(reserveUserEmail);
 			$("#reserveUserContact1").val(reserveUserContact1);
-			$("#reserveUserBirthDay").val(reserveUserBirthDay);
+			$("#reserveUserBirthday").val(reserveUserBirthday);
 			
 			// 운전자 정보
 //			let userFlag = nullCheck(data.;
@@ -610,7 +610,7 @@ function initDetailInfo(seq){
 			$("#reserveUserEmail").val(reserveUserEmail);
 			$("#btnreserveUserEmail").hide();
 			$("#reserveUserContact1").val(reserveUserContact1);
-			$("#reserveUserBirthDay").val(reserveUserBirthDay);
+			$("#reserveUserBirthday").val(reserveUserBirthday);
 			
 			let refundFee = nullCheck(data.refundFee) == ''?'':objectConvertToPriceFormat(data.refundFee);
 			let miSu = nullCheck(data.miSu) == ''?'':objectConvertToPriceFormat(data.miSu);
@@ -1068,29 +1068,29 @@ function serachUserInfo(flag, urIdx) {
 				let userContact1 	= phoneFomatter(data.userContact1);
 				let userGender		= data.userGender;
 				let userId			= data.userId;
-				let userBirthDay	= data.userBirthDay;
-				userBirthDay 		= dateFormatter(userBirthDay);
+				let userBirthday	= data.userBirthday;
+				userBirthday 		= dateFormatter(userBirthday);
 
 				if(flag == 'init'){
 					$("#urIdx").val(urIdx);
 					$("#reserveUserName").val(userName);
 					$("#reserveUserContact1").val(userContact1);
 					$("#reserveUserEmail").val(userId);
-					$("#reserveUserBirthDay").val(userBirthDay);
+					$("#reserveUserBirthday").val(userBirthday);
 					$("#sel_reserveUserGender").val(userGender).prop("selected", true);
 				}else if(flag == 'first'){
 					$("#firstDriverId").val(userId);
 					$("#firstDriverName").val(userName);
 					$("#sel_firstDriverGender").val(userGender).prop("selected", true);
 					$('#firstDriverContact').val(userContact1);
-					$('#firstDriverBirthDay').val(userBirthDay);  
+					$('#firstDriverBirthDay').val(userBirthday);
 					DriverSetting(flag, urIdx);
 				}else if(flag == 'second'){
 					$("#secondDriverId").val(userId);
 					$("#secondDriverName").val(userName);
 					$("#sel_secondDriverGender").val(userGender).prop("selected", true);
 					$('#secondDriverContact').val(userContact1);
-					$('#secondDriverBirthDay').val(userBirthDay);  
+					$('#secondDriverBirthDay').val(userBirthday);
 					DriverSetting(flag, urIdx);
 				}
 
@@ -1119,7 +1119,7 @@ function firstDriverSetting(target){
 		let name = $('#reserveUserName').val();
 		let gender = $("#sel_reserveUserGender option:selected").val();
 		let contact1 = $('#reserveUserContact1').val();
-		let birthDay = $('#reserveUserBirthDay').val();
+		let birthDay = $('#reserveUserBirthday').val();
 		
 		$('#firstDriverName').val(name);  
 		$("#sel_firstDriverGender").val(gender).prop("selected", true)
@@ -1361,7 +1361,7 @@ function settingInputStatus(){
 		$('#reserveUserName').prop('readonly' , false); 
 		$('#sel_reserveUserGender').prop('disabled' , false); 
 		$('#reserveUserContact1').prop('readonly' , false);
-		$('#reserveUserBirthDay').prop('readonly' , false);
+		$('#reserveUserBirthday').prop('readonly' , false);
 		
 		$('#btnreserveUserEmail').show();
 
@@ -1389,7 +1389,7 @@ function settingInputStatus(){
 		$('#sel_reserveUserGender').attr('disabled', true);
 		$('#reserveUserEmail').attr('readonly', true);
 		$('#reserveUserContact1').attr('readonly', true);
-		$('#reserveUserBirthDay').attr('readonly', true);
+		$('#reserveUserBirthday').attr('readonly', true);
 
 		if(GLOBAL_LOGIN_USER_ROLE != 'RA'){
 			$('#companyName').attr('disabled', true);
@@ -1429,7 +1429,7 @@ function detailValidation(){
 	let reserveUserName = getPureText($('#reserveUserName').val());
 	let reserveUserGender = getPureText($('#sel_reserveUserGender option:selected').val());
 	let reserveUserContact1 = getPureText($('#reserveUserContact1').val());
-	let reserveUserBirthDay = getPureText($('#reserveUserBirthDay').val());
+	let reserveUserBirthday = getPureText($('#reserveUserBirthday').val());
 
 	if (isEmpty(reserveUserEmail)) { // is not empty
 		errorAlert('회원', '이메일(아이디)는 필수 입력값 입니다.');
@@ -1443,11 +1443,11 @@ function detailValidation(){
 	}else if (isEmpty(reserveUserContact1)) { // is not empty
 		errorAlert('회원', '연락처는 필수 입력값 입니다.');
 		return;
-	}else if (isEmpty(reserveUserBirthDay)) { // is not empty
+	}else if (isEmpty(reserveUserBirthday)) { // is not empty
 		errorAlert('회원', '생년월일은 필수 입력값 입니다.');
 		return;
 	}
-//	alert(urIdx+'\n'+reserveUserEmail+'\n'+reserveUserName+'\n'+reserveUserGender+'\n'+reserveUserContact1+'\n'+reserveUserBirthDay);
+//	alert(urIdx+'\n'+reserveUserEmail+'\n'+reserveUserName+'\n'+reserveUserGender+'\n'+reserveUserContact1+'\n'+reserveUserBirthday);
 	let reserveTypeCode = getPureText($('#sel_reserveTypeCode option:selected').val());
 	let ulIdx1 = getPureText($('#urIdx').val());
 	let firstDriverName = getPureText($('#firstDriverName').val());
@@ -1602,7 +1602,7 @@ function detailValidation(){
 			,	'reserveUserName' : reserveUserName  
 			,	'reserveUserEmail' : reserveUserEmail
 			,	'reserveUserContact1' : reserveUserContact1
-			,	'reserveUserBirthDay' : reserveUserBirthDay
+			,	'reserveUserBirthday' : reserveUserBirthday
 			,	'reserveUserGender' : reserveUserGender
 			,	'rentStartDay' : rentStartDay
 			,	'rentStartTime' : rentStartTime

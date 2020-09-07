@@ -18,7 +18,7 @@ public interface DochaAdminUserInfoMntMapper {
     /*
      * 통합회원 상세
      * */
-    public DochaAdminUserInfoDetailResponse selectUserInfoDetail(DochaAdminUserInfoRequest reqParam);
+    public List<DochaAdminUserInfoDetailResponse> selectUserInfoDetail(DochaAdminUserInfoRequest reqParam);
 
     /*
      * 통합회원 정보 update
@@ -39,11 +39,16 @@ public interface DochaAdminUserInfoMntMapper {
     /*
      * 사용자 면허정보 Update
      * */
-    public DochaAdminUserInfoUserLicenseInfoResponse selectLicenseInfo(DochaAdminUserInfoUserLicenseInfoRequest reqParam);
+    public List<DochaAdminUserInfoUserLicenseInfoResponse> selectLicenseInfo(DochaAdminUserInfoUserLicenseInfoRequest reqParam);
 
     /*
      * 신규 사용자 INSERT
      * */
     public int insertUserInfo(DochaAdminInsertUserInfoRequest reqParam);
+
+    /*
+     * 회원 DELETE
+     * */
+    public int deleteUserInfo(DochaAdminUserInfoRequest reqParam);
 
 }
