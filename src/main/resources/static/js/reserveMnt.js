@@ -571,7 +571,7 @@ function initDetailInfo(seq){
 			let personalCover = nullCheck(data.personalCover) == ''?'':objectConvertToPriceFormat(data.personalCover);  
 			let propertyDamageCover = nullCheck(data.propertyDamageCover) == ''?'':objectConvertToPriceFormat(data.propertyDamageCover);
 			let carDamageCover = nullCheck(data.carDamageCover) == ''?'':objectConvertToPriceFormat(data.carDamageCover);  
-			let insuranceCopayment = nullCheck(data.insuranceCopayment) == ''?'':objectConvertToPriceFormat(data.insuranceCopayment);
+			let insuranceCompanyment = nullCheck(data.insuranceCompanyment) == ''?'':objectConvertToPriceFormat(data.insuranceCompanyment);
 			let fuelCode = nullCheck(data.fuelCode);
 			
 			$("#rtIdx").val(rtIdx);
@@ -584,7 +584,7 @@ function initDetailInfo(seq){
 			$("#propertyDamageCover").val(propertyDamageCover);
 			
 			$("#carDamageCover").val(carDamageCover); // 예약시 면책금
-			$("#insuranceCopayment").val(insuranceCopayment); // 예약시 보험료
+			$("#insuranceCompanyment").val(insuranceCompanyment); // 예약시 보험료
 			
 			$("#sel_fuel").val(fuelCode).prop("selected", true);
 
@@ -975,50 +975,50 @@ function selectCarInfo(crIdx){
 	$('#optionCodeValue').val(optionCodeValue);
 
 	let carDamageCover = nullCheck(carListData[crIdxIndex].carDamageCover) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover);
-	let insuranceCopayment = nullCheck(carListData[crIdxIndex].insuranceCopayment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment);
+	let insuranceCompanyment = nullCheck(carListData[crIdxIndex].insuranceCompanyment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment);
 	let carDamageCover2 = nullCheck(carListData[crIdxIndex].carDamageCover2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover2);
-	let insuranceCopayment2 = nullCheck(carListData[crIdxIndex].insuranceCopayment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment2);
+	let insuranceCompanyment2 = nullCheck(carListData[crIdxIndex].insuranceCompanyment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment2);
 	let carDamageCover3 = nullCheck(carListData[crIdxIndex].carDamageCover3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover3);
-	let insuranceCopayment3 = nullCheck(carListData[crIdxIndex].insuranceCopayment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment3);
+	let insuranceCompanyment3 = nullCheck(carListData[crIdxIndex].insuranceCompanyment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment3);
 	let carDamageCover4 = nullCheck(carListData[crIdxIndex].carDamageCover4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover4);
-	let insuranceCopayment4 = nullCheck(carListData[crIdxIndex].insuranceCopayment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment4);
+	let insuranceCompanyment4 = nullCheck(carListData[crIdxIndex].insuranceCompanyment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment4);
 
 	let strOption = "";
 	strOption += "<option value = ''>선택하세요</option>";
  
-	if(!isEmpty(carDamageCover) && !isEmpty(insuranceCopayment)){
-		strOption += "<option value = '"+insuranceCopayment+"'>" + "면책금:" + carDamageCover + "/보험금:" + insuranceCopayment + "</option>";
+	if(!isEmpty(carDamageCover) && !isEmpty(insuranceCompanyment)){
+		strOption += "<option value = '"+insuranceCompanyment+"'>" + "면책금:" + carDamageCover + "/보험금:" + insuranceCompanyment + "</option>";
 	}
-	if(!isEmpty(carDamageCover2) && !isEmpty(insuranceCopayment2)){
-		strOption += "<option value = '"+insuranceCopayment2+"'>" + "면책금:" + carDamageCover2 + "/보험금:" + insuranceCopayment2 + "</option>";
+	if(!isEmpty(carDamageCover2) && !isEmpty(insuranceCompanyment2)){
+		strOption += "<option value = '"+insuranceCompanyment2+"'>" + "면책금:" + carDamageCover2 + "/보험금:" + insuranceCompanyment2 + "</option>";
 	}
-	if(!isEmpty(carDamageCover3) && !isEmpty(insuranceCopayment3)){
-		strOption += "<option value = '"+insuranceCopayment3+"'>" + "면책금:" + carDamageCover3 + "/보험금:" + insuranceCopayment3 + "</option>";
+	if(!isEmpty(carDamageCover3) && !isEmpty(insuranceCompanyment3)){
+		strOption += "<option value = '"+insuranceCompanyment3+"'>" + "면책금:" + carDamageCover3 + "/보험금:" + insuranceCompanyment3 + "</option>";
 	}
-	if(!isEmpty(carDamageCover4) && !isEmpty(insuranceCopayment4)){
-		strOption += "<option value = '"+insuranceCopayment4+"'>" + "면책금:" + carDamageCover4 + "/보험금:" + insuranceCopayment4 + "</option>";
+	if(!isEmpty(carDamageCover4) && !isEmpty(insuranceCompanyment4)){
+		strOption += "<option value = '"+insuranceCompanyment4+"'>" + "면책금:" + carDamageCover4 + "/보험금:" + insuranceCompanyment4 + "</option>";
 	}
 
 	$('#sel_ciIdx').empty();
 	$('#sel_ciIdx').append(strOption);
 	
-	let revinsuranceCopayment = $("#insuranceCopayment").val();
+	let revinsuranceCompanyment = $("#insuranceCompanyment").val();
 	let revcarDamageCover = $("#carDamageCover").val();
 	
-	if((isEmpty(revinsuranceCopayment) || revinsuranceCopayment == '0') && !isEmpty(revcarDamageCover) && revcarDamageCover > '0'){
+	if((isEmpty(revinsuranceCompanyment) || revinsuranceCompanyment == '0') && !isEmpty(revcarDamageCover) && revcarDamageCover > '0'){
 		if (carDamageCover == revcarDamageCover){
-			revinsuranceCopayment = insuranceCopayment;
+			revinsuranceCompanyment = insuranceCompanyment;
 		}else if (carDamageCover2 == revcarDamageCover){
-			revinsuranceCopayment = insuranceCopayment2;
+			revinsuranceCompanyment = insuranceCompanyment2;
 		}else if (carDamageCover3 == revcarDamageCover){
-			revinsuranceCopayment = insuranceCopayment3;
+			revinsuranceCompanyment = insuranceCompanyment3;
 		}else if (carDamageCover4 == revcarDamageCover){
-			revinsuranceCopayment = insuranceCopayment4;
+			revinsuranceCompanyment = insuranceCompanyment4;
 		}
 	}
 
-	if(!isEmpty(revinsuranceCopayment) && revinsuranceCopayment != '0' && !isEmpty(crIdx) ){
-		$("#sel_ciIdx").val(revinsuranceCopayment).prop("selected", true);
+	if(!isEmpty(revinsuranceCompanyment) && revinsuranceCompanyment != '0' && !isEmpty(crIdx) ){
+		$("#sel_ciIdx").val(revinsuranceCompanyment).prop("selected", true);
 	}else{
 		$("#sel_ciIdx").val('').prop("selected", true);
 	}
@@ -1230,7 +1230,7 @@ function rentcal(){
 			crIdx : crIdx,
 			calRentStartDt : calRentStartDt,
 			calRentEndDt : calRentEndDt,
-			insuranceCopayment : selInsuranceFee
+			insuranceCompanyment : selInsuranceFee
 	};
 
 	let target = 'selectReserveAmt';
@@ -1561,7 +1561,7 @@ function detailValidation(){
 	let mdIdx = getPureText($('#mdIdx').val());
 	let crIdx = getPureText($('#sel_modelName option:selected').val()); // 차량순번
 	let carDamageCover = getPureText($('#carDamageCover').val());
-	let insuranceCopayment = getPureText($('#insuranceCopayment').val());
+	let insuranceCompanyment = getPureText($('#insuranceCompanyment').val());
 	let carTypeCode = getPureText($('#carTypeCode').val());
 	
 	if (isEmpty(rtIdx)) { // is not empty
@@ -1570,13 +1570,13 @@ function detailValidation(){
 	}else if (isEmpty(crIdx)) { // is not empty
 		errorAlert('차량', '모델(번호)는 필수 선택값 입니다.');
 		return;
-	}else if (isEmpty(insuranceCopayment) && reserveTypeCode != 'QT') { // is not empty
+	}else if (isEmpty(insuranceCompanyment) && reserveTypeCode != 'QT') { // is not empty
 		errorAlert('차량', '자차 고객부담금은 필수 선택값 입니다.');
 		return;
 	}
 	let rtIdxSplit = $('#companyName option:selected').text().split('(');
 	let companyName = rtIdxSplit[0];
-//	alert(rtIdx+'\n'+mdIdx+'\n'+crIdx+'\n'+carDamageCover+'\n'+insuranceCopayment);
+//	alert(rtIdx+'\n'+mdIdx+'\n'+crIdx+'\n'+carDamageCover+'\n'+insuranceCompanyment);
 	
 	let rentFee = getPureText($('#rentFee').val());
 	let insuranceFee = getPureText($('#insuranceFee').val());
@@ -1641,7 +1641,7 @@ function detailValidation(){
 			,	'secondDriverLicenseNumber' : secondDriverLicenseNumber
 			,	'secondDriverExpirationDate' : secondDriverExpirationDate
 			,	'secondDriverLicenseIsDate' : secondDriverLicenseIsDate
-			,	'insuranceCopayment' : insuranceCopayment
+			,	'insuranceCompanyment' : insuranceCompanyment
 			,	'carDamageCover' : carDamageCover
 			,	'modId' : GLOBAL_LOGIN_USER_IDX
 			,	'regId' : GLOBAL_LOGIN_USER_IDX
@@ -1709,32 +1709,32 @@ function detailSubmit(save_type, req){
  */
 function selectInsuranceInfo() {
 	let crIdxIndex = $("#sel_modelName option:selected").index() - 1;
-	let ciIdxinsuranceCopayment = $("#sel_ciIdx option:selected").val();
+	let ciIdxinsuranceCompanyment = $("#sel_ciIdx option:selected").val();
 
 	let carDamageCover = nullCheck(carListData[crIdxIndex].carDamageCover) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover);
-	let insuranceCopayment = nullCheck(carListData[crIdxIndex].insuranceCopayment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment);
+	let insuranceCompanyment = nullCheck(carListData[crIdxIndex].insuranceCompanyment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment);
 	let carDamageCover2 = nullCheck(carListData[crIdxIndex].carDamageCover2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover2);
-	let insuranceCopayment2 = nullCheck(carListData[crIdxIndex].insuranceCopayment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment2);
+	let insuranceCompanyment2 = nullCheck(carListData[crIdxIndex].insuranceCompanyment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment2);
 	let carDamageCover3 = nullCheck(carListData[crIdxIndex].carDamageCover3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover3);
-	let insuranceCopayment3 = nullCheck(carListData[crIdxIndex].insuranceCopayment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment3);
+	let insuranceCompanyment3 = nullCheck(carListData[crIdxIndex].insuranceCompanyment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment3);
 	let carDamageCover4 = nullCheck(carListData[crIdxIndex].carDamageCover4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover4);
-	let insuranceCopayment4 = nullCheck(carListData[crIdxIndex].insuranceCopayment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment4);
+	let insuranceCompanyment4 = nullCheck(carListData[crIdxIndex].insuranceCompanyment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment4);
 	
-	if(ciIdxinsuranceCopayment == insuranceCopayment){
+	if(ciIdxinsuranceCompanyment == insuranceCompanyment){
 		$("#carDamageCover").val(carDamageCover);
-		$("#insuranceCopayment").val(insuranceCopayment);
-	}else if(ciIdxinsuranceCopayment == insuranceCopayment2){
+		$("#insuranceCompanyment").val(insuranceCompanyment);
+	}else if(ciIdxinsuranceCompanyment == insuranceCompanyment2){
 		$("#carDamageCover").val(carDamageCover2);
-		$("#insuranceCopayment").val(insuranceCopayment2);
-	}else if(ciIdxinsuranceCopayment == insuranceCopayment3){
+		$("#insuranceCompanyment").val(insuranceCompanyment2);
+	}else if(ciIdxinsuranceCompanyment == insuranceCompanyment3){
 		$("#carDamageCover").val(carDamageCover3);
-		$("#insuranceCopayment").val(insuranceCopayment3);
-	}else if(ciIdxinsuranceCopayment == insuranceCopayment4){
+		$("#insuranceCompanyment").val(insuranceCompanyment3);
+	}else if(ciIdxinsuranceCompanyment == insuranceCompanyment4){
 		$("#carDamageCover").val(carDamageCover4);
-		$("#insuranceCopayment").val(insuranceCopayment4);
+		$("#insuranceCompanyment").val(insuranceCompanyment4);
 	}else{
 		$("#carDamageCover").val('');
-		$("#insuranceCopayment").val('');
+		$("#insuranceCompanyment").val('');
 	}
 	CALCULABLE_MOTH = 'N';
 }

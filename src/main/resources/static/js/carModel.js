@@ -317,7 +317,7 @@ function initDetailInfo(seq){
  			errorAlert('조회중 에러가 발생했습니다', '관리자에게 문의하세요');
     	 }
      });//end fn_callApi
-	
+
 	
 }
 
@@ -370,12 +370,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result;
+			// let data = res.data.result;
 
 			let strOption = "";
 			
@@ -395,9 +395,9 @@ function initDetailSelectBox(data){
 				$("#sel_conturyCode").val('0').prop("sel_conturyCode", true);
 			}// 국가
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 제조사
@@ -407,12 +407,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result;
+			// let data = res.data.result;
 
 			let strOption = "";
 			
@@ -432,9 +432,9 @@ function initDetailSelectBox(data){
 				$("#sel_manufacturerCode").val('0').prop("sel_manufacturerCode", true);
 			}// 제조사
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 차종
@@ -444,12 +444,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-
-			let data = res.data.result;
+		// if (res.code == 200) {
+		//
+		// 	let data = res.data.result;
 
 			let strOption = "";
 			
@@ -469,9 +469,9 @@ function initDetailSelectBox(data){
 				$("#sel_cartypeCode").val('0').prop("sel_cartypeCode", true);
 			}// 차종
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 	
 	// 연료
@@ -481,12 +481,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result;
+			// let data = res.data.result;
 
 			let strOption = "";
 			
@@ -506,9 +506,9 @@ function initDetailSelectBox(data){
 				$("#sel_fuelCode").val('0').prop("sel_fuelCode", true);
 			}// 연료
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 국내/외 구분
@@ -518,12 +518,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data =response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result;
+			// let data = res.data.result;
 
 			let strOption = "";
 			
@@ -543,9 +543,9 @@ function initDetailSelectBox(data){
 				$("#sel_importCode").val('0').prop("sel_importCode", true);
 			}// 연료
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 변속 구분
@@ -555,12 +555,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result;
+			// let data = res.data.result;
 
 			let strOption = "";
 			
@@ -580,9 +580,9 @@ function initDetailSelectBox(data){
 				$("#sel_transmissionCode").val('0').prop("sel_transmissionCode", true);
 			}// 연료
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 구동방식
@@ -592,12 +592,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-
-			let data = res.data.result;
+		// if (res.code == 200) {
+		//
+		// 	let data = res.data.result;
 
 			let strOption = "";
 			
@@ -617,9 +617,9 @@ function initDetailSelectBox(data){
 				$("#sel_driveTypeCode").val('0').prop("sel_driveTypeCode", true);
 			}// 연료
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// 구동방식
@@ -629,12 +629,12 @@ function initDetailSelectBox(data){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-
-			let data = res.data.result;
+		// if (res.code == 200) {
+		//
+		// 	let data = res.data.result;
 
 			let strOption = "";
 			
@@ -654,9 +654,9 @@ function initDetailSelectBox(data){
 				$("#sel_driveLicenseCode").val('0').prop("sel_driveLicenseCode", true);
 			}// 연료
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 	
 }

@@ -66,7 +66,7 @@ public class DochaAdminReserveInfoDetailResponse extends CommonResponseDto {
 	private String personalCover;
 	private String propertyDamageCover;
 	private String carDamageCover;
-	private String insuranceCopayment;
+	private String insuranceCompanyment;
 	private String fuelCode;
 	
 	// 대여금액 정보
@@ -375,11 +375,11 @@ public class DochaAdminReserveInfoDetailResponse extends CommonResponseDto {
 	public void setCarDamageCover(String carDamageCover) {
 		this.carDamageCover = carDamageCover;
 	}
-	public String getInsuranceCopayment() {
-		return insuranceCopayment;
+	public String getInsuranceCompanyment() {
+		return insuranceCompanyment;
 	}
-	public void setInsuranceCopayment(String insuranceCopayment) {
-		this.insuranceCopayment = insuranceCopayment;
+	public void setInsuranceCompanyment(String insuranceCompanyment) {
+		this.insuranceCompanyment = insuranceCompanyment;
 	}
 	public String getFuelCode() {
 		return fuelCode;

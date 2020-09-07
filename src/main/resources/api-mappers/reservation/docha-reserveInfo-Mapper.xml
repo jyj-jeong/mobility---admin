@@ -174,7 +174,7 @@
       , IFNULL(C.PERSONAL_COVER, '0') AS PERSONAL_COVER /* 대인보상금액 */
       , IFNULL(C.PROPERTY_DAMAGE_COVER, '0') AS PROPERTY_DAMAGE_COVER   /* 대물보상금액 */
       , IFNULL(A.CAR_DAMAGE_COVER, '') AS CAR_DAMAGE_COVER /* 예약시 자차보상금(면책금)*/
-      , IFNULL(A.INSURANCE_COPAYMENT, '') AS INSURANCE_COPAYMENT /* 예약시 고객부담금(보험료)*/
+      , IFNULL(A.INSURANCE_COMPANYMENT, '') AS INSURANCE_COMPANYMENT /* 예약시 고객부담금(보험료)*/
       , IFNULL(C.FUEL_CODE, '') AS FUEL_CODE /* 연료코드 */
 
       , IFNULL(A.RENT_FEE, '0') AS RENT_FEE /* 대여금 */
@@ -336,8 +336,8 @@
 		<if test =" discountFee != null and discountFee != '' ">
 			,      DISCOUNT_FEE = #{discountFee}
 		</if>
-		<if test =" insuranceCopayment != null and insuranceCopayment != '' ">
-			,      INSURANCE_COPAYMENT = #{insuranceCopayment}
+		<if test =" insuranceCompanyment != null and insuranceCompanyment != '' ">
+			,      INSURANCE_COMPANYMENT = #{insuranceCompanyment}
 		</if>
 		<if test =" carDamageCover != null and carDamageCover != '' ">
 			,      CAR_DAMAGE_COVER = #{carDamageCover}
@@ -403,7 +403,7 @@
       , SECOND_DRIVER_LICENSE_NUMBER
       , SECOND_DRIVER_EXPIRATION_DATE
       , SECOND_DRIVER_LICENSE_IS_DATE
-      , INSURANCE_COPAYMENT
+      , INSURANCE_COMPANYMENT
       , CAR_DAMAGE_COVER
       , REG_ID
       , REG_DT
@@ -462,7 +462,7 @@
       , #{secondDriverLicenseNumber}
       , #{secondDriverExpirationDate}
       , #{secondDriverLicenseIsDate}
-      , #{insuranceCopayment}
+      , #{insuranceCompanyment}
       , #{carDamageCover}
       , #{regId}
       , SYSDATE
@@ -812,13 +812,13 @@
          --,      IFNULL(T1.DRIVE_CAREER_LIMIT    ,  '' ) AS DRIVE_CAREER_LIMIT         /*운전경력제한   */
          ,      IFNULL(T1.DEL_YN                ,  '' ) AS DEL_YN                     /*삭제여부      */
 
-         ,      IFNULL(T1.INSURANCE_COPAYMENT      ,  '' ) AS INSURANCE_COPAYMENT      /*보험료      */
+         ,      IFNULL(T1.INSURANCE_COMPANYMENT      ,  '' ) AS INSURANCE_COMPANYMENT      /*보험료      */
          ,      IFNULL(T1.CAR_DAMAGE_COVER         ,  '' ) AS CAR_DAMAGE_COVER         /*면책금      */
-         ,      IFNULL(T1.INSURANCE_COPAYMENT2      ,  '' ) AS INSURANCE_COPAYMENT2     /*보험료2      */
+         ,      IFNULL(T1.INSURANCE_COMPANYMENT2      ,  '' ) AS INSURANCE_COMPANYMENT2     /*보험료2      */
          ,      IFNULL(T1.CAR_DAMAGE_COVER2      ,  '' ) AS CAR_DAMAGE_COVER2        /*면책금2      */
-         ,      IFNULL(T1.INSURANCE_COPAYMENT3      ,  '' ) AS INSURANCE_COPAYMENT3     /*보험료3      */
+         ,      IFNULL(T1.INSURANCE_COMPANYMENT3      ,  '' ) AS INSURANCE_COMPANYMENT3     /*보험료3      */
          ,      IFNULL(T1.CAR_DAMAGE_COVER3      ,  '' ) AS CAR_DAMAGE_COVER3        /*면책금3      */
-         ,      IFNULL(T1.INSURANCE_COPAYMENT4      ,  '' ) AS INSURANCE_COPAYMENT4     /*보험료4      */
+         ,      IFNULL(T1.INSURANCE_COMPANYMENT4      ,  '' ) AS INSURANCE_COMPANYMENT4     /*보험료4      */
          ,      IFNULL(T1.CAR_DAMAGE_COVER4      ,  '' ) AS CAR_DAMAGE_COVER4        /*면책금4      */
          ,      IFNULL(CA.CAROPTION_LIST_VALUE, '') AS OPTION_CODE_VALUE /* 옵션정보*/
          FROM   DC_CAR_INFO T1
@@ -904,7 +904,7 @@
          ,      IFNULL(T3.PROPERTY_DAMAGE_COVER ,  '0' ) AS PROPERTY_DAMAGE_COVER   /*대물보상금액   */
          ,      IFNULL(T3.AGE_LIMIT             ,  '' ) AS AGE_LIMIT               /*연령제한      */
          ,      IFNULL(T3.DRIVE_CAREER_LIMIT    ,  '' ) AS DRIVE_CAREER_LIMIT      /*운전경력제한   */
-         ,      IFNULL(T3.INSURANCE_COPAYMENT   ,  '0' ) AS INSURANCE_COPAYMENT     /*고객부담금   */
+         ,      IFNULL(T3.INSURANCE_COMPANYMENT   ,  '0' ) AS INSURANCE_COMPANYMENT     /*고객부담금   */
          FROM   DC_CAR_INFO T1
          LEFT OUTER JOIN (
                 SELECT CR_IDX
@@ -933,7 +933,7 @@
          ,      IFNULL(ONSELF_DAMAGE_COVER      , '' ) AS ONSELF_DAMAGE_COVER
          ,      IFNULL(PERSONAL_COVER           , '' ) AS PERSONAL_COVER
          ,      IFNULL(PROPERTY_DAMAGE_COVER   , '' ) AS PROPERTY_DAMAGE_COVER
-         ,      IFNULL(INSURANCE_COPAYMENT      , '' ) AS INSURANCE_COPAYMENT
+         ,      IFNULL(INSURANCE_COMPANYMENT      , '' ) AS INSURANCE_COMPANYMENT
          ,      IFNULL(AGE_LIMIT                , '' ) AS AGE_LIMIT
          ,      IFNULL(DRIVE_CAREER_LIMIT       , '' ) AS DRIVE_CAREER_LIMIT
          ,      IFNULL(REG_ID                   , '' ) AS REG_ID
@@ -943,11 +943,11 @@
          ,      IFNULL(DEL_YN                   , '' ) AS DEL_YN
          ,      IFNULL(RT_IDX                   , '' ) AS RT_IDX
          ,      IFNULL(CAR_DAMAGE_COVER2        , '' ) AS CAR_DAMAGE_COVER2
-         ,      IFNULL(INSURANCE_COPAYMENT2     , '' ) AS INSURANCE_COPAYMENT2
+         ,      IFNULL(INSURANCE_COMPANYMENT2     , '' ) AS INSURANCE_COMPANYMENT2
          ,      IFNULL(CAR_DAMAGE_COVER3        , '' ) AS CAR_DAMAGE_COVER3
-         ,      IFNULL(INSURANCE_COPAYMENT3     , '' ) AS INSURANCE_COPAYMENT3
+         ,      IFNULL(INSURANCE_COMPANYMENT3     , '' ) AS INSURANCE_COMPANYMENT3
          ,      IFNULL(CAR_DAMAGE_COVER4        , '' ) AS CAR_DAMAGE_COVER4
-         ,      IFNULL(INSURANCE_COPAYMENT4     , '' ) AS INSURANCE_COPAYMENT4
+         ,      IFNULL(INSURANCE_COMPANYMENT4     , '' ) AS INSURANCE_COMPANYMENT4
          ,      IFNULL(CAR_DAMAGE1_YN           , '' ) AS CAR_DAMAGE1_YN
          ,      IFNULL(CAR_DAMAGE2_YN           , '' ) AS CAR_DAMAGE2_YN
          ,      IFNULL(CAR_DAMAGE3_YN           , '' ) AS CAR_DAMAGE3_YN

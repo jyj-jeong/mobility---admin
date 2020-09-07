@@ -77,7 +77,7 @@ public class DochaCarDto extends CommonResponseDto {
 	private String personalCover        ;
 	private String propertyDamageCover  ;
 	private String driveCareerLimit     ;
-	private String insuranceCopayment   ;
+	private String insuranceCompanyment   ;
 	private String cartypeListValue     ;
 	private String carDeposit           ;
 	private String approvalNumber       ;
@@ -97,11 +97,11 @@ public class DochaCarDto extends CommonResponseDto {
 	private String ciIdx;
 	private String driveCareer_limit;
 	private String carDamageCover2;
-	private String insuranceCopayment2;
+	private String insuranceCompanyment2;
 	private String carDamageCover3;
-	private String insuranceCopayment3;
+	private String insuranceCompanyment3;
 	private String carDamageCover4;
-	private String insuranceCopayment4;
+	private String insuranceCompanyment4;
 	private String carDamage1Yn;
 	private String carDamage2Yn;
 	private String carDamage3Yn;
@@ -128,11 +128,11 @@ public class DochaCarDto extends CommonResponseDto {
 	public void setCarDamageCover2(String carDamageCover2) {
 		this.carDamageCover2 = carDamageCover2;
 	}
-	public String getInsuranceCopayment2() {
-		return insuranceCopayment2;
+	public String getInsuranceCompanyment2() {
+		return insuranceCompanyment2;
 	}
-	public void setInsuranceCopayment2(String insuranceCopayment2) {
-		this.insuranceCopayment2 = insuranceCopayment2;
+	public void setInsuranceCompanyment2(String insuranceCompanyment2) {
+		this.insuranceCompanyment2 = insuranceCompanyment2;
 	}
 	public String getCarDamageCover3() {
 		return carDamageCover3;
@@ -140,11 +140,11 @@ public class DochaCarDto extends CommonResponseDto {
 	public void setCarDamageCover3(String carDamageCover3) {
 		this.carDamageCover3 = carDamageCover3;
 	}
-	public String getInsuranceCopayment3() {
-		return insuranceCopayment3;
+	public String getInsuranceCompanyment3() {
+		return insuranceCompanyment3;
 	}
-	public void setInsuranceCopayment3(String insuranceCopayment3) {
-		this.insuranceCopayment3 = insuranceCopayment3;
+	public void setInsuranceCompanyment3(String insuranceCompanyment3) {
+		this.insuranceCompanyment3 = insuranceCompanyment3;
 	}
 	public String getCarDamageCover4() {
 		return carDamageCover4;
@@ -152,11 +152,11 @@ public class DochaCarDto extends CommonResponseDto {
 	public void setCarDamageCover4(String carDamageCover4) {
 		this.carDamageCover4 = carDamageCover4;
 	}
-	public String getInsuranceCopayment4() {
-		return insuranceCopayment4;
+	public String getInsuranceCompanyment4() {
+		return insuranceCompanyment4;
 	}
-	public void setInsuranceCopayment4(String insuranceCopayment4) {
-		this.insuranceCopayment4 = insuranceCopayment4;
+	public void setInsuranceCompanyment4(String insuranceCompanyment4) {
+		this.insuranceCompanyment4 = insuranceCompanyment4;
 	}
 	public String getCarDamage1Yn() {
 		return carDamage1Yn;
@@ -615,11 +615,11 @@ public class DochaCarDto extends CommonResponseDto {
 	public void setDriveCareerLimit(String driveCareerLimit) {
 		this.driveCareerLimit = driveCareerLimit;
 	}
-	public String getInsuranceCopayment() {
-		return insuranceCopayment;
+	public String getInsuranceCompanyment() {
+		return insuranceCompanyment;
 	}
-	public void setInsuranceCopayment(String insuranceCopayment) {
-		this.insuranceCopayment = insuranceCopayment;
+	public void setInsuranceCompanyment(String insuranceCompanyment) {
+		this.insuranceCompanyment = insuranceCompanyment;
 	}
 	public String getCartypeListValue() {
 		return cartypeListValue;

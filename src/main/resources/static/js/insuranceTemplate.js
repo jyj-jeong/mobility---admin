@@ -333,13 +333,13 @@ function initDetailInfo(seq){
 			let personalCover               = nullCheck(data.personalCover) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.personalCover));;
 			let propertyDamageCover     	= nullCheck(data.propertyDamageCover) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.propertyDamageCover));;
 			let carDamageCover              = nullCheck(data.carDamageCover) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.carDamageCover));
-			let insuranceCopayment          = nullCheck(data.insuranceCopayment) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCopayment));
+			let insuranceCompanyment          = nullCheck(data.insuranceCompanyment) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCompanyment));
 			let carDamageCover2             = nullCheck(data.carDamageCover2) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.carDamageCover2));
-			let insuranceCopayment2         = nullCheck(data.insuranceCopayment2) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCopayment2));
+			let insuranceCompanyment2         = nullCheck(data.insuranceCompanyment2) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCompanyment2));
 			let carDamageCover3             = nullCheck(data.carDamageCover3) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.carDamageCover3));
-			let insuranceCopayment3         = nullCheck(data.insuranceCopayment3) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCopayment3));
+			let insuranceCompanyment3         = nullCheck(data.insuranceCompanyment3) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCompanyment3));
 			let carDamageCover4             = nullCheck(data.carDamageCover4) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.carDamageCover4));
-			let insuranceCopayment4         = nullCheck(data.insuranceCopayment4) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCopayment4));
+			let insuranceCompanyment4         = nullCheck(data.insuranceCompanyment4) == '' ? '' : objectConvertToPriceFormat(nullCheck(data.insuranceCompanyment4));
 			let carDamage1Yn                = nullCheck(data.carDamage1Yn) == '' ? 'N' : nullCheck(data.carDamage1Yn);
 			let carDamage2Yn                = nullCheck(data.carDamage2Yn) == '' ? 'N' : nullCheck(data.carDamage2Yn);
 			let carDamage3Yn                = nullCheck(data.carDamage3Yn) == '' ? 'N' : nullCheck(data.carDamage3Yn);
@@ -377,13 +377,13 @@ function initDetailInfo(seq){
 			$('#propertyDamageCover').val(propertyDamageCover);
 			
 			$('#carDamageCover').val(carDamageCover);
-			$('#insuranceCopayment').val(insuranceCopayment);
+			$('#insuranceCompanyment').val(insuranceCompanyment);
 			$('#carDamageCover2').val(carDamageCover2);
-			$('#insuranceCopayment2').val(insuranceCopayment2);
+			$('#insuranceCompanyment2').val(insuranceCompanyment2);
 			$('#carDamageCover3').val(carDamageCover3);
-			$('#insuranceCopayment3').val(insuranceCopayment3);
+			$('#insuranceCompanyment3').val(insuranceCompanyment3);
 			$('#carDamageCover4').val(carDamageCover4);
-			$('#insuranceCopayment4').val(insuranceCopayment4);
+			$('#insuranceCompanyment4').val(insuranceCompanyment4);
 
 			if(carDamage1Yn == 'Y') { 
 				$("input:radio[name='carDamage1Yn']:radio[value='Y']").prop('checked', true); // 선택하기
@@ -482,18 +482,18 @@ function detailValidation(){
 	let onselfDamageCover       =  getPureText($('#onselfDamageCover').val());
 	let propertyDamageCover     =  getPureText($('#propertyDamageCover').val());
 	let carDamageCover     		=  getPureText($('#carDamageCover').val());
-	let insuranceCopayment     	=  getPureText($('#insuranceCopayment').val());
+	let insuranceCompanyment     	=  getPureText($('#insuranceCompanyment').val());
 	let carDamageCover2     	=  getPureText($('#carDamageCover2').val());
-	let insuranceCopayment2     =  getPureText($('#insuranceCopayment2').val());
+	let insuranceCompanyment2     =  getPureText($('#insuranceCompanyment2').val());
 	let carDamageCover3    		=  getPureText($('#carDamageCover3').val());
-	let insuranceCopayment3     =  getPureText($('#insuranceCopayment3').val());
+	let insuranceCompanyment3     =  getPureText($('#insuranceCompanyment3').val());
 	let carDamageCover4     	=  getPureText($('#carDamageCover4').val());
-	let insuranceCopayment4     =  getPureText($('#insuranceCopayment4').val());
+	let insuranceCompanyment4     =  getPureText($('#insuranceCompanyment4').val());
 	
 	let carDamage1Yn 			=  $(':input:radio[name=carDamage1Yn]:checked').val();
-	let carDamage2Yn 			=  insuranceCopayment2 == '' ? 'N' : $(':input:radio[name=carDamage2Yn]:checked').val();
-	let carDamage3Yn 			=  insuranceCopayment3 == '' ? 'N' : $(':input:radio[name=carDamage3Yn]:checked').val();
-	let carDamage4Yn 			=  insuranceCopayment4 == '' ? 'N' : $(':input:radio[name=carDamage4Yn]:checked').val();
+	let carDamage2Yn 			=  insuranceCompanyment2 == '' ? 'N' : $(':input:radio[name=carDamage2Yn]:checked').val();
+	let carDamage3Yn 			=  insuranceCompanyment3 == '' ? 'N' : $(':input:radio[name=carDamage3Yn]:checked').val();
+	let carDamage4Yn 			=  insuranceCompanyment4 == '' ? 'N' : $(':input:radio[name=carDamage4Yn]:checked').val();
 	let ciEtc               	=  getPureText($('#ciEtc').val());
 	let delYn				    =  getPureText($('#delYn').val());
 
@@ -517,41 +517,41 @@ function detailValidation(){
 		errorAlert('자손', '자손 입력 하여주세요.');
 		$('#onselfDamageCover').focus();
 		return;
-	}else if(isEmpty(insuranceCopayment)){
+	}else if(isEmpty(insuranceCompanyment)){
 		errorAlert('자차보험 1', '자차 보험 요금/일 입력 하여주세요.');
-		$('#insuranceCopayment').focus();
+		$('#insuranceCompanyment').focus();
 		return;
 	}else if(isEmpty(carDamageCover)){
 		errorAlert('자차보험1', '자차보험 면책금 입력 하여주세요.');
 		$('#carDamageCover').focus();
 		return;
-	}else if(!isEmpty(insuranceCopayment) && !$.isNumeric(insuranceCopayment)){
+	}else if(!isEmpty(insuranceCompanyment) && !$.isNumeric(insuranceCompanyment)){
 		errorAlert('자차보험 1', '자차 보험 요금/일 숫자만 입력 가능합니다.');
-		$('#insuranceCopayment').focus();
+		$('#insuranceCompanyment').focus();
 		return;
 	}else if(!isEmpty(carDamageCover) && !$.isNumeric(carDamageCover)){
 		errorAlert('자차보험 1', '자차보험 면책금 숫자만 입력 가능합니다.');
 		$('#carDamageCover').focus();
 		return;
-	}else if(!isEmpty(insuranceCopayment2) && !$.isNumeric(insuranceCopayment2)){
+	}else if(!isEmpty(insuranceCompanyment2) && !$.isNumeric(insuranceCompanyment2)){
 		errorAlert('자차보험 2', '자차 보험 요금/일 숫자만 입력 가능합니다.');
-		$('#insuranceCopayment2').focus();
+		$('#insuranceCompanyment2').focus();
 		return;
 	}else if(!isEmpty(carDamageCover2) && !$.isNumeric(carDamageCover2)){
 		errorAlert('자차보험 2', '자차보험 면책금 숫자만 입력 가능합니다.');
 		$('#carDamageCover2').focus();
 		return;
-	}else if(!isEmpty(insuranceCopayment3) && !$.isNumeric(insuranceCopayment3)){
+	}else if(!isEmpty(insuranceCompanyment3) && !$.isNumeric(insuranceCompanyment3)){
 		errorAlert('자차보험 3', '자차 보험 요금/일 숫자만 입력 가능합니다.');
-		$('#insuranceCopayment3').focus();
+		$('#insuranceCompanyment3').focus();
 		return;
 	}else if(!isEmpty(carDamageCover3) && !$.isNumeric(carDamageCover3)){
 		errorAlert('자차보험 3', '자차보험 면책금 숫자만 입력 가능합니다.');
 		$('#carDamageCover3').focus();
 		return;
-	}else if(!isEmpty(insuranceCopayment4) && !$.isNumeric(insuranceCopayment4)){
+	}else if(!isEmpty(insuranceCompanyment4) && !$.isNumeric(insuranceCompanyment4)){
 		errorAlert('자차보험 4', '자차 보험 요금/일 숫자만 입력 가능합니다.');
-		$('#insuranceCopayment4').focus();
+		$('#insuranceCompanyment4').focus();
 		return;
 	}else if(!isEmpty(carDamageCover4) && !$.isNumeric(carDamageCover4)){
 		errorAlert('자차보험 4', '자차보험 면책금 숫자만 입력 가능합니다.');
@@ -568,13 +568,13 @@ function detailValidation(){
 		,	'onselfDamageCover' : onselfDamageCover
 		,	'propertyDamageCover' : propertyDamageCover  
 		,	'carDamageCover' : carDamageCover  
-		,	'insuranceCopayment' : insuranceCopayment  
+		,	'insuranceCompanyment' : insuranceCompanyment
 		,	'carDamageCover2' : carDamageCover2
-		,	'insuranceCopayment2' : insuranceCopayment2  
+		,	'insuranceCompanyment2' : insuranceCompanyment2
 		,	'carDamageCover3' : carDamageCover3  
-		,	'insuranceCopayment3' : insuranceCopayment3  
+		,	'insuranceCompanyment3' : insuranceCompanyment3
 		,	'carDamageCover4' : carDamageCover4  
-		,	'insuranceCopayment4' : insuranceCopayment4  
+		,	'insuranceCompanyment4' : insuranceCompanyment4
 		,	'carDamage1Yn' : carDamage1Yn
 		,	'carDamage2Yn' : carDamage2Yn
 		,	'carDamage3Yn' : carDamage3Yn

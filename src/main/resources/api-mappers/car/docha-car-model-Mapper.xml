@@ -150,7 +150,7 @@
                SELECT
                      T1.MD_IDX AS MD_IDX
                        ,IFNULL(T1.MODEL_DETAIL_NAME , '') AS MODEL_DETAIL_NAME /*모델상세*/
-                       --, MODEL_DETAIL_NAME
+--                        , MODEL_DETAIL_NAME
                        , TRANSMISSION_CODE
                        , DRIVE_TYPE_CODE
                        , CARTYPE_CODE

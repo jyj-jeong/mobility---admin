@@ -804,50 +804,50 @@ function selectCarInfo(){
 ////	$('#carTypeCode').val(carTypeCode);
 //
 //	let carDamageCover = nullCheck(carListData[crIdxIndex].carDamageCover) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover);
-//	let insuranceCopayment = nullCheck(carListData[crIdxIndex].insuranceCopayment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment);
+//	let insuranceCompanyment = nullCheck(carListData[crIdxIndex].insuranceCompanyment) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment);
 //	let carDamageCover2 = nullCheck(carListData[crIdxIndex].carDamageCover2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover2);
-//	let insuranceCopayment2 = nullCheck(carListData[crIdxIndex].insuranceCopayment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment2);
+//	let insuranceCompanyment2 = nullCheck(carListData[crIdxIndex].insuranceCompanyment2) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment2);
 //	let carDamageCover3 = nullCheck(carListData[crIdxIndex].carDamageCover3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover3);
-//	let insuranceCopayment3 = nullCheck(carListData[crIdxIndex].insuranceCopayment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment3);
+//	let insuranceCompanyment3 = nullCheck(carListData[crIdxIndex].insuranceCompanyment3) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment3);
 //	let carDamageCover4 = nullCheck(carListData[crIdxIndex].carDamageCover4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].carDamageCover4);
-//	let insuranceCopayment4 = nullCheck(carListData[crIdxIndex].insuranceCopayment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCopayment4);
+//	let insuranceCompanyment4 = nullCheck(carListData[crIdxIndex].insuranceCompanyment4) == ''?'':objectConvertToPriceFormat(carListData[crIdxIndex].insuranceCompanyment4);
 //
 //	let strOption = "";
 //	strOption += "<option value = ''>선택하세요</option>";
 // 
-//	if(!isEmpty(carDamageCover) && !isEmpty(insuranceCopayment)){
-//		strOption += "<option value = '"+insuranceCopayment+"'>" + "면책금:" + carDamageCover + "/보험금:" + insuranceCopayment + "</option>";
+//	if(!isEmpty(carDamageCover) && !isEmpty(insuranceCompanyment)){
+//		strOption += "<option value = '"+insuranceCompanyment+"'>" + "면책금:" + carDamageCover + "/보험금:" + insuranceCompanyment + "</option>";
 //	}
-//	if(!isEmpty(carDamageCover2) && !isEmpty(insuranceCopayment2)){
-//		strOption += "<option value = '"+insuranceCopayment2+"'>" + "면책금:" + carDamageCover2 + "/보험금:" + insuranceCopayment2 + "</option>";
+//	if(!isEmpty(carDamageCover2) && !isEmpty(insuranceCompanyment2)){
+//		strOption += "<option value = '"+insuranceCompanyment2+"'>" + "면책금:" + carDamageCover2 + "/보험금:" + insuranceCompanyment2 + "</option>";
 //	}
-//	if(!isEmpty(carDamageCover3) && !isEmpty(insuranceCopayment3)){
-//		strOption += "<option value = '"+insuranceCopayment3+"'>" + "면책금:" + carDamageCover3 + "/보험금:" + insuranceCopayment3 + "</option>";
+//	if(!isEmpty(carDamageCover3) && !isEmpty(insuranceCompanyment3)){
+//		strOption += "<option value = '"+insuranceCompanyment3+"'>" + "면책금:" + carDamageCover3 + "/보험금:" + insuranceCompanyment3 + "</option>";
 //	}
-//	if(!isEmpty(carDamageCover4) && !isEmpty(insuranceCopayment4)){
-//		strOption += "<option value = '"+insuranceCopayment4+"'>" + "면책금:" + carDamageCover4 + "/보험금:" + insuranceCopayment4 + "</option>";
+//	if(!isEmpty(carDamageCover4) && !isEmpty(insuranceCompanyment4)){
+//		strOption += "<option value = '"+insuranceCompanyment4+"'>" + "면책금:" + carDamageCover4 + "/보험금:" + insuranceCompanyment4 + "</option>";
 //	}
 //
 //	$('#sel_ciIdx').empty();
 //	$('#sel_ciIdx').append(strOption);
 //	
-//	let revinsuranceCopayment = $("#insuranceCopayment").val();
+//	let revinsuranceCompanyment = $("#insuranceCompanyment").val();
 //	let revcarDamageCover = $("#carDamageCover").val();
 //	
-//	if((isEmpty(revinsuranceCopayment) || revinsuranceCopayment == '0') && !isEmpty(revcarDamageCover) && revcarDamageCover > '0'){
+//	if((isEmpty(revinsuranceCompanyment) || revinsuranceCompanyment == '0') && !isEmpty(revcarDamageCover) && revcarDamageCover > '0'){
 //		if (carDamageCover == revcarDamageCover){
-//			revinsuranceCopayment = insuranceCopayment;
+//			revinsuranceCompanyment = insuranceCompanyment;
 //		}else if (carDamageCover2 == revcarDamageCover){
-//			revinsuranceCopayment = insuranceCopayment2;
+//			revinsuranceCompanyment = insuranceCompanyment2;
 //		}else if (carDamageCover3 == revcarDamageCover){
-//			revinsuranceCopayment = insuranceCopayment3;
+//			revinsuranceCompanyment = insuranceCompanyment3;
 //		}else if (carDamageCover4 == revcarDamageCover){
-//			revinsuranceCopayment = insuranceCopayment4;
+//			revinsuranceCompanyment = insuranceCompanyment4;
 //		}
 //	}
 //
-//	if(!isEmpty(revinsuranceCopayment) && revinsuranceCopayment != '0' && !isEmpty(crIdx) ){
-//		$("#sel_ciIdx").val(revinsuranceCopayment).prop("selected", true);
+//	if(!isEmpty(revinsuranceCompanyment) && revinsuranceCompanyment != '0' && !isEmpty(crIdx) ){
+//		$("#sel_ciIdx").val(revinsuranceCompanyment).prop("selected", true);
 //	}else{
 //		$("#sel_ciIdx").val('').prop("selected", true);
 //	}

@@ -20,13 +20,13 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer"
-                            onclick="changeCardView('userInfoCard')">차량등록 - 관리자 (00렌트카 / 00지점)</h6>
+                            onclick="changeCardView('regCarDetail')">차량등록 - 관리자 (00렌트카 / 00지점)</h6>
                     </div>
 
-                    <!--region 회원정보 카드  -->
-                    <div id="userInfoCard" class="card-body">
+                    <!--region 차량정보 카드  -->
+                    <div id="regCarDetail" class="card-body">
 
-                        <!-- 회원 정보 -->
+                        <!-- 차량 정보 -->
                         <div class="row">
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="companyName">회사명(지점)</label>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="year">차량연식</label>
-                                <input type="text" class="form-control" name="year" id="year" placeholder="년도"/>
+                                <input type="text" class="form-control" name="year" id="year" placeholder="년도" maxlength="4"/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="sel_modelName">차종</label>
@@ -65,21 +65,21 @@
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="carNumber">차량번호</label>
-                                <input type="text" class="form-control" name="carNumber" id="carNumber"/>
+                                <input type="text" class="form-control" name="carNumber" id="carNumber" readonly/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="mileage">누적 km</label>
                                 <input type="text" class="form-control" name="mileage" id="mileage"
                                        placeholder="누적 Km"/>
                             </div>
-                            <div class="col-3 mb-3">
-                                <label class="form-label">정비</label>
-                                <input type="text" class="form-control"/>
-                            </div>
-                            <div class="col-3 mb-3">
-                                <label class="form-label">예정 정비일</label>
-                                <input type="text" class="form-control"/>
-                            </div>
+                            <!--                            <div class="col-3 mb-3">-->
+                            <!--                                <label class="form-label">정비</label>-->
+                            <!--                                <input type="text" class="form-control"/>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="col-3 mb-3">-->
+                            <!--                                <label class="form-label">예정 정비일</label>-->
+                            <!--                                <input type="text" class="form-control"/>-->
+                            <!--                            </div>-->
                         </div>
                         <div class="row">
                             <div class="col-3 mb-3">
@@ -87,6 +87,15 @@
                                 <input type="text" class="form-control"/>
                             </div>
                         </div>
+
+                        <div class="col-lg-13 ">
+                            <div class="p-b-20 p-r-40 text-right">
+                                <button class="btn btn-primary" type="button" onclick="detailValidation('saveCarinfo');">차량정보 저장</button>
+                                <!--                                <button class="btn btn-danger" type="button" onclick="cancelData('saveCarinfo')">취소</button>-->
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -156,11 +165,11 @@
                                 <div class="form-check-inline">
                                     <div class="m-1">
                                         <label>자차1 보험 요금/일</label>
-                                        <input type="text" class="form-control float-l" id="insuranceCopayment1" placeholder="단위:원"/>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment" placeholder="단위:원"/>
                                     </div>
                                     <div class="m-1">
                                         <label>자차1 보험 면책금</label>
-                                        <input type="text" class="form-control float-l" id="carDamageCover1" placeholder="단위:원"/>
+                                        <input type="text" class="form-control float-l" id="carDamageCover" placeholder="단위:원"/>
                                     </div>
                                 </div>
                             </div>
@@ -170,7 +179,7 @@
                                 <div class="form-check-inline">
                                     <div class="m-1">
                                         <label>자차2 보험 요금/일</label>
-                                        <input type="text" class="form-control float-l" id="insuranceCopayment2" placeholder="단위:원"/>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment2" placeholder="단위:원"/>
                                     </div>
                                     <div class="m-1">
                                         <label>자차2 보험 면책금</label>
@@ -186,7 +195,7 @@
                                 <div class="form-check-inline">
                                     <div class="m-1">
                                         <label>자차3 보험 요금/일</label>
-                                        <input type="text" class="form-control float-l" id="insuranceCopayment3" placeholder="단위:원"/>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment3" placeholder="단위:원"/>
                                     </div>
                                     <div class="m-1">
                                         <label>자차3 보험 면책금</label>
@@ -200,7 +209,7 @@
                                 <div class="form-check-inline">
                                     <div class="m-1">
                                         <label>자차4 보험 요금/일</label>
-                                        <input type="text" class="form-control float-l" id="insuranceCopayment4" placeholder="단위:원"/>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment4" placeholder="단위:원"/>
                                     </div>
                                     <div class="m-1">
                                         <label>자차4 보험 면책금</label>
@@ -209,6 +218,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-13 ">
+                            <div class="p-b-20 p-r-40 text-right">
+                                <button class="btn btn-primary" type="button" onclick="detailValidation('saveInsurance');">보험정보 저장</button>
+                                <button class="btn btn-danger" type="button" onclick="cancelData('saveInsurance')">취소</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -287,6 +304,13 @@
                                 <br />
                             </div>
                         </div>
+
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <p><br></p>
+                            <button class="btn btn-primary" type="button" onclick="detailValidation('savePaymentinfo');">요금정보 저장</button>
+                            <button class="btn btn-danger" type="button" onclick="cancelData('savePaymentinfo')">취소</button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -295,7 +319,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row mt-2">
-                            <h6 class="col-12 mb-3 font-weight-bold">요금 계산기</h6>
+                            <h6 class="col-12 mb-3 font-weight-bold">요금 계산기 [최초 사용 시 요금계산기 초기화를 누르신 후 사용해주세요]</h6>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="calRentStartDt">대여일시</label>
                                 <input type="text" class="form-control" vlaue="" id="calRentStartDt" name="calRentStartDt" data-mask="____-__-__ __:__"  />
@@ -308,7 +332,7 @@
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="calRentPeriod">대여기간</label>
-                                <input type="text" class="form-control" name="calRentPeriod" id="calRentPeriod" placeholder="대여기간"/>
+                                <input type="text" class="form-control" name="calRentPeriod" id="calRentPeriod" placeholder="대여기간" readonly/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="selInsuranceFee">자차보험</label>
@@ -344,11 +368,11 @@
                         <div class="row mt-2">
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="calRentFee">대여금액</label>
-                                <input type="text" class="form-control" name="calRentFee" id="calRentFee"/>
+                                <input type="text" class="form-control" name="calRentFee" id="calRentFee" readonly/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="calInsuranceFee">자차보험</label>
-                                <input type="text" class="form-control" name="calInsuranceFee" id="calInsuranceFee"/>
+                                <input type="text" class="form-control" name="calInsuranceFee" id="calInsuranceFee" readonly/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="cardeposit">할증금액</label>
@@ -363,11 +387,11 @@
                         <div class="row mt-2">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="calRentTotAmount">총 금액</label>
-                                <input type="text" class="form-control" name="calRentTotAmount" id="calRentTotAmount"/>
+                                <input type="text" class="form-control" name="calRentTotAmount" id="calRentTotAmount" readonly/>
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="calCarssumRate">MOBILITY-K 수수료</label>
-                                <input type="text" class="form-control" name="calCarssumRate" id="calCarssumRate"/>
+                                <input type="text" class="form-control" name="calCarssumRate" id="calCarssumRate" readonly/>
                             </div>
                         </div>
 
@@ -375,9 +399,16 @@
                         <div class="row mt-3">
                             <div class="col-12 mb-3">
                                 <label class="form-label" for="calPaymentAmount">입금금액(VAT포함)</label>
-                                <input type="text" class="form-control" name="calPaymentAmount" id="calPaymentAmount"/>
+                                <input type="text" class="form-control" name="calPaymentAmount" id="calPaymentAmount" readonly/>
                             </div>
                         </div>
+
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <p><br></p>
+                            <button class="btn btn-primary" type="button" onclick="rentcal();">요금 계산해 보기</button>
+                            <button class="btn btn-danger" type="button" onclick="initcal();">요금 계산기 초기화</button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -471,7 +502,7 @@
             <div class="text-right">
                 <div class="row">
                     <div class="mr-2 font-weight-bold" style="cursor: pointer"
-                         onclick="changeCardView('userCouponCard')">정비내역
+                         onclick="changeCardView('regCarDetail')">정비내역
                     </div>
                     <div class="mr-2 font-weight-bold" style="cursor: pointer"
                          onclick="changeCardView('userReviewCard')">후기
@@ -485,8 +516,6 @@
                 </div>
             </div>
             <div class="text-right">
-                <button id="btnSave" class="btn btn-secondary" type="button" onclick="updateUserInfo()">저장</button>
-<!--                <button id="btnWithdrawal" class="btn btn-secondary" type="button" onclick="self.close()">회원탈퇴</button>-->
                 <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
             </div>
         </div>
@@ -530,253 +559,8 @@
         </div>
     </div>
 </div>
-<!--<script th:inline="javascript">-->
-<!--    /* esc 창 닫기 */-->
-<!--    $(document).keydown(function (e) {-->
-<!--        if (e.keyCode === 27 || e.which === 27) {-->
-<!--            window.close();-->
-<!--        }-->
-<!--    });-->
-
-<!--    /* 카드 뷰 교체 */-->
-<!--    function changeCardView(cardViewName) {-->
-<!--        let cards = $('.card-body');-->
-
-<!--        switch (cardViewName) {-->
-<!--            case 'userInfoCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userInfoCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userReviewCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userReviewCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userReservationHisCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userReservationHisCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userCouponCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userCouponCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userPointHisCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userPointHisCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userLicenseCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userLicenseCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            case 'userGradeCard':-->
-<!--                cards.addClass('d-none');-->
-<!--                $('#userGradeCard').removeClass('d-none');-->
-<!--                break;-->
-<!--            default:-->
-<!--                break;-->
-<!--        }-->
-<!--    }-->
-
-<!--    /* 회원 정보 수정 */-->
-<!--    function updateUserInfo() {-->
-
-<!--        // region [ validation check ]-->
-
-<!--        let urIdx = $("input[name=urIdx]");-->
-<!--        let userId = $("input[name=userId]");-->
-<!--        let userName = $("input[name=userName]");-->
-<!--        let userAccountType = $("input[name=userAccountType]");-->
-<!--        let userBirthday = $("input[name=userBirthday]");-->
-<!--        let userContact = $("input[name=userContact]");-->
-<!--        let userRegDt = $("input[name=userRegDt]");-->
-<!--        let userGender = $("input[name=userGender]");-->
-<!--        let userPoint = $("input[name=userPoint]");-->
-<!--        let userGradeCode = $("input[name=userGradeCode]");-->
-<!--        let userRating = $("input[name=userRating]");-->
-
-<!--        let licenseCode = $("input[name=licenseCode]");-->
-<!--        let licenseNumber = $("input[name=licenseNumber]");-->
-<!--        let licenseLocation = $("input[name=licenseLocation]");-->
-<!--        let licenseOwnerName = $("input[name=licenseIssueDt]");-->
-<!--        let licenseExpiration = $("input[name=licenseExpiration]");-->
-<!--        let licenseIssueDt = $("input[name=licenseIssueDt]");-->
-
-<!--        /* 아이디 체크 */-->
-<!--        if (userId.val() === '') {-->
-<!--            alert("아이디를 입력 해 주세요");-->
-<!--            userId.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 이름 체크 */-->
-<!--        if (userName.val() === '') {-->
-<!--            alert("아이디를 입력 해 주세요");-->
-<!--            userName.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 아이디 체크 */-->
-<!--        if (userAccountType.val() === '') {-->
-<!--            alert("계정타입을 입력 해 주세요");-->
-<!--            userAccountType.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 생년월일 체크 */-->
-<!--        if (userBirthday.val() === '') {-->
-<!--            alert("생년월일을 입력 해 주세요");-->
-<!--            userBirthday.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 연락처 체크 */-->
-<!--        if (userContact.val() === '') {-->
-<!--            alert("연락처를 입력 해 주세요");-->
-<!--            userContact.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 가입일시 체크 */-->
-<!--        if (userRegDt.val() === '') {-->
-<!--            alert("가입일시를 입력 해 주세요");-->
-<!--            userRegDt.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 성별 체크 */-->
-<!--        if (userGender.val() === '') {-->
-<!--            alert("성별을 입력 해 주세요");-->
-<!--            userGender.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 포인트 체크 */-->
-<!--        if (userPoint.val() === '') {-->
-<!--            alert("포인트를 입력 해 주세요");-->
-<!--            userPoint.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 회원등급 체크 */-->
-<!--        if (userGradeCode.val() === '') {-->
-<!--            alert("회원등급을 입력 해 주세요");-->
-<!--            userGradeCode.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 평점 체크 */-->
-<!--        if (userRating.val() === '') {-->
-<!--            alert("평점을 입력 해 주세요");-->
-<!--            userRating.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 면허종류 체크 */-->
-<!--        if (licenseCode.val() === '') {-->
-<!--            alert("면허종류를 입력 해 주세요");-->
-<!--            licenseCode.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 면허번호 체크 */-->
-<!--        if (licenseNumber.val() === '') {-->
-<!--            alert("면허번호를 입력 해 주세요");-->
-<!--            licenseNumber.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 면허 지역 체크 */-->
-<!--        if (licenseLocation.val() === '') {-->
-<!--            alert("면허정보 지역을 입력 해 주세요");-->
-<!--            licenseLocation.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 면허번호 체크 */-->
-<!--        if (licenseOwnerName.val() === '') {-->
-<!--            alert("면허자 성명을 입력 해 주세요");-->
-<!--            licenseOwnerName.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 적성검사 만료일 체크 */-->
-<!--        if (licenseExpiration.val() === '') {-->
-<!--            alert("적성검사 만료일을 입력 해 주세요");-->
-<!--            licenseExpiration.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        /* 발급일 체크 */-->
-<!--        if (licenseIssueDt.val() === '') {-->
-<!--            alert("발급일을을 입력 해 주요");-->
-<!--            licenseIssueDt.focus();-->
-<!--            return;-->
-<!--        }-->
-
-<!--        // endregion-->
-
-<!--        // region [ 회원정보 수정 ]-->
-
-<!--        $.ajax({-->
-<!--            url: '../mem/userInfoUpdate.json',-->
-<!--            dataType: "json",-->
-<!--            method: 'post',-->
-<!--            contentType: 'application/json; charset=utf-8',-->
-<!--            data: JSON.stringify({-->
-<!--                urIdx: urIdx.val(),-->
-<!--                userId: userId.val(),-->
-<!--                userName: userName.val(),-->
-<!--                userAccountType: userAccountType.val(),-->
-<!--                userBirthDay: userBirthday.val(),-->
-<!--                userContact: userContact.val(),-->
-<!--                userRegDt: userRegDt.val(),-->
-<!--                userGender: userGender.val(),-->
-<!--                userPoint: userPoint.val(),-->
-<!--                userGradeCode: userGradeCode.val(),-->
-<!--                userRating: userRating.val()-->
-<!--            }),-->
-<!--            processData: false,-->
-<!--            success: function (res) {-->
-<!--                location.reload();-->
-<!--                alert("회원 정보가 저장되었습니다.");-->
-<!--            },-->
-<!--            error: function (err) {-->
-<!--                alert(err);-->
-<!--            }-->
-<!--        });-->
-
-<!--        // endregion-->
-
-<!--        // region [ 면허정보 수정 ]-->
-
-<!--        $.ajax({-->
-<!--            url: '../mem/userLicenseUpdate.json',-->
-<!--            dataType: "json",-->
-<!--            method: 'post',-->
-<!--            contentType: 'application/json; charset=utf-8',-->
-<!--            data: JSON.stringify({-->
-<!--                licenseCode: licenseCode.val(),-->
-<!--                licenseNumber: licenseNumber.val(),-->
-<!--                licenseLocation: licenseLocation.val(),-->
-<!--                licenseOwnerName: licenseOwnerName.val(),-->
-<!--                licenseExpiration: licenseExpiration.val(),-->
-<!--                licenseIssueDt: licenseIssueDt.val()-->
-<!--            }),-->
-<!--            processData: false,-->
-<!--            success: function (res) {-->
-
-<!--            },-->
-<!--            error: function (err) {-->
-<!--                alert(err);-->
-<!--            }-->
-<!--        });-->
-
-<!--        // endregion-->
-
-<!--    }-->
-
-<!--</script>-->
 <script th:inline="javascript">
-    initializingPageData();
+    initDetailData('insert');
 </script>
 </body>
 </html>
