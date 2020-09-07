@@ -14,7 +14,7 @@ public class DochaAdminUpdateUserInfoRequest extends CommonRequestDto {
 	private String userPassword             ; //비밀번호
 	private String userStatusCode           ; //회원상태코드
 	private String userName                 ; //이름
-	private String userBirthDay             ; //생년월일
+	private String userBirthday             ; //생년월일
 	private String userContact1             ; //연락처1
 	private String userContact2             ; //연락처2
 	private String userGender               ; //성별CODE
@@ -74,11 +74,11 @@ public class DochaAdminUpdateUserInfoRequest extends CommonRequestDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserBirthDay() {
-		return userBirthDay;
+	public String getuserBirthday() {
+		return userBirthday;
 	}
-	public void setUserBirthDay(String userBirthDay) {
-		this.userBirthDay = userBirthDay;
+	public void setuserBirthday(String userBirthday) {
+		this.userBirthday = userBirthday;
 	}
 	public String getUserContact1() {
 		return userContact1;

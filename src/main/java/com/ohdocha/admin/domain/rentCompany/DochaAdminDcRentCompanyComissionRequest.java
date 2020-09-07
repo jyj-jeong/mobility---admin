@@ -1,12 +1,12 @@
 package com.ohdocha.admin.domain.rentCompany;
 
-import com.ohdocha.admin.domain.common.CommonResponseDto;
+import com.ohdocha.admin.domain.common.CommonRequestDto;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("dcRentCompanyComissionResponse")
-public class DochaAdminDcRentCompnayComissionResponse extends CommonResponseDto {
+@Alias("dcRentCompanyComissionRequest")
+public class DochaAdminDcRentCompanyComissionRequest extends CommonRequestDto {
 	
 	private String rtIdx         ; //제휴사idx
 	private String commissionPer ; //수수료윯
@@ -65,5 +65,7 @@ public class DochaAdminDcRentCompnayComissionResponse extends CommonResponseDto 
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
 	}
-
+	
+	
+	
 }

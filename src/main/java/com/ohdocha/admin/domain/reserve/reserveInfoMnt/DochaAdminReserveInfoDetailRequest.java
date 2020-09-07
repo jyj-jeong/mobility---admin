@@ -16,7 +16,7 @@ public class DochaAdminReserveInfoDetailRequest extends CommonRequestDto {
 	private String reserveUserGender;
 	private String reserveUserEmail;
 	private String reserveUserContact1;
-	private String reserveUserBirthDay;
+	private String reserveuserBirthday;
 
 	// 운전자 정보
 	private String userFlag;
@@ -139,11 +139,11 @@ public class DochaAdminReserveInfoDetailRequest extends CommonRequestDto {
 	public void setReserveUserContact1(String reserveUserContact1) {
 		this.reserveUserContact1 = reserveUserContact1;
 	}
-	public String getReserveUserBirthDay() {
-		return reserveUserBirthDay;
+	public String getReserveuserBirthday() {
+		return reserveuserBirthday;
 	}
-	public void setReserveUserBirthDay(String reserveUserBirthDay) {
-		this.reserveUserBirthDay = reserveUserBirthDay;
+	public void setReserveuserBirthday(String reserveuserBirthday) {
+		this.reserveuserBirthday = reserveuserBirthday;
 	}
 	public String getUserFlag() {
 		return userFlag;

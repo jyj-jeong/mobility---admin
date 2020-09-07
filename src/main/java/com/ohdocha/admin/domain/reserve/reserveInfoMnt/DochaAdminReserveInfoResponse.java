@@ -175,7 +175,7 @@ public class DochaAdminReserveInfoResponse extends CommonResponseDto {
 //	private String modDt                ;  
 //	private String delYn                ;  
 //	private String userId               ;  
-//	private String userBirthDay         ;   
+//	private String userBirthday         ;
 //	private String userGender           ;   
 //	private String userContact2         ;  
 //	private String rentFee              ;  
@@ -227,7 +227,7 @@ public class DochaAdminReserveInfoResponse extends CommonResponseDto {
 //	private String reserveUserName;
 //	private String reserveUserEmail;
 //	private String reserveUserContact1;
-//	private String reserveUserBirthDay;
+//	private String reserveuserBirthday;
 //	private String reserveUserGender;
 //	private String cartypeCode;
 //	private String reserveDate;
@@ -481,11 +481,11 @@ public class DochaAdminReserveInfoResponse extends CommonResponseDto {
 //	public void setUserName(String userName) {
 //		this.userName = userName;
 //	}
-//	public String getUserBirthDay() {
-//		return userBirthDay;
+//	public String getuserBirthday() {
+//		return userBirthday;
 //	}
-//	public void setUserBirthDay(String userBirthDay) {
-//		this.userBirthDay = userBirthDay;
+//	public void setuserBirthday(String userBirthday) {
+//		this.userBirthday = userBirthday;
 //	}
 //	public String getUserGender() {
 //		return userGender;
@@ -805,11 +805,11 @@ public class DochaAdminReserveInfoResponse extends CommonResponseDto {
 //	public void setReserveUserContact1(String reserveUserContact1) {
 //		this.reserveUserContact1 = reserveUserContact1;
 //	}
-//	public String getReserveUserBirthDay() {
-//		return reserveUserBirthDay;
+//	public String getReserveuserBirthday() {
+//		return reserveuserBirthday;
 //	}
-//	public void setReserveUserBirthDay(String reserveUserBirthDay) {
-//		this.reserveUserBirthDay = reserveUserBirthDay;
+//	public void setReserveuserBirthday(String reserveuserBirthday) {
+//		this.reserveuserBirthday = reserveuserBirthday;
 //	}
 //	public String getReserveUserGender() {
 //		return reserveUserGender;

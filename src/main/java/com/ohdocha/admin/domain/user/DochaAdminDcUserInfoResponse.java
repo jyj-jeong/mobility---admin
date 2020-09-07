@@ -78,10 +78,10 @@ public class DochaAdminDcUserInfoResponse {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getUserBirthday() {
+	public String getuserBirthday() {
 		return userBirthday;
 	}
-	public void setUserBirthday(String userBirthday) {
+	public void setuserBirthday(String userBirthday) {
 		this.userBirthday = userBirthday;
 	}
 	public String getUserContact1() {

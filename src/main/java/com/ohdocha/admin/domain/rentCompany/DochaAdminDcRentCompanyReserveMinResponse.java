@@ -5,8 +5,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("dcRentCompanyReseveMinResponse")
-public class DochaAdminDcRentCompanyReseveMinResponse extends CommonResponseDto {
+@Alias("dcRentCompanyReserveMinResponse")
+public class DochaAdminDcRentCompanyReserveMinResponse extends CommonResponseDto {
 	private String minIdx;			/*특정기간idx*/
 	private String rtIdx;			/*제휴사idx*/
 	private String minimumStartDt;	/*최소예약시간시작일*/

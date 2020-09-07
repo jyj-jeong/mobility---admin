@@ -24,7 +24,7 @@ public class DochaAdminUserInfoDetailResponse extends CommonResponseDto {
     private String userName;					// 이름
     
     @NotNull
-    private String userBirthDay;				// 생년월일
+    private String userBirthday;				// 생년월일
     
     @NotNull
     private String userContact1;				// 연락처1
@@ -330,11 +330,11 @@ public class DochaAdminUserInfoDetailResponse extends CommonResponseDto {
 	public void setUseYn(String useYn) {
 		this.useYn = useYn;
 	}
-	public String getUserBirthDay() {
-		return userBirthDay;
+	public String getuserBirthday() {
+		return userBirthday;
 	}
-	public void setUserBirthDay(String userBirthDay) {
-		this.userBirthDay = userBirthDay;
+	public void setuserBirthday(String userBirthday) {
+		this.userBirthday = userBirthday;
 	}
     
 }

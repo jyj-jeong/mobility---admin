@@ -11,7 +11,7 @@ public class DochaReserveInfoDto {
 	private String reserveUserName;
 	private String reserveUserEmail;
 	private String reserveUserContact1;
-	private String reserveUserBirthDay;
+	private String reserveuserBirthday;
 	private String reserveUserGender;
 	private String rentStartDay;
 	private String rentStartTime;
@@ -122,11 +122,11 @@ public class DochaReserveInfoDto {
 	public void setReserveUserContact1(String reserveUserContact1) {
 		this.reserveUserContact1 = reserveUserContact1;
 	}
-	public String getReserveUserBirthDay() {
-		return reserveUserBirthDay;
+	public String getReserveuserBirthday() {
+		return reserveuserBirthday;
 	}
-	public void setReserveUserBirthDay(String reserveUserBirthDay) {
-		this.reserveUserBirthDay = reserveUserBirthDay;
+	public void setReserveuserBirthday(String reserveuserBirthday) {
+		this.reserveuserBirthday = reserveuserBirthday;
 	}
 	public String getReserveUserGender() {
 		return reserveUserGender;

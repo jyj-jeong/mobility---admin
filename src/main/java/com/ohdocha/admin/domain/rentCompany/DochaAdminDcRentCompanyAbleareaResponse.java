@@ -1,12 +1,12 @@
 package com.ohdocha.admin.domain.rentCompany;
 
-import com.ohdocha.admin.domain.common.CommonRequestDto;
+import com.ohdocha.admin.domain.common.CommonResponseDto;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("DcRentCompanyAbleareaRequest")
-public class DochaAdminDcRentCompnayAbleareaRequest extends CommonRequestDto {
+@Alias("DcRentCompanyAbleareaResponse")
+public class DochaAdminDcRentCompanyAbleareaResponse extends CommonResponseDto {
 	private String raIdx;			/*배달지역idx*/
 	private String rtIdx;			/*제휴사idx*/
 	private String lat;				/*위도*/
@@ -16,8 +16,6 @@ public class DochaAdminDcRentCompnayAbleareaRequest extends CommonRequestDto {
 	private String regId;			/*등록자*/
 	private String modId;			/*수정자*/
 	private String delYn; 			/*삭제여부*/
-	private String dataNewYn; 		/*신규/추가 구분자 [N:신규, A:추가]*/
-	
 	public String getRaIdx() {
 		return raIdx;
 	}
@@ -72,11 +70,6 @@ public class DochaAdminDcRentCompnayAbleareaRequest extends CommonRequestDto {
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
 	}
-	public String getDataNewYn() {
-		return dataNewYn;
-	}
-	public void setDataNewYn(String dataNewYn) {
-		this.dataNewYn = dataNewYn;
-	}
 
+	
 }
