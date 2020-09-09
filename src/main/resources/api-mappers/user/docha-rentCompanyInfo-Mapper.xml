@@ -94,8 +94,7 @@
 			resultType="rentCompanyDetailResponse">
 		<![CDATA[
 		SELECT
-		1 AS ROW_NUMBER
-		, IFNULL(T1.RT_IDX                      	, '') AS RT_IDX                         /*제휴사idx*/
+		IFNULL(T1.RT_IDX                      	, '') AS RT_IDX                         /*제휴사idx*/
 		, IFNULL(T1.RT_P_IDX                    	, '') AS RT_P_IDX                       /*부모제휴사idx*/
 		, IFNULL(T1.COMPANY_NAME                	, '') AS COMPANY_NAME                   /*제휴사명*/
 		, IFNULL(T1.COMPANY_ZIPCODE             	, '') AS COMPANY_ZIPCODE                /*우편번호*/
@@ -162,7 +161,7 @@
 				                GROUP BY RT_IDX
 				                ) T4 ON T1.RT_IDX = T4.RT_IDX
 		]]>
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<trim prefix="WHERE">
 			<if test="rtIdx != null and rtIdx != '' ">
 				<![CDATA[ T1.RT_IDX = #{rtIdx}  ]]>
 			</if>
@@ -185,7 +184,7 @@
              <if test="userStatusCode 	!= null"><![CDATA[  , USER_STATUS_CODE		= #{userStatusCode} ]]></if>	회원상태
              <if test="userLicenseOwnYn 	!= null"><![CDATA[  , USER_LICENSE_OWN_YN 	= #{userLicenseOwnYn}  	]]></if> 	면허정보 사용 여부
              <if test="urIdx 			!= null"><![CDATA[  , MOD_ID 				= #{urIdx}  		]]></if> 	수정자
-             , MOD_DT = SYSDATE
+             , MOD_DT = NOW()
         </trim>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="urIdx != null and urIdx != ''">
@@ -213,7 +212,7 @@
 			<if test="alarmYn 					!= null"><![CDATA[  , ACCESS_YN 					= #{accessYn}					]]></if>
 			<if test="carCount 					!= null"><![CDATA[  , CAR_COUNT 					= #{carCount}  					]]></if> 	<!-- 총 차량수 -->
 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 						= #{modId}  					]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -241,7 +240,7 @@
 				,	ACCESS_YN
 				,	REG_ID
 				,	REG_DT
-				,	DEL_YN 
+				,	DEL_YN
 				)
 				VALUES(		
 					#{rtIdx}
@@ -277,8 +276,8 @@
 	<select id="selectrentCompanyStaffList" parameterType="dcRentCompanyStaffRequest"
 			resultType="dcRentCompanyStaffResponse">
 		<![CDATA[
-		SELECT * FROM (
-			SELECT
+			SELECT * FROM (
+				SELECT
 						IFNULL(T2.RS_IDX          , '') AS RS_IDX             /*제휴사직원idsx*/
 					,	IFNULL(T2.RT_IDX          , '') AS RT_IDX             /*제휴사idx*/
 					,	IFNULL(T2.STAFF_NAME      , '') AS STAFF_NAME         /*직원명*/
@@ -296,31 +295,29 @@
 					,	IFNULL(T2.RS_IDX          , '') AS UR_IDX             /*회원순번*/
 			FROM DC_USER_INFO T1
 			LEFT JOIN DC_RENT_COMPANY_STAFF T2
-             	   ON T1.UR_IDX = T2.RS_IDX
-            	  -- AND T1.RT_IDX = T2.RT_IDX
+            	  ON T1.RT_IDX = T2.RT_IDX
 			WHERE T2.RS_IDX IS NOT NULL
               AND 'N' = IFNULL(T2.DEL_YN, 'N')
-		) A
+              ) A
 		]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<![CDATA[ ]]>
 			<if test="rtIdx != null and rtIdx != ''">
-				AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
+				<![CDATA[ AND RT_IDX = #{rtIdx} ]]>
 			</if>
 			<if test="urIdx != null and urIdx != ''">
-				AND <![CDATA[ UR_IDX = #{urIdx} ]]>
+				<![CDATA[ AND UR_IDX = #{urIdx} ]]>
 			</if>
 			<if test="rsIdx != null and rsIdx != ''">
-				AND <![CDATA[ RS_IDX = #{rsIdx} ]]>
+				<![CDATA[ AND RS_IDX = #{rsIdx} ]]>
 			</if>
 			<if test="staffName != null and staffName != ''">
-				AND <![CDATA[ STAFF_NAME = #{staffName} ]]>
+				<![CDATA[ AND STAFF_NAME = #{staffName} ]]>
 			</if>
 			<if test="staffEmail != null and staffEmail != ''">
-				AND <![CDATA[ STAFF_EMAIL = #{staffEmail} ]]>
+				<![CDATA[ AND STAFF_EMAIL = #{staffEmail} ]]>
 			</if>
 			<if test="staffContact1 != null and staffContact1 != ''">
-				AND <![CDATA[ STAFF_CONTACT1 = #{staffContact1} ]]>
+				<![CDATA[ AND STAFF_CONTACT1 = #{staffContact1} ]]>
 			</if>
 		</trim>
 	</select>
@@ -337,7 +334,7 @@
 			<!-- <if test="staffTypeCode            	!= null"><![CDATA[  , STAFF_TYPE_CODE	= #{staffTypeCode}	]]></if> -->
 			<if test="delYn 					!= null"><![CDATA[  , DEL_YN 			= #{delYn}  		]]></if> 	<!-- 사용여부 -->
 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 			= #{modId}  		]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -355,7 +352,7 @@
 			RT_IDX		= #{rtIdx}
 			<if test="userRole          		!= null"><![CDATA[  , USER_ROLE		= #{userRole}		]]></if>
 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 		= #{modId}  		]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="urIdx != null and urIdx != ''">
@@ -380,10 +377,9 @@
 				,	REG_ID
 				,	REG_DT
 				,	DEL_YN
-				,	UR_IDX
 				)
 				VALUES(		
-					(SELECT IFNULL(MAX(RS_IDX)+1,0) FROM DC_RENT_COMPANY_STAFF)
+					(SELECT IFNULL(MAX(RS_IDX)+1,0) FROM DC_RENT_COMPANY_STAFF A)
 				,	#{rtIdx}				
 				,	#{staffName}
 				,	#{staffContact1}
@@ -393,10 +389,9 @@
 				,	#{ownerYn}
 				,	#{staffTypeCode}
 				,	#{regId}
-				,	SYSDATE
+				,	NOW()
 				,	#{delYn}
-				, 	#{urIdx}
-				)				
+				)
     ]]>
     </insert>
 
@@ -449,7 +444,7 @@
 			<if test="minimumTime       != null"><![CDATA[  , MINIMUM_TIME		= #{minimumTime}]]></if>
 			<if test="delYn 			!= null"><![CDATA[  , DEL_YN 			= #{delYn}]]></if> 	<!-- 사용여부 -->
 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if>
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -466,7 +461,8 @@
     <![CDATA[
 			   	INSERT INTO DC_RENT_COMPANY_RESERVE_MIN
 			   	(
-					RT_IDX
+			   		MIN_IDX
+				,	RT_IDX
 				,	MINIMUM_START_DT
 				,	MINIMUM_END_DT
 				,	MINIMUM_TIME
@@ -475,12 +471,13 @@
 				,	DEL_YN
 				)
 				VALUES(
-					#{rtIdx}				
+					#{minIdx}
+				,	#{rtIdx}
 				,	#{minimumStartDt}
 				,	#{minimumEndDt}
 				,	#{minimumTime}
 				,	#{regId}
-				,	SYSDATE
+				,	NOW()
 				,	#{delYn}
 				)				
     ]]>
@@ -507,7 +504,7 @@
 			<if test="commissionPer	      		!= null"><![CDATA[    COMMISSION_PER	= #{commissionPer}]]></if>
 			<if test="taxInvoiceCode      		!= null"><![CDATA[  , TAX_INVOICE_CODE	= #{taxInvoiceCode}]]></if>
 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 			= #{modId}  		]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -531,7 +528,7 @@
 				,	#{commissionPer}
 				,	#{taxInvoiceCode}
 				,	#{regId}
-				,	SYSDATE
+				,	NOW()
 				)				
     ]]>
     </insert>
@@ -568,7 +565,7 @@
 			<if test="weekendReserveMinimumTime != null"><![CDATA[  , WEEKEND_RESERVE_MINIMUM_TIME	= #{weekendReserveMinimumTime}]]></if>
 			<if test="weekendReserveMinimumRate != null"><![CDATA[  , WEEKEND_RESERVE_MINIMUM_RATE	= #{weekendReserveMinimumRate}]]></if>
 			<if test="modId 					!= null"><![CDATA[  , MOD_ID 						= #{modId}]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -614,7 +611,7 @@
 				,	#{weekendReserveMinimumTime}
 				,	#{weekendReserveMinimumRate}
 				,	#{regId}
-				,	SYSDATE
+				,	NOW()
 				)				
     ]]>
     </insert>
@@ -664,7 +661,7 @@
 			<if test="holidayName       != null"><![CDATA[  , HOLIDAY_NAME		= #{holidayName}]]></if>
 			<if test="delYn 			!= null"><![CDATA[  , DEL_YN 			= #{delYn}]]></if> 	<!-- 사용여부 -->
 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="holIdx != null and holIdx != ''">
@@ -692,7 +689,7 @@
 				,	#{holidayName}
 				,	#{delYn}
 				,	#{regId}
-				,	SYSDATE
+				,	NOW()
 				)				
     ]]>
     </insert>
@@ -722,7 +719,7 @@
 		<trim prefix="SET" prefixOverrides=",">
 			, DEL_YN 			= 'Y'
 			<if test="modId 			!= null"><![CDATA[  , MOD_ID 			= #{modId}]]></if> 	<!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -754,7 +751,7 @@
 	,#{raGbnCode} as RA_GBN_CODE
 	,'N' AS DEL_YN
 	,#{regId} as REG_ID
-	,SYSDATE as REG_DT
+	,NOW() as REG_DT
 	FROM (
 	    SELECT ROWNUM AS ID,
 	    trim(regexp_substr(#{latlng}, '[^,]+', 1, LEVEL)) TXT

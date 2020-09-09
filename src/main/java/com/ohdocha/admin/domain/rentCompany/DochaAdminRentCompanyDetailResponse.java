@@ -29,7 +29,7 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	private String shorttermRentYn           ; //단기렌트이용여부
 	private String alliance_status           ; //제휴상태
 	private String branchAbleYn              ; //지점보유가능여부
-	private int carCount                  ; //보유차량대수
+	private String  carCount                  ; //보유차량대수
 	private String etc                       ; //비고
 	private String regId                     ; //등록자
 	private String regDt                     ; //등록일시
@@ -200,10 +200,10 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	public void setBranchAbleYn(String branchAbleYn) {
 		this.branchAbleYn = branchAbleYn;
 	}
-	public int getCarCount() {
+	public String getCarCount() {
 		return carCount;
 	}
-	public void setCarCount(int carCount) {
+	public void setCarCount(String carCount) {
 		this.carCount = carCount;
 	}
 	public String getEtc() {
