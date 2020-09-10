@@ -100,7 +100,7 @@
                         ,   IFNULL(T2.BRANCH_NAME            , '' ) AS    BRANCH_NAME           /*지점명*/
                         ,   IFNULL(T1.MD_IDX                 , '' ) AS    MD_IDX                /*모델idx*/
                         ,   IFNULL(T1.MODEL_NAME              , '' ) AS    MODEL_NAME            /*모델명*/
-                        ,   IFNULL(T1.MODEL_DETAIL_NAME      , '' ) AS    MODEL_DETAIL_NAME     /*모델상세명*/
+                        ,   IFNULL(T1.MODEL_DETAILE_NAME      , '' ) AS    MODEL_DETAIL_NAME     /*모델상세명*/
                         ,   IFNULL(T1.FUEL_CODE              , '' ) AS    FUEL_CODE             /*연료구분code*/
                         ,   IFNULL(T1.CAR_REG_DT             , '' ) AS    CAR_REG_DT            /*차량등록일*/
                         ,   IFNULL(T1.COLOR_NAME             , '' ) AS    COLOR_NAME            /*색상*/
@@ -196,7 +196,7 @@
 		<![CDATA[ UPDATE DC_CAR_INFO ]]>
 		<trim prefix="SET" suffixOverrides=",">
 			<!-- 차량 기본정보 -->
-			<if test="rtIdx          != null"><![CDATA[    RT_IDX            = #{rtIdx}            ]]></if>   <!-- 회원사순번 -->
+			<if test="rtIdx != null"><![CDATA[  RT_IDX            = #{rtIdx}            ]]></if>   <!-- 회원사순번 -->
 			<if test="carNumber       != null"><![CDATA[  , CAR_NUMBER         = #{carNumber}        ]]></if>   <!-- 차량번호 -->
 			<if test="carChassisNumber    != null"><![CDATA[  , CAR_CHASSIS_NUMBER   = #{carChassisNumber}     ]]></if>   <!-- 차대번호-->
 			<if test="year             != null"><![CDATA[  , YEAR               = #{year}              ]]></if>   <!-- 연식 -->
@@ -250,7 +250,7 @@
 			<if test="dailyYn            != null"><![CDATA[  DAILY_YN             = #{dailyYn}              ]]></if>    <!-- 일대여여부 -->
 			<if test="monthlyYn            != null"><![CDATA[  MONTHLY_YN             = #{monthlyYn}           ]]></if>    <!-- 월대여여부 -->
 
-			<if test="modId            != null"><![CDATA[  , MOD_ID             = #{modId}           ]]></if>    <!-- 수정자 -->
+			<if test="modId 			!= null"><![CDATA[  ,  MOD_ID 				= #{modId}				]]></if> 	<!-- 수정자 -->
 			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -308,6 +308,57 @@
          ,     #{manufacturerCode}
          ,     #{displacement}
          ,     #{maximumPassenger}
+         ,   'N'
+         ,     #{regId}
+         ,   NOW()
+      )
+   ]]>
+    </insert>
+
+	<!-- 차량 보험정보 INSERT -->
+	<insert  id="insertRegCarInsurance" parameterType="regCarDetailRequest">
+   <![CDATA[
+        INSERT INTO DC_CAR_INFO_INSURANCE (
+              CR_IDX
+           ,  RT_IDX
+         ,  PERSONAL_COVER
+         ,  ONSELF_DAMAGE_COVER
+         ,  PROPERTY_DAMAGE_COVER
+         ,  CAR_DAMAGE_COVER
+         ,  INSURANCE_COMPANYMENT
+         ,  CAR_DAMAGE_COVER2
+         ,  INSURANCE_COMPANYMENT2
+         ,  CAR_DAMAGE_COVER3
+         ,  INSURANCE_COMPANYMENT3
+         ,  CAR_DAMAGE_COVER4
+         ,  INSURANCE_COMPANYMENT4
+         ,  CAR_DAMAGE1_YN
+         ,  CAR_DAMAGE2_YN
+         ,  CAR_DAMAGE3_YN
+         ,  CAR_DAMAGE4_YN
+         ,  AGE_LIMIT
+         ,  DEL_YN
+         ,  REG_ID
+         ,  REG_DT
+      ) VALUES (
+            #{crIdx}
+         ,     #{rtIdx}
+         ,     #{personalCover}
+         ,     #{onselfDamageCover}
+         ,     #{propertyDamageCover}
+         ,     #{carDamageCover}
+         ,     #{insuranceCompanyment}
+         ,     #{carDamageCover2}
+         ,     #{insuranceCompanyment2}
+         ,     #{carDamageCover3}
+         ,     #{insuranceCompanyment3}
+         ,     #{carDamageCover4}
+         ,     #{insuranceCompanyment4}
+         ,     #{ageLimit}
+         ,     #{carDamage1Yn}
+         ,     #{carDamage2Yn}
+         ,     #{carDamage3Yn}
+         ,     #{carDamage4Yn}
          ,   'N'
          ,     #{regId}
          ,   NOW()

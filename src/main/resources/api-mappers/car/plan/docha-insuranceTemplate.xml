@@ -172,13 +172,18 @@
 			,  CAR_DAMAGE2_YN
 			,  CAR_DAMAGE3_YN
 			,  CAR_DAMAGE4_YN
+			,  INSURANCE_FEE
+			,  AGE_LIMIT
+			,  DRIVE_CAREER_LIMIT
+			,  MOD_ID
+			,  MOD_DT
 			,  CI_ETC
 			,  DEL_YN
 			,  REG_ID
 			,  REG_DT
 		) VALUES (
 				#{rtIdx}
-			,  	#{onselfDamageCover}    
+			,  	#{onselfDamageCover}
 			,  	#{personalCover}
 			,  	#{propertyDamageCover}
 			,  	#{carDamageCover}
@@ -192,11 +197,16 @@
 			,  	#{carDamage1Yn}			
 			,  	#{carDamage2Yn}			
 			,  	#{carDamage3Yn}			
-			,  	#{carDamage4Yn}			
-			,  	#{ciEtc}			
+			,  	#{carDamage4Yn}
+			,  	#{insuranceFee}
+			,  	#{ageLimit}
+			,  	#{driverCareerLimit}
+			,  	#{modId}
+			,	NOW()
+			,  	#{ciEtc}
 			,  	#{delYn}			
 			,  	#{regId}
-			,	SYSDATE			
+			,	NOW()
 		)
 	]]>
     </insert>

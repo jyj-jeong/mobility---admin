@@ -64,12 +64,12 @@ function loadApi (fnc, page, displayPageNum, division) {
     fn_callApi(method, target, req, function (response) {
     	let res = response;
     	 
-    	 //200이라면 페이징을 구한다.
-    	 if(res.code == 200) {
-    		 fnc(res.data, page, displayPageNum, division);
-    	 }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('조회중 에러가 발생했습니다', '관리자에게 문의하세요');
-    	 }
+    	 // //200이라면 페이징을 구한다.
+    	 // if(res.code == 200) {
+    		//  fnc(res.data, page, displayPageNum, division);
+    	 // }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
+			// errorAlert('조회중 에러가 발생했습니다', '관리자에게 문의하세요');
+    	 // }
      });//end fn_callApi
 
 }
@@ -268,12 +268,12 @@ function initDetailInfo(seq){
 	let method = 'select';
     
     fn_callApi(method, target, req, function (response) {
-    	 let res = response;
+    	 let data = response;
     	 
-    	 //200이라면 페이징을 구한다.
-    	 if(res.code == 200) {
-    		 
-    		let data = res.data.result[0];
+    	 // //200이라면 페이징을 구한다.
+    	 // if(res.code == 200) {
+    		//
+    		// let data = res.data.result[0];
 
     		let mdIdx 				= data.mdIdx            ; //모델idx
     		let modelName 			= data.modelName        ; //모델명
@@ -312,10 +312,10 @@ function initDetailInfo(seq){
         		$("#delYn").val('N').prop("delYn", true);
     		}
 
-    		openIziModal(MODAL_NAME);
-    	 }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
- 			errorAlert('조회중 에러가 발생했습니다', '관리자에게 문의하세요');
-    	 }
+    		// openIziModal(MODAL_NAME);
+    	 // }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
+ 		// 	errorAlert('조회중 에러가 발생했습니다', '관리자에게 문의하세요');
+    	 // }
      });//end fn_callApi
 
 	
@@ -665,6 +665,7 @@ function initDetailSelectBox(data){
 function detailValidation(){
 	
 	let mdIdx = $("#mdIdx").val();												// 모델순번
+	let year = $("#year").val();												// 모델순번
 	let modelName = $("#modelName").val();										// 모델명
 	let modelDetailName = $("#modelDetailName").val();							// 모델상세명
 	let manufacturerCode = $("#sel_manufacturerCode option:selected").val();	// 제조사
@@ -679,23 +680,33 @@ function detailValidation(){
 	let maximumPassenger = $("#maximumPassenger").val();						// 승차인원
 	let delYn = $("#delYn option:selected").val();								// 삭제여부
 
-	if(isEmpty(modelName)) {
-		errorAlert('모델 정보', '모델명은 필수 항목입니다.');
-		return;
-	}else if(isEmpty(modelDetailName)) {
-		errorAlert('모델 정보', '모델상세명은 필수 항목입니다.');
-		return;
-	}else if(isEmpty(manufacturerCode) || manufacturerCode == '0') {
-		errorAlert('모델 정보', '제조사는 필수 항목입니다.');
-		return;
-	}else if(isEmpty(conturyCode) || conturyCode == '0') {
+
+	if(isEmpty(conturyCode) || conturyCode === '0') {
 		errorAlert('모델 정보', '국가는 필수 항목입니다.');
 		return;
-	}else if(isEmpty(importCode) || importCode == '0') {
-		errorAlert('모델 정보', '국내/외구분은 필수 항목입니다.');
+	}
+	else if(isEmpty(manufacturerCode) || manufacturerCode === '0') {
+		errorAlert('모델 정보', '제조사는 필수 항목입니다.');
 		return;
-	}else if(isEmpty(cartypeCode) || cartypeCode == '0') {
+	}
+	else if(isEmpty(year)) {
+		errorAlert('모델 정보', '연식은 필수 항목입니다.');
+		return;
+	}
+	else if(isEmpty(modelName)) {
+		errorAlert('모델 정보', '차종은 필수 항목입니다.');
+		return;
+	}else if(isEmpty(modelDetailName)) {
+		errorAlert('모델 정보', '차종상세는 필수 항목입니다.');
+		return;
+	}
+	else if(isEmpty(cartypeCode) || cartypeCode == '0') {
 		errorAlert('모델 정보', '등급은 필수 항목입니다.');
+		return;
+	}
+
+	else if(isEmpty(importCode) || importCode == '0') {
+		errorAlert('모델 정보', '국내/외구분은 필수 항목입니다.');
 		return;
 	}else if(isEmpty(fuelCode) || fuelCode == '0') {
 		errorAlert('모델 정보', '연료는 필수 항목입니다.');
@@ -733,8 +744,8 @@ function detailValidation(){
 			,	'displacement' : displacement
 			,	'maximumPassenger' : maximumPassenger
 			,	'delYn' : delYn
-			,	'modId' : GLOBAL_LOGIN_USER_IDX
-			,	'regId' : GLOBAL_LOGIN_USER_IDX
+			// ,	'modId' : GLOBAL_LOGIN_USER_IDX
+			// ,	'regId' : GLOBAL_LOGIN_USER_IDX
 	}
 
 	let title = '모델정보 저장';

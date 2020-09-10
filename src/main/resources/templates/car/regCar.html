@@ -2,7 +2,8 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>차량 추가 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'insert'}">차량 등록 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'modify'}">차량 상세 :: DoCha Admin Web</title>
 
     <script src="/js/regCar.js" th:src="@{/js/regCar.js}"></script>
 </head>
@@ -28,6 +29,7 @@
 
                         <!-- 차량 정보 -->
                         <div class="row">
+                            <input type="text" class="form-control " name="crIdx" id="crIdx"/>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="companyName">회사명(지점)</label>
                                 <select class="custom-select" name="companyName" id="companyName"
@@ -55,7 +57,7 @@
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="carRegDt">출고연식</label>
                                 <input type="text" class="form-control" name="carRegDt" id="carRegDt"
-                                       placeholder="년-월 (YYYY-MM)"/>
+                                       placeholder="년-월 (YYYY-MM)" maxlength="7"/>
                             </div>
 
                             <div class="col-3 mb-3">
@@ -65,7 +67,7 @@
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="carNumber">차량번호</label>
-                                <input type="text" class="form-control" name="carNumber" id="carNumber" readonly/>
+                                <input type="text" class="form-control" name="carNumber" id="carNumber" maxlength="8" readonly/>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="mileage">누적 km</label>
@@ -560,7 +562,14 @@
     </div>
 </div>
 <script th:inline="javascript">
-    initDetailData('insert');
+    CRUD = /*[[${CRUD}]]*/'';
+    crIdx = /*[[${crIdx}]]*/'';
+
+    if(CRUD === "insert"){
+        initDetailData('insert');
+    }else if (CRUD === "modify"){
+        initDetailInfo(crIdx)
+    }
 </script>
 </body>
 </html>

@@ -1047,10 +1047,8 @@ function detailValidation(save_type){
 	let _rtIdx 	= $("#companyName option:selected").val();
 	let crIdx 	= $("#crIdx").val();
 
-	if(save_type !== 'saveCarinfo' && CRUD_METHOD === 'insert'){
-		errorAlert('차량정보', '차량정보를 먼저 저장해 주세요.');
-		return;
-	}
+
+
 	if (!isEmpty(save_type)) { // is not empty
 		switch (save_type) {
 			case 'saveCarinfo':		// 차량기본정보
@@ -1082,31 +1080,14 @@ function detailValidation(save_type){
 				// pp += crIdx+'\n'+transmissionCode+'\n'+driveTypeCode+'\n'+cartypeCode+'\n'+driveLicenseCode+'\n'+manufacturerCode+'\n'+displacement+'\n'+maximumPassenger;
 				// alert(pp);
 				if (isEmpty(companyName)) { // is not empty
-					errorAlert('차량정보', '회원사명은 필수 입력값 입니다.\n\r회원사명 선택하여 주세요.');
+					errorAlert('차량정보', '회사명은 필수 입력값 입니다.\n\r회원사명 선택하여 주세요.');
 					$('#companyName').focus();
 					return;
 				}
-				if (isEmpty(carNumber)) { // is not empty
-					errorAlert('차량정보', '차량번호는 필수 입력값 입니다.');
-					return;
-				}
-//			if (isEmpty(carChassisNumber)) { // is not empty
-//				errorAlert('차량정보', '차량대번호는 필수 입력값 입니다.');
-//				return;
-//			}
 				if (isEmpty(year)) { // is not empty
 					errorAlert('차량정보', '차량연식은 필수 입력값 입니다.');
 					return;
 				}
-				if (isEmpty(carRegDt)) { // is not empty
-					errorAlert('차량정보', '차량등록일은 필수 입력값 입니다.');
-					return;
-				}
-				if (getPureText(carRegDt).length !== 6) { // is not empty
-					errorAlert('차량정보', '차량등록일은 YYYY-MM 형식으로 입력하여 주세요.');
-					return;
-				}
-
 				if (isEmpty(modelName)) { // is not empty
 					errorAlert('차량정보', '차종은 필수 입력값 입니다.\n\차종을 선택하여 주세요.');
 					return;
@@ -1119,8 +1100,24 @@ function detailValidation(save_type){
 					errorAlert('차량정보', '연료는 필수 입력값 입니다.\n\연료를 선택하여 주세요.');
 					return;
 				}
+				if (isEmpty(carRegDt)) { // is not empty
+					errorAlert('차량정보', '출고연식은 필수 입력값 입니다.');
+					return;
+				}
 				if (isEmpty(colorName)) { // is not empty
 					errorAlert('차량정보', '색상은 필수 입력값 입니다.');
+					return;
+				}
+				if (isEmpty(carNumber)) { // is not empty
+					errorAlert('차량정보', '차량번호는 필수 입력값 입니다.');
+					return;
+				}
+//			if (isEmpty(carChassisNumber)) { // is not empty
+//				errorAlert('차량정보', '차량대번호는 필수 입력값 입니다.');
+//				return;
+//			}
+				if (getPureText(carRegDt).length !== 6) { // is not empty
+					errorAlert('차량정보', '출고연식은 YYYY-MM 형식으로 입력하여 주세요.');
 					return;
 				}
 				if (isEmpty(mileage)) { // is not empty
@@ -1128,6 +1125,13 @@ function detailValidation(save_type){
 				}
 				if (isEmpty(ageLimit)) { // is not empty
 					ageLimit = '21';
+				}
+
+				if (CRUD_METHOD === 'modify') {
+					if(isEmpty(crIdx)) {
+						errorAlert('API ERROR', 'seq가 Null일 수 없습니다.');
+						return;
+					}
 				}
 
 				req  = {};
@@ -1183,6 +1187,11 @@ function detailValidation(save_type){
 				let carDamage3Yn 		=  insuranceCompanyment3 === '' ? 'N' : $(':input:radio[name=carDamage3Yn]:checked').val();
 				let carDamage4Yn 		=  insuranceCompanyment4 == '' ? 'N' : $(':input:radio[name=carDamage4Yn]:checked').val();
 
+				// TODO 차량 저장순서
+				if (isEmpty(crIdx)) {
+					errorAlert('차량정보', '차량정보를 먼저 저장해 주세요.');
+					return;
+				}
 				if(isEmpty(personalCover)){
 					errorAlert('책임보험', '대인은 필수 입력값 입니다.');
 					return;
@@ -1257,6 +1266,8 @@ function detailValidation(save_type){
 					if (ciYn === 'N'){
 						ciIdx = '';
 					}
+
+
 					//insuranceData[ciIdxIndex]
 				}
 
@@ -1284,7 +1295,7 @@ function detailValidation(save_type){
 				}
 
 				title = '보험정보 저장';
-				text = '저장하시겠습니까?'
+				text = '저장하시겠습니까?';
 				icon = 'info';
 				cancel_text = '취소하셨습니다.';
 
@@ -1305,6 +1316,11 @@ function detailValidation(save_type){
 				let deliveryAddPay 		= getPureText($('#deliveryAddPay').val());
 				let deliveryMaxRate 	= getPureText($('#deliveryMaxRate').val());
 
+				// TODO 차량 저장순서
+				if (isEmpty(crIdx)) {
+					errorAlert('차량정보', '차량정보를 먼저 저장해 주세요.');
+					return;
+				}
 				if(isEmpty(dailyStandardPay)){
 					errorAlert('요금정보', '일 기본요금은 필수 입력값 입니다.');
 					return;
@@ -1379,6 +1395,8 @@ function detailValidation(save_type){
 						pyYn = 'N';
 					}
 
+
+
 					if(pyYn == 'N'){
 						pyIdx = '';
 					}
@@ -1399,8 +1417,8 @@ function detailValidation(save_type){
 					,	'deliveryStandardPay' : deliveryStandardPay
 					,	'deliveryAddPay' : deliveryAddPay
 					,	'deliveryMaxRate' : deliveryMaxRate
-					,	'modId' : GLOBAL_LOGIN_USER_IDX
-					,	'regId' : GLOBAL_LOGIN_USER_IDX
+					// ,	'modId' : GLOBAL_LOGIN_USER_IDX
+					// ,	'regId' : GLOBAL_LOGIN_USER_IDX
 				}
 
 				title = '기본요금제 저장';
@@ -1441,12 +1459,22 @@ function detailSubmit(save_type, req){
 			}
 			break;
 		case 'saveInsurance':	// 보험정보
-			target = 'updateDcCarInfo';
-			method = 'update';
+			if (CRUD_METHOD === 'insert') {
+				target = 'insertDcCarInsuranceInfo';
+				method = 'insert';
+			} else if (CRUD_METHOD === 'update') {
+				target = 'updateDcCarInfo';
+				method = 'update';
+			}
 			break;
 		case 'savePaymentinfo':	// 기본요금
-			target = 'updateDcCarInfo';
-			method = 'update';
+			if (CRUD_METHOD === 'insert') {
+				target = 'insertDcCarInsuranceInfo';
+				method = 'insert';
+			} else if (CRUD_METHOD === 'update') {
+				target = 'updateDcCarInfo';
+				method = 'update';
+			}
 			break;
 
 	}// end switch
@@ -1466,7 +1494,7 @@ function detailSubmit(save_type, req){
 //						CRUD_METHOD = 'update';
 						let crIdx = data.crIdx;
 						$("#crIdx").val(crIdx);
-						initDetailInfo(crIdx);
+						// initDetailInfo(crIdx);
 //						$("#"+MODAL_NAME).iziModal('close');
 //						loadApi(drawTable, null, null);
 					}
@@ -1513,7 +1541,8 @@ function initDetailData(data){
 	initDetailSelectBox(null);
 
 	// 모달 오픈
-	openIziModal(MODAL_NAME);
+	// TODO openIziModal 지우기
+	// openIziModal(MODAL_NAME);
 
 }
 
@@ -1600,7 +1629,7 @@ function rentcal(){
 		let commissionPer	= data.commissionPer; 	//회원사 수수료 -->
 		let calcPeriodDt	= data.calcPeriodDt; 	//대여일수
 
-		if(rentFee == '0' && insuranceFee == '0'){
+		if(rentFee === '0' && insuranceFee === '0'){
 			errorAlert('요금계산', '보험료정보 또는 기본요금 정보를 확인하세요.');
 			return;
 		}
@@ -1612,7 +1641,7 @@ function rentcal(){
 		let calCarssumRate = '0';
 		let calPaymentAmount = '0';
 
-		if(mmRentAmt == 0){
+		if(mmRentAmt === 0){
 			calRentFee = disRentFee;
 			calInsuranceFee = insuranceFee;
 //				if(selInsuranceFee == '1'){
@@ -1657,10 +1686,11 @@ function rentcal(){
 
 function initcal(){
 
-	if(CRUD_METHOD === 'insert'){
-		errorAlert('차량정보', '차량정보를 먼저 저장해 주세요.');
-		return;
-	}
+	// TODO 저장순서체크
+	// if(CRUD_METHOD === 'insert'){
+	// 	errorAlert('차량정보', '차량정보를 먼저 저장해 주세요.');
+	// 	return;
+	// }
 	calinit = calinit + 1;
 
 	$("#calRentStartDt").val('');

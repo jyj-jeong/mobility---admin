@@ -2,7 +2,8 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>차종 등록 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'insert'}">차종 등록 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'modify'}">차종 상세 :: DoCha Admin Web</title>
 
     <script src="/js/carModel.js" th:src="@{/js/carModel.js}"></script>
 </head>
@@ -47,19 +48,15 @@
                                 <input type="text" class="form-control" id="modelName" name="modelName" />
                             </div>
                             <div class="col-4 mb-3">
-                                <label class="form-label" for="modelDetailName">차종상세</label>
-                                <input type="text" class="form-control" id="modelDetailName" name="modelDetailName" />
-                            </div>
-                            <div class="col-4 mb-3">
                                 <label class="form-label" for="sel_cartypeCode">등급</label>
                                 <select id="sel_cartypeCode" name="sel_cartypeCode" class="custom-select">
                                 </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-3 mb-3">
-                                <label class="form-label">옵션</label>
-                                <input type="text" class="form-control"/>
+                            <div class="col-4 mb-3">
+                                <label class="form-label" for="modelDetailName">차종상세</label>
+                                <input type="text" class="form-control" id="modelDetailName" name="modelDetailName" />
                             </div>
                             <button class="btn btn-primary" type="button" onclick="initDetailData()">등록</button>
                         </div>
@@ -76,7 +73,7 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="carImg" aria-describedby="carImg">
-                                        <label class="custom-file-label" for="carImg">Choose file</label>
+                                        <label class="custom-file-label" for="carImg">파일을 선택하세요</label>
                                     </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" id="carImgAdd">등록</button>
@@ -141,7 +138,14 @@
     </div>
 </div>
 <script th:inline="javascript">
-    initDetailData();
+    CRUD = /*[[${CRUD}]]*/'';
+    mdIdx = /*[[${mdIdx}]]*/'';
+
+    if(CRUD === "insert"){
+        initDetailData();
+    }else if (CRUD === "modify"){
+        initDetailInfo(mdIdx)
+    }
 </script>
 </body>
 </html>

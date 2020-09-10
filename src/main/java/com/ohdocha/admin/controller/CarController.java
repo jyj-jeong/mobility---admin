@@ -2,6 +2,7 @@ package com.ohdocha.admin.controller;
 
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanDetailRequest;
+import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
@@ -18,31 +19,33 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @AllArgsConstructor
 @Controller
-@RequestMapping(value = "/car")
 public class CarController extends ControllerExtension {
 
     private final CarService carService;
 
+    //region [ 등록차량 ]
     /* 등록차량 리스트 */
-    @GetMapping(value = "")
-    public String carList(HttpServletRequest request, ModelMap modelMap) {
+    @GetMapping(value = "/car")
+    public String regCarList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
-        carService.getCarList(serviceMessage);
+        carService.regCarList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return "car/car_list";
     }
 
-    /* 차량 추가 */
-    @GetMapping(value = "/add")
+    /* 등록차량 추가 화면 */
+    @GetMapping(value = "/car/add")
     public String regCarAdd(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("CRUD","insert");
 
         modelMap.addAllAttributes(serviceMessage);
 
         return "car/regCar";
     }
 
+    /* 등록차량 추가 */
     @PostMapping(value = "/api/v1.0/insertDcCarInfo.do")
     @ResponseBody
     public Object regCarAdd(@RequestBody DochaAdminRegCarDetailRequest regCarDetailRequest, HttpServletRequest request) {
@@ -54,6 +57,32 @@ public class CarController extends ControllerExtension {
         return serviceMessage;
     }
 
+    /* 등록차량 보험 추가 */
+    @PostMapping(value = "/api/v1.0/insertDcCarInsuranceInfo.do")
+    @ResponseBody
+    public Object insertRegCarInsurance(@RequestBody DochaAdminInsuranceTemplateDetailRequest insuranceTemplateRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("insuranceTemplateRequest", insuranceTemplateRequest);
+
+        carService.insertRegCarInsurance(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 차량 상세 화면 */
+    @GetMapping(value = "/car/detail/{crIdx}")
+    public String regCarDetail(@PathVariable String crIdx, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("crIdx", crIdx);
+        serviceMessage.addData("CRUD", "modify");
+
+        carService.regCarDetail(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/regCar";
+    }
+
+    /* 등록차량 수정 */
     @PostMapping(value = "/api/v1.0/updateDcCarInfo.do")
     @ResponseBody
     public Object updateCdtCarInfo(@RequestBody DochaAdminRegCarDetailRequest regCarDetailRequest, HttpServletRequest request) {
@@ -155,8 +184,10 @@ public class CarController extends ControllerExtension {
         return serviceMessage.get("result");
     }
 
+    //endregion
+
     /* 차량 관제 */
-    @GetMapping(value = "/control")
+    @GetMapping(value = "/car/control")
     public String carControlList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -165,8 +196,8 @@ public class CarController extends ControllerExtension {
         return "car/car_control_list";
     }
 
-    /* 등록차량 리스트 */
-    @GetMapping(value = "/maintain")
+    /* 차량정비 리스트 */
+    @GetMapping(value = "/car/maintain")
     public String carMaintainList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -176,7 +207,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량모델 리스트 */
-    @GetMapping(value = "/model")
+    @GetMapping(value = "/car/model")
     public String carModelList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -185,9 +216,46 @@ public class CarController extends ControllerExtension {
         return "car/car_model_list";
     }
 
-    @GetMapping(value = "/model/add")
-    public String insertCarModelInfo(HttpServletRequest request, ModelMap modelMap) {
+    /* 차량모델 상세 화면 */
+    @GetMapping(value = "/car/model/{mdIdx}")
+    public String selectCarModelDetail(@PathVariable String mdIdx, HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("mdIdx", mdIdx);
+        serviceMessage.addData("CRUD", "modify");
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/carModel";
+    }
+
+    /* 차량모델 조회 */
+    @PostMapping(value = "/api/v1.0/carModelDetail.json")
+    @ResponseBody
+    public Object carModelDetail(@RequestBody DochaAdminCarModelDetailRequest carModelDetailRequest, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("carModelDetailRequest", carModelDetailRequest);
+
+        carService.selectCarModelDetail(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 차량모델 등록 */
+    @GetMapping(value = "insertCarModelInfo.do")
+    public String insertCarModelInfo(DochaAdminCarModelDetailRequest carModelDetailRequest, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("carModelDetailRequest", carModelDetailRequest);
+
+        carService.insertCarModelInfo(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/carModel";
+    }
+
+    /* 차량모델 등록 화면 */
+    @GetMapping(value = "/car/model/add")
+    public String insertCarModelInfoView(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("CRUD", "insert");
 
         modelMap.addAllAttributes(serviceMessage);
 
@@ -195,7 +263,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량속성 : 국가 */
-    @GetMapping(value = "/property/country")
+    @GetMapping(value = "/car/property/country")
     public String carCountryProperty(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -205,7 +273,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량속성 : 제조사 */
-    @GetMapping(value = "/property/manufacturer")
+    @GetMapping(value = "/car/property/manufacturer")
     public String carManufacturerProperty(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -215,7 +283,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량속성 : 등급 */
-    @GetMapping(value = "/property/cartype")
+    @GetMapping(value = "/car/property/cartype")
     public String carTypeProperty(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -225,7 +293,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량속성 : 옵션 */
-    @GetMapping(value = "/property/option")
+    @GetMapping(value = "/car/property/option")
     public String carOptionProperty(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -235,7 +303,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 차량속성 : 연료 */
-    @GetMapping(value = "/property/fuel")
+    @GetMapping(value = "/car/property/fuel")
     public String carFuelProperty(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);
@@ -245,7 +313,7 @@ public class CarController extends ControllerExtension {
     }
 
     /* 요금제 */
-    @GetMapping(value = "/payment")
+    @GetMapping(value = "/car/payment")
     public String carPayment(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         carService.getCarModelList(serviceMessage);

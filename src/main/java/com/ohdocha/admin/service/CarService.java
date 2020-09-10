@@ -4,7 +4,7 @@ import com.ohdocha.admin.util.ServiceMessage;
 
 public interface CarService {
 
-    void getCarList(ServiceMessage message);
+    void regCarList(ServiceMessage message);
 
     void getCarModelList(ServiceMessage message);
 
@@ -25,4 +25,12 @@ public interface CarService {
     void selectRegCarDetailOption(ServiceMessage message);
 
     void updateCdtCarInfo(ServiceMessage message);
+
+    void insertRegCarInsurance(ServiceMessage message);
+
+    void insertCarModelInfo(ServiceMessage message);
+
+    void selectCarModelDetail(ServiceMessage message);
+
+    void regCarDetail(ServiceMessage message);
 }
