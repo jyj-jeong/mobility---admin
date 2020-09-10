@@ -10,6 +10,7 @@ import com.ohdocha.admin.mapper.DochaAdminAdminUserInfoMntMapper;
 import com.ohdocha.admin.mapper.DochaAdminAuthTemplateMapper;
 import com.ohdocha.admin.mapper.DochaAdminRentCompanyInfoMapper;
 import com.ohdocha.admin.mapper.DochaAdminUserInfoMntMapper;
+import com.ohdocha.admin.util.KeyMaker;
 import com.ohdocha.admin.util.ServiceMessage;
 import com.ohdocha.admin.util.TextUtils;
 import lombok.AllArgsConstructor;
@@ -140,7 +141,16 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         int res = rentCompanyInfoMapper.insertDcRentCompany(rentCompanyDetailRequest);
 
-        message.addData("res",res);
+        message.addData("rtIdx",rtIdx);
+    }
+
+    @Override
+    public void getRentShopDetail(ServiceMessage message) {
+        DochaAdminRentCompanyDetailRequest rentCompanyDetailRequest = message.getObject("rentCompanyDetailRequest", DochaAdminRentCompanyDetailRequest.class);
+
+        List<DochaAdminRentCompanyInfoResponse> rentCompanyDetailResponseList = rentCompanyInfoMapper.selectRentCompanyDetailInfo(rentCompanyDetailRequest);
+
+        message.addData("rentCompanyDetailResponseList",rentCompanyDetailResponseList);
     }
 
     @Override
@@ -162,12 +172,60 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     }
 
     @Override
+    public void updateRentCompanyCommission(ServiceMessage message) {
+        DochaAdminDcRentCompanyComissionRequest rentCompanyCommissionRequest = message.getObject("rentCompanyCommissionRequest", DochaAdminDcRentCompanyComissionRequest.class);
+
+        //회원사 수수료 정보 유무 확인
+        List<DochaAdminDcRentCompanyComissionResponse> rentCompanyCommissionReques = rentCompanyInfoMapper.selectRentCompanyComission(rentCompanyCommissionRequest);
+        int rentCompanyCommissionCnt = rentCompanyCommissionReques.size();
+
+        int res = 0;
+        if (rentCompanyCommissionCnt == 0){
+            res = rentCompanyInfoMapper.insertDcRentCompanyComission(rentCompanyCommissionRequest);
+        }else {
+            res = rentCompanyInfoMapper.updateDcRentCompanyComission(rentCompanyCommissionRequest);
+        }
+
+        message.addData("res ", res);
+
+    }
+
+    @Override
+    public void updateRentCompanyTime(ServiceMessage message) {
+        DochaAdminDcRentCompanyTimeRequest rentCompanyTimeRequest = message.getObject("rentCompanyTimeRequest", DochaAdminDcRentCompanyTimeRequest.class);
+
+        //회원사 예약정보 유무 확인
+        List<DochaAdminDcRentCompanyTimeResponse> rentCompanyTimeResponseList = rentCompanyInfoMapper.selectRentCompanyTime(rentCompanyTimeRequest);
+        int rentCompanyTimeCnt = rentCompanyTimeResponseList.size();
+
+        int res = 0;
+        if (rentCompanyTimeCnt == 0){
+            res = rentCompanyInfoMapper.insertDcRentCompanyTime(rentCompanyTimeRequest);
+        }else {
+            res = rentCompanyInfoMapper.updateDcRentCompanyTime(rentCompanyTimeRequest);
+        }
+
+        message.addData("res ", res);
+    }
+
+    @Override
+    public void insertRentCompanyReserveMinList(ServiceMessage message) {
+        DochaAdminDcRentCompanyReserveMinRequest rentCompanyReserveMinRequest = message.getObject("rentCompanyReserveMinRequest", DochaAdminDcRentCompanyReserveMinRequest.class);
+        String minIdx = KeyMaker.getInsetance().getKeyDeafult("min");
+        rentCompanyReserveMinRequest.setMinIdx(minIdx);
+
+        int res = rentCompanyInfoMapper.insertDcRentCompanyReserveMin(rentCompanyReserveMinRequest);
+
+        message.addData("result", res);
+    }
+
+    @Override
     public void insertRentCompanyStaff(ServiceMessage message) {
         DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest = message.getObject("rentCompanyStaffRequest", DochaAdminDcRentCompanyStaffRequest.class);
 
-        List<DochaAdminDcRentCompanyStaffResponse> rentCompanyStaffResponsesList = rentCompanyInfoMapper.selectrentCompanyStaffList(rentCompanyStaffRequest);
+         int res = rentCompanyInfoMapper.insertDcRentCompanyStaff(rentCompanyStaffRequest);
 
-        message.addData("result", rentCompanyStaffResponsesList);
+        message.addData("res", res);
     }
 
     @Override

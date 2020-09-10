@@ -461,14 +461,14 @@ function initDetailInfo(seq) {
 
 	let target = 'rentCompanyDetailInfo';
 	let method = 'select';
-	
-	$("#btnstaffEmail").attr("disabled", true);
-	
+
+	// TODO staffEmail disabled true 전부 수정정	// $("#btnstaffEmail").attr("disabled", true);
+
 	fn_callApi(method,target,req,function(response) {
 		let res = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 			
 //			CRUD = 'modify';
 			MCRUD = 'insert';
@@ -482,7 +482,7 @@ function initDetailInfo(seq) {
 			$("#staffContact1").val('');
 			$("#staffEmail").val('');
 
-			let data = res.data.result[0];
+			let data = res[0];
 
 			let rtIdx = data.rtIdx;
 			let companyName = data.companyName;
@@ -693,9 +693,9 @@ function initDetailInfo(seq) {
 			}
 			CRUD = 'modify';
 //			openIziModal(MODAL_NAME);
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+// 		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+// 			errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+// 		}
 	});// end fn_callApi
 }
 
@@ -882,7 +882,10 @@ function detailValidation(save_type) {
 
 	let _rtIdx = $('#rtIdx').val();
 
-	if(save_type != 'saveRentCompanyInfo' && CRUD == 'insert'){
+	//TODO 회원사 번호 삭제
+	_rtIdx = '3obbyRFE';
+
+	if(save_type !== 'saveRentCompanyInfo' && isEmpty(_rtIdx)){
 		errorAlert('회원사정보', '회원사 정보를 먼저 저장해 주세요.');
 		return;
 	}
@@ -891,43 +894,55 @@ function detailValidation(save_type) {
 		switch (save_type) {
 		case 'saveRentCompanyInfo':// 회원사정보
 			let companyName = $('#companyName').val();
-
-			if (isEmpty(companyName)) { // is not empty
-				errorAlert('회원사', '회원사 필드를 확인하세요.');
-				$('#companyName').focus();
-				return;
-			}
-
+            let branchName = $('#branchName').val();
 			let companyZipcode = $('#companyZipcode').val();
 			let companyAddress = $('#companyAddress').val();
 			let companyAddressDetail = $('#companyAddressDetail').val();
 			let companyRegistrationNumber = $('#companyRegistrationNumber').val();
 			let companyContact1 = $('#companyContact1').val();
 
+			let accountBank = $("#sel_bank option:selected").val();
+            let accountNumber = $('#accountNumber').val();
+            let accountHolder = $('#accountHolder').val();
+            let accessYn = $("#sel_accessYn option:selected").val();
+            let carCount = $('#carCount').val();
+
+            let companyRegistrationName = $('#companyRegistrationName').val();
+            let alarmYn = $("#sel_alarmYn option:selected").val();
+
+
+            if (isEmpty(companyName)) { // is not empty
+                errorAlert('회원사', '회사명 필드를 확인하세요.');
+                $('#companyName').focus();
+                return;
+            }
+
+            if (isEmpty(branchName)) { // is not empty
+                errorAlert('회원사', '지점명 필드를 확인하세요.');
+                $('#branchName').focus();
+                return;
+            }
+
+            if (isEmpty(companyRegistrationName)) { // is not empty
+                errorAlert('회원사', '법인명 필드를 확인하세요.');
+                $('#companyRegistrationName').focus();
+                return;
+            }
+
 			if (!isEmpty(companyRegistrationNumber)) {
 				companyRegistrationNumber = removeHypen(companyRegistrationNumber);
 			}
 
-			let accountBank = $("#sel_bank option:selected").val();
 
 			if (isEmpty(accountBank) || accountBank == 0) {
 				accountBank = '0';
 			}
-
-			let accountNumber = $('#accountNumber').val();
-			let accountHolder = $('#accountHolder').val();
-			let accessYn = $("#sel_accessYn option:selected").val();
-			let carCount = $('#carCount').val();
 			
 			if (isEmpty(accessYn) || accessYn == 0 || accessYn == 'N') {
 				accessYn = 'N';
 			} else {
 				accessYn = 'Y';
 			}
-
-			let companyRegistrationName = $('#companyRegistrationName').val();
-			let branchName = $('#branchName').val();
-			let alarmYn = $("#sel_alarmYn option:selected").val();
 
 			if (isEmpty(alarmYn) || alarmYn == 0 || alarmYn == 'N') {
 				alarmYn = 'N';
@@ -954,7 +969,7 @@ function detailValidation(save_type) {
 					modId : GLOBAL_LOGIN_USER_IDX,
 					alarmYn : alarmYn
 				}
-			} else if (CRUD === '') {
+			} else if (CRUD === 'insert') {
 				if (!isEmpty(_rtIdx)) {
 					errorAlert('API ERROR', '이미 존재하는 RTIDX 입니다.');
 				}
@@ -989,10 +1004,10 @@ function detailValidation(save_type) {
 			break;
 
 		case 'saveStaff':// 담당자 정보
-			if($("#btnstaffEmail").attr('disabled') != 'disabled'){
-				errorAlert('회원검색', '회원검색을 먼저 하여 주세요');
-				return;
-			}
+			// if($("#btnstaffEmail").attr('disabled') != 'disabled'){
+			// 	errorAlert('회원검색', '회원검색을 먼저 하여 주세요');
+			// 	return;
+			// }
 			let rsIdx = $('#rsIdx').val(); 							// 관리자순번
 			let staffurIdx = $('#staffurIdx').val(); 				// 직원회원순번
 			let staffName = $('#staffName').val(); 					// 직원명
@@ -1143,16 +1158,14 @@ function detailValidation(save_type) {
 			req  = {};
 			req = {
 				rtIdx : _rtIdx,
-				commissionPer : commissionPer,
+				commissionPer : commissionPer
 				// TODO 로그인 해결
 				// regId : GLOBAL_LOGIN_USER_IDX,
 				// modId : GLOBAL_LOGIN_USER_IDX
-				regId : 'jungsoonLee',
-				modId : 'jungsoonLee'
 			};
 
 			title = '수수료정보 저장';
-			text = '저장하시겠습니까?'
+			text = '저장하시겠습니까?';
 			icon = 'info';
 			cancel_text = '취소하셨습니다.';
 
@@ -1270,13 +1283,14 @@ function detailValidation(save_type) {
 				weekendAbleDeliveryTime : weekendAbleDeliveryTime,
 				returnInspectionTime : returnInspectionTime,
 				weekendReserveMinimumTime : weekendReserveMinimumTime,
-				weekendReserveMinimumRate : weekendReserveMinimumRate,
-				regId : GLOBAL_LOGIN_USER_IDX,
-				modId : GLOBAL_LOGIN_USER_IDX
+				weekendReserveMinimumRate : weekendReserveMinimumRate
+				// TODO 로그인 정보
+				// regId : GLOBAL_LOGIN_USER_IDX,
+				// modId : GLOBAL_LOGIN_USER_IDX
 			};
 
 			title = '예약정보 저장';
-			text = '저장하시겠습니까?'
+			text = '저장하시겠습니까?';
 			icon = 'info';
 			cancel_text = '취소하셨습니다.';
 
@@ -1321,9 +1335,9 @@ function detailValidation(save_type) {
 			};
 			
 			fn_callApi(method, target, req, function(response) {
-				let res = response;
-				if (res.code == 200) {
-					let data = res.data.result;
+				let data = response.result;
+				// if (res.code == 200) {
+				// 	let data = res.result;
 					if (data.length == 0) {
 
 						if(RMCRUD == 'modify') {
@@ -1377,7 +1391,7 @@ function detailValidation(save_type) {
 						
 						errorAlert('특정 기간 최소 예약 시간', '중복된 날짜가 존재하여 저장 할 수 없습니다.');
 					}
-				}
+				// }
 			}); //fn_callApi rentCompanyReserveMinList
 			break;
 		case 'saveRentCompanyHoliday':// 회원사정보 - 휴무일정보
@@ -1425,7 +1439,7 @@ function detailValidation(save_type) {
 			
 			fn_callApi(method, target, req, function(response) {
 				let res = response;
-				if (res.code == 200) {
+				// if (res.code == 200) {
 					let data = res.data.result;
 					if (data.length == 0) {
 
@@ -1480,7 +1494,7 @@ function detailValidation(save_type) {
 						
 						errorAlert('휴무일정보', '중복된 날짜가 존재하여 저장 할 수 없습니다.');
 					}
-				}
+				// }
 			}); //fn_callApi saveRentCompanyHoliday
 			break;
 			
@@ -1510,7 +1524,7 @@ function detailSubmit(save_type, req) {
 
 	switch (save_type) {
 		case 'saveRentCompanyInfo':// 회원사정보
-			if (CRUD == '') {
+			if (CRUD == 'insert') {
 				target = 'insertDcRentCompany';
 				method = 'insert';
 			} else if (CRUD == 'modify') {
@@ -1528,10 +1542,10 @@ function detailSubmit(save_type, req) {
 			}
 			break;
 		case 'updateCommission':// 수수료율
-			target = 'updateDcRentCompanyComission';
+			target = 'updateDcRentCompanyCommission';
 			method = 'update';
 			break;
-		case 'saveRentCompanyTime':// 수수료율
+		case 'saveRentCompanyTime':// 영업시간
 			target = 'updateDcRentCompanyTime';
 			method = 'update';
 			break;
@@ -1578,10 +1592,10 @@ function detailSubmit(save_type, req) {
 					cancelData('saveStaff');
 					break;
 				case 'saveRentCompanyInfo':// 회원사정보
-					if (CRUD == 'insert'){
-						let rtIdx = res.data.rtIdx;
-						$("#rtIdx").val(rtIdx);
-						initDetailInfo(rtIdx);
+					if (CRUD === 'insert'){
+						_rtIdx = res.rtIdx;
+						$("#rtIdx").val(_rtIdx);
+						initDetailInfo(_rtIdx);
 //						$("#"+MODAL_NAME).iziModal('close');
 //						loadApi(drawTable, null, null);
 					}
@@ -1635,7 +1649,7 @@ function initStaffDetail(seq) {
 		let res = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
 			let data = res.data.result;
 
@@ -1655,7 +1669,7 @@ function initStaffDetail(seq) {
 			let staffTypeCode = data.staffTypeCode;
 
 			$('#staffTypeCode').val('');
-		}
+		// }
 	});// end fn_callApi
 }
 
@@ -1716,7 +1730,7 @@ $('#rentStaffList').on("click", "tbody tr ", function() {
 	}
 
 	MCRUD = 'modify';
-	$("#btnstaffEmail").attr("disabled", false);
+	// $("#btnstaffEmail").attr("disabled", false);
 
 	let td = tr.children();
 
@@ -1841,9 +1855,9 @@ $("input#staffContact1").blur(function() {
 
 $("input#staffEmail").keyup(function(e) {
 	if($("input#staffEmail").val().length >= 1){
-		$("#btnstaffEmail").attr("disabled", false);
+		// $("#btnstaffEmail").attr("disabled", false);
 	}else{
-		$("#btnstaffEmail").attr("disabled", true);
+		// $("#btnstaffEmail").attr("disabled", true);
 	}
 });
 
@@ -1873,7 +1887,7 @@ function cancelData(cancel_type) {
 			$("#ownerYn").val('');
 			$("#staffContact1").val('');
 			$("#staffEmail").val('');
-			$("#btnstaffEmail").attr("disabled", true);
+			// $("#btnstaffEmail").attr("disabled", true);
 			$("#sel_staffdelYn").val('N');
 	
 			break;
@@ -1922,8 +1936,8 @@ function cancelData(cancel_type) {
 /*
  * 회원검색(회원id검색)
  */
-function serachUserInfo() {
-	let staffEmail = $("#staffEmail").val();
+function searchUserInfo() {
+	let staffEmail = '%' +$("#staffEmail").val() + '%';
 
 	if(isEmpty(staffEmail)){
 		errorAlert('이메일', '회원 가입시 등록한 이메일을 입력하여 주세요');
@@ -1939,7 +1953,7 @@ function serachUserInfo() {
 
 		// Detail정보 조회
 		fn_callApi(method,target, req, function(response) {
-			let data = response;
+			let data = response[0];
 
 			// 200이라면 페이징을 구한다.
 			// if (res.code == 200) {
@@ -1950,13 +1964,15 @@ function serachUserInfo() {
 				}else{
 					// 기본정보 셋팅
 					let urIdx 			= data.urIdx;
+					let userId 			= data.userId;
 					let userName 		= data.userName;
 					let userContact1 	= phoneFomatter(data.userContact1);
 
 					$("#staffurIdx").val(urIdx);
+					$("#staffEmail").val(userId);
 					$("#staffName").val(userName);
 					$("#staffContact1").val(userContact1);
-					$("#btnstaffEmail").attr("disabled", true);
+					// $("#btnstaffEmail").attr("disabled", true);
 					swal("회원정보 조회 완료", {icon : "success"});
 				}
 				
@@ -2009,7 +2025,7 @@ var chkValDate = function( date ){
 	}else if  (date.length == 10) {
 		return date.match(/[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}/g);
 	}
-}
+};
 
 function openDaumPolygon(ragbncode){
 	let _rtIdx = $('#rtIdx').val();

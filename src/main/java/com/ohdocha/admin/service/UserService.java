@@ -28,9 +28,17 @@ public interface UserService {
 
     void addRentShop(ServiceMessage message);                       // 회원사 등록
 
-    void getRentShopStaffList(ServiceMessage message);              // 회원사 직원 리스트 조회
+    void getRentShopDetail(ServiceMessage message);                 // 회원사 조회
 
     void insertRentCompanyStaff(ServiceMessage message);            // 회원사 직원 등록
+
+    void getRentShopStaffList(ServiceMessage message);              // 회원사 직원 리스트 조회
+
+    void updateRentCompanyCommission(ServiceMessage message);       // 회원사 수수료 정보 등록
+
+    void updateRentCompanyTime(ServiceMessage message);             // 회원사 수수료 정보 등록
+
+    void insertRentCompanyReserveMinList(ServiceMessage message);   // 회원사별 최소 예약시간 정보 조회
 
     void selectRentCompanyReserveMinList(ServiceMessage message);   // 회원사별 최소 예약시간 정보 조회
 

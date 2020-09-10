@@ -24,13 +24,18 @@
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="hoilday">휴일</label>
-                                <input type="text" class="form-control" name="hoilday" id="hoilday"/>
+                                <input type="date" class="form-control" name="hoilday" id="hoilday"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <input type="text" class="form-control" name="hoilday" id="saveHoilday"/>
                             </div>
                         </div>
 
                         <div class="card-footer">
                             <div class="text-right">
-                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="">저장</button>
+                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="saveHoliday()">저장</button>
                                 <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
                             </div>
                         </div>
@@ -58,6 +63,12 @@
 </div>
 <script th:inline="javascript">
 
+    // TODO 휴일등록 처리
+    function saveHoliday() {
+        swal("저장 성공", {icon : "success"});
+        var holiday = $('#hoilday').val();
+        $('#saveHoilday').val(holiday);
+    }
 </script>
 </body>
 </html>

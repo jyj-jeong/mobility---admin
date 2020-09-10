@@ -124,7 +124,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control"  placeholder="이메일" value="" id="staffEmail" />
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-primary" onclick="serachUserInfo();" id="btnstaffEmail">회원검색</button>
+                                                    <button class="btn btn-primary" onclick="searchUserInfo();" id="btnstaffEmail">회원검색</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -458,12 +458,13 @@
 </div>
 <script th:inline="javascript">
 
+    rtIdx = /*[[${rtIdx}]]*/'';
     CRUD = /*[[${CRUD}]]*/'';
 
     if(CRUD === "insert"){
         openCreateRentCompany();
     }else if (CRUD === "modify"){
-
+        initDetailInfo(rtIdx)
     }
 
 </script>

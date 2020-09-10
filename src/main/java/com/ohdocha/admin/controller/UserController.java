@@ -1,9 +1,6 @@
 package com.ohdocha.admin.controller;
 
-import com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompanyReserveMinRequest;
-import com.ohdocha.admin.domain.rentCompany.DochaAdminDcRentCompanyStaffRequest;
-import com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyDetailRequest;
-import com.ohdocha.admin.domain.rentCompany.DochaAdminRentCompanyHolidayRequest;
+import com.ohdocha.admin.domain.rentCompany.*;
 import com.ohdocha.admin.domain.user.DochaAdminInsertUserInfoRequest;
 import com.ohdocha.admin.domain.user.DochaAdminUpdateUserInfoRequest;
 import com.ohdocha.admin.domain.user.DochaAdminUserInfoRequest;
@@ -196,8 +193,21 @@ public class UserController extends ControllerExtension {
 
         userService.addRentShop(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
+
+    /* 회원사 상세 조회 */
+    @PostMapping(value = "/api/v1.0/rentCompanyDetailInfo.json")
+    @ResponseBody
+    public Object rentCompanyDetailInfo(@RequestBody DochaAdminRentCompanyDetailRequest rentCompanyDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyDetailRequest", rentCompanyDetailRequest);
+
+        userService.getRentShopDetail(serviceMessage);
+
+        return serviceMessage.get("rentCompanyDetailResponseList");
+    }
+
 
     /* 회원사 상세 페이지 */
     @GetMapping(value = "/mem/rentshop/{rtIdx}")
@@ -210,8 +220,8 @@ public class UserController extends ControllerExtension {
         return "user/rentshop_detail";
     }
 
-    /* 회원사 직원 */
-    @PostMapping(value = "/mem/rentshop/api/v1.0/rentCompanyStaffList.json")
+    /* 회원사 직원 조회 */
+    @PostMapping(value = "/api/v1.0/rentCompanyStaffList.json")
     @ResponseBody
     public Object rentShopStaffList(@RequestBody DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request);
@@ -222,20 +232,8 @@ public class UserController extends ControllerExtension {
         return serviceMessage.get("result");
     }
 
-    /* 회원사 직원 */
-    @PostMapping(value = "/api/v1.0/rentCompanyStaffList.json")
-    @ResponseBody
-    public Object rentShopStaffList2(@RequestBody DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest, HttpServletRequest request) {
-        ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("rentCompanyStaffRequest", rentCompanyStaffRequest);
-
-        userService.getRentShopStaffList(serviceMessage);
-
-        return serviceMessage.get("result");
-    }
-
     /* 회원사 직원 추가 */
-    @PostMapping(value = "/mem/rentshop/api/v1.0/insertCdtRentCompanyStaff.json")
+    @PostMapping(value = "/api/v1.0/insertDcRentCompanyStaff.do")
     @ResponseBody
     public Object insertRentCompanyStaff(@RequestBody DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request);
@@ -243,8 +241,46 @@ public class UserController extends ControllerExtension {
 
         userService.insertRentCompanyStaff(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage.get("res");
     }
+
+    /* 회원사 수수료 정보 추가 */
+    @PostMapping(value = "/api/v1.0/updateDcRentCompanyCommission.do")
+    @ResponseBody
+    public Object updateRentCompanyCommission(@RequestBody DochaAdminDcRentCompanyComissionRequest rentCompanyCommissionRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyCommissionRequest", rentCompanyCommissionRequest);
+
+        userService.updateRentCompanyCommission(serviceMessage);
+
+        return serviceMessage.get("res");
+    }
+
+    /* 회원사 영업시간 추가 */
+    @PostMapping(value = "/api/v1.0/updateDcRentCompanyTime.do")
+    @ResponseBody
+    public Object updateRentCompanyTime(@RequestBody DochaAdminDcRentCompanyTimeRequest rentCompanyTimeRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyTimeRequest", rentCompanyTimeRequest);
+
+        userService.updateRentCompanyTime(serviceMessage);
+
+        return serviceMessage.get("res");
+
+    }
+
+    /* 예약정보 특정 시간 추가 */
+    @PostMapping(value = "/api/v1.0/insertDcRentCompanyReserveMin.do")
+    @ResponseBody
+    public Object insertDcRentCompanyReserveMin(@RequestBody DochaAdminDcRentCompanyReserveMinRequest rentCompanyReserveMinRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyReserveMinRequest", rentCompanyReserveMinRequest);
+
+        userService.insertRentCompanyReserveMinList(serviceMessage);
+
+        return serviceMessage;
+    }
+
 
     /* 예약정보 특정 시간 리스트 */
     @PostMapping(value = "/api/v1.0/rentCompanyReserveMinList.json")
@@ -255,7 +291,7 @@ public class UserController extends ControllerExtension {
 
         userService.selectRentCompanyReserveMinList(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원사 전체 휴일 등록*/
