@@ -32,7 +32,7 @@ public class DochaAdminInsuranceTemplateDetailRequest  {
 	private String regId;				//작성자 idx
 	private String modId;				//수정자 idx
 
-	public String getCiIdx() {
+	public String getciIdx() {
 		return ciIdx;
 	}
 	public void setCiIdx(String ciIdx) {

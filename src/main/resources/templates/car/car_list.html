@@ -43,7 +43,6 @@
                                 <script th:inline="javascript">
                                     /* 차량 등록 */
                                     function addRegCar() {
-                                        initDetailData('insert');
                                         var url = "/car/add";
                                         var name = "차량 등록";
                                         var specs = "width=1200, height=800, location=no, left=500, top=50";
@@ -91,6 +90,19 @@
                                     <td th:text="${car.getReserveStatus()}"></td>
                                     <td th:text="${car.getReserveStatus()}"></td>
                                 </tr>
+                                <script th:inline="javascript">
+                                    // 상세보기 이동
+                                    $('#dataTable > tbody > tr >').click(function () {
+                                    var crIdx = $(this).parent().attr('data-value');
+                                    if (crIdx === "") return;
+
+                                    var url = "car/detail/" + crIdx;
+                                    var name = "차량 등록";
+                                    var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+
+                                    window.open(url, name, option);
+                                });
+                                </script>
                                 </tbody>
                             </table>
                         </div>
@@ -173,17 +185,7 @@
         }]
     } );
 
-    // 상세보기 이동
-    $('#example > tbody > tr >').click(function () {
-        var crIdx = $(this).parent().attr('data-value');
-        if (crIdx === "") return;
 
-        var url = "/detail/" + crIdx;
-        var name = "test";
-        var option = "width = 500, height =800 ,location=no, left=500, top=50";
-
-        window.open(url, name, option);
-    });
 
 </script>
 </body>

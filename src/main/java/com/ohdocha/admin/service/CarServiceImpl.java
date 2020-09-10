@@ -6,16 +6,17 @@ import com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelResponse;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanRequest;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanResponse;
+import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateResponse;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
-import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailResponse;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto;
 import com.ohdocha.admin.mapper.*;
 import com.ohdocha.admin.util.ServiceMessage;
+import com.ohdocha.admin.util.TextUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,14 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     private final DochaAdminCarModelMapper carModelMapper;
     private final DochaAdminRegCarMapper regCarMapper;
     private final DochaAdminReserveInfoMapper reserveInfoMapper;
-    private final DochaAdminInsuranceTemplateMapper templateMapper;
+    private final DochaAdminInsuranceTemplateMapper insuranceTemplateMapper;
     private final DochaAdminBasicPlanMapper basicPlanMapper;
 
 
+    // region [ 등록차량 ]
     /* 등록차량 리스트 */
     @Override
-    public void getCarList(ServiceMessage message) {
+    public void regCarList(ServiceMessage message) {
         DochaAdminRegCarRequest reqParam = message.getObject("reqParam", DochaAdminRegCarRequest.class);
 
         List<DochaAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(reqParam);
@@ -95,7 +97,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     public void insuranceTemplateinfoDetail(ServiceMessage message) {
         DochaAdminInsuranceTemplateRequest reqParam = message.getObject("reqParam", DochaAdminInsuranceTemplateRequest.class);
 
-        List<DochaAdminInsuranceTemplateResponse> responseDto = templateMapper.insuranceTemplateinfoDetail(reqParam);
+        List<DochaAdminInsuranceTemplateResponse> responseDto = insuranceTemplateMapper.insuranceTemplateinfoDetail(reqParam);
 
         message.addData("result", responseDto);
 
@@ -134,11 +136,40 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
     @Override
     public void updateCdtCarInfo(ServiceMessage message) {
-        DochaAdminRegCarDetailRequest reqParam = message.getObject("reqParam", DochaAdminRegCarDetailRequest.class);
+        DochaAdminRegCarDetailRequest reqParam = message.getObject("regCarRequest", DochaAdminRegCarDetailRequest.class);
 
         int res = regCarMapper.updateDcCarInfo(reqParam);
 
     }
+
+    /* 등록차량 보험 등록 */
+    @Override
+    public void insertRegCarInsurance(ServiceMessage message) {
+        DochaAdminInsuranceTemplateDetailRequest insuranceTemplateRequest = message.getObject("insuranceTemplateRequest", DochaAdminInsuranceTemplateDetailRequest.class);
+
+        int res = regCarMapper.insertRegCarInsurance(insuranceTemplateRequest);
+
+        message.addData("res", res);
+        message.addData("crIdx", insuranceTemplateRequest.getCrIdx());
+
+    }
+
+    /* 차량모델 등록 */
+    @Override
+    public void insertCarModelInfo(ServiceMessage message) {
+        DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
+
+        String mdIdx = TextUtils.getKeyDefault("MD");
+        carModelDetailRequest.setMdIdx(mdIdx);
+
+        int res = carModelMapper.insertCarModelInfo(carModelDetailRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carModelDetailRequest.getMdIdx());
+
+    }
+
+    // endregion
 
     /* 차량모델 리스트 */
     @Override
@@ -149,6 +180,20 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         message.addData("carModelInfoList", responseDto);
 
+    }
+
+    /* 차량모델 상세 */
+    @Override
+    public void selectCarModelDetail(ServiceMessage message) {
+        DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
+
+        List<DochaAdminCarModelDetailResponse> carModelDetailResponseList = carModelMapper.selectCarModelDetail(carModelDetailRequest);
+
+        message.addData("result", carModelDetailResponseList);
+    }
+
+    @Override
+    public void regCarDetail(ServiceMessage message) {
 
     }
 }

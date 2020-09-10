@@ -912,13 +912,13 @@ function detailSubmit(save_type, req){
             swal("저장 성공", { icon: "success"});
             switch (save_type) {
                 case 'saveUser'://회원정보
-                    if( CRUD == 'insert') {
+                    if( CRUD === 'insert') {
                         let urIdx = res.urIdx;
                         $("#urIdx").val(urIdx);
                     }
                     break;
                 case 'INSERTuserLicenseInfo'://운전면허
-                    if( CRUD == 'insert') {
+                    if( CRUD === 'insert') {
                         // $("#"+MODAL_NAME).iziModal('close');
                     }
                     break;
