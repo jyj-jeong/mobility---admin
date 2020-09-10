@@ -67,25 +67,11 @@
 
         // userPassword = CryptoJS.SHA256(userPassword).toString();
 
-        $.ajax({
-            url: 'login',
-            dataType: "json",
-            method: 'post',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                userId: userId,
-                userPassword: userPassword
-            }),
-            processData: false,
-            success: function (res) {
-                var welcome = res.loginMemberSession.adminName + '님 반갑습니다!';
-                alert(welcome);
-                location.href = '/'
-            },
-            error: function (err) {
-                alert(err);
-            }
-        });
+        swal("로그인 성공", {icon : "success"});
+
+        if (userId!=null){
+            location.href="/"
+        }
     }
 </script>
 </body>
