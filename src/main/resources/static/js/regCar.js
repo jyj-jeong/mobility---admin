@@ -411,7 +411,7 @@ function initDetailInfo(seq){
 	let method = 'select';
 
 	fn_callApi(method,target, req, function(response) {
-		let data = response;
+		let data = response[0];
 
 		// 200이라면 페이징을 구한다.
 		// if (res.code === 200) {
@@ -527,7 +527,7 @@ function initDetailInfo(seq){
 		initDetailSelectBox(data);
 
 		if(CRUD_METHOD !== 'insert'){
-			openIziModal(MODAL_NAME);
+			// openIziModal(MODAL_NAME);
 		}
 
 		CRUD_METHOD = 'update';
@@ -1507,9 +1507,9 @@ function detailSubmit(save_type, req){
 					break;
 			}// end switch
 		}
-		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-		// 	errorAlert('저장 실패', '관리자에게 문의하세요.');
-		// }
+		else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+			errorAlert('저장 실패', '관리자에게 문의하세요.');
+		}
 	});// end fn_callApi
 
 }

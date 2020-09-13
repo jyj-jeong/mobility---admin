@@ -1,20 +1,24 @@
 package com.ohdocha.admin.domain.car.property;
 
 import com.ohdocha.admin.domain.common.CommonRequestDto;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.ibatis.type.Alias;
 
+@Builder
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Alias("carPropertyRequest")
 public class DochaAdminCarPropertyRequest extends CommonRequestDto {
-	
-	
+
+
 	private String rtCode;
 	private String pCode; 		//중분류(부모코드)
 	private String code;  		//소분류(자식코드)
-	
-	
-	
+
+
+
 	/*
 	 * countType = country			국가
 		countType = manufacturer	제조사
@@ -25,7 +29,7 @@ public class DochaAdminCarPropertyRequest extends CommonRequestDto {
 	 * */
 	private String countType;   //속성 Count
 	private String codeIdx;
-	
+
 	public String getpCode() {
 		return pCode;
 	}
@@ -56,8 +60,8 @@ public class DochaAdminCarPropertyRequest extends CommonRequestDto {
 	public void setCodeIdx(String codeIdx) {
 		this.codeIdx = codeIdx;
 	}
-	
-	
-	
-	
+
+
+
+
 }

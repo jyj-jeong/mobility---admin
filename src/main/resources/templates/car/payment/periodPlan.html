@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title th:if="${CRUD == 'insert'}">기간요금 등록 :: DoCha Admin Web</title>
+    <title th:if="${CRUD == 'modify'}">기간요금 상세 :: DoCha Admin Web</title>
+
+    <script src="/js/regCar.js" th:src="@{/js/regCar.js}"></script>
+</head>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer"
+                            onclick="changeCardView('regCarDetail')">차량등록 - 관리자 (00렌트카 / 00지점)</h6>
+                    </div>
+
+                    <!--region 차량정보 카드  -->
+                    <div id="regCarDetail" class="card-body">
+
+                        <!-- 차량 정보 -->
+                        <div class="row">
+                            <input type="text" class="form-control " name="crIdx" id="crIdx"/>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="companyName">회사명(지점)</label>
+                                <select class="custom-select" name="companyName" id="companyName"
+                                        onchange="rtIdxchange();"></select>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="year">차량연식</label>
+                                <input type="text" class="form-control" name="year" id="year" placeholder="년도" maxlength="4"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="sel_modelName">차종</label>
+                                <select id="sel_modelName" name="sel_modelName" class="custom-select"
+                                        onchange="modelNamechange();"></select>
+                            </div>
+
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="sel_modelDetailName">차종상세</label>
+                                <select id="sel_modelDetailName" name="sel_modelDetailName" class="custom-select"
+                                        onchange="modelDetailNamechange()"></select>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="sel_fuel">연료</label>
+                                <input type="text" class="form-control" name="sel_fuel" id="sel_fuel"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="carRegDt">출고연식</label>
+                                <input type="text" class="form-control" name="carRegDt" id="carRegDt"
+                                       placeholder="년-월 (YYYY-MM)" maxlength="7"/>
+                            </div>
+
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="colorName">색상</label>
+                                <input type="text" class="form-control" name="colorName" id="colorName"
+                                       placeholder="색상"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="carNumber">차량번호</label>
+                                <input type="text" class="form-control" name="carNumber" id="carNumber" maxlength="8" readonly/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="mileage">누적 km</label>
+                                <input type="text" class="form-control" name="mileage" id="mileage"
+                                       placeholder="누적 Km"/>
+                            </div>
+                            <!--                            <div class="col-3 mb-3">-->
+                            <!--                                <label class="form-label">정비</label>-->
+                            <!--                                <input type="text" class="form-control"/>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="col-3 mb-3">-->
+                            <!--                                <label class="form-label">예정 정비일</label>-->
+                            <!--                                <input type="text" class="form-control"/>-->
+                            <!--                            </div>-->
+                        </div>
+                        <div class="row">
+                            <div class="col-3 mb-3">
+                                <label class="form-label">옵션</label>
+                                <input type="text" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-13 ">
+                            <div class="p-b-20 p-r-40 text-right">
+                                <button class="btn btn-primary" type="button" onclick="detailValidation('saveCarinfo');">차량정보 저장</button>
+                                <!--                                <button class="btn btn-danger" type="button" onclick="cancelData('saveCarinfo')">취소</button>-->
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- 책임 보험 -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+
+                        <div class="row mt-2">
+                            <h6 class="col-12 mb-3 font-weight-bold">책임보험</h6>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="sel_ciIdx">보험 템플릿 선택</label>
+                                <select id="sel_ciIdx" name="sel_ciIdx" class="custom-select"
+                                        onchange="ciIdxchange();"></select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="personalCover">대인</label>
+                                <input type="text" class="form-control" placeholder="단위:원" id="personalCover"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="propertyDamageCover">대물</label>
+                                <input type="text" class="form-control" placeholder="단위:원" id="propertyDamageCover"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="onselfDamageCover">자손</label>
+                                <input type="text" class="form-control" placeholder="단위:원" id="onselfDamageCover"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 자차 보험 -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="row mt-2">
+                            <h6 class="col-7 mb-3 font-weight-bold">자차보험</h6>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="carDamage1Yn"
+                                       value="carDamage1Yn">
+                                <label class="form-check-label" for="carDamage1Yn">자차 1</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="carDamage2Yn"
+                                       value="carDamage2Yn">
+                                <label class="form-check-label" for="carDamage2Yn">자차 2</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="carDamage3Yn"
+                                       value="carDamage3Yn">
+                                <label class="form-check-label" for="carDamage3Yn">자차 3</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="carDamage4Yn"
+                                       value="carDamage4Yn">
+                                <label class="form-check-label" for="carDamage4Yn">자차 4</label>
+                            </div>
+
+                        </div>
+                        <div class="row mt-4">
+
+                            <div class="col-6 mb-3">
+                                <label class="form-label form-check-inline">자차 1</label>
+                                <div class="form-check-inline">
+                                    <div class="m-1">
+                                        <label>자차1 보험 요금/일</label>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment" placeholder="단위:원"/>
+                                    </div>
+                                    <div class="m-1">
+                                        <label>자차1 보험 면책금</label>
+                                        <input type="text" class="form-control float-l" id="carDamageCover" placeholder="단위:원"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label class="form-label form-check-inline">자차 2</label>
+                                <div class="form-check-inline">
+                                    <div class="m-1">
+                                        <label>자차2 보험 요금/일</label>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment2" placeholder="단위:원"/>
+                                    </div>
+                                    <div class="m-1">
+                                        <label>자차2 보험 면책금</label>
+                                        <input type="text" class="form-control float-l" id="carDamageCover2" placeholder="단위:원"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label form-check-inline">자차 3</label>
+                                <div class="form-check-inline">
+                                    <div class="m-1">
+                                        <label>자차3 보험 요금/일</label>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment3" placeholder="단위:원"/>
+                                    </div>
+                                    <div class="m-1">
+                                        <label>자차3 보험 면책금</label>
+                                        <input type="text" class="form-control float-l" id="carDamageCover3" placeholder="단위:원"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label class="form-label form-check-inline">자차 4</label>
+                                <div class="form-check-inline">
+                                    <div class="m-1">
+                                        <label>자차4 보험 요금/일</label>
+                                        <input type="text" class="form-control float-l" id="insuranceCompanyment4" placeholder="단위:원"/>
+                                    </div>
+                                    <div class="m-1">
+                                        <label>자차4 보험 면책금</label>
+                                        <input type="text" class="form-control float-l" id="carDamageCover4" placeholder="단위:원"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-13 ">
+                            <div class="p-b-20 p-r-40 text-right">
+                                <button class="btn btn-primary" type="button" onclick="detailValidation('saveInsurance');">보험정보 저장</button>
+                                <button class="btn btn-danger" type="button" onclick="cancelData('saveInsurance')">취소</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 요금 -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="row mt-2">
+                            <h6 class="col-12 mb-3 font-weight-bold">요금</h6>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="sel_pyIdx">요금 템플릿</label>
+                                <select id="sel_pyIdx" name="sel_pyIdx" class="custom-select"  onchange="pyIdxchange();"></select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="dailyStandardPay">일 기본요금</label>
+                                <input type="text" class="form-control" name="dailyStandardPay" id="dailyStandardPay"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="dailyMaxRate">일 대여 최대 할인율</label>
+                                <input type="text" class="form-control" name="dailyMaxRate"
+                                       id="dailyMaxRate"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="monthlyStandardPay">월 기본요금</label>
+                                <input type="text" class="form-control" name="monthlyStandardPay" id="monthlyStandardPay"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="monthlyMaxRate">월 대여 최대 할인율</label>
+                                <input type="text" class="form-control" name="monthlyMaxRate" id="monthlyMaxRate"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="month3Deposit">3개월 보증금</label>
+                                <input type="text" class="form-control" name="month3Deposit" id="month3Deposit"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="month6Deposit">6개월 보증금</label>
+                                <input type="text" class="form-control" name="month6Deposit" id="month6Deposit"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="month9Deposit">9개월 보증금</label>
+                                <input type="text" class="form-control" name="month9Deposit" id="month9Deposit"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="month12Deposit">12개월 보증금</label>
+                                <input type="text" class="form-control" name="month12Deposit" id="month12Deposit"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="deliveryStandardPay">배달 기본요금</label>
+                                <input type="text" class="form-control" name="deliveryStandardPay" id="deliveryStandardPay"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="deliveryAddPay">배달 10km 단위 추가요금</label>
+                                <input type="text" class="form-control" name="deliveryAddPay" id="deliveryAddPay"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="deliveryMaxRate">배달 최대 할인율</label>
+                                <input type="text" class="form-control" name="deliveryMaxRate" id="deliveryMaxRate"/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-12 float-l flex-1"><p style="height:10px;"></p>
+                                <label>* 최대 할인율은 일 대여 최대 7일, 월대여 최대 12개월 까지 기간대비 자동으로 차등 적용 되는 할인율 입니다.</label>
+                                <br />
+                                <label>* 각 요금이 설정되지 않으면 차량이 고객에게 노출되지 않습니다.</label>
+                                <br />
+                                <label>* 최대 할인율이 설정되지 않으면 각 기본요금으로 계산되어 고객에게 노출됩니다.</label>
+                                <br />
+                                <label>* 월 기본요금에는 자차보험 요금과 배달요금이 포함된 금액을 넣어주시기 바랍니다.</label>
+                                <br />
+                                <label>* 배달요금에서의 거리는 지점위치와 고객간의 직선거리 입니다.</label>
+                                <br />
+                                <label>* 배달요금은 대여, 반납시의 배달이 포함된 요금입니다. 기준입니다.</label>
+                                <br />
+                                <label>* 배달 가능 지역 내에서 대여위치와 반납위치가 다를경우 더 긴 거리를 기준으로 계산됩니다.</label>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <p><br></p>
+                            <button class="btn btn-primary" type="button" onclick="detailValidation('savePaymentinfo');">요금정보 저장</button>
+                            <button class="btn btn-danger" type="button" onclick="cancelData('savePaymentinfo')">취소</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- 요금 계산기 -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="row mt-2">
+                            <h6 class="col-12 mb-3 font-weight-bold">요금 계산기 [최초 사용 시 요금계산기 초기화를 누르신 후 사용해주세요]</h6>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="calRentStartDt">대여일시</label>
+                                <input type="text" class="form-control" vlaue="" id="calRentStartDt" name="calRentStartDt" data-mask="____-__-__ __:__"  />
+                                <input type="datetime-local" class="form-control" vlaue="" id="calRentStartDt" name="calRentStartDt2" />
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="calRentEndDt">반납일시</label>
+                                <input type="text" class="form-control" vlaue="" id="calRentEndDt" name="calRentEndDt" data-mask="____-__-__ __:__"  />
+                                <input type="datetime-local" class="form-control" vlaue="" id="calRentEndDt" name="calRentEndDt2" />
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="calRentPeriod">대여기간</label>
+                                <input type="text" class="form-control" name="calRentPeriod" id="calRentPeriod" placeholder="대여기간" readonly/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="selInsuranceFee">자차보험</label>
+                                <select id="selInsuranceFee" name="selInsuranceFee" class="custom-select"></select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="custom-control custom-radio custom-control-inline col-2 mb-3">
+                                <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="customRadioInline1">지점방문</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="customRadioInline2">배달대여</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="rentlocation">대여위치</label>
+                                <input type="text" class="form-control" name="rentlocation" id="rentlocation"/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="returnAddr">반납위치</label>
+                                <input type="text" class="form-control" name="returnAddr" id="returnAddr"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="calRentFee">대여금액</label>
+                                <input type="text" class="form-control" name="calRentFee" id="calRentFee" readonly/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="calInsuranceFee">자차보험</label>
+                                <input type="text" class="form-control" name="calInsuranceFee" id="calInsuranceFee" readonly/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="cardeposit">할증금액</label>
+                                <input type="text" class="form-control" name="cardeposit" id="cardeposit"/>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label class="form-label" for="licenseIssueDt">배달 금액</label>
+                                <input type="text" class="form-control" name="licenseIssueDt" id="licenseIssueDt"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="calRentTotAmount">총 금액</label>
+                                <input type="text" class="form-control" name="calRentTotAmount" id="calRentTotAmount" readonly/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="calCarssumRate">MOBILITY-K 수수료</label>
+                                <input type="text" class="form-control" name="calCarssumRate" id="calCarssumRate" readonly/>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-12 mb-3">
+                                <label class="form-label" for="calPaymentAmount">입금금액(VAT포함)</label>
+                                <input type="text" class="form-control" name="calPaymentAmount" id="calPaymentAmount" readonly/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <p><br></p>
+                            <button class="btn btn-primary" type="button" onclick="rentcal();">요금 계산해 보기</button>
+                            <button class="btn btn-danger" type="button" onclick="initcal();">요금 계산기 초기화</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- #endregion -->
+
+        <!--region 후기 카드-->
+        <div id="userReviewCard" class="card-body d-none" style="height: 500px">
+            <h1>서비스 준비중입니다.</h1>
+        </div>
+        <!-- endregion -->
+
+        <!--region 예약내역 카드-->
+        <div id="userReservationHisCard" class="card-body d-none" style="height: 500px">
+            <h1>서비스 준비중입니다.</h1>
+        </div>
+        <!-- endregion -->
+
+        <!--region 쿠폰발급내역 카드-->
+        <div id="userCouponCard" class="card-body d-none" style="height: 500px">
+            <h1>서비스 준비중입니다.</h1>
+        </div>
+        <!-- endregion -->
+
+        <!--region 포인트 적립내역 카드-->
+        <div id="userPointHisCard" class="card-body d-none" style="height: 500px">
+            <h1>서비스 준비중입니다.</h1>
+        </div>
+        <!-- endregion -->
+
+        <!--region 면허사진 카드-->
+        <div id="userLicenseCard" class="card-body d-none">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label font-weight-bolder" for="licenseIssueDt">면허사진</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile04"
+                                   aria-describedby="inputGroupFileAddon04">
+                            <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">등록
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img class="d-block mx-auto bg-gray-200 mb-4" src="" width="500" height="300" alt="IMG">
+            <div class="row">
+                <h6 class="col-12 mb-3 font-weight-bold">면허정보</h6>
+                <div class="col-4 mb-3">
+                    <label class="form-label" for="licenseLocation">지역</label>
+                    <select class="custom-select" id="licenseLocation" name="licenseLocation">
+                        <option value="서울" selected>서울(11)</option>
+                        <option value="부산">부산(12)</option>
+                        <option value="경기">경기(13)</option>
+                        <option value="경기남부">경기남부(13)</option>
+                        <option value="강원">강원(14)</option>
+                        <option value="충북">충북(15)</option>
+                        <option value="충남">충남(16)</option>
+                    </select>
+                </div>
+                <div class="col-6 mb-3">
+                    <label class="form-label" for="licenseNumber">번호</label>
+                    <input type="text" class="form-control" name="licenseNumber" id="licenseNumber"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 mb-3">
+                    <label class="form-label" for="userBirthday">생년월일</label>
+                    <input type="text" class="form-control" name="userBirthday" id="userBirthday"/>
+                </div>
+                <div class="col-4 mb-3">
+                    <label class="form-label" for="licenseOwnerName">성명</label>
+                    <input type="text" class="form-control" name="licenseOwnerName" id="licenseOwnerName"/>
+                </div>
+            </div>
+        </div>
+        <!-- endregion -->
+
+        <!--region 고객평점 카드-->
+        <div id="userGradeCard" class="card-body d-none" style="height: 500px">
+            <h1>서비스 준비중입니다.</h1>
+        </div>
+        <!-- endregion -->
+
+        <div class="card-footer">
+            <div class="text-right">
+                <div class="row">
+                    <div class="mr-2 font-weight-bold" style="cursor: pointer"
+                         onclick="changeCardView('regCarDetail')">정비내역
+                    </div>
+                    <div class="mr-2 font-weight-bold" style="cursor: pointer"
+                         onclick="changeCardView('userReviewCard')">후기
+                    </div>
+                    <div class="mr-2 font-weight-bold" style="cursor: pointer"
+                         onclick="changeCardView('userReservationHisCard')">예약내역
+                    </div>
+                    <div class="mr-2 font-weight-bold" style="cursor: pointer"
+                         onclick="changeCardView('userGradeCard')">휴차일
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<div th:replace="main_footer :: mainFooter"></div>
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    CRUD = /*[[${CRUD}]]*/'';
+    crIdx = /*[[${crIdx}]]*/'';
+
+    if(CRUD === "insert"){
+        initDetailData('insert');
+    }else if (CRUD === "modify"){
+        initDetailInfo(crIdx)
+    }
+</script>
+</body>
+</html>

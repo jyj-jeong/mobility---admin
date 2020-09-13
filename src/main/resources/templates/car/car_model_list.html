@@ -63,8 +63,8 @@
                                     <td th:text="${carModelInfo.getCountryCode()}"></td>
                                     <td th:text="${carModelInfo.getManufacturerCode()}"></td>
                                     <td th:text="${carModelInfo.getYear()}"></td>
+                                    <td th:text="${carModelInfo.getModelName()}"></td>
                                     <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td ></td>
                                     <td th:text="${carModelInfo.getImgIdx()}"></td>
                                 </tr>
                                 <script th:inline="javascript">
@@ -138,8 +138,6 @@
         }]
     } );
 
-
-
     /* 차종 등록 */
     function addCarModel() {
             var url = "/car/model/add";
@@ -147,9 +145,6 @@
             var specs = "width=1200, height=950, location=no, left=500, top=50";
             window.open(url, name, specs);
     }
-
-
-
 </script>
 </body>
 </html>

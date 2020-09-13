@@ -68,14 +68,14 @@ public class DochaAdminCarModelResponse extends CommonResponseDto {
 	public void setManufacturerName(String manufacturerName) {
 		this.manufacturerName = manufacturerName;
 	}
-	public void setConturyCode(String conturyCode) {
-		this.countryCode = conturyCode;
+	public void setConturyCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 	public String getConturyName() {
 		return countryName;
 	}
-	public void setConturyName(String conturyName) {
-		this.countryName = conturyName;
+	public void setConturyName(String countryName) {
+		this.countryName = countryName;
 	}
 	public String getImportCode() {
 		return importCode;
