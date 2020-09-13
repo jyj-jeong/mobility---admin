@@ -30,7 +30,7 @@
 --                      ,  IFNULL(GET_COMMON_CODE_VALUE('DL', T1.DRIVE_LICENSE_CODE)     , '') AS DRIVE_LICENSE_NAME  /*면허구분 이름*/
                      ,  IFNULL(T1.MAXIMUM_PASSENGER   , '') AS MAXIMUM_PASSENGER                                   /*승차인원*/
                      ,  IFNULL(T1.DISPLACEMENT        , '') AS DISPLACEMENT                                        /*배기량*/
-                     ,  IFNULL(T1.YEAR                , '') AS YEAR                                                /*연식*/
+                     ,  IFNULL(T1.YEAR                , '') AS 'YEAR'                                                /*연식*/
                      ,  IFNULL(T1.COLOR_NAME          , '') AS COLOR_NAME                                          /*색상*/
                      ,  IFNULL(T1.PY_IDX              , '') AS PY_IDX                                              /*요금IDX*/
                      ,  IFNULL(T1.REG_ID              , '') AS REG_ID                                              /*등록자*/
@@ -83,9 +83,9 @@
                    ,  IFNULL(T1.MODEL_NAME          , '') AS MODEL_NAME                                          /*모델명*/
                    ,  IFNULL(T1.MODEL_DETAIL_NAME   , '') AS MODEL_DETAIL_NAME                                   /*모델상세명*/
                    ,  IFNULL(T1.MANUFACTURER_CODE   , '') AS MANUFACTURER_CODE                                   /*제조사code*/
---                    ,  IFNULL(GET_COMMON_CODE_VALUE('CR', T1.MANUFACTURER_CODE) , '' ) AS MANUFACTURER_NAME       /*제조사명*/
+--                    ,  IFNULL(T2.P_CODE('CR', T1.MANUFACTURER_CODE) , '' ) AS MANUFACTURER_NAME       /*제조사명*/
                    ,  IFNULL(T1.COUNTRY_CODE        , '') AS COUNTRY_CODE                                        /*국가code*/
---                    ,  IFNULL(GET_COMMON_CODE_VALUE('CN',T1.COUNTRY_CODE) , '' ) AS CONTURY_NAME                  /*국가명*/
+--                    ,  IFNULL(GET_COMMON_CODE_VALUE('CN',T1.COUNTRY_CODE) , '' ) AS COUNTRY_CODE                  /*국가명*/
                    ,  IFNULL(T1.IMPORT_CODE         , '') AS IMPORT_CODE                                         /*국내 해외구분*/
 --                    ,  IFNULL(GET_COMMON_CODE_VALUE('IM',T1.IMPORT_CODE) , '' ) AS IMPORT_NAME                    /*국내 해외 명*/
                    ,  IFNULL(T1.CARTYPE_CODE        , '') AS CARTYPE_CODE                                        /*차종 코드*/
@@ -100,7 +100,7 @@
 --                    ,  IFNULL(GET_COMMON_CODE_VALUE('DL', T1.DRIVE_LICENSE_CODE)     , '') AS DRIVE_LICENSE_NAME  /*면허구분 이름*/
                    ,  IFNULL(T1.MAXIMUM_PASSENGER   , '') AS MAXIMUM_PASSENGER                                   /*승차인원*/
                    ,  IFNULL(T1.DISPLACEMENT        , '') AS DISPLACEMENT                                        /*배기량*/
-                   ,  IFNULL(T1.YEAR                , '') AS 'YEAR'                                                /*연식*/
+                   ,  IFNULL(T1.YEAR                , '') AS YEAR                                                /*연식*/
                    ,  IFNULL(T1.COLOR_NAME          , '') AS COLOR_NAME                                          /*색상*/
                    ,  IFNULL(T1.PY_IDX              , '') AS PY_IDX                                              /*요금IDX*/
                    ,  IFNULL(T1.REG_ID              , '') AS REG_ID                                              /*등록자*/
@@ -110,7 +110,7 @@
                    ,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                              /*삭제여부*/
                    ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                                     /* 이미지 등록 여부 */
                     FROM
-                          DC_CAR_MODEL T1
+                          DC_CAR_MODEL T1 , DC_COMMON_CODE T2
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="mdIdx != null and mdIdx != '' ">
@@ -149,7 +149,7 @@
                SELECT
                      T1.MD_IDX AS MD_IDX
                        ,IFNULL(T1.MODEL_DETAIL_NAME , '') AS MODEL_DETAIL_NAME /*모델상세*/
---                        , MODEL_DETAIL_NAME
+                       , MODEL_DETAIL_NAME
                        , TRANSMISSION_CODE
                        , DRIVE_TYPE_CODE
                        , CARTYPE_CODE
@@ -176,6 +176,7 @@
 			<if test="modelName       != null"><![CDATA[   MODEL_NAME         = #{modelName}        ]]></if>   <!-- 차종명 -->
 			<if test="modelDetailName   != null"><![CDATA[  , MODEL_DETAIL_NAME      = #{modelDetailName}     ]]></if>   <!-- 차종상세명 -->
 			<if test="manufacturerCode   != null"><![CDATA[  , MANUFACTURER_CODE    = #{manufacturerCode}     ]]></if>    <!-- 제조사code -->
+			<if test="year   != null"><![CDATA[  , YEAR    = #{year}     ]]></if>    <!-- 제조사code -->
 			<if test="countryCode      != null"><![CDATA[  , COUNTRY_CODE          = #{countryCode}        ]]></if>    <!-- 제조국가code -->
 			<if test="importCode      != null"><![CDATA[  , IMPORT_CODE          = #{importCode}        ]]></if>    <!-- 국내/해외구분code -->
 			<if test="cartypeCode      != null"><![CDATA[  , CARTYPE_CODE          = #{cartypeCode}        ]]></if>    <!-- 차등급code -->
@@ -187,7 +188,7 @@
 			<if test="maximumPassenger   != null"><![CDATA[  , MAXIMUM_PASSENGER    = #{maximumPassenger}     ]]></if>    <!-- 승차인원 -->
 			<if test="delYn            != null"><![CDATA[  , DEL_YN             = #{delYn}           ]]></if>    <!-- 삭제여부 -->
 			<if test="modId            != null"><![CDATA[  , MOD_ID             = #{modId}           ]]></if>    <!-- 수정자 -->
-			, MOD_DT = SYSDATE
+			, MOD_DT = NOW()
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="mdIdx != null and mdIdx != ''">
@@ -202,6 +203,7 @@
         INSERT INTO DC_CAR_MODEL (
             MODEL_NAME
          ,  MODEL_DETAIL_NAME
+         ,  YEAR
          ,  MANUFACTURER_CODE
          ,  COUNTRY_CODE
          ,  IMPORT_CODE
@@ -218,6 +220,7 @@
       ) VALUES (
             #{modelName}
          ,     #{modelDetailName}
+         ,     #{year}
          ,     #{manufacturerCode}
          ,     #{countryCode}
          ,     #{importCode}
@@ -230,7 +233,7 @@
          ,     #{maximumPassenger}
          ,   'N'
          ,     #{regId}
-         ,   SYSDATE
+         ,   NOW()
       )
    ]]>
     </insert>
