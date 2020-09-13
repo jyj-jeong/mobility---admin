@@ -2,146 +2,129 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ohdocha.admin.mapper.DochaAdminCarPropertyMapper">
 
-	<!-- 차량 속성 국가, 제조사, 등급, 옵션, 연료  -->
-	<select id="selectCarPropertyInfo"  parameterType="carPropertyRequest" 
-      			   				  	    resultType="carPropertyResponse">
-		<![CDATA[
-			SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER	, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
-			FROM ( 
-		]]>	
-		<if test =' searchType == "0" ' >
-		<![CDATA[    SELECT              
-								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.CONTURY_CODE
-					WHERE T1.RT_CODE='CN' AND T1.P_CODE ='CN'
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-					UNION ALL 
-					SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.MANUFACTURER_CODE  
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='MF'
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-					UNION ALL
-					SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						  ON T1.CODE =  T2.CARTYPE_CODE  
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='CTY'
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-					UNION ALL
-					SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.FUEL_CODE  
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='FL'  --연료
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-			]]>
-		    </if>
-		    <!-- 국가 -->
-			<if test =' searchType == "country" ' > 
-			    		SELECT              
-								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-						FROM DC_COMMON_CODE T1
-						LEFT JOIN DC_MODEL  T2
-							   ON T1.CODE =  T2.CONTURY_CODE  
-						WHERE T1.RT_CODE='CN' AND T1.P_CODE ='CN'
-						<if test="searchKeyWord != null and searchKeyWord != ''">
-							<![CDATA[	AND T1.CODE_VALUE  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-						</if>
-						GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-			</if>		    
-		    <!-- 제조사 -->
- 			<if test =' searchType == "mf" ' >
-		    		SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.MANUFACTURER_CODE
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='MF'  
-					<if test="searchKeyWord != null and searchKeyWord != ''">
-						<![CDATA[	AND T1.CODE_VALUE  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-					</if>
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-			</if>
-		    <!-- 등급(차종) -->
- 			<if test =' searchType == "carType" ' >
-		    		SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.CARTYPE_CODE
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='CTY'
-					<if test="searchKeyWord != null and searchKeyWord != ''">
-						<![CDATA[	AND T1.CODE_VALUE  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-					</if>
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-			</if>
-		    <!-- 등급(연료) -->
- 			<if test =' searchType == "fuel" ' >
-		    		SELECT              
-							IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
-							,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
-							,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
-							,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
-							,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
-							, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
-					FROM DC_COMMON_CODE T1
-					LEFT JOIN DC_MODEL  T2
-						   ON T1.CODE =  T2.CARTYPE_CODE
-					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='FL'
-					<if test="searchKeyWord != null and searchKeyWord != ''">
-						<![CDATA[	AND T1.CODE_VALUE  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-					</if>
-					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE
-			</if>
 
-		<![CDATA[ ) A )	]]> 
-		
-       	<!-- WHERE 절 페이징-->
-       	<trim prefix="WHERE" prefixOverrides="AND|OR">
-       	<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
-       	</trim>		
+	<!-- 차량속성 INSERT -->
+	<insert  id="insertCarProperty" parameterType="carPropertyRequest">
+   <![CDATA[
+        INSERT INTO DC_COMMON_CODE (
+            RT_CODE
+         ,  P_CODE
+         ,  CODE
+         ,  CODE_VALUE
+         ,  DESCRIPT
+         ,  SORT
+         ,  ROOT_YN
+      ) VALUES (
+            #{rtCode}
+         ,     #{pCode}
+         ,     #{code}
+         ,     #{code}
+         ,     #{code}
+         ,     #{code}
+         ,     'Y'
+      )
+   ]]>
+    </insert>
+	<!-- 차량 속성 국가 조회  -->
+	<select id="selectCarCountryPropertyInfo"  parameterType="carPropertyRequest"
+      			   				  	    resultType="carPropertyResponse">
+		SELECT
+								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
+								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
+								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
+								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
+								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
+								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_CAR_MODEL  T2
+						   ON T1.CODE =  T2.COUNTRY_CODE
+					WHERE T1.RT_CODE='CN' AND T1.P_CODE ='CN'
+					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE;
+
 	</select>
+
+
+	<!-- 차량 속성 제조사 조회  -->
+	<select id="selectCarCountryManufacturerInfo"  parameterType="carPropertyRequest"
+			resultType="carPropertyResponse">
+		SELECT
+								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
+								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
+								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
+								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
+								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
+								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_CAR_MODEL  T2
+						   ON T1.CODE =  T2.MANUFACTURER_CODE
+					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='MF'
+					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE;
+
+	</select>
+
+
+	<!-- 차량 속성 등급 조회  -->
+	<select id="selectCarTypePropertyInfo"  parameterType="carPropertyRequest"
+			resultType="carPropertyResponse">
+		SELECT
+								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
+								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
+								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
+								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
+								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
+								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_CAR_MODEL  T2
+						   ON T1.CODE =  T2.CARTYPE_CODE
+					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='CTY'
+					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE;
+
+	</select>
+
+
+
+	<!-- 차량 속성 옵션 조회  -->
+	<select id="selectCarOptionPropertyInfo"  parameterType="carPropertyRequest"
+			resultType="carPropertyResponse">
+		SELECT
+								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
+								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
+								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
+								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
+								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
+								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_CAR_MODEL  T2
+						   ON T1.CODE =  T2.OPTION
+					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='OT'
+					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE;
+
+	</select>
+
+
+
+	<!-- 차량 속성 연료 조회  -->
+	<select id="selectCarFuelPropertyInfo"  parameterType="carPropertyRequest"
+			resultType="carPropertyResponse">
+		SELECT
+								IFNULL(T1.CODE_IDX  , '' ) AS CODE_IDX			/*	코드idx	*/
+								,	IFNULL(T1.RT_CODE   , '' ) AS RT_CODE		/*	최상위코드	*/
+								,	IFNULL(T1.P_CODE    , '' ) AS P_CODE		/*	부모코드	*/
+								,	IFNULL(T1.CODE      , '' ) AS CODE			/*	코드		*/
+								,	IFNULL(T1.CODE_VALUE, '' ) AS CODE_VALUE	/*	코드명	*/
+								, COUNT(T2.MD_IDX) AS PROPERTY_CNT 			/* 국가별 카운트 */
+					FROM DC_COMMON_CODE T1
+					LEFT JOIN DC_CAR_MODEL  T2
+						   ON T1.CODE =  T2.FUEL_CODE
+					WHERE T1.RT_CODE='CR' AND T1.P_CODE ='FL'
+					GROUP BY T1.CODE_IDX, T1.RT_CODE, T1.CODE, T1.P_CODE, T1.CODE_VALUE;
+
+	</select>
+
+
+	<!-- 속성 DELETE -->
+	<delete  id="deleteProperty" parameterType="carPropertyRequest">
+		<![CDATA[ DELETE FROM DC_COMMON_CODE WHERE CODE_IDX = #{urIdx}]]>
+	</delete>
 	
 </mapper>

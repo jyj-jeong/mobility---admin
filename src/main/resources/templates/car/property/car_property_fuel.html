@@ -44,6 +44,32 @@
                                 </div>
                             </div>
                         </div>
+
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>연료 속성</th>
+                                <th>적용 수</th>
+                                <th th:width="40">삭제</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>국가 속성</th>
+                                <th>적용 수</th>
+                                <th>삭제</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr th:each="property, index : ${propertyList}" th:data-value="${property.getCodeIdx()}">
+                                <td th:text="${property.getCodeValue()}"></td>
+                                <td th:text="${property.getPropertyCnt()}"></td>
+                                <td class="text-center align-middle">
+                                    <button id="delete_btn" class="btn btn-danger btn-sm" type="button" th:data-value="${property.getCodeIdx()}" onclick="event.cancelBubble = true;">삭제</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -86,7 +112,57 @@
         </div>
     </div>
 </div>
-<script>
+<script th:inline="javascript">
+    $('#dataTable').DataTable( {
+        buttons: [{
+            footer: true,
+        }],
+        "order": [1, "desc"]
+    } );
+
+    $('#propertyAdd').click(function () {
+        msg = "등록하시겠습니까?";
+
+        if (confirm(msg)) {
+            let value = $('#property').val();
+            $.ajax({
+                url: '../property/fuel/' + value,
+                dataType: "json",
+                method: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                processData: false,
+                success: function (res) {
+                    alert("성공적으로 등록 되었습니다.");
+                    location.reload();
+                },
+                error: function (err) {
+                    alert("등록에 실패했습니다.");
+                }
+            });
+        }
+    });
+
+    $('table .btn.btn-danger.btn-sm').click(function () {
+        msg = "삭제하시겠습니까?";
+
+        if (confirm(msg)) {
+            let codeIdx = $(this).attr('data-value');
+            $.ajax({
+                url: '../property/' + codeIdx,
+                dataType: "json",
+                method: 'delete',
+                contentType: 'application/json; charset=utf-8',
+                processData: false,
+                success: function (res) {
+                    alert("성공적으로 삭제 되었습니다.");
+                    location.reload();
+                },
+                error: function (err) {
+                    alert("삭제에 실패했습니다.");
+                }
+            });
+        }
+    });
 
 </script>
 </body>
