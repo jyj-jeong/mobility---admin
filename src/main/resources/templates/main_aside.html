@@ -94,7 +94,12 @@
                     <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/option'}">옵션</a></div>
                     <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/property/fuel'}">연료</a></div>
                 </div>
-                <a class="collapse-item" href="" th:href="${#request.getContextPath() + '/car/payment'}">요금제</a>
+                <a class="collapse-item collapsed" href="#" data-toggle="collapse" data-target="#Admin" aria-expanded="true" aria-controls="collapseAdmin">요금제</a>
+                <div id="Admin" class="collapse" aria-labelledby="collapseAdmin" data-parent="#Admin">
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/payment/period'}">기간요금설정</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/payment/basic'}">기본요금제</a></div>
+                    <div><a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/car/payment/insurance'}">보험템플릿</a></div>
+                </div>
             </div>
         </div>
     </li>

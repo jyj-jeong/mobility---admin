@@ -9,19 +9,22 @@ import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanResponse;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateResponse;
+import com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyRequest;
+import com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyResponse;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
+import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailResponse;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto;
 import com.ohdocha.admin.mapper.*;
 import com.ohdocha.admin.util.ServiceMessage;
-import com.ohdocha.admin.util.TextUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,82 +36,107 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     private final DochaAdminReserveInfoMapper reserveInfoMapper;
     private final DochaAdminInsuranceTemplateMapper insuranceTemplateMapper;
     private final DochaAdminBasicPlanMapper basicPlanMapper;
+    private final DochaAdminCarPropertyMapper propertyMapper;
 
 
     // region [ 등록차량 ]
     /* 등록차량 리스트 */
     @Override
     public void regCarList(ServiceMessage message) {
-        DochaAdminRegCarRequest reqParam = message.getObject("reqParam", DochaAdminRegCarRequest.class);
+        DochaAdminRegCarRequest regCarRequest = new DochaAdminRegCarRequest();
 
-        List<DochaAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(reqParam);
+        List<DochaAdminRegCarResponse> responseDto = regCarMapper.selectRegCarInfo(regCarRequest);
 
         message.addData("carRegList", responseDto);
-
     }
 
     /* 등록차량 추가 */
     @Override
     public void regCarAdd(ServiceMessage message) {
-        DochaAdminRegCarDetailRequest regCarRequest = message.getObject("regCarRequest", DochaAdminRegCarDetailRequest.class);
+        DochaAdminRegCarDetailRequest regCarDetailRequest = message.getObject("regCarDetailRequest", DochaAdminRegCarDetailRequest.class);
 
-        regCarRequest.setCrIdx(createIdx());
+        regCarDetailRequest.setCrIdx(createIdx());
 
-        int res = regCarMapper.insertDcCarInfo(regCarRequest);
+        int res = regCarMapper.insertDcCarInfo(regCarDetailRequest);
 
         message.addData("res", res);
-        message.addData("crIdx", regCarRequest.getCrIdx());
+        message.addData("crIdx", regCarDetailRequest.getCrIdx());
     }
 
-    /* 회사명(지점) 선택 */
+    /* 등록차량 보험 추가 */
+    @Override
+    public void insertRegCarInsurance(ServiceMessage message) {
+        DochaAdminInsuranceTemplateDetailRequest insuranceTemplateRequest = message.getObject("insuranceTemplateRequest", DochaAdminInsuranceTemplateDetailRequest.class);
+
+        int res = regCarMapper.insertRegCarInsurance(insuranceTemplateRequest);
+
+        message.addData("res", res);
+        message.addData("crIdx", insuranceTemplateRequest.getCrIdx());
+    }
+
+    /* 등록차량 상세 */
+    @Override
+    public void regCarDetail(ServiceMessage message) {
+        DochaAdminRegCarDetailRequest regCarDetailRequest = message.getObject("regCarDetailRequest", DochaAdminRegCarDetailRequest.class);
+
+        List<DochaAdminRegCarDetailResponse> regCarDetailResponseList = regCarMapper.selectRegCarDetail(regCarDetailRequest);
+
+        message.addData("result", regCarDetailResponseList);
+    }
+
+
+
+    /* 등록차량 수정 */
+    @Override
+    public void updateCdtCarInfo(ServiceMessage message) {
+        DochaAdminRegCarDetailRequest regCarRequest = message.getObject("regCarRequest", DochaAdminRegCarDetailRequest.class);
+
+        int res = regCarMapper.updateDcCarInfo(regCarRequest);
+
+        message.addData("res", res);
+
+    }
+
+
+    //region [ 등록차량 옵션 선택]
+    /* 회사 옵션 선택 */
     @Override
     public void companyList(ServiceMessage message) {
-        DochaAdminReserveInfoRequest reqParam = message.getObject("reqParam", DochaAdminReserveInfoRequest.class);
+        DochaAdminReserveInfoRequest reserveInfoRequest = message.getObject("reserveInfoRequest", DochaAdminReserveInfoRequest.class);
 
-        List<DochaRentCompanyDto> requestDto = reserveInfoMapper.selectCompanyList(reqParam);
+        List<DochaRentCompanyDto> rentCompanyDtoList = reserveInfoMapper.selectCompanyList(reserveInfoRequest);
 
-        message.addData("result", requestDto);
+        message.addData("result", rentCompanyDtoList);
 
     }
 
-    /* 차종 선택 */
+    /* 차종 옵션 선택 */
     @Override
     public void selectCarModelForSelectBox(ServiceMessage message) {
-        DochaAdminCarModelDetailRequest reqParam = message.getObject("reqParam", DochaAdminCarModelDetailRequest.class);
+        DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
 
-        List<DochaAdminCarModelDetailResponse> carModelResponses = carModelMapper.selectCarModelForSelectBox(reqParam);
+        List<DochaAdminCarModelDetailResponse> carModelDetailResponseList = carModelMapper.selectCarModelForSelectBox(carModelDetailRequest);
 
-        message.addData("result", carModelResponses);
+        message.addData("result", carModelDetailResponseList);
 
     }
 
-    /* 차종상세 선택 */
+    /* 차종상세 옵션 선택 */
     @Override
     public void selectCarModelDetailForSelectBox(ServiceMessage message) {
-        DochaAdminCarModelDetailRequest reqParam = message.getObject("reqParam", DochaAdminCarModelDetailRequest.class);
+        DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
 
-        List<DochaAdminCarModelDetailResponse> carModelResponses = carModelMapper.selectCarModelDetailForSelectBox(reqParam);
+        List<DochaAdminCarModelDetailResponse> carModelDetailResponseList = carModelMapper.selectCarModelDetailForSelectBox(carModelDetailRequest);
 
-        message.addData("result", carModelResponses);
+        message.addData("result", carModelDetailResponseList);
     }
 
-    /* 차량-요금제-기본요금제 상세 */
+    /* 보험 템플릿 선택 */
     @Override
     public void insuranceTemplateinfoDetail(ServiceMessage message) {
-        DochaAdminInsuranceTemplateRequest reqParam = message.getObject("reqParam", DochaAdminInsuranceTemplateRequest.class);
+        DochaAdminInsuranceTemplateRequest templateRequest = message.getObject("templateRequest", DochaAdminInsuranceTemplateRequest.class);
 
-        List<DochaAdminInsuranceTemplateResponse> responseDto = insuranceTemplateMapper.insuranceTemplateinfoDetail(reqParam);
-
-        message.addData("result", responseDto);
-
-    }
-
-    /* 차량-요금제-기본요금제 리스트 */
-    @Override
-    public void basicPlanInfo(ServiceMessage message) {
-        DochaAdminBaiscPlanRequest reqParam = message.getObject("reqParam", DochaAdminBaiscPlanRequest.class);
-
-        List<DochaAdminBasicPlanResponse> responseDto = basicPlanMapper.selectBasicPlan(reqParam);
+        List<DochaAdminInsuranceTemplateResponse> responseDto = insuranceTemplateMapper.insuranceTemplateinfoDetail(templateRequest);
 
         message.addData("result", responseDto);
 
@@ -123,60 +151,31 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         message.addData("result", responseDto);
     }
+    //endregion
+    //endregion
 
-    /* 등록차량 상세 옵션 */
-    @Override
-    public void selectRegCarDetailOption(ServiceMessage message) {
-        DochaAdminRegCarDetailRequest reqParam = message.getObject("reqParam", DochaAdminRegCarDetailRequest.class);
 
-        List<DochaAdminRegCarMapper> regCarMapperList = regCarMapper.selectRegCarDetailOption(reqParam);
 
-        message.addData("result", regCarMapperList);
-    }
 
-    @Override
-    public void updateCdtCarInfo(ServiceMessage message) {
-        DochaAdminRegCarDetailRequest reqParam = message.getObject("regCarRequest", DochaAdminRegCarDetailRequest.class);
 
-        int res = regCarMapper.updateDcCarInfo(reqParam);
-
-    }
-
-    /* 등록차량 보험 등록 */
-    @Override
-    public void insertRegCarInsurance(ServiceMessage message) {
-        DochaAdminInsuranceTemplateDetailRequest insuranceTemplateRequest = message.getObject("insuranceTemplateRequest", DochaAdminInsuranceTemplateDetailRequest.class);
-
-        int res = regCarMapper.insertRegCarInsurance(insuranceTemplateRequest);
-
-        message.addData("res", res);
-        message.addData("crIdx", insuranceTemplateRequest.getCrIdx());
-
-    }
-
+    //region [ 차량 모델 ]
     /* 차량모델 등록 */
     @Override
     public void insertCarModelInfo(ServiceMessage message) {
         DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
 
-        String mdIdx = TextUtils.getKeyDefault("MD");
-        carModelDetailRequest.setMdIdx(mdIdx);
-
         int res = carModelMapper.insertCarModelInfo(carModelDetailRequest);
 
         message.addData("res", res);
         message.addData("mdIdx", carModelDetailRequest.getMdIdx());
-
     }
-
-    // endregion
 
     /* 차량모델 리스트 */
     @Override
     public void getCarModelList(ServiceMessage message) {
-        DochaAdminCarModelRequest reqParam = message.getObject("reqParam", DochaAdminCarModelRequest.class);
+        DochaAdminCarModelRequest carModelRequest = new DochaAdminCarModelRequest();
 
-        List<DochaAdminCarModelResponse> responseDto = carModelMapper.selectCarModelInfo(reqParam);
+        List<DochaAdminCarModelResponse> responseDto = carModelMapper.selectCarModelInfo(carModelRequest);
 
         message.addData("carModelInfoList", responseDto);
 
@@ -192,8 +191,185 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         message.addData("result", carModelDetailResponseList);
     }
 
+    /* 차량모델 수정 */
     @Override
-    public void regCarDetail(ServiceMessage message) {
+    public void updateCarModelInfo(ServiceMessage message) {
+        DochaAdminCarModelDetailRequest carModelDetailRequest = message.getObject("carModelDetailRequest", DochaAdminCarModelDetailRequest.class);
+
+        int res = carModelMapper.updateCarModelInfo(carModelDetailRequest);
+
+        message.addData("res", res);
+    }
+    // endregion
+
+
+
+
+    //region [ 차량 속성 ]
+    /* 차량속성 추가 : 국가 */
+    @Override
+    public void insertCarPropertyCountry(ServiceMessage message) {
+        String value = message.getString("value","");
+        DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
+                .rtCode("CN")
+                .pCode("CN")
+                .code(value)
+                .build();
+
+        int res = propertyMapper.insertCarProperty(carPropertyRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carPropertyRequest.getCodeIdx());
+    }
+
+    /* 차량 속성 리스트 : 국가 */
+    @Override
+    public void carCountryProperty(ServiceMessage message) {
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarCountryPropertyInfo(carPropertyRequest);
+
+        message.addData("propertyList", carPropertyResponseList);
 
     }
+
+    /* 차량속성 추가 : 제조사 */
+    @Override
+    public void insertCarPropertyManufacturer(ServiceMessage message) {
+        String value = message.getString("value","");
+        DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
+                .rtCode("CR")
+                .pCode("MF")
+                .code(value)
+                .build();
+
+        int res = propertyMapper.insertCarProperty(carPropertyRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carPropertyRequest.getCodeIdx());
+    }
+
+    /* 차량 속성 리스트 : 제조사 */
+    @Override
+    public void carManufacturerProperty(ServiceMessage message) {
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarCountryManufacturerInfo(carPropertyRequest);
+
+        message.addData("propertyList", carPropertyResponseList);
+
+    }
+
+    /* 차량속성 추가 : 등급 */
+    @Override
+    public void insertCarPropertyCarType(ServiceMessage message) {
+        String value = message.getString("value","");
+        DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
+                .rtCode("CR")
+                .pCode("CTY")
+                .code(value)
+                .build();
+
+        int res = propertyMapper.insertCarProperty(carPropertyRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carPropertyRequest.getCodeIdx());
+    }
+
+    /* 차량 속성 리스트 : 등급 */
+    @Override
+    public void carCarTypeProperty(ServiceMessage message) {
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarTypePropertyInfo(carPropertyRequest);
+
+        message.addData("propertyList", carPropertyResponseList);
+
+    }
+
+    /* 차량속성 추가 : 옵션 */
+    @Override
+    public void insertCarPropertyOption(ServiceMessage message) {
+        String value = message.getString("value","");
+        DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
+                .rtCode("CR")
+                .pCode("OT")
+                .code(value)
+                .build();
+
+        int res = propertyMapper.insertCarProperty(carPropertyRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carPropertyRequest.getCodeIdx());
+    }
+
+    /* 차량 속성 리스트 : 옵션 */
+    @Override
+    public void carOptionProperty(ServiceMessage message) {
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarOptionPropertyInfo(carPropertyRequest);
+
+        message.addData("propertyList", carPropertyResponseList);
+    }
+
+    /* 차량속성 추가 : 연료 */
+    @Override
+    public void insertCarPropertyFuel(ServiceMessage message) {
+        String value = message.getString("value","");
+        DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
+                .rtCode("CR")
+                .pCode("FL")
+                .code(value)
+                .build();
+
+        int res = propertyMapper.insertCarProperty(carPropertyRequest);
+
+        message.addData("res", res);
+        message.addData("mdIdx", carPropertyRequest.getCodeIdx());
+    }
+
+    /* 차량 속성 리스트 : 연료 */
+    @Override
+    public void carFuelProperty(ServiceMessage message) {
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarFuelPropertyInfo(carPropertyRequest);
+
+        message.addData("propertyList", carPropertyResponseList);
+    }
+    /* 속성 삭제 */
+    @Override
+    public void deleteProperty(ServiceMessage message) {
+        String codeIdx = message.getString("codeIdx");
+
+        int res = propertyMapper.deleteProperty(codeIdx);
+    }
+    //endregion
+
+
+
+    /* 차량-요금제-기본요금제 리스트 */
+    @Override
+    public void basicPlanInfo(ServiceMessage message) {
+        DochaAdminBaiscPlanRequest reqParam = message.getObject("reqParam", DochaAdminBaiscPlanRequest.class);
+
+        List<DochaAdminBasicPlanResponse> responseDto = basicPlanMapper.selectBasicPlan(reqParam);
+
+        message.addData("result", responseDto);
+
+    }
+
+
+
+    /* 등록차량 상세 옵션 */
+    @Override
+    public void selectRegCarDetailOption(ServiceMessage message) {
+        DochaAdminRegCarDetailRequest reqParam = message.getObject("reqParam", DochaAdminRegCarDetailRequest.class);
+
+        List<DochaAdminRegCarMapper> regCarMapperList = regCarMapper.selectRegCarDetailOption(reqParam);
+
+        message.addData("result", regCarMapperList);
+    }
+
 }

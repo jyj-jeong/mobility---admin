@@ -32,5 +32,29 @@ public interface CarService {
 
     void selectCarModelDetail(ServiceMessage message);
 
-    void regCarDetail(ServiceMessage message);
+    void updateCarModelInfo(ServiceMessage message);
+
+    void regCarDetail(ServiceMessage serviceMessage);
+
+    void carCountryProperty(ServiceMessage message);
+
+    void deleteProperty(ServiceMessage message);
+
+    void insertCarPropertyCountry(ServiceMessage message);
+
+    void carManufacturerProperty(ServiceMessage message);
+
+    void insertCarPropertyManufacturer(ServiceMessage message);
+
+    void insertCarPropertyCarType(ServiceMessage message);
+
+    void carCarTypeProperty(ServiceMessage message);
+
+    void insertCarPropertyOption(ServiceMessage message);
+
+    void carOptionProperty(ServiceMessage message);
+
+    void carFuelProperty(ServiceMessage message);
+
+    void insertCarPropertyFuel(ServiceMessage message);
 }

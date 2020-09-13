@@ -13,8 +13,8 @@ public class DochaAdminCarModelDetailRequest extends CommonRequestDto {
 	private String modelDetailName  ; //모델상세명
 	private String manufacturerCode ; //제조사code
 	private String manufacturerName ; //제조사명
-	private String conturyCode      ; //국가code
-	private String conturyName      ; //국가명
+	private String countryCode      ; //국가code
+	private String countryName      ; //국가명
 	private String importCode       ; //국내해외구분
 	private String importName       ; //국내해외명
 	private String cartypeCode		;	//차종
@@ -69,14 +69,14 @@ public class DochaAdminCarModelDetailRequest extends CommonRequestDto {
 		this.manufacturerName = manufacturerName;
 	}
 
-	public void setConturyCode(String conturyCode) {
-		this.conturyCode = conturyCode;
+	public void setConturyCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 	public String getConturyName() {
-		return conturyName;
+		return countryName;
 	}
-	public void setConturyName(String conturyName) {
-		this.conturyName = conturyName;
+	public void setConturyName(String countryName) {
+		this.countryName = countryName;
 	}
 	public String getImportCode() {
 		return importCode;
