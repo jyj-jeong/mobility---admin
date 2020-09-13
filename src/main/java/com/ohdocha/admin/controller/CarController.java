@@ -436,7 +436,7 @@ public class CarController extends ControllerExtension {
         ServiceMessage serviceMessage = createServiceMessage(request);
 
         modelMap.addAllAttributes(serviceMessage);
-        return "car/payment/basicPlan_list";
+        return "car/payment/insuranceTemplate_list";
     }
     //endregion
 
