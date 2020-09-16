@@ -5,7 +5,7 @@
     <title th:if="${CRUD == 'insert'}">기간요금 등록 :: DoCha Admin Web</title>
     <title th:if="${CRUD == 'modify'}">기간요금 상세 :: DoCha Admin Web</title>
 
-    <script src="/js/periodPlanSetting.js" th:src="@{/js/periodPlanSetting.js}"></script>
+    <script src="/js/basicPlan.js" th:src="@{/js/basicPlan.js}"></script>
 </head>
 <body id="page-top">
 
@@ -20,14 +20,15 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4 mt-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">기간 요금제</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">
+                            기본 요금제</h6>
                     </div>
 
                     <div id="regCarDetail" class="card-body">
 
                         <!-- 회원사 -->
                         <div class="row mt-2">
-                            <input type="text" class="form-control " name="perIdx" id="perIdx"/>
+                            <input type="text" class="form-control " name="pyIdx" id="pyIdx"/>
                             <label class="form-label mb-3" for="companyName">
                                 <b class="-bold col-1">회원사</b></label>
                             <div class="col-12 mb-3">
@@ -38,19 +39,14 @@
                     </div>
                 </div>
 
-                <!-- 일정 -->
+                <!-- 제목 -->
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row mt-2">
-                            <label class="form-label mb-3">
-                                <b class="-bold col-1">일정</b></label>
+                            <label class="form-label mb-3" for="companyName">
+                                <b class="-bold col-1">제목</b></label>
                             <div class="col-12 mb-3">
-                                <label class="form-label" for="periodStartDt">시작일</label>
-                                <input type="date" class="form-control float-1" id="periodStartDt"/>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="form-label" for="periodEndDt">종료일</label>
-                                <input type="date" class="form-control float-1" id="periodEndDt"/>
+                                <input type="text" class="form-control float-1" id="pyEtc"/>
                             </div>
                         </div>
                     </div>
@@ -63,42 +59,54 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row mt-2">
-                            <h6 class="col-9 mb-3 font-weight-bold">요금제</h6>
-                            <div class="row mt-2">
-                                <div class="custom-control custom-radio custom-control-inline mb-3">
-                                    <input type="radio" id="customRadioInline" name="rd_discountExtrachargeCode"
-                                           class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadioInline">할증</label>
-                                </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input type="radio" id="customRadioInline2" name="rd_discountExtrachargeCode"
-                                           class="custom-control-input">
-                                    <label class="custom-control-label" for="customRadioInline2">할인</label>
-                                </div>
+                            <h6 class="col-12 mb-3 font-weight-bold">기본요금제</h6>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="dailyStandardPay">일 기본요금</label>
+                                <input type="text" class="form-control" id="dailyStandardPay" name="dailyStandardPay"/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="dailyMaxRate">일대여 최대 할인율</label>
+                                <input type="text" class="form-control" id="dailyMaxRate" name="dailyMaxRate"/>
                             </div>
                         </div>
-                            <label class="form-label" for="periodPay">금액/일</label>
-                            <input type="text" class="form-control float-1" id="periodPay"/>
-                    </div>
-                </div>
 
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="monthlyStandardPay">월 기본요금</label>
+                                <input type="text" class="form-control" id="monthlyStandardPay" name="monthlyStandardPay"/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="monthlyMaxRate">월대여 최대 할인율</label>
+                                <input type="text" class="form-control" id="monthlyMaxRate" name="monthlyMaxRate"/>
+                            </div>
+                        </div>
 
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="month3Deposit">3개월 보증금</label>
+                                <input type="text" class="form-control" id="month3Deposit" name="month3Deposit"/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="month6Deposit">6개월 보증금</label>
+                                <input type="text" class="form-control" id="month6Deposit" name="month6Deposit"/>
+                            </div>
+                        </div>
 
-
-                <!-- 내용 -->
-                <div class="card shadow mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <label class="form-label mb-3" for="companyName">
-                                <b class="-bold col-1">내용</b></label>
-                            <div class="col-12 mb-3">
-                                <input type="text" class="form-control float-1" placeholder="요금제에 대한 설명을 입력하세요" id="periodEtc"/>
+                        <div class="row mt-2">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="month9Deposit">9개월 보증금</label>
+                                <input type="text" class="form-control" id="month9Deposit" name="month9Deposit"/>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="month12Deposit">12개월 보증금</label>
+                                <input type="text" class="form-control" id="month12Deposit" name="month12Deposit"/>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
-                <!-- 차량 -->
+                <!-- 일정 -->
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row mt-2">
@@ -173,12 +181,12 @@
 </div>
 <script th:inline="javascript">
     CRUD = /*[[${CRUD}]]*/'';
-    perIdx = /*[[${perIdx}]]*/'';
+    pyIdx = /*[[${pyIdx}]]*/'';
 
     if(CRUD === "insert"){
         initDetailData('insert');
     }else if (CRUD === "modify"){
-        initDetailInfo(perIdx)
+        initDetailInfo(pyIdx)
     }
 </script>
 </body>

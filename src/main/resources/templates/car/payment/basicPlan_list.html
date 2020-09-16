@@ -32,6 +32,16 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <button class="btn btn-info" onclick="addBasicPlan()">기본요금설정 등록</button>
+                                <script th:inline="javascript">
+                                    /* 기본요금설정 등록 */
+                                    function addBasicPlan() {
+                                        var url = "/car/payment/basic/add";
+                                        var name = "기본요금설정 등록";
+                                        var specs = "width=600, height=800, location=no, left=500, top=50";
+                                        window.open(url, name, specs);
+                                    }
+                                </script>
                                 <thead>
                                 <tr>
                                     <th>기본요금제번호</th>
@@ -39,7 +49,7 @@
                                     <th>제목</th>
                                     <th>일기본요금</th>
                                     <th>월기본요금</th>
-                                    <th>내용</th>
+                                    <th>설정차량대수</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -49,20 +59,32 @@
                                     <th>제목</th>
                                     <th>일기본요금</th>
                                     <th>월기본요금</th>
-                                    <th>내용</th>
+                                    <th>설정차량대수</th>
                                 </tr>
                                 </tfoot>
-<!--                                <tbody>-->
-<!--                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">-->
-<!--                                    <td th:text="${carModelInfo.getCdIdx()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCdYear()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
+                                <tbody>
+                                <tr th:each="basicPlan, index : ${basicPlanList}" style="cursor: pointer" th:data-value="${basicPlan.getPyIdx()}">
+                                    <td th:text="${basicPlan.getPyIdx()}"></td>
+                                    <td th:text="${basicPlan.getCompanyName() + '(' + basicPlan.getBranchName() + ')'}"></td>
+                                    <td th:text="${basicPlan.getPyEtc()}"></td>
+                                    <td th:text="${basicPlan.getDailyStandardPay()}"></td>
+                                    <td th:text="${basicPlan.getMonthlyStandardPay()}"></td>
+                                    <td th:text="${basicPlan.getSettingCarCnt()}"></td>
+                                </tr>
+                                <script th:inline="javascript">
+                                    // 상세보기 이동
+                                    $('#dataTable > tbody > tr >').click(function () {
+                                        var pyIdx = $(this).parent().attr('data-value');
+                                        if (pyIdx === "") return;
+
+                                        var url = "../../car/payment/basic/" + pyIdx;
+                                        var name = "기본 요금제 수정";
+                                        var option = "width=600, height=800, location=no, left=500, top=50";
+
+                                        window.open(url, name, option);
+                                    });
+                                </script>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -107,8 +129,16 @@
         </div>
     </div>
 </div>
-<script>
-
+<script th:inline="javascript">
+    $('#dataTable').DataTable( {
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'csvHtml5',
+            text: 'Export CSV',
+            footer: true,
+            className: 'exportBtn'
+        }]
+    } );
 </script>
 </body>
 </html>

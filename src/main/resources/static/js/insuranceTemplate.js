@@ -217,10 +217,16 @@ function initSelectBox(){
 	$("#searchSelectBox option:eq(0)").prop("selected", true);
 	$("#showContents option:eq(0)").prop("selected", true);
 	$("#delYn option:eq(0)").prop("selected", true);
-	$("input:radio[name='carDamage1Yn']:radio[value='Y']").prop('checked', true);
-	$("input:radio[name='carDamage2Yn']:radio[value='Y']").prop('checked', true);
-	$("input:radio[name='carDamage3Yn']:radio[value='Y']").prop('checked', true);
-	$("input:radio[name='carDamage4Yn']:radio[value='Y']").prop('checked', true);
+	if ($("carDamage1Yn").is(":checked")) {
+		$("carDamage1Yn").val();
+	}else{
+		$("carDamage1Yn").val("N");
+	}
+
+	$("input:checkbox[name='carDamage1Yn']:checkbox[value='Y']").prop('checked', true);
+	$("input:checkbox[name='carDamage2Yn']:checkbox[value='Y']").prop('checked', true);
+	$("input:checkbox[name='carDamage3Yn']:checkbox[value='Y']").prop('checked', true);
+	$("input:checkbox[name='carDamage4Yn']:checkbox[value='Y']").prop('checked', true);
 }
 
 function bindEvent(){  
@@ -316,12 +322,12 @@ function initDetailInfo(seq){
 	};
 	
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		// let res = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result[0];
+			let data = response[0];
 			
 			let strOption = "";
 			
@@ -386,33 +392,33 @@ function initDetailInfo(seq){
 			$('#insuranceCompanyment4').val(insuranceCompanyment4);
 
 			if(carDamage1Yn == 'Y') { 
-				$("input:radio[name='carDamage1Yn']:radio[value='Y']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage1Yn']:checkbox[value='Y']").prop('checked', true); // 선택하기
 			} else { 
-				$("input:radio[name='carDamage1Yn']:radio[value='N']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage1Yn']:checkbox[value='N']").prop('checked', true); // 선택하기
 			}
 			if(carDamage2Yn == 'Y') { 
-				$("input:radio[name='carDamage2Yn']:radio[value='Y']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage2Yn']:checkbox[value='Y']").prop('checked', true); // 선택하기
 			} else { 
-				$("input:radio[name='carDamage2Yn']:radio[value='N']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage2Yn']:checkbox[value='N']").prop('checked', true); // 선택하기
 			}
 			if(carDamage3Yn == 'Y') { 
-				$("input:radio[name='carDamage3Yn']:radio[value='Y']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage3Yn']:checkbox[value='Y']").prop('checked', true); // 선택하기
 			} else { 
-				$("input:radio[name='carDamage3Yn']:radio[value='N']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage3Yn']:checkbox[value='N']").prop('checked', true); // 선택하기
 			}
 			if(carDamage4Yn == 'Y') { 
-				$("input:radio[name='carDamage4Yn']:radio[value='Y']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage4Yn']:checkbox[value='Y']").prop('checked', true); // 선택하기
 			} else { 
-				$("input:radio[name='carDamage4Yn']:radio[value='N']").prop('checked', true); // 선택하기
+				$("input:checkbox[name='carDamage4Yn']:checkbox[value='N']").prop('checked', true); // 선택하기
 			}
 			
-			openIziModal(modalName);
+			// openIziModal(modalName);
 			CRUD_METHOD = 'update';
 			
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		//
+		// }
 	});// end fn_callApi
 //	openIziModal(modalName);
 }
@@ -443,10 +449,10 @@ function initDetailSelectBox(_data){
 	   
 	// 회사리스트
 	fn_callApi(method, target, req, function(response) {
-		let res = response;   
+		let data = response;
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-			let data = res.data.result.result;
+		// if (res.code == 200) {
+		// 	let data = res.data.result.result;
 			let strOption = "<option value=''>선택</option>";     
 			for ( var i=0; i<data.length; i++ ) {   
 				let companyName = '';
@@ -459,14 +465,14 @@ function initDetailSelectBox(_data){
 			} 				 
 			$('#companyName').append(strOption);
 			$('#companyName').attr('disabled', false);
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// company init
 	if( CRUD_METHOD == 'insert' ){ 
-		openIziModal(modalName);
+		// openIziModal(modalName);
 	}
 	
 }
@@ -489,11 +495,11 @@ function detailValidation(){
 	let insuranceCompanyment3     =  getPureText($('#insuranceCompanyment3').val());
 	let carDamageCover4     	=  getPureText($('#carDamageCover4').val());
 	let insuranceCompanyment4     =  getPureText($('#insuranceCompanyment4').val());
-	
-	let carDamage1Yn 			=  $(':input:radio[name=carDamage1Yn]:checked').val();
-	let carDamage2Yn 			=  insuranceCompanyment2 == '' ? 'N' : $(':input:radio[name=carDamage2Yn]:checked').val();
-	let carDamage3Yn 			=  insuranceCompanyment3 == '' ? 'N' : $(':input:radio[name=carDamage3Yn]:checked').val();
-	let carDamage4Yn 			=  insuranceCompanyment4 == '' ? 'N' : $(':input:radio[name=carDamage4Yn]:checked').val();
+
+	let carDamage1Yn 			=  $('input:checkbox[id=carDamage1Yn]:checked').val();
+	let carDamage2Yn 			=  insuranceCompanyment2 == '' ? 'N' : $('input:checkbox[id=carDamage2Yn]:checked').val();
+	let carDamage3Yn 			=  insuranceCompanyment3 == '' ? 'N' : $('input:checkbox[id=carDamage3Yn]:checked').val();
+	let carDamage4Yn 			=  insuranceCompanyment4 == '' ? 'N' : $('input:checkbox[id=carDamage4Yn]:checked').val();
 	let ciEtc               	=  getPureText($('#ciEtc').val());
 	let delYn				    =  getPureText($('#delYn').val());
 
@@ -501,11 +507,13 @@ function detailValidation(){
 		errorAlert('회원사', '회원사를 선택하여 주세요.');
 		$('#companyName').focus();
 		return;
-	}else if(isEmpty(ciEtc)){
+	}
+	else if(isEmpty(ciEtc)){
 		errorAlert('제목', '제목을 입력해 주세요.');
 		$('#ciEtc').focus();
 		return;
-	}else if(isEmpty(personalCover)){
+	}
+	else if(isEmpty(personalCover)){
 		errorAlert('대인', '대인 입력 하여주세요.');
 		$('#personalCover').focus();
 		return;
@@ -581,8 +589,8 @@ function detailValidation(){
 		,	'carDamage4Yn' : carDamage4Yn
 		,	'ciEtc' : ciEtc
 		,	'delYn' : delYn
-		,	'modId' : GLOBAL_LOGIN_USER_IDX
-		,	'regId' : GLOBAL_LOGIN_USER_IDX
+		// ,	'modId' : GLOBAL_LOGIN_USER_IDX
+		// ,	'regId' : GLOBAL_LOGIN_USER_IDX
 	}
 
 	let method = '';
@@ -608,9 +616,10 @@ function detailSubmit(method, reqParam){
 	let param = reqParam;
 
 	fn_callApi(_method, _target, param, function(response) {
+		let data = response
 		$("#"+modalName).iziModal('close');
 
-		if(response.code == 200 && response.data.result == 1){
+		if(data.res === 1){
 			swal("저장 성공", { icon: "success"});
 
 			loadApi(drawTable, null);  

@@ -32,6 +32,16 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <button class="btn btn-info" onclick="addInsuranceTemplate()">보험템플릿 등록</button>
+                                <script th:inline="javascript">
+                                    /* 보험템플릿 등록 */
+                                    function addInsuranceTemplate() {
+                                        var url = "/car/payment/insurance/add";
+                                        var name = "보험템플릿 등록";
+                                        var specs = "width=1200, height=800, location=no, left=500, top=50";
+                                        window.open(url, name, specs);
+                                    }
+                                </script>
                                 <thead>
                                 <tr>
                                     <th>보험템플릿번호</th>
@@ -54,17 +64,30 @@
                                     <th>설정차량대수</th>
                                 </tr>
                                 </tfoot>
-<!--                                <tbody>-->
-<!--                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">-->
-<!--                                    <td th:text="${carModelInfo.getCdIdx()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCdYear()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
+                                <tbody>
+                                <tr th:each="insurance, index : ${insuranceList}" th:data-value="${insurance.getCiIdx()}" style="cursor: pointer">
+                                    <td th:text="${insurance.getCiIdx()}"></td>
+                                    <td th:text="${insurance.getCompanyName() + '(' + insurance.getBranchName() + ')'}"></td>
+                                    <td th:text="${insurance.getCiEtc()}"></td>
+                                    <td th:text="${insurance.getPersonalCover()}"></td>
+                                    <td th:text="${insurance.getPropertyDamageCover()}"></td>
+                                    <td th:text="${insurance.getOnselfDamageCover()}"></td>
+                                    <td th:text="${insurance.getSettingCarCnt()}"></td>
+                                </tr>
+                                <script th:inline="javascript">
+                                    // 상세보기 이동
+                                    $('#dataTable > tbody > tr >').click(function () {
+                                        var ciIdx = $(this).parent().attr('data-value');
+                                        if (ciIdx === "") return;
+
+                                        var url = "../../car/payment/insurance/" + ciIdx;
+                                        var name = "보험템플릿 수정";
+                                        var option = "width=1200, height=800, location=no, left=500, top=50";
+
+                                        window.open(url, name, option);
+                                    });
+                                </script>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -109,7 +132,19 @@
         </div>
     </div>
 </div>
-<script>
+<script th:inline="javascript">
+
+    $('#dataTable').DataTable( {
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'csvHtml5',
+            text: 'Export CSV',
+            footer: true,
+            className: 'exportBtn'
+        }]
+    } );
+
+
 
 </script>
 </body>

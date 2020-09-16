@@ -275,12 +275,12 @@ function initDetailInfo(seq){
 	};
 		
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		// let data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result[0];
+			let data = response[0];
 			
 			let pyIdx                = nullCheck(data.pyIdx);
 			let mdIdx                = nullCheck(data.mdIdx);
@@ -328,12 +328,12 @@ function initDetailInfo(seq){
 			$('#companyName').attr('disabled', true);
 			
 			CRUD_METHOD = 'update';
-			openIziModal(modalName);
+			// openIziModal(modalName);
 			
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		//
+		// }
 	});// end fn_callApi
 }
 
@@ -363,10 +363,10 @@ function initDetailSelectBox(_data){
 	   
 	// 회사리스트
 	fn_callApi(method, target, req, function(response) {
-		let res = response;   
+		let data = response;
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-			let data = res.data.result.result;
+		// if (res.code == 200) {
+		// 	let data = res.data.result.result;
 			let strOption = "<option value=''>선택</option>";     
 			for ( var i=0; i<data.length; i++ ) {   
 				if(!isEmpty(data[i].branchName)){
@@ -378,14 +378,14 @@ function initDetailSelectBox(_data){
 			} 				 
 			$('#companyName').append(strOption);
 			$('#companyName').attr('disabled', false);
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// company init
 	if( CRUD_METHOD == 'insert' ){ 
-		openIziModal(modalName);
+		// openIziModal(modalName);
 	}
 	
 }
@@ -449,19 +449,20 @@ function detailValidation(){
 		errorAlert('12개월 보증금', '12개월 보증금은 숫자만 입력 가능합니다.');
 		$('#month12Deposit').focus();
 		return;
-	}else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryStandardPay)){
-		errorAlert('배달기본요금', '배달기본요금은 숫자만 입력 가능합니다.');
-		$('#deliveryStandardPay').focus();
-		return;
-	}else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryAddPay)){
-		errorAlert('배달10KM단위추가요금', '배달10KM단위추가요금은 숫자만 입력 가능합니다.');
-		$('#deliveryAddPay').focus();
-		return;
-	}else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryMaxRate)){
-		errorAlert('배달최대할인율', '배달최대할인율은 숫자만 입력 가능합니다.');
-		$('#deliveryMaxRate').focus();
-		return;
 	}
+	// else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryStandardPay)){
+	// 	errorAlert('배달기본요금', '배달기본요금은 숫자만 입력 가능합니다.');
+	// 	$('#deliveryStandardPay').focus();
+	// 	return;
+	// }else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryAddPay)){
+	// 	errorAlert('배달10KM단위추가요금', '배달10KM단위추가요금은 숫자만 입력 가능합니다.');
+	// 	$('#deliveryAddPay').focus();
+	// 	return;
+	// }else if(!isEmpty(month3Deposit) && !$.isNumeric(deliveryMaxRate)){
+	// 	errorAlert('배달최대할인율', '배달최대할인율은 숫자만 입력 가능합니다.');
+	// 	$('#deliveryMaxRate').focus();
+	// 	return;
+	// }
 	
 	let rtIdx = companyName;
 
@@ -480,8 +481,8 @@ function detailValidation(){
 		,	'deliveryStandardPay' : deliveryStandardPay
 		,	'deliveryAddPay' : deliveryAddPay
 		,	'deliveryMaxRate' : deliveryMaxRate
-		,	'modId' : GLOBAL_LOGIN_USER_IDX
-		,	'regId' : GLOBAL_LOGIN_USER_IDX
+		// ,	'modId' : GLOBAL_LOGIN_USER_IDX
+		// ,	'regId' : GLOBAL_LOGIN_USER_IDX
 	}
 
 	let method = '';
@@ -508,9 +509,10 @@ function detailSubmit(method, reqParam){
 	let param = reqParam;
 
 	fn_callApi(_method, _target, param, function(response) {
+		let data = response;
 		$("#"+modalName).iziModal('close');
 		
-		if(response.code == 200 && response.data.result == 1){
+		if(data.res === 1){
 			swal("저장 성공", { icon: "success"});
 
 			loadApi(drawTable, null);  

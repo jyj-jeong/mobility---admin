@@ -6,9 +6,9 @@
 	<select id="selectInsuranceTemplateInfo"  parameterType="insuranceTemplateRequest" 
       			   				  	 resultType="insuranceTemplateResponse">
       	<![CDATA[
-		SELECT * FROM (
-			SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
-			FROM ( 
+-- 		SELECT * FROM (
+-- 			SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.*
+-- 			FROM (
      				 SELECT 
 							    IFNULL(T1.CI_IDX				, '') AS CI_IDX                 /*보험정보idx*/
 							,   IFNULL(T1.CR_IDX				, '') AS CR_IDX                 /*차량idx*/
@@ -43,36 +43,18 @@
       				FROM DC_CAR_INFO_INSURANCE T1
       				INNER JOIN DC_RENT_COMPANY T2
       						ON T1.RT_IDX = T2.RT_IDX
-				) A 
+-- 				) A
          ]]>
-		 <trim prefix="WHERE" prefixOverrides="AND|OR">
-				1=1 
-         </trim>
+<!--		 <trim prefix="WHERE" prefixOverrides="AND|OR">-->
+<!--				1=1-->
+<!--         </trim>-->
      	 <if test="rtIdx != null  and rtIdx != '' ">
 	    	AND <![CDATA[    A.RT_IDX = #{rtIdx} ]]>
 		 </if>
-		 <if test="searchType != null and searchType != '' ">
-		    <choose>
-		    	<when test =' searchType == "companyName" ' >
-		    		AND <![CDATA[ A.COMPANY_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "branchName" ' >
-		    		AND <![CDATA[ A.BRANCH_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "ciIdx" ' >
-		    		AND <![CDATA[ A.CI_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "ciEtc" ' >
-		    		AND <![CDATA[ A.CI_ETC  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<otherwise>
-		    	</otherwise>
-		    </choose>   
-		 </if>
-         <![CDATA[	) X ]]> 
-         <trim prefix="WHERE" prefixOverrides="AND|OR">
-         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
-       	</trim>						  		
+<!--         <![CDATA[	) X ]]> -->
+<!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
+<!--         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>-->
+<!--       	</trim>						  		-->
 	</select>    
 	
 	<select id="insuranceTemplateinfoDetail"  parameterType="insuranceTemplateRequest" 
@@ -143,7 +125,8 @@
  			<if test="ciEtc					!= null"><![CDATA[  , CI_ETC 				= #{ciEtc}  				]]></if> 	<!-- 제목 -->		
  			<if test="delYn					!= null"><![CDATA[  , DEL_YN 				= #{delYn}  				]]></if> 	<!-- 삭제여부 -->		
  			<if test="modId					!= null"><![CDATA[  , MOD_ID 				= #{modId}  				]]></if> 	<!-- 수정자 -->
- 			, MOD_DT = SYSDATE
+ 			, MOD_DT = NOW()
+
 		</trim>
     	<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="ciIdx != null and ciIdx != ''">
@@ -200,7 +183,7 @@
 			,  	#{carDamage4Yn}
 			,  	#{insuranceFee}
 			,  	#{ageLimit}
-			,  	#{driverCareerLimit}
+			,  	#{driveCareerLimit}
 			,  	#{modId}
 			,	NOW()
 			,  	#{ciEtc}

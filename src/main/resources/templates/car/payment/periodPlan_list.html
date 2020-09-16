@@ -31,8 +31,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-<!--                                <button class="btn btn-info" onclick="addPerionPlan()">기간요금설정 등록</button>-->
+                            <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                                <button class="btn btn-info" onclick="addPerionPlan()">기간요금설정 등록</button>
                                 <script th:inline="javascript">
                                     /* 기간요금설정 등록 */
                                     function addPerionPlan() {
@@ -64,17 +64,30 @@
                                     <th>내용</th>
                                 </tr>
                                 </tfoot>
-<!--                                <tbody>-->
-<!--                                <tr th:each="carModelInfo, index : ${carModelInfoList}" th:data-value="${carModelInfo.getCdIdx()}">-->
-<!--                                    <td th:text="${carModelInfo.getCdIdx()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getManufacturerCode()}"></td>-->
-<!--                                    <td th:text="${carModelInfo.getCdYear()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                    <td th:text="${carModelInfo.getCarTypeCode()}"></td>-->
-<!--                                    <td ></td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
+                                <tbody>
+                                <tr th:each="period, index : ${periodList}" style="cursor: pointer" th:data-value="${period.getPerIdx()}">
+                                    <td th:text="${period.getPerIdx()}"></td>
+                                    <td th:text="${period.getCompanyName() + '(' + period.getBranchName() + ')'}"></td>
+                                    <td th:text="${period.getPeriodStartDt() + ' (' + period.getPeriodEndDt() + ')'}"></td>
+                                    <td th:text="${period.getPeriodPay()}"></td>
+                                    <td th:text="${period.getPeriodPay()}"></td>
+                                    <td th:text="${period.getSettingCarCnt()}"></td>
+                                    <td th:text="${period.getPeriodEtc()}"></td>
+                                </tr>
+                                <script th:inline="javascript">
+                                    // 상세보기 이동
+                                    $('#dataTable > tbody > tr >').click(function () {
+                                        var perIdx = $(this).parent().attr('data-value');
+                                        if (perIdx === "") return;
+
+                                        var url = "../../car/payment/period/" + perIdx;
+                                        var name = "기간 요금제 수정";
+                                        var option = "width=600, height=800, location=no, left=500, top=50";
+
+                                        window.open(url, name, option);
+                                    });
+                                </script>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -119,8 +132,16 @@
         </div>
     </div>
 </div>
-<script>
-
+<script th:inline="javascript">
+    $('#dataTable').DataTable( {
+        dom: 'Blfrtip',
+        buttons: [{
+            extend: 'csvHtml5',
+            text: 'Export CSV',
+            footer: true,
+            className: 'exportBtn'
+        }]
+    } );
 </script>
 </body>
 </html>
