@@ -1,5 +1,6 @@
 package com.ohdocha.admin.mapper;
 
+import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailResponse;
@@ -26,6 +27,9 @@ public interface DochaAdminRegCarMapper {
 
     //등록차량 보험 저장
     public int insertRegCarInsurance(DochaAdminInsuranceTemplateDetailRequest reqParam);
+
+    //등록차량 요금제 저장
+    public int insertRegCarPayment(DochaAdminBaiscPlanDetailRequest reqParam);
 
     //등록차량 수정
     public int updateDcCarInfo(DochaAdminRegCarDetailRequest reqParam);

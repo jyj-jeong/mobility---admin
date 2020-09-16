@@ -18,7 +18,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- DataTales Example -->
-                <div class="card shadow mb-4">
+                <div class="card shadow mb-4 mt-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer"
                             onclick="changeCardView('regCarDetail')">차량등록 - 관리자 (00렌트카 / 00지점)</h6>
@@ -134,7 +134,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row mt-2">
-                            <h6 class="col-7 mb-3 font-weight-bold">자차보험</h6>
+                            <h6 class="col-8 mb-3 font-weight-bold">자차보험</h6>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="carDamage1Yn"
@@ -569,6 +569,15 @@
         initDetailData('insert');
     }else if (CRUD === "modify"){
         initDetailInfo(crIdx)
+    }
+
+    var browse = navigator.userAgent.toLowerCase();
+    if( (navigator.appName === 'Netscape' && browse.indexOf('trident') !== -1) || (browse.indexOf("msie") !== -1)) {
+        $("input[name=calRentStartDt2]").remove();
+        $("input[name=calRentEndDt2]").remove();
+    }else{
+        $("input[name=calRentStartDt]").remove();
+        $("input[name=calRentEndDt]").remove();
     }
 </script>
 </body>
