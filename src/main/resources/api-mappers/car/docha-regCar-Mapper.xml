@@ -125,49 +125,58 @@
                         ,   IFNULL(T1.CAR_ETC                , '' ) AS    CAR_ETC               /*비고*/
 
                         /* 보험료 */
---                         ,   IFNULL(T1.CI_IDX                 , '' ) AS    CI_IDX                /*보험정보idx*/
---                         ,   IFNULL(T1.PERSONAL_COVER         , '' ) AS    PERSONAL_COVER        /*대인보상금액*/
---                         ,   IFNULL(T1.PROPERTY_DAMAGE_COVER  , '' ) AS    PROPERTY_DAMAGE_COVER /*대물보상금액*/
---                         ,   IFNULL(T1.ONSELF_DAMAGE_COVER    , '' ) AS    ONSELF_DAMAGE_COVER   /*자손보상금액*/
---                         ,   IFNULL(T1.INSURANCE_COMPANYMENT    , '' ) AS    INSURANCE_COMPANYMENT   /*고객부담금(보험료)*/
---                         ,   IFNULL(T1.CAR_DAMAGE_COVER       , '' ) AS    CAR_DAMAGE_COVER      /*자차보상금액(면책금)*/
---                         ,   IFNULL(T1.INSURANCE_COMPANYMENT2   , '' ) AS    INSURANCE_COMPANYMENT2  /*고객부담금2(보험료)*/
---                         ,   IFNULL(T1.CAR_DAMAGE_COVER2      , '' ) AS    CAR_DAMAGE_COVER2     /*자차보상금액2(면책금)*/
---                         ,   IFNULL(T1.INSURANCE_COMPANYMENT3   , '' ) AS    INSURANCE_COMPANYMENT3  /*고객부담금3(보험료)*/
---                         ,   IFNULL(T1.CAR_DAMAGE_COVER3      , '' ) AS    CAR_DAMAGE_COVER3     /*자차보상금액3(면책금)*/
---                         ,   IFNULL(T1.INSURANCE_COMPANYMENT4   , '' ) AS    INSURANCE_COMPANYMENT4  /*고객부담금4(보험료)*/
---                         ,   IFNULL(T1.CAR_DAMAGE_COVER4      , '' ) AS    CAR_DAMAGE_COVER4     /*자차보상금액4(면책금)*/
---                         ,   IFNULL(T1.CAR_DAMAGE1_YN         , 'Y') AS    CAR_DAMAGE1_YN        /*자차1사용유무*/
---                         ,   IFNULL(T1.CAR_DAMAGE2_YN         , 'Y') AS    CAR_DAMAGE2_YN        /*자차2사용유무*/
---                         ,   IFNULL(T1.CAR_DAMAGE3_YN         , 'Y') AS    CAR_DAMAGE3_YN        /*자차3사용유무*/
---                         ,   IFNULL(T1.CAR_DAMAGE4_YN         , 'Y') AS    CAR_DAMAGE4_YN        /*자차4사용유무*/
+                        ,   IFNULL(T3.CI_IDX                 , '' ) AS    CI_IDX                /*보험정보idx*/
+                        ,   IFNULL(T3.PERSONAL_COVER         , '' ) AS    PERSONAL_COVER        /*대인보상금액*/
+                        ,   IFNULL(T3.PROPERTY_DAMAGE_COVER  , '' ) AS    PROPERTY_DAMAGE_COVER /*대물보상금액*/
+                        ,   IFNULL(T3.ONSELF_DAMAGE_COVER    , '' ) AS    ONSELF_DAMAGE_COVER   /*자손보상금액*/
+                        ,   IFNULL(T3.INSURANCE_COMPANYMENT    , '' ) AS    INSURANCE_COMPANYMENT   /*고객부담금(보험료)*/
+                        ,   IFNULL(T3.CAR_DAMAGE_COVER       , '' ) AS    CAR_DAMAGE_COVER      /*자차보상금액(면책금)*/
+                        ,   IFNULL(T3.INSURANCE_COMPANYMENT2   , '' ) AS    INSURANCE_COMPANYMENT2  /*고객부담금2(보험료)*/
+                        ,   IFNULL(T3.CAR_DAMAGE_COVER2      , '' ) AS    CAR_DAMAGE_COVER2     /*자차보상금액2(면책금)*/
+                        ,   IFNULL(T3.INSURANCE_COMPANYMENT3   , '' ) AS    INSURANCE_COMPANYMENT3  /*고객부담금3(보험료)*/
+                        ,   IFNULL(T3.CAR_DAMAGE_COVER3      , '' ) AS    CAR_DAMAGE_COVER3     /*자차보상금액3(면책금)*/
+                        ,   IFNULL(T3.INSURANCE_COMPANYMENT4   , '' ) AS    INSURANCE_COMPANYMENT4  /*고객부담금4(보험료)*/
+                        ,   IFNULL(T3.CAR_DAMAGE_COVER4      , '' ) AS    CAR_DAMAGE_COVER4     /*자차보상금액4(면책금)*/
+                        ,   IFNULL(T3.CAR_DAMAGE1_YN         , 'Y') AS    CAR_DAMAGE1_YN        /*자차1사용유무*/
+                        ,   IFNULL(T3.CAR_DAMAGE2_YN         , 'Y') AS    CAR_DAMAGE2_YN        /*자차2사용유무*/
+                        ,   IFNULL(T3.CAR_DAMAGE3_YN         , 'Y') AS    CAR_DAMAGE3_YN        /*자차3사용유무*/
+                        ,   IFNULL(T3.CAR_DAMAGE4_YN         , 'Y') AS    CAR_DAMAGE4_YN        /*자차4사용유무*/
 --
 --                         /* 기본 요금제 */
---                         ,   IFNULL(T1.PY_IDX                 , '' ) AS    PY_IDX                /*요금idx*/
---                         ,   IFNULL(T1.DAILY_STANDARD_PAY     , '' ) AS    DAILY_STANDARD_PAY    /*일기본요금*/
---                         ,   IFNULL(T1.DAILY_MAX_RATE         , '' ) AS    DAILY_MAX_RATE        /*일대여최대할인율*/
---                         ,   IFNULL(T1.MONTHLY_STANDARD_PAY   , '' ) AS    MONTHLY_STANDARD_PAY  /*월기본요금*/
---                         ,   IFNULL(T1.MONTHLY_MAX_RATE       , '' ) AS    MONTHLY_MAX_RATE      /*월대여최대할인율*/
---                         ,   IFNULL(T1.MONTH3_DEPOSIT         , '' ) AS    MONTH3_DEPOSIT        /*3개월보증금*/
---                         ,   IFNULL(T1.MONTH6_DEPOSIT         , '' ) AS    MONTH6_DEPOSIT        /*6개월보증금*/
---                         ,   IFNULL(T1.MONTH9_DEPOSIT         , '' ) AS    MONTH9_DEPOSIT        /*9개월보증금*/
---                         ,   IFNULL(T1.MONTH12_DEPOSIT        , '' ) AS    MONTH12_DEPOSIT       /*12개월보증금*/
---                         ,   IFNULL(T1.DELIVERY_STANDARD_PAY  , '' ) AS    DELIVERY_STANDARD_PAY /*배달기본요금*/
---                         ,   IFNULL(T1.DELIVERY_ADD_PAY       , '' ) AS    DELIVERY_ADD_PAY      /*배달10KM단위추가요금*/
---                         ,   IFNULL(T1.DELIVERY_MAX_RATE      , '' ) AS    DELIVERY_MAX_RATE     /*배달최대할인율*/
---                         ,   IFNULL(T1.DAILY_YN               , '' ) AS    DAILY_YN              /*일대여사용유무*/
---                         ,   IFNULL(T1.MONTHLY_YN             , '' ) AS    MONTHLY_YN            /*월대여사용유무*/
---                         ,   IFNULL(T1.CLOSEDVEHICLE_YN       , '' ) AS    CLOSEDVEHICLE_YN      /*휴차일사용유무*/
---                         ,   IFNULL(T1.PER_IDX              , '' ) AS      PER_IDX               /*기간요금idx*/
-                  FROM   DC_CAR_INFO T1 INNER JOIN DC_RENT_COMPANY T2 ON T1.RT_IDX = T2.RT_IDX
+                        ,   IFNULL(T4.PY_IDX                 , '' ) AS    PY_IDX                /*요금idx*/
+                        ,   IFNULL(T4.DAILY_STANDARD_PAY     , '' ) AS    DAILY_STANDARD_PAY    /*일기본요금*/
+                        ,   IFNULL(T4.DAILY_MAX_RATE         , '' ) AS    DAILY_MAX_RATE        /*일대여최대할인율*/
+                        ,   IFNULL(T4.MONTHLY_STANDARD_PAY   , '' ) AS    MONTHLY_STANDARD_PAY  /*월기본요금*/
+                        ,   IFNULL(T4.MONTHLY_MAX_RATE       , '' ) AS    MONTHLY_MAX_RATE      /*월대여최대할인율*/
+                        ,   IFNULL(T4.MONTH3_DEPOSIT         , '' ) AS    MONTH3_DEPOSIT        /*3개월보증금*/
+                        ,   IFNULL(T4.MONTH6_DEPOSIT         , '' ) AS    MONTH6_DEPOSIT        /*6개월보증금*/
+                        ,   IFNULL(T4.MONTH9_DEPOSIT         , '' ) AS    MONTH9_DEPOSIT        /*9개월보증금*/
+                        ,   IFNULL(T4.MONTH12_DEPOSIT        , '' ) AS    MONTH12_DEPOSIT       /*12개월보증금*/
+                        ,   IFNULL(T4.DELIVERY_STANDARD_PAY  , '' ) AS    DELIVERY_STANDARD_PAY /*배달기본요금*/
+                        ,   IFNULL(T4.DELIVERY_ADD_PAY       , '' ) AS    DELIVERY_ADD_PAY      /*배달10KM단위추가요금*/
+                        ,   IFNULL(T4.DELIVERY_MAX_RATE      , '' ) AS    DELIVERY_MAX_RATE     /*배달최대할인율*/
+                        ,   IFNULL(T4.DAILY_YN               , '' ) AS    DAILY_YN              /*일대여사용유무*/
+                        ,   IFNULL(T4.MONTHLY_YN             , '' ) AS    MONTHLY_YN            /*월대여사용유무*/
+                        ,   IFNULL(T4.CLOSEDVEHICLE_YN       , '' ) AS    CLOSEDVEHICLE_YN      /*휴차일사용유무*/
+                        ,   IFNULL(T1.PER_IDX              , '' ) AS      PER_IDX               /*기간요금idx*/
+                  FROM DC_CAR_INFO T1
+         INNER JOIN DC_RENT_COMPANY T2
+                    ON T1.RT_IDX = T2.RT_IDX
+
+         LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+                    ON T1.CR_IDX = T3.CR_IDX
+
+         LEFT OUTER JOIN DC_PAYMENT_INFO T4
+         			ON T1.CR_IDX = T4.CR_IDX
+
          ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<!-- <![CDATA[   T1.DEL_YN='N' ]]> -->
 			<if test="rtIdx != null and rtIdx != ''">
-				<![CDATA[   AND T1.RT_IDX = #{rtIdx} ]]>
+				<![CDATA[ AND T1.RT_IDX = #{rtIdx} ]]>
 			</if>
 			<if test="crIdx != null and crIdx != ''">
-				<![CDATA[  AND   T1.CR_IDX = #{crIdx} ]]>
+				<![CDATA[  AND T1.CR_IDX = #{crIdx} ]]>
 			</if>
 		</trim>
 	</select>
@@ -217,41 +226,44 @@
 			<if test="maximumPassenger   != null"><![CDATA[  , MAXIMUM_PASSENGER    = #{maximumPassenger}     ]]></if>    <!-- 승차인원 -->
 			<if test="delYn            != null"><![CDATA[  , DEL_YN             = #{delYn}           ]]></if>    <!-- 삭제여부 -->
 			<!-- 차량 보험료 -->
-			<if test="ciIdx             != null"><![CDATA[  , CI_IDX            = #{ciIdx}               ]]></if>   <!-- 보험료순번 -->
-			<if test="onselfDamageCover    != null"><![CDATA[  , ONSELF_DAMAGE_COVER   = #{onselfDamageCover}      ]]></if>   <!-- 자손보상금액 -->
-			<if test="personalCover       != null"><![CDATA[  , PERSONAL_COVER      = #{personalCover}        ]]></if>   <!-- 대인보상금액 -->
-			<if test="propertyDamageCover    != null"><![CDATA[  , PROPERTY_DAMAGE_COVER   = #{propertyDamageCover}     ]]></if>   <!-- 대물보상금액-->
-			<if test="carDamageCover       != null"><![CDATA[  , CAR_DAMAGE_COVER      = #{carDamageCover}        ]]></if>   <!-- 자차보상금액:면책금 -->
-			<if test="insuranceCompanyment    != null"><![CDATA[  , INSURANCE_COMPANYMENT   = #{insuranceCompanyment}     ]]></if>   <!-- 고객부담금:보험료 -->
-			<if test="carDamageCover2       != null"><![CDATA[  , CAR_DAMAGE_COVER2      = #{carDamageCover2}        ]]></if>   <!-- 자차보상금액2:면책금 -->
-			<if test="insuranceCompanyment2   != null"><![CDATA[  , INSURANCE_COMPANYMENT2   = #{insuranceCompanyment2}     ]]></if>   <!-- 고객부담금2:보험료 -->
-			<if test="carDamageCover3       != null"><![CDATA[  , CAR_DAMAGE_COVER3      = #{carDamageCover3}       ]]></if>   <!-- 자차보상금액3:면책금 -->
-			<if test="insuranceCompanyment3   != null"><![CDATA[  , INSURANCE_COMPANYMENT3    = #{insuranceCompanyment3}     ]]></if>    <!-- 고객부담금3:보험료 -->
-			<if test="carDamageCover4       != null"><![CDATA[  , CAR_DAMAGE_COVER4    = #{carDamageCover4}        ]]></if>    <!-- 자차보상금액4:면책금 -->
-			<if test="insuranceCompanyment4   != null"><![CDATA[  , INSURANCE_COMPANYMENT4    = #{insuranceCompanyment4}     ]]></if>    <!-- 고객부담금4:보험료 -->
-			<if test="carDamage1Yn         != null"><![CDATA[  , CAR_DAMAGE1_YN       = #{carDamage1Yn}           ]]></if>    <!-- 자차1사용유무 -->
-			<if test="carDamage2Yn         != null"><![CDATA[  , CAR_DAMAGE2_YN       = #{carDamage2Yn}           ]]></if>    <!-- 자차2사용유무 -->
-			<if test="carDamage3Yn         != null"><![CDATA[  , CAR_DAMAGE3_YN       = #{carDamage3Yn}           ]]></if>    <!-- 자차3사용유무 -->
-			<if test="carDamage4Yn         != null"><![CDATA[  , CAR_DAMAGE4_YN       = #{carDamage4Yn}           ]]></if>    <!-- 자차4사용유무 -->
+			<if test="ciIdx             != null"><![CDATA[ 			 , T2.CI_IDX            = #{ciIdx}               ]]></if>   <!-- 보험료순번 -->
+			<if test="onselfDamageCover    != null"><![CDATA[ 		 , T2.ONSELF_DAMAGE_COVER   = #{onselfDamageCover}      ]]></if>   <!-- 자손보상금액 -->
+			<if test="personalCover       != null"><![CDATA[ 		 , T2.PERSONAL_COVER      = #{personalCover}        ]]></if>   <!-- 대인보상금액 -->
+			<if test="propertyDamageCover    != null"><![CDATA[		 , T2.PROPERTY_DAMAGE_COVER   = #{propertyDamageCover}     ]]></if>   <!-- 대물보상금액-->
+			<if test="carDamageCover       != null"><![CDATA[  		 , T2.CAR_DAMAGE_COVER      = #{carDamageCover}        ]]></if>   <!-- 자차보상금액:면책금 -->
+			<if test="insuranceCompanyment    != null"><![CDATA[  	 , T2.INSURANCE_COMPANYMENT   = #{insuranceCompanyment}     ]]></if>   <!-- 고객부담금:보험료 -->
+			<if test="carDamageCover2       != null"><![CDATA[  	 , T2.CAR_DAMAGE_COVER2      = #{carDamageCover2}        ]]></if>   <!-- 자차보상금액2:면책금 -->
+			<if test="insuranceCompanyment2   != null"><![CDATA[	 , T2.INSURANCE_COMPANYMENT2   = #{insuranceCompanyment2}     ]]></if>   <!-- 고객부담금2:보험료 -->
+			<if test="carDamageCover3       != null"><![CDATA[  	 , T2.CAR_DAMAGE_COVER3      = #{carDamageCover3}       ]]></if>   <!-- 자차보상금액3:면책금 -->
+			<if test="insuranceCompanyment3   != null"><![CDATA[  	 , T2.INSURANCE_COMPANYMENT3    = #{insuranceCompanyment3}     ]]></if>    <!-- 고객부담금3:보험료 -->
+			<if test="carDamageCover4       != null"><![CDATA[  	 , T2.CAR_DAMAGE_COVER4    = #{carDamageCover4}        ]]></if>    <!-- 자차보상금액4:면책금 -->
+			<if test="insuranceCompanyment4   != null"><![CDATA[  	 , T2.INSURANCE_COMPANYMENT4    = #{insuranceCompanyment4}     ]]></if>    <!-- 고객부담금4:보험료 -->
+			<if test="carDamage1Yn         != null"><![CDATA[  		 , T2.CAR_DAMAGE1_YN       = #{carDamage1Yn}           ]]></if>    <!-- 자차1사용유무 -->
+			<if test="carDamage2Yn         != null"><![CDATA[  		 , T2.CAR_DAMAGE2_YN       = #{carDamage2Yn}           ]]></if>    <!-- 자차2사용유무 -->
+			<if test="carDamage3Yn         != null"><![CDATA[  		 , T2.CAR_DAMAGE3_YN       = #{carDamage3Yn}           ]]></if>    <!-- 자차3사용유무 -->
+			<if test="carDamage4Yn         != null"><![CDATA[  		 , T2.CAR_DAMAGE4_YN       = #{carDamage4Yn}           ]]></if>    <!-- 자차4사용유무 -->
 			<!-- 차량 기본요금 -->
-			<if test="pyIdx             != null"><![CDATA[  , PY_IDX            = #{pyIdx}               ]]></if>   <!-- 보험료순번 -->
-			<if test="dailyStandardPay      != null"><![CDATA[  , DAILY_STANDARD_PAY   = #{dailyStandardPay}        ]]></if>   <!-- 일 기본요금 -->
-			<if test="dailyMaxRate         != null"><![CDATA[  , DAILY_MAX_RATE      = #{dailyMaxRate}           ]]></if>   <!-- 일대여 최대 할인율 -->
-			<if test="monthlyStandardPay   != null"><![CDATA[  , MONTHLY_STANDARD_PAY   = #{monthlyStandardPay}     ]]></if>   <!-- 월 기본 요금 -->
-			<if test="monthlyMaxRate       != null"><![CDATA[  , MONTHLY_MAX_RATE      = #{monthlyMaxRate}        ]]></if>   <!-- 월대여 최대 할인율 -->
-			<if test="month3Deposit       != null"><![CDATA[  , MONTH3_DEPOSIT      = #{month3Deposit}        ]]></if>   <!-- 3개월 보증금 -->
-			<if test="month6Deposit       != null"><![CDATA[  , MONTH6_DEPOSIT      = #{month6Deposit}        ]]></if>   <!-- 6개월 보증금 -->
-			<if test="month9Deposit       != null"><![CDATA[  , MONTH9_DEPOSIT      = #{month9Deposit}        ]]></if>   <!-- 9개월 보증금 -->
-			<if test="month12Deposit       != null"><![CDATA[  , MONTH12_DEPOSIT      = #{month12Deposit}       ]]></if>   <!-- 12개월 보증금 -->
-			<if test="deliveryStandardPay   != null"><![CDATA[  , DELIVERY_STANDARD_PAY = #{deliveryStandardPay}     ]]></if>    <!-- 배달기본요금 -->
-			<if test="deliveryAddPay      != null"><![CDATA[  , DELIVERY_ADD_PAY       = #{deliveryAddPay}        ]]></if>    <!-- 배달10KM단위추가요금 -->
-			<if test="deliveryMaxRate      != null"><![CDATA[  , DELIVERY_MAX_RATE    = #{deliveryMaxRate}        ]]></if>    <!-- 배달최대할인율 -->
-
-			<if test="dailyYn            != null"><![CDATA[  DAILY_YN             = #{dailyYn}              ]]></if>    <!-- 일대여여부 -->
-			<if test="monthlyYn            != null"><![CDATA[  MONTHLY_YN             = #{monthlyYn}           ]]></if>    <!-- 월대여여부 -->
+<!--			<if test="pyIdx             != null"><![CDATA[  , PY_IDX            = #{pyIdx}               ]]></if>   &lt;!&ndash; 보험료순번 &ndash;&gt;-->
+<!--			<if test="dailyStandardPay      != null"><![CDATA[  , DAILY_STANDARD_PAY   = #{dailyStandardPay}        ]]></if>   &lt;!&ndash; 일 기본요금 &ndash;&gt;-->
+<!--			<if test="dailyMaxRate         != null"><![CDATA[  , DAILY_MAX_RATE      = #{dailyMaxRate}           ]]></if>   &lt;!&ndash; 일대여 최대 할인율 &ndash;&gt;-->
+<!--			<if test="monthlyStandardPay   != null"><![CDATA[  , MONTHLY_STANDARD_PAY   = #{monthlyStandardPay}     ]]></if>   &lt;!&ndash; 월 기본 요금 &ndash;&gt;-->
+<!--			<if test="monthlyMaxRate       != null"><![CDATA[  , MONTHLY_MAX_RATE      = #{monthlyMaxRate}        ]]></if>   &lt;!&ndash; 월대여 최대 할인율 &ndash;&gt;-->
+<!--			<if test="month3Deposit       != null"><![CDATA[  , MONTH3_DEPOSIT      = #{month3Deposit}        ]]></if>   &lt;!&ndash; 3개월 보증금 &ndash;&gt;-->
+<!--			<if test="month6Deposit       != null"><![CDATA[  , MONTH6_DEPOSIT      = #{month6Deposit}        ]]></if>   &lt;!&ndash; 6개월 보증금 &ndash;&gt;-->
+<!--			<if test="month9Deposit       != null"><![CDATA[  , MONTH9_DEPOSIT      = #{month9Deposit}        ]]></if>   &lt;!&ndash; 9개월 보증금 &ndash;&gt;-->
+<!--			<if test="month12Deposit       != null"><![CDATA[  , MONTH12_DEPOSIT      = #{month12Deposit}       ]]></if>   &lt;!&ndash; 12개월 보증금 &ndash;&gt;-->
+<!--			<if test="deliveryStandardPay   != null"><![CDATA[  , DELIVERY_STANDARD_PAY = #{deliveryStandardPay}     ]]></if>    &lt;!&ndash; 배달기본요금 &ndash;&gt;-->
+<!--			<if test="deliveryAddPay      != null"><![CDATA[  , DELIVERY_ADD_PAY       = #{deliveryAddPay}        ]]></if>    &lt;!&ndash; 배달10KM단위추가요금 &ndash;&gt;-->
+<!--			<if test="deliveryMaxRate      != null"><![CDATA[  , DELIVERY_MAX_RATE    = #{deliveryMaxRate}        ]]></if>    &lt;!&ndash; 배달최대할인율 &ndash;&gt;-->
+<!--			<if test="dailyYn            != null"><![CDATA[  DAILY_YN             = #{dailyYn}              ]]></if>    &lt;!&ndash; 일대여여부 &ndash;&gt;-->
+<!--			<if test="monthlyYn            != null"><![CDATA[  MONTHLY_YN             = #{monthlyYn}           ]]></if>    &lt;!&ndash; 월대여여부 &ndash;&gt;-->
 
 			<if test="modId 			!= null"><![CDATA[  ,  MOD_ID 				= #{modId}				]]></if> 	<!-- 수정자 -->
 			, MOD_DT = NOW()
+			FROM DC_CAR_INFO T1
+			LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T2
+					ON T1.CR_IDX = T2.CR_IDX
+
 		</trim>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="crIdx != null and crIdx != ''">
@@ -365,6 +377,42 @@
       )
    ]]>
     </insert>
+
+	<!-- 차량 요금제정보 INSERT -->
+	<insert  id="insertRegCarPayment" parameterType="paymentInfoRequest">
+   <![CDATA[
+        INSERT INTO DC_PAYMENT_INFO (
+		  DAILY_STANDARD_PAY
+		 , DAILY_MAX_RATE
+		 , MONTHLY_STANDARD_PAY
+		 , MONTHLY_MAX_RATE
+		 , MONTH3_DEPOSIT
+		 , MONTH6_DEPOSIT
+		 , MONTH9_DEPOSIT
+		 , MONTH12_DEPOSIT
+		 , DELIVERY_STANDARD_PAY
+		 , DELIVERY_ADD_PAY
+		 , DELIVERY_MAX_RATE
+         ,  REG_ID
+         ,  REG_DT
+      ) VALUES (
+              #{dailyStandardPay}
+         ,     #{dailyMaxRate}
+         ,     #{monthlyStandardPay}
+         ,     #{monthlyMaxRate}
+         ,     #{month3Deposit}
+         ,     #{month6Deposit}
+         ,     #{month9Deposit}
+         ,     #{month12Deposit}
+         ,     #{deliveryStandardPay}
+         ,     #{deliveryAddPay}
+         ,     #{deliveryMaxRate}
+         ,     #{regId}
+         ,   NOW()
+      )
+   ]]>
+    </insert>
+
 
 	<select id="selectReserveAmt" parameterType="regCarDetailRequest"
 			resultType="regCarDetailResponse">

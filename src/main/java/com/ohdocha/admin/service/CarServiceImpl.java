@@ -4,11 +4,17 @@ import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailResponse;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelResponse;
+import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanDetailRequest;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanRequest;
+import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanDetailResponse;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBasicPlanResponse;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateResponse;
+import com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingDetailRequest;
+import com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingDetailResponse;
+import com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingRequest;
+import com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingResponse;
 import com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyRequest;
 import com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyResponse;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
@@ -24,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,6 +42,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     private final DochaAdminInsuranceTemplateMapper insuranceTemplateMapper;
     private final DochaAdminBasicPlanMapper basicPlanMapper;
     private final DochaAdminCarPropertyMapper propertyMapper;
+    private final DochaAdminPeriodPlanSettingMapper periodPlanSettingMapper;
 
 
     // region [ 등록차량 ]
@@ -74,6 +80,17 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         message.addData("crIdx", insuranceTemplateRequest.getCrIdx());
     }
 
+    /* 등록차량 요금제 추가 */
+    @Override
+    public void insertRegCarPayment(ServiceMessage message) {
+        DochaAdminBaiscPlanDetailRequest paymentInfoRequest = message.getObject("paymentInfoRequest", DochaAdminBaiscPlanDetailRequest.class);
+
+        int res = regCarMapper.insertRegCarPayment(paymentInfoRequest);
+
+        message.addData("res", res);
+//        message.addData("crIdx", paymentInfoRequest.getCrIdx());
+    }
+
     /* 등록차량 상세 */
     @Override
     public void regCarDetail(ServiceMessage message) {
@@ -84,7 +101,15 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         message.addData("result", regCarDetailResponseList);
     }
 
+    /* 등록차량 요금 계산 */
+    @Override
+    public void selectReserveAmt(ServiceMessage message) {
+        DochaAdminRegCarDetailRequest regCarDetailRequest = message.getObject("regCarDetailRequest", DochaAdminRegCarDetailRequest.class);
 
+        List<DochaAdminRegCarDetailResponse> regCarDetailResponseList = regCarMapper.selectReserveAmt(regCarDetailRequest);
+
+        message.addData("result", regCarDetailResponseList);
+    }
 
     /* 등록차량 수정 */
     @Override
@@ -142,15 +167,6 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
     }
 
-    /* 차량-요금제-기본요금제 상세 */
-    @Override
-    public void basicPlanDetail(ServiceMessage message) {
-        DochaAdminBaiscPlanRequest reqParam = message.getObject("reqParam", DochaAdminBaiscPlanRequest.class);
-
-        List<DochaAdminBasicPlanResponse> responseDto = basicPlanMapper.selectBasicPlan(reqParam);
-
-        message.addData("result", responseDto);
-    }
     //endregion
     //endregion
 
@@ -201,6 +217,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         message.addData("res", res);
     }
     // endregion
+
 
 
 
@@ -349,16 +366,139 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
 
 
-    /* 차량-요금제-기본요금제 리스트 */
+
+
+    //region [ 요금제 ]
+    /* 기간 요금제 등록 */
     @Override
-    public void basicPlanInfo(ServiceMessage message) {
-        DochaAdminBaiscPlanRequest reqParam = message.getObject("reqParam", DochaAdminBaiscPlanRequest.class);
+    public void insertPlanSettingDetail(ServiceMessage message) {
+        DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest = message.getObject("periodPlanSettingDetailRequest", DochaAdminPeriodPlanSettingDetailRequest.class);
 
-        List<DochaAdminBasicPlanResponse> responseDto = basicPlanMapper.selectBasicPlan(reqParam);
+        int res = periodPlanSettingMapper.insertPlanSettingDetail(periodPlanSettingDetailRequest);
 
-        message.addData("result", responseDto);
-
+        message.addData("res", res);
     }
+
+    /* 기간 요금제 리스트  */
+    @Override
+    public void getPeriodPlanList(ServiceMessage message) {
+        DochaAdminPeriodPlanSettingRequest reqParam = new DochaAdminPeriodPlanSettingRequest();
+
+        List<DochaAdminPeriodPlanSettingResponse> responseDto = periodPlanSettingMapper.selectPeriodPlanInfo(reqParam);
+
+        message.addData("periodList", responseDto);
+    }
+
+    /* 기간 요금제 상세 */
+    @Override
+    public void selectPeriodPlanDetail(ServiceMessage message) {
+        DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest = message.getObject("periodPlanSettingDetailRequest", DochaAdminPeriodPlanSettingDetailRequest.class);
+
+        List<DochaAdminPeriodPlanSettingDetailResponse> periodPlanSettingDetailResponseList = periodPlanSettingMapper.selectPeriodPlanDetail(periodPlanSettingDetailRequest);
+
+        message.addData("result", periodPlanSettingDetailResponseList);
+    }
+
+    /* 기간 요금제 수정 */
+    @Override
+    public void updatePeriodPlan(ServiceMessage message) {
+        DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest = message.getObject("periodPlanSettingDetailRequest", DochaAdminPeriodPlanSettingDetailRequest.class);
+
+        int res = periodPlanSettingMapper.updatePlanSettingDetail(periodPlanSettingDetailRequest);
+
+        message.addData("res", res);
+    }
+
+    /* 기본 요금제 등록 */
+    @Override
+    public void insertBasicPlanInfo(ServiceMessage message) {
+        DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest = message.getObject("baiscPlanDetailRequest", DochaAdminBaiscPlanDetailRequest.class);
+
+        int res = basicPlanMapper.insertBasicPlanInfo(baiscPlanDetailRequest);
+
+        message.addData("res", res);
+    }
+
+    /* 기본 요금제 리스트 */
+    @Override
+    public void getBasicPlanList(ServiceMessage message) {
+        DochaAdminBaiscPlanRequest baiscPlanRequest = new DochaAdminBaiscPlanRequest();
+
+        List<DochaAdminBasicPlanResponse> basicPlanResponseList = basicPlanMapper.selectBasicPlan(baiscPlanRequest);
+
+        message.addData("basicPlanList", basicPlanResponseList);
+    }
+
+    /* 기본 요금제 상세 */
+    @Override
+    public void selectbasicPlanDetail(ServiceMessage message) {
+        DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest = message.getObject("baiscPlanDetailRequest", DochaAdminBaiscPlanDetailRequest.class);
+
+        List<DochaAdminBasicPlanDetailResponse> basicPlanDetailResponseList = basicPlanMapper.selectBasicPlanDetail(baiscPlanDetailRequest);
+
+        message.addData("result", basicPlanDetailResponseList);
+    }
+
+    /* 기본 요금제 수정 */
+    @Override
+    public void updateBasicPlanInfo(ServiceMessage message) {
+        DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest = message.getObject("baiscPlanDetailRequest", DochaAdminBaiscPlanDetailRequest.class);
+
+        int res = basicPlanMapper.updateBasicPlanInfo(baiscPlanDetailRequest);
+
+        message.addData("res", res);
+    }
+
+
+
+    /* 보험템플릿 등록 */
+    @Override
+    public void insertInsuranceTemplate(ServiceMessage message) {
+        DochaAdminInsuranceTemplateDetailRequest insuranceTemplateDetailRequest = message.getObject("insuranceTemplateDetailRequest", DochaAdminInsuranceTemplateDetailRequest.class);
+
+        int res = insuranceTemplateMapper.insertInsuranceTemplate(insuranceTemplateDetailRequest);
+
+        message.addData("res", res);
+    }
+
+    /* 보험템플릿 리스트 */
+    @Override
+    public void getInsuranceTemplateList(ServiceMessage message) {
+        DochaAdminInsuranceTemplateRequest insuranceTemplateRequest = new DochaAdminInsuranceTemplateRequest();
+
+        List<DochaAdminInsuranceTemplateResponse> insuranceTemplateResponseList = insuranceTemplateMapper.selectInsuranceTemplateInfo(insuranceTemplateRequest);
+
+        message.addData("insuranceList", insuranceTemplateResponseList);
+    }
+    /* 기본 요금제 상세 */
+    @Override
+    public void InsuranceTemplateDetail(ServiceMessage message) {
+        DochaAdminInsuranceTemplateRequest insuranceTemplateRequest = message.getObject("insuranceTemplateRequest", DochaAdminInsuranceTemplateRequest.class);
+
+        List<DochaAdminInsuranceTemplateResponse> basicPlanDetailResponseList = insuranceTemplateMapper.insuranceTemplateinfoDetail(insuranceTemplateRequest);
+
+        message.addData("result", basicPlanDetailResponseList);
+    }
+
+    /* 기본 요금제 수정 */
+    @Override
+    public void updateInsuranceTemplate(ServiceMessage message) {
+        DochaAdminInsuranceTemplateDetailRequest insuranceTemplateDetailRequest = message.getObject("insuranceTemplateDetailRequest", DochaAdminInsuranceTemplateDetailRequest.class);
+
+
+
+        int res = insuranceTemplateMapper.updateInsuranceTemplate(insuranceTemplateDetailRequest);
+
+        message.addData("res", res);
+    }
+
+
+
+
+
+
+
+
 
 
 

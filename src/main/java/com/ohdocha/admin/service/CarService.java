@@ -18,10 +18,6 @@ public interface CarService {
 
     void insuranceTemplateinfoDetail(ServiceMessage message);
 
-    void basicPlanInfo(ServiceMessage message);
-
-    void basicPlanDetail(ServiceMessage message);
-
     void selectRegCarDetailOption(ServiceMessage message);
 
     void updateCdtCarInfo(ServiceMessage message);
@@ -57,4 +53,32 @@ public interface CarService {
     void carFuelProperty(ServiceMessage message);
 
     void insertCarPropertyFuel(ServiceMessage message);
+
+    void insertPlanSettingDetail(ServiceMessage message);
+
+    void getPeriodPlanList(ServiceMessage message);
+
+    void selectPeriodPlanDetail(ServiceMessage message);
+
+    void updatePeriodPlan(ServiceMessage message);
+
+    void insertBasicPlanInfo(ServiceMessage message);
+
+    void getBasicPlanList(ServiceMessage message);
+
+    void selectbasicPlanDetail(ServiceMessage message);
+
+    void updateBasicPlanInfo(ServiceMessage message);
+
+    void insertInsuranceTemplate(ServiceMessage message);
+
+    void getInsuranceTemplateList(ServiceMessage message);
+
+    void InsuranceTemplateDetail(ServiceMessage message);
+
+    void updateInsuranceTemplate(ServiceMessage message);
+
+    void selectReserveAmt(ServiceMessage message);
+
+    void insertRegCarPayment(ServiceMessage message);
 }

@@ -4,7 +4,7 @@ import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
 import com.ohdocha.admin.domain.car.plan.basicplan.DochaAdminBaiscPlanDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateDetailRequest;
 import com.ohdocha.admin.domain.car.plan.insuranceTemplate.DochaAdminInsuranceTemplateRequest;
-import com.ohdocha.admin.domain.car.property.DochaAdminCarPropertyRequest;
+import com.ohdocha.admin.domain.car.plan.periodplansetting.DochaAdminPeriodPlanSettingDetailRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
 import com.ohdocha.admin.service.CarService;
@@ -70,6 +70,18 @@ public class CarController extends ControllerExtension {
         return serviceMessage;
     }
 
+    /* 등록차량 요금제 추가 */
+    @PostMapping(value = "/api/v1.0/insertDcCarPaymentInfo.do")
+    @ResponseBody
+    public Object insertRegCarPayment(@RequestBody DochaAdminBaiscPlanDetailRequest paymentInfoRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("paymentInfoRequest", paymentInfoRequest);
+
+        carService.insertRegCarPayment(serviceMessage);
+
+        return serviceMessage;
+    }
+
     /* 등록차량 상세 화면 */
     @GetMapping(value = "/car/detail/{crIdx}")
     public String regCarDetailView(@PathVariable String crIdx, HttpServletRequest request, ModelMap modelMap) {
@@ -89,6 +101,18 @@ public class CarController extends ControllerExtension {
         serviceMessage.addData("regCarDetailRequest", regCarDetailRequest);
 
         carService.regCarDetail(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 등록차량 요금 계산  */
+    @PostMapping(value = "/api/v1.0/selectReserveAmt.json")
+    @ResponseBody
+    public Object selectReserveAmt(@RequestBody DochaAdminRegCarDetailRequest regCarDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("regCarDetailRequest", regCarDetailRequest);
+
+        carService.selectReserveAmt(serviceMessage);
 
         return serviceMessage.get("result");
     }
@@ -155,19 +179,6 @@ public class CarController extends ControllerExtension {
         serviceMessage.addData("templateRequest", templateRequest);
 
         carService.insuranceTemplateinfoDetail(serviceMessage);
-
-        return serviceMessage.get("result");
-
-    }
-
-    /* 차량-요금제-기본요금제 상세 */
-    @PostMapping(value = "/api/v1.0/basicPlanDetail.json")
-    @ResponseBody
-    public Object basicPlanDetail(@RequestBody DochaAdminBaiscPlanDetailRequest templateRequest, HttpServletRequest request) {
-        ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("templateRequest", templateRequest);
-
-        carService.basicPlanDetail(serviceMessage);
 
         return serviceMessage.get("result");
 
@@ -247,8 +258,6 @@ public class CarController extends ControllerExtension {
 
         return serviceMessage;
     }
-
-
     //endregion
 
 
@@ -401,43 +410,210 @@ public class CarController extends ControllerExtension {
     }
 
     /* 기간요금제 등록 */
-    @PostMapping(value = "/api/v1.0/insertInfo.do")
+    @PostMapping(value = "/api/v1.0/insertPlanSettingDetail.do")
     @ResponseBody
-    public Object insertPeriodPlanInfo(@RequestBody DochaAdminCarModelDetailRequest carModelDetailRequest, HttpServletRequest request) {
+    public Object insertPeriodPlanInfo(@RequestBody DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("carModelDetailRequest", carModelDetailRequest);
+        serviceMessage.addData("periodPlanSettingDetailRequest", periodPlanSettingDetailRequest);
 
-        carService.insertCarModelInfo(serviceMessage);
+        carService.insertPlanSettingDetail(serviceMessage);
 
         return serviceMessage;
     }
 
     /* 기간 요금제 리스트 */
     @GetMapping(value = "/car/payment/period")
-    public String periodPlanView(HttpServletRequest request, ModelMap modelMap) {
+    public String periodPlanList(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        carService.getPeriodPlanList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return "car/payment/periodPlan_list";
     }
 
-    /* 기본 요금제 화면 */
-    @GetMapping(value = "/car/payment/basic")
-    public String basicPlanView(HttpServletRequest request, ModelMap modelMap) {
+    /* 기간요금제 상세 화면 */
+    @GetMapping(value = "/car/payment/period/{perIdx}")
+    public String updatePeriodPlanView(@PathVariable String perIdx, HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("perIdx", perIdx);
+        serviceMessage.addData("CRUD", "modify");
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/payment/periodPlan";
+    }
+
+    /* 기간요금제 상세  */
+    @PostMapping(value = "/api/v1.0/periodPlanSettingDetail.json")
+    @ResponseBody
+    public Object periodPlanDetail(@RequestBody DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("periodPlanSettingDetailRequest", periodPlanSettingDetailRequest);
+
+        carService.selectPeriodPlanDetail(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 기간요금제 수정 */
+    @PostMapping(value = "/api/v1.0/updatePlanSettingDetail.do")
+    @ResponseBody
+    public Object updatePeriodPlan(@RequestBody DochaAdminPeriodPlanSettingDetailRequest periodPlanSettingDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("periodPlanSettingDetailRequest", periodPlanSettingDetailRequest);
+
+        carService.updatePeriodPlan(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 기본요금제 등록 화면 */
+    @GetMapping(value = "/car/payment/basic/add")
+    public String insertBasicPlanInfoView(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("CRUD", "insert");
+
+        modelMap.addAllAttributes(serviceMessage);
+
+        return "car/payment/basicPlan";
+    }
+
+    /* 기본요금제 등록 */
+    @PostMapping(value = "/api/v1.0/insertBasicPlanInfo.do")
+    @ResponseBody
+    public Object insertBasicPlanInfo(@RequestBody DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("baiscPlanDetailRequest", baiscPlanDetailRequest);
+
+        carService.insertBasicPlanInfo(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 기본 요금제 리스트 */
+    @GetMapping(value = "/car/payment/basic")
+    public String basicPlanList(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        carService.getBasicPlanList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return "car/payment/basicPlan_list";
     }
 
-    /* 보험 템플릿 화면 */
+    /* 기본요금제 상세 화면 */
+    @GetMapping(value = "/car/payment/basic/{pyIdx}")
+    public String updateBasicPlanView(@PathVariable String pyIdx, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("pyIdx", pyIdx);
+        serviceMessage.addData("CRUD", "modify");
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/payment/basicPlan";
+    }
+
+    /* 기본요금제 상세  */
+    @PostMapping(value = "/api/v1.0/basicPlanDetail.json")
+    @ResponseBody
+    public Object selectBasicPlanDetail(@RequestBody DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("baiscPlanDetailRequest", baiscPlanDetailRequest);
+
+        carService.selectbasicPlanDetail(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 기본요금제 수정 */
+    @PostMapping(value = "/api/v1.0/updateBasicPlanInfo.do")
+    @ResponseBody
+    public Object updateBasicPlanInfo(@RequestBody DochaAdminBaiscPlanDetailRequest baiscPlanDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("baiscPlanDetailRequest", baiscPlanDetailRequest);
+
+        carService.updateBasicPlanInfo(serviceMessage);
+
+        return serviceMessage;
+    }
+
+
+
+
+
+
+
+
+
+
+    /* 보험템플릿 등록 화면 */
+    @GetMapping(value = "/car/payment/insurance/add")
+    public String insertInsuranceTemplateView(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("CRUD", "insert");
+
+        modelMap.addAllAttributes(serviceMessage);
+
+        return "car/payment/insuranceTemplate";
+    }
+
+    /* 보험템플릿 등록 */
+    @PostMapping(value = "/api/v1.0/insertInsuranceTemplate.do")
+    @ResponseBody
+    public Object insertInsuranceTemplate(@RequestBody DochaAdminInsuranceTemplateDetailRequest insuranceTemplateDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("insuranceTemplateDetailRequest", insuranceTemplateDetailRequest);
+
+        carService.insertInsuranceTemplate(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 보험 템플릿 리스트 */
     @GetMapping(value = "/car/payment/insurance")
     public String insuranceTemplateView(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
 
+        carService.getInsuranceTemplateList(serviceMessage);
+
         modelMap.addAllAttributes(serviceMessage);
         return "car/payment/insuranceTemplate_list";
     }
+
+    /* 보험템플릿 상세 화면 */
+    @GetMapping(value = "/car/payment/insurance/{ciIdx}")
+    public String InsuranceTemplateDetailView(@PathVariable String ciIdx, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("ciIdx", ciIdx);
+        serviceMessage.addData("CRUD", "modify");
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "car/payment/insuranceTemplate";
+    }
+
+    /* 보험템플릿 상세  */
+    @PostMapping(value = "/api/v1.0/insuranceTemplateDetail.json")
+    @ResponseBody
+    public Object InsuranceTemplateDetail(@RequestBody DochaAdminInsuranceTemplateRequest insuranceTemplateRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("insuranceTemplateRequest", insuranceTemplateRequest);
+
+        carService.InsuranceTemplateDetail(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 보험템플릿 수정 */
+    @PostMapping(value = "/api/v1.0/updateInsuranceTemplate.do")
+    @ResponseBody
+    public Object updateInsuranceTemplate(@RequestBody DochaAdminInsuranceTemplateDetailRequest insuranceTemplateDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("insuranceTemplateDetailRequest", insuranceTemplateDetailRequest);
+
+        carService.updateInsuranceTemplate(serviceMessage);
+
+        return serviceMessage;
+    }
+
+
+
     //endregion
 
 
@@ -445,18 +621,10 @@ public class CarController extends ControllerExtension {
 
 
 
-    /* 차량-요금제-기간요금설정 List 조회 */
-    @PostMapping(value = "/api/v1.0/basicPlanInfo.json")
-    @ResponseBody
-    public Object basicPlanInfo(@RequestBody DochaAdminInsuranceTemplateRequest templateRequest, HttpServletRequest request) {
-        ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("templateRequest", templateRequest);
 
-        carService.basicPlanInfo(serviceMessage);
 
-        return serviceMessage.get("result");
 
-    }
+
 
     /* 등록차량 상세 옵션 리스트 상세 */
     @PostMapping(value = "/api/v1.0/regCarDetailOption.json")

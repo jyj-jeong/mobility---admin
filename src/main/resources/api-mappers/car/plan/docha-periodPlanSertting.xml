@@ -6,9 +6,7 @@
 	<select id="selectPeriodPlanInfo"  parameterType="periodPlanRequest" 
       			   				  	 resultType="periodPlanResponse">
       	<![CDATA[
-		SELECT * FROM (
-					SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.* 
-					FROM ( 
+-- 		SELECT * FROM (
      				 SELECT 
 				     		IFNULL(T2.COMPANY_NAME, '') AS COMPANY_NAME 							 					/* 회원사명 */
 				     	,	IFNULL(T2.BRANCH_NAME, '') AS BRANCH_NAME 								 					/* 지점명 */
@@ -29,36 +27,10 @@
 				     FROM DC_PAYMENT_PERIOD T1
 				     INNER JOIN DC_RENT_COMPANY T2
 				     		 ON T1.RT_IDX = T2.RT_IDX
-					) A		     		 
+
          ]]>
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
-				1=1 
-        </trim>
-     	<if test="rtIdx != null  and rtIdx != '' ">
-	    	AND <![CDATA[    A.RT_IDX = #{rtIdx} ]]>
-		</if>
-		<if test="searchType != null and searchType != '' ">
-		    <choose>
-		    	<when test =' searchType == "companyName" ' >
-		    		AND <![CDATA[ A.COMPANY_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "branchName" ' >
-		    		AND <![CDATA[ A.BRANCH_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "perIdx" ' >
-		    		AND <![CDATA[ A.PER_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<when test =' searchType == "perEtc" ' >
-		    		AND <![CDATA[ A.PERIOD_ETC  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-		    	</when>
-		    	<otherwise>
-		    	</otherwise>
-		    </choose>   
-		</if>
-         <![CDATA[	) X ]]> 
-         <trim prefix="WHERE" prefixOverrides="AND|OR">
-         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>
-       	</trim>						  		
+
+
 	</select>    
 	
 	
@@ -103,16 +75,16 @@
 	<update  id="updatePlanSettingDetail" parameterType="periodPlanDetailRequest">
     	<![CDATA[ UPDATE DC_PAYMENT_PERIOD ]]>
     	<trim prefix="SET" suffixOverrides=",">
-    		<if test="perIdx                 	!= null"><![CDATA[    PER_IDX					= #{perIdx}  				]]></if>	<!--기간요금idx --> 
-			<if test="rtIdx                  	!= null"><![CDATA[  , RT_IDX					= #{rtIdx}  				]]></if>	<!--회원사idx --> 
-			<if test="periodStartDt          	!= null"><![CDATA[  , PERIOD_START_DT			= #{periodStartDt}  		]]></if>	<!--기간시작일 --> 
-			<if test="periodEndDt            	!= null"><![CDATA[  , PERIOD_END_DT				= #{periodEndDt}  			]]></if>	<!--기간종료일 --> 
-			<if test="discountExtrachargeCode	!= null"><![CDATA[  , DISCOUNT_EXTRACHARGE_CODE	= #{discountExtrachargeCode}]]></if>	<!--할인할증구분 --> 
- 			<if test="periodPay              	!= null"><![CDATA[  , PERIOD_PAY				= #{periodPay}  			]]></if>	<!--기간요금 --> 
+    		<if test="perIdx                 	!= null"><![CDATA[    PER_IDX					= #{perIdx}  				]]></if>	<!--기간요금idx -->
+			<if test="rtIdx                  	!= null"><![CDATA[  , RT_IDX					= #{rtIdx}  				]]></if>	<!--회원사idx -->
+			<if test="periodStartDt          	!= null"><![CDATA[  , PERIOD_START_DT			= #{periodStartDt}  		]]></if>	<!--기간시작일 -->
+			<if test="periodEndDt            	!= null"><![CDATA[  , PERIOD_END_DT				= #{periodEndDt}  			]]></if>	<!--기간종료일 -->
+			<if test="discountExtrachargeCode	!= null"><![CDATA[  , DISCOUNT_EXTRACHARGE_CODE	= #{discountExtrachargeCode}]]></if>	<!--할인할증구분 -->
+ 			<if test="periodPay              	!= null"><![CDATA[  , PERIOD_PAY				= #{periodPay}  			]]></if>	<!--기간요금 -->
  			<if test="periodEtc              	!= null"><![CDATA[  , PERIOD_ETC				= #{periodEtc} 				]]></if>	<!--내용 --> 
-			<if test="delYn                   	!= null"><![CDATA[  , DEL_YN 					= #{delYn}				  	]]></if> 	<!--삭제여부 --> 
- 			<if test="modId                   	!= null"><![CDATA[  , MOD_ID 					= #{modId}  				]]></if> 	<!--수정자 --> 
- 			, MOD_DT = SYSDATE
+			<if test="delYn                   	!= null"><![CDATA[  , DEL_YN 					= #{delYn}				  	]]></if> 	<!--삭제여부 -->
+ 			<if test="modId                   	!= null"><![CDATA[  , MOD_ID 					= #{modId}  				]]></if> 	<!--수정자 -->
+ 			, MOD_DT = NOW()
 		</trim>       				  
     	<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="perIdx != null and perIdx != ''">
@@ -141,9 +113,9 @@
 			,  	#{periodEndDt}
 			,  	#{discountExtrachargeCode}
 			,  	#{periodPay}
-			,  	#{delYn}
+			,  	'N'
 			,  	#{regId}
-			,	SYSDATE			
+			,	NOW()
 		)
 	]]>
     </insert>

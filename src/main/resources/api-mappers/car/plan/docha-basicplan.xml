@@ -112,7 +112,7 @@
  			<if test="deliveryAddPay		!= null"><![CDATA[  , DELIVERY_ADD_PAY 		= #{deliveryAddPay}  		]]></if> 	<!-- 배달10KM단위추가요금 -->		
  			<if test="deliveryMaxRate		!= null"><![CDATA[  , DELIVERY_MAX_RATE 	= #{deliveryMaxRate}  		]]></if> 	<!-- 배달최대할인율 -->		
  			<if test="modId					!= null"><![CDATA[  , MOD_ID 				= #{modId}  				]]></if> 	<!-- 수정자 -->
- 			, MOD_DT = SYSDATE
+ 			, MOD_DT = NOW()
 		</trim>
     	<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="pyIdx != null and pyIdx != ''">
@@ -155,7 +155,7 @@
 			,  	#{deliveryAddPay}			
 			,  	#{deliveryMaxRate}			
 			,  	#{regId}
-			,	SYSDATE			
+			,	NOW()
 		)
 	]]>
     </insert>

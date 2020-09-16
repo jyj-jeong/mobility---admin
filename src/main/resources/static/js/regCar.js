@@ -1469,7 +1469,7 @@ function detailSubmit(save_type, req){
 			break;
 		case 'savePaymentinfo':	// 기본요금
 			if (CRUD_METHOD === 'insert') {
-				target = 'insertDcCarInsuranceInfo';
+				target = 'insertDcCarPaymentInfo';
 				method = 'insert';
 			} else if (CRUD_METHOD === 'update') {
 				target = 'updateDcCarInfo';
@@ -1610,13 +1610,13 @@ function rentcal(){
 	let method = 'select';
 
 	fn_callApi(method,target,req,function(response) {
-		let res = response;
+		// let res = response;
 
 		// 200이라면 페이징을 구한다.
 
 		// TODO response 200
 		// if (res.code == 200) {
-		// 	let data = res.data.result[0];
+		let data = response[0];
 
 		let rentFee			= data.rentFee; 		//대여금
 		let disRentFee		= data.disRentFee; 		//할인 후 대여금 -->

@@ -4,8 +4,17 @@
 
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
+        <i class="fa fa-bars text-white"></i>
     </button>
+    <script th:inline="javascript">
+        $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+            $("body").toggleClass("sidebar-toggled");
+            $(".sidebar").toggleClass("toggled");
+            if ($(".sidebar").hasClass("toggled")) {
+                $('.sidebar .collapse').collapse('hide');
+            };
+        });
+    </script>
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

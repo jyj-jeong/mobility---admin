@@ -22,7 +22,7 @@ var modalTitle = '기간요금설정 상세';
 var modalWidth = 500;
 var DEFAULT_PAGENUM = 10;
 var CURRENT_PAGE = 0;
-var CRUD_METHOD = ''
+var CRUD_METHOD = '';
 
 function initializingPageData(){
 	loadApi(drawTable, null, null);
@@ -325,12 +325,12 @@ function initDetailInfo(seq){
 	};
 		
 	fn_callApi(method, target, req, function(response) {
-		let res = response;
+		// let data = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
-			let data = res.data.result[0];
+			let data = response[0];
 			
 			let strOption = "";
 			
@@ -395,14 +395,15 @@ function initDetailInfo(seq){
 			
 			//내용
 			$('#periodEtc').val(periodEtc);
-			
-			openIziModal(modalName);
+
+			//TODO : IziModal
+			// openIziModal(modalName);
 			CRUD_METHOD = 'update';
 			
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		//
+		// }
 	});// end fn_callApi
 
 }
@@ -437,10 +438,10 @@ function initDetailSelectBox(_data){
 	   
 	// 회사리스트
 	fn_callApi(method, target, req, function(response) {
-		let res = response;   
+		let data = response;
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
-			let data = res.data.result.result;
+		// if (res.code == 200) {
+		// 	let data = res.data.result.result;
 			let strOption = "<option value=''>선택</option>";     
 			for ( var i=0; i<data.length; i++ ) {   
 				if(!isEmpty(data[i].branchName)){
@@ -452,14 +453,14 @@ function initDetailSelectBox(_data){
 			} 				 
 			$('#companyName').append(strOption);
 			$('#companyName').attr('disabled', false);
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 	// company init
 	if( CRUD_METHOD == 'insert' ){ 
-		openIziModal(modalName);
+		// openIziModal(modalName);
 	}
 	
 }
@@ -496,7 +497,7 @@ function detailValidation(){
 		$('#periodPay').focus();
 		return;
 	}else if(isEmpty(periodEtc)){
-		errorAlert('제목', '제목을 입력해 주세요.');
+		errorAlert('내용', '내용을 입력해 주세요.');
 		$('#periodEtc').focus();
 		return;
 	}
@@ -513,9 +514,9 @@ function detailValidation(){
 		,	'discountExtrachargeCode' : discountExtrachargeCode
 		,	'periodPay' : periodPay
 		,	'delYn' : delYn
-		,	'modId' : GLOBAL_LOGIN_USER_IDX
-		,	'regId' : GLOBAL_LOGIN_USER_IDX
-	}
+		// ,	'modId' : GLOBAL_LOGIN_USER_IDX
+		// ,	'regId' : GLOBAL_LOGIN_USER_IDX
+	};
 
 	let method = '';
 	if( CRUD_METHOD == 'insert' ){
@@ -541,16 +542,18 @@ function detailSubmit(method, reqParam){
 	let param = reqParam;
 
 	fn_callApi(_method, _target, param, function(response) {
+		let data = response;
 		$("#"+modalName).iziModal('close');
 
-		if(response.code == 200 && response.data.result == 1){
+		// if(response.code == 200 && response.data.result == 1){
+		if(data.res === 1) {
 			swal("저장 성공", { icon: "success"});
 
 			loadApi(drawTable, null);  
 		}else{
 			errorAlert('저장 실패', response.error.errorMessage);
 			//errorAlert('저장 실패', '관리자에게 문의하세요.');
-		} 
+		}
 	});
 
 }
