@@ -24,7 +24,8 @@ public class DochaAdminBaiscPlanDetailRequest extends CommonRequestDto {
 	private String deliveryMaxRate;		//배달최대할인율
 	private String regId;				//작성자 idx
 	private String modId;				//수정자 idx
-	
+	private String crIdx;				//차량 idx
+
 	public String getRtIdx() {
 		return rtIdx;
 	}
