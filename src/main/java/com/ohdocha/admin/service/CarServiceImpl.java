@@ -88,7 +88,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         int res = regCarMapper.insertRegCarPayment(paymentInfoRequest);
 
         message.addData("res", res);
-//        message.addData("crIdx", paymentInfoRequest.getCrIdx());
+        message.addData("crIdx", paymentInfoRequest.getCrIdx());
     }
 
     /* 등록차량 상세 */

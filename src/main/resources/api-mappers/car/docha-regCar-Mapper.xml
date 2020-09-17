@@ -18,8 +18,8 @@
 --                         ,   GET_COMMON_CODE_VALUE('CR', T1.FUEL_CODE) AS FUEL_NAME                   /* 연료명 */
                           ,   IFNULL(T1.MILEAGE, '0')               AS MILEAGE                  /*누적KM - 주행거리*/
                           ,   IFNULL(T1.YEAR , '' )                  AS YEAR                       /*년도 */
-                          ,   IFNULL(T1.SHORTTERM_FEE, '0')         AS DAILY_STANDARD_PAY         /* 일 기본요금*/
-                          ,   IFNULL(T1.LONGTERM_FEE, '0')      AS MONTHLY_STANDARD_PAY       /* 월 기본요금*/
+                          ,   IFNULL(T4.DAILY_STANDARD_PAY, '0')         AS DAILY_STANDARD_PAY         /* 일 기본요금*/
+                          ,   IFNULL(T4.MONTHLY_STANDARD_PAY, '0')      AS MONTHLY_STANDARD_PAY       /* 월 기본요금*/
                             ,   CASE WHEN IFNULL(RESERVE_ABLE_YN, 'Y') = 'N' THEN 'UnableReserve'
                                       WHEN ( SELECT COUNT(CR_IDX)
                                           FROM DC_RESERVE_MASTER
@@ -51,6 +51,8 @@
                                   ON T1.RT_IDX = T2.RT_IDX
                   LEFT JOIN DC_RENT_COMPANY_TIME T3
                                   ON T1.RT_IDX = T3.RT_IDX
+                  LEFT OUTER JOIN DC_PAYMENT_INFO T4
+                  				  ON T1.CR_IDX = T4.CR_IDX
 --                    ) A
              ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -383,6 +385,7 @@
    <![CDATA[
         INSERT INTO DC_PAYMENT_INFO (
 		  DAILY_STANDARD_PAY
+		 , CR_IDX
 		 , DAILY_MAX_RATE
 		 , MONTHLY_STANDARD_PAY
 		 , MONTHLY_MAX_RATE
@@ -397,6 +400,7 @@
          ,  REG_DT
       ) VALUES (
               #{dailyStandardPay}
+         ,     #{crIdx}
          ,     #{dailyMaxRate}
          ,     #{monthlyStandardPay}
          ,     #{monthlyMaxRate}
