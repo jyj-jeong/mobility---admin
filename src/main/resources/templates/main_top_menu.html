@@ -133,7 +133,7 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" data-target="#profileMenu" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-white small" th:if="${session.LOGIN_SESSION != null }" th:text="${session.LOGIN_SESSION.get('userName')}"></span>
-                <img class="img-profile rounded-circle" src="">
+                <i class="fas fa-user"></i>
             </a>
             <!-- Dropdown - User Information -->
             <div id="profileMenu" class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
