@@ -784,22 +784,31 @@ function rentReserveMinListGrid(_rtIdx) {
 	let method = 'select';
 
 	RMRUD = 'insert';
-	
+
 	let req = {
 		rtIdx : _rtIdx
 	};
 
 	fn_callApi(method,target,req,function(response) {
-		let data = response;
+		let data = response[0];
 
 		// if (res.code == 200) {
 
 			// let data = res.data.result;
 			let rentReserveMinList_rows = data;
 
+			rows = [{
+				// "rowNumber" : rentReserveMinList_rows.rowNumber,
+				"minIdx" : rentReserveMinList_rows.minIdx,
+				"minimumStartDt" : rentReserveMinList_rows.minimumStartDt,
+				"minimumEndDt" : rentReserveMinList_rows.minimumEndDt,
+				"minimumTime" : rentReserveMinList_rows.minimumTime,
+				"delYn" : rentReserveMinList_rows.delYn
+			}];
+
 			let columns;
 			columns = [
-					{"name" : "rowNumber","id" : "rowNum","title" : "No","visible" : false},
+					// {"name" : "rowNumber","id" : "rowNum","title" : "No","visible" : false},
 					{"name" : "minIdx","id" : "minIdx","title" : "특정기간번호"},
 					{"name" : "minimumStartDt","title" : "최소예약시간시작일","breakpoints" : "xs"},
 					{"name" : "minimumEndDt","title" : "최소예약시간종료일","breakpoints" : "xs"},
@@ -815,7 +824,7 @@ function rentReserveMinListGrid(_rtIdx) {
 					   }
 				},
 				"columns" : columns,
-				"rows" : rentReserveMinList_rows
+				"rows" : rows
 			});
 
 		// }// end 200 check
@@ -1338,7 +1347,8 @@ function detailValidation(save_type) {
 				let data = response.result;
 				// if (res.code == 200) {
 				// 	let data = res.result;
-					if (data.length == 0) {
+				// TODO if 조건 수정
+					if (data == null) {
 
 						if(RMCRUD == 'modify') {
 							if(!isEmpty(_rtIdx)) { //If This is not empty,
@@ -1440,8 +1450,8 @@ function detailValidation(save_type) {
 			fn_callApi(method, target, req, function(response) {
 				let res = response;
 				// if (res.code == 200) {
-					let data = res.data.result;
-					if (data.length == 0) {
+					let data = res.result;
+					if (data == null) {
 
 						if(HCRUD == 'modify') {
 							if(!isEmpty(_rtIdx)) { //If This is not empty,
@@ -1601,6 +1611,7 @@ function detailSubmit(save_type, req) {
 					}
 					break;
 				case 'saveRentCompanyMin':// 특정기간정보
+					_rtIdx = '3obbyRFE';
 					rentReserveMinListGrid(_rtIdx);
 					break;
 				case 'saveRentCompanyHoliday':// 휴무일정보
@@ -1995,7 +2006,7 @@ function movieMenu(goMenu){
 			break;
 		case 'reserveMnt':		// 예약내역
 			GLOBAL_LINK_RTIDX = $('#rtIdx').val();
-			left_location('/static/viewContents/reservation/reserveMnt.html', '예약관리', 'link');
+			left_location('/static/viewContents/reservation/reservation_list.html', '예약관리', 'link');
 			break;
 	}
 }

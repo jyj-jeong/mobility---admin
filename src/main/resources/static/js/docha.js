@@ -1,5 +1,21 @@
 
 /**
+ 변수 선언
+ */
+var TEST_FLAG = false;
+
+var LoginUser = request.getParameter('LOGIN_USER');
+alert(LoginUser);
+// var GLOBAL_LOGIN_USER_IDX = TEST_FLAG ? 'UR202001101910027' : '${sessionScope.userInfo.urIdx}';
+// var GLOBAL_LOGIN_USER_ROLE = '${.userInfo.userRole}';
+// var GLOBAL_LOGIN_USER_NAME = TEST_FLAG ?  '이우성' : '${sessionScope.userInfo.userName}';
+// var GLOBAL_LOGIN_RT_IDX = '${sessionScope.userInfo.rtIdx}';
+
+
+var GLOBAL_LINK_RTIDX = ''; // 회원사 링크 버튼 클릭시 이동전 저장 변수
+
+
+/**
 
  * 입력값이  null 인지 체크한다
 

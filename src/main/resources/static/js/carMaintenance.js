@@ -233,8 +233,20 @@ function detailPreSubmit(){
 }
 
 // submit
-function detailSubmit(){
-	
+function detailSubmit(save_type, req){
+	let target = '';
+	let method = '';
+
+	if (isEmpty(save_type)) { // save_type
+		errorAlert('API ERROR', 'Save Type이 존재하지 않습니다. 관리자에게 문의하세요');
+		return;
+	}
+
+	if (isEmpty(req)) { // req array
+		errorAlert('API ERROR', '전송가능한 파라메터가 존재하지 않습니다. 관리자에게 문의하세요');
+		return;
+	}
+
 	// convert json
 	var data = $('#detailForm').serialize();
 	closeDetail();
