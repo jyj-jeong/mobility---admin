@@ -33,8 +33,8 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">관리자 관리</h6>
-                        <button class="btn btn-secondary">등록</button>
-                        <button class="btn btn-secondary">삭제</button>
+                        <button class="btn btn-secondary" onclick="registerAdmin()">등록</button>
+                        <button class="btn btn-secondary" onclick="detailValidation('deleteAdmin()')">삭제</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -63,7 +63,11 @@
                                 </tfoot>
                                 <tbody>
                                 <tr th:each="adminInfo, index : ${adminUserInfoList}" style="cursor: pointer" th:data-value="${adminInfo.getAdIdx()}">
-                                    <td ></td>
+                                    <td>
+                                        <label for="checkBox">
+                                            <div class="ui checkbox"><input id="checkBox" type="checkbox" name="checkbox"/></div>
+                                        </label>
+                                    </td>
                                     <td th:text="${adminInfo.getAdIdx()}"></td>
                                     <td th:text="${adminInfo.getAdminName()}"></td>
                                     <td th:text="${adminInfo.getAdminId()}"></td>
@@ -98,17 +102,16 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">알림</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" href="login.html">Logout</a>
@@ -117,7 +120,13 @@
     </div>
 </div>
 <script>
+    function registerAdmin() {
+        var url = '/mem/admin/register';
+        var name = "test";
+        var option = "width = 800, height =500 ,location=no, left=500, top=50";
 
+        window.open(url, name, option);
+    }
 </script>
 </body>
 </html>

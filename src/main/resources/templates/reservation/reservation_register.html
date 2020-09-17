@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title>예약 등록 :: DoCha Admin Web</title>
+
+    <script src="/js/reserveMnt.js" th:src="@{/js/reserveMnt.js}"></script>
+</head>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">예약 등록</h6>
+                    </div>
+
+                    <div id="reserveMasterInfo">
+                        <div class="card-body"><h5 class="card-title">회원 (예약자)</h5>
+                            <div class="row">
+                                <div class=" col-lg-3 float-l flex-1">
+                                    <label>이름</label>
+                                    <input type="text" class="form-control reserveUserInfo" id="reserveUserName" placeholder="" />
+                                </div>
+                                <div class="col-lg-3 float-l">
+                                    <label>아이디</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control"  placeholder="" value="" id="firstDriverId" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" onclick="serachUserInfo('first');">회원검색</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" col-lg-3 float-l flex-1">
+                                    <label>연락처</label>
+                                    <input type="text" class="form-control reserveUserInfo" id="reserveUserContact1" placeholder="" />
+                                </div>
+                                <div class=" col-lg-3 float-l flex-1">
+                                    <label>생년월일</label>
+                                    <input type="date" class="form-control reserveUserInfo" id="reserveUserBirthDay" placeholder=""  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-card mb-3 card" id="firstDriverDiv">
+                    <div class="card-body">
+                        <h5 class="card-title">제1 운전자</h5>
+                        <input type="hidden" id="ulIdx1" />
+                        <span class="top-right">
+                                    <div class="position-relative form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input" id="DriverSettingchk" onchange="firstDriverSetting('DriverSettingchk');" />예약자와 동일
+                                        </label>
+                                    </div>
+                                </span>
+                        <div class="row">
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>이름</label>
+                                <input type="text" class="form-control" id="firstDriverName" placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>연락처</label>
+                                <input type="text" class="form-control" id="firstDriverContact" placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l" style="flex:1;">
+                                <label>생년월일</label>
+                                <input type="date" id="firstDriverBirthDay" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>면허종류</label>
+                                <select id="sel_firstDriverLicenseCode" class="custom-select">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>면허번호</label>
+                                <input type="text" id="firstDriverLicenseNumber" class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>적성검사 만료일</label>
+                                <input type="date" id="firstDriverExpirationDate" class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>발급일</label>
+                                <input type="date" id="firstDriverLicenseIsDate" class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card">
+                    <div class="card-body"><h5 class="card-title">제2 운전자</h5>
+                        <input type="hidden" id="ulIdx2" />
+                        <div class="row">
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>이름</label>
+                                <input type="text" class="form-control" id="secondDriverName"  placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>연락처</label>
+                                <input type="text" class="form-control" id="secondDriverContact" placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l" style="flex:1;">
+                                <label>생년월일</label>
+                                <input type="date" id="secondDriverBirthDay" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>면허종류</label>
+                                <select id="sel_secondDriverLicenseCode" class="custom-select">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>면허번호</label>
+                                <input type="text" id="secondDriverLicenseNumber" class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>적성검사 만료일</label>
+                                <input type="date" id="secondDriverExpirationDate" class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>발급일</label>
+                                <input type="date" id="secondDriverLicenseIsDate" class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card">
+                    <div class="card-body"><h5 class="card-title">사업자</h5>
+                        <!--                        <input type="hidden" id="ulIdx2" />-->
+                        <div class="row">
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>회사명</label>
+                                <input type="text" class="form-control"   placeholder="" />
+                            </div>
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>사업자 등록번호</label>
+                                <input type="text" class="form-control"  placeholder="" />
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>담당자 이름</label>
+                                <input type="text" class="form-control"  placeholder="" />
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>담당자 연락처</label>
+                                <input type="text" class="form-control"  placeholder="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 float-l" style="flex:1;">
+                                <label>주소</label>
+                                <input type="text" class="form-control"  placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card">
+                    <div class="card-body"><h5 class="card-title">예약</h5>
+                        <span class="top-right">
+                            <div class="position-relative form-check">
+                                <label class="mr-4 form-check-label" for="1">
+                                    <input type="checkbox" class="form-check-input" id="1" onchange="firstDriverSetting('DriverSettingchk');" />배달대여</label>
+                                <label class="form-check-label" for="2">
+                                    <input type="checkbox" class="form-check-input" id="2" onchange="firstDriverSetting('DriverSettingchk');" />지점방문</label>
+                            </div>
+                        </span>
+                        <div class="row">
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>대여일시</label>
+                                <input type="text" class="form-control " id="gbn" placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>반납일시</label>
+                                <input type="text" class="form-control " placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>대여기간</label>
+                                <input type="date" class="form-control " placeholder="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 float-l flex-1" >
+                                <label>대여위치</label>
+                                <input type="text" class="form-control " placeholder="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 float-l flex-1" >
+                                <label>반납위치</label>
+                                <input type="text" class="form-control " placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card">
+                    <div class="card-body"><h5 class="card-title">차량</h5>
+                        <div class="row">
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>회사명(지점)</label>
+                                <select id="companyName" class="custom-select" onchange="selectCompany(this.value);">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>관리자</label>
+                                <input type="text" class="form-control "  id="staffName"  placeholder="" />
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>연락처</label>
+                                <input type="text" id="staffContact1"  class="form-control " value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>모델(번호)</label>
+                                <input type="hidden" id="mdIdx">
+                                <select id="sel_modelName"  class="custom-select" onchange="selectCarInfo('');">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>연료</label>
+                                <select id="sel_fuel" class="custom-select">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>출고연식</label>
+                                <input type="text"  class="form-control " id="year"  placeholder="" />
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>색상</label>
+                                <input type="text"  class="form-control " id="colorName" value="">
+                            </div>
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>누적</label>
+                                <input type="text"  class="form-control " id="mileage" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 mt-3 float-l" id="optionDetailCode" >
+                                <label class="carInsuranceInfoOption" >옵션</label>
+                                <input type="text" id="optionCodeValue"  class="form-control " value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l">
+                                <label>대인</label>
+                                <input type="text" id="personalCover"  class="form-control " value="">
+                            </div>
+                            <div class="col-lg-3 float-l">
+                                <label>대물</label>
+                                <input type="text" id="propertyDamageCover"  class="form-control " value="">
+                            </div>
+                            <div class="col-lg-3 float-l">
+                                <label>자손</label>
+                                <input type="text" id="onselfDamageCover"  class="form-control " value="">
+                            </div>
+                            <div class="col-lg-3 float-l">
+                                <label>자차 고객부담금</label>
+                                <input type="hidden" id="carDamageCover">
+                                <input type="hidden" id="insuranceCopayment">
+                                <select id="sel_ciIdx" class="custom-select" onchange="selectInsuranceInfo();">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <p><br></p>
+                            <button class="btn btn-primary" type="button" id="rentcalAmt" onclick="rentcal();">요금 계산</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card paymentDiv">
+                    <div class="card-body"><h5 class="card-title">결제</h5>
+                        <div class="row">
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>차량대여금액</label>
+                                <input type="text"  class="form-control" id="rentFee" placeholder="" />
+                            </div>
+                            <div class="col-lg-4 float-l flex-1" >
+                                <label>왕복배달금액</label>
+                                <input type="text"  class="form-control" id="deliveryFee" placeholder=""  value="0"/>
+                            </div>
+                            <div class="col-lg-4 float-l" style="flex:1;">
+                                <label>자차보험</label>
+                                <input type="text" id="insuranceFee"  class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>총 대여금액</label>
+                                <input type="text" id="paymentTotalAmount"  class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>추가 수수료</label>
+                                <input type="text"  class="form-control" id="revaddFee" placeholder=""  value="0" />
+                            </div>
+                            <div class="col-lg-6 float-l" style="flex:1;">
+                                <label>합계 금액</label>
+                                <input type="text" id="discountFee"  class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 float-l" style="flex:1;">
+                                <label>쿠폰</label>
+                                <input type="text"  class="form-control" value="">
+                            </div>
+                            <div class="col-lg-3 float-l flex-1" >
+                                <label>포인트</label>
+                                <input type="text"  class="form-control" placeholder=""  value="0" />
+                            </div>
+                            <div class="col-lg-6 float-l" style="flex:1;">
+                                <label>결제 예정 금액</label>
+                                <input type="text" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-3 mt-3 float-l" >
+                            <label id="calRentTotAmountEtc"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="text-right">
+                        <button class="btn btn-primary" type="button" onclick="self.close()">저장</button>
+                        <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="main_footer :: mainFooter"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">알림</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">로그아웃을 하시겠습니까?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+
+    // swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
+
+    rtIdx = /*[[${rtIdx}]]*/'';
+    CRUD = /*[[${CRUD}]]*/'';
+
+    if(CRUD === "insert"){
+        openCreateRentCompany();
+    }else if (CRUD === "modify"){
+        initDetailInfo(rtIdx)
+    }
+
+</script>
+</body>
+</html>

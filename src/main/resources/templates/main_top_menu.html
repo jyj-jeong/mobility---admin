@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript" src="js/bootstrap/bootstrap-dropdown.js"></script>
+</head>
 <nav th:fragment="topMenu" class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow" style="background: #008080">
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -128,12 +131,12 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-white small">Valerie Luna</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+            <a class="nav-link dropdown-toggle" data-target="#profileMenu" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-white small" th:if="${session.LOGIN_SESSION != null }" th:text="${session.LOGIN_SESSION.get('userName')}"></span>
+                <img class="img-profile rounded-circle" src="">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+            <div id="profileMenu" class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
@@ -153,8 +156,6 @@
                 </a>
             </div>
         </li>
-
     </ul>
-
 </nav>
 </html>

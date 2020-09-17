@@ -6,23 +6,24 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@AllArgsConstructor
 @Configuration
+@AllArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginInterceptor())
-//                .addPathPatterns("/**")
-//                .excludePathPatterns(
-//                        "/favicon.ico", "/login",
-//                        "/webjars/**",
-//                        "/img/**",
-//                        "/css/**",
-//                        "/js/**",
-//                        "/vendor/**"
-//                );
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/favicon.ico", "/login",
+                        "/api/v1.0/**",
+                        "/webjars/**",
+                        "/img/**",
+                        "/css/**",
+                        "/js/**",
+                        "/vendor/**"
+                );
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

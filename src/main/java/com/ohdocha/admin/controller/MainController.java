@@ -4,6 +4,7 @@ import com.ohdocha.admin.config.Properties;
 import com.ohdocha.admin.domain.common.code.DochaAdminCommonCodeRequest;
 import com.ohdocha.admin.domain.user.DochaAdminDcUserInfoRequest;
 import com.ohdocha.admin.service.MainService;
+import com.ohdocha.admin.util.DochaMap;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @AllArgsConstructor
@@ -46,16 +48,26 @@ public class MainController extends ControllerExtension {
         return "login";
     }
 
-    @PostMapping(value = "/login")
+    @PostMapping(value = "/api/v1.0/carssum.login")
     @ResponseBody
     public Object loginAsync(@RequestBody DochaAdminDcUserInfoRequest userInfoRequest, HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request).addData("userInfoRequest", userInfoRequest);
+        serviceMessage.addData("userInfoRequest",userInfoRequest);
+
         mainService.login(serviceMessage);
 
-//        adminInfoDto = serviceMessage.getObject("adminLoginInfo", AdminInfoDto.class);
-//        request.getSession().setAttribute("LOGIN_SESSION", adminInfoDto);
+        DochaMap userInfo = serviceMessage.getObject("userInfo", DochaMap.class);
+        request.getSession().setAttribute("LOGIN_SESSION", userInfo);
 
-        return createServiceMessage(request).addData("result", "success");
+        return serviceMessage;
+    }
+
+    @GetMapping(value = "/api/v1.0/carssum.logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response) {
+        request.getSession().invalidate();
+        sendRedirect(response, request.getContextPath() + "/login");
+
+        return "login";
     }
 
     /* 공통 코드 리스트 */

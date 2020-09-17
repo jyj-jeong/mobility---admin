@@ -2,7 +2,10 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>전체휴일 등록 :: DoCha Admin Web</title>
+    <title>권한 템플릿 등록 :: DoCha Admin Web</title>
+
+    <script src="/js/authTemplate.js" th:src="@{/js/authTemplate.js}"></script>
+
 </head>
 <body id="page-top">
 
@@ -17,25 +20,51 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">전체휴일 등록</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">권한 템플릿 (전체관리자)</h6>
                     </div>
 
                     <div id="userInfoCard" class="card-body">
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <label class="form-label" for="hoilday">휴일</label>
-                                <input type="date" class="form-control" name="hoilday" id="hoilday"/>
+                                <label class="form-label" for="templateNm">템플릿명</label>
+                                <input type="text" class="form-control" name="templateNm" id="templateNm" placeholder="템플릿명"/>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <input type="text" class="form-control" name="hoilday" id="saveHoilday"/>
+                                <label class="form-label" for="templateMemo">설명</label>
+                                <input type="text" class="form-control" name="templateMemo" id="templateMemo" placeholder="설명"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">권한</h6>
+                    </div>
+
+                    <div id="authCard" class="card-body">
+                        <div id="menuTemplate">
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table id="menuTemplateListTable" class="table table-hover" data-show-toggle="false" data-sorting="true">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
                         <div class="card-footer">
                             <div class="text-right">
-                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="saveHoliday()">저장</button>
+                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="detailValidation('saveAuthTemplate')">저장</button>
                                 <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
                             </div>
                         </div>
@@ -80,13 +109,7 @@
     </div>
 </div>
 <script th:inline="javascript">
-
-    // TODO 휴일등록 처리
-    function saveHoliday() {
-        swal("저장 성공", {icon : "success"});
-        var holiday = $('#hoilday').val();
-        $('#saveHoilday').val(holiday);
-    }
+    initDetailInfo('');
 </script>
 </body>
 </html>

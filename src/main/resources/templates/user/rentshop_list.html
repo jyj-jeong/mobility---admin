@@ -31,7 +31,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">회원사</h6>
                         <button class="btn btn-secondary" onclick="registerRentShop()">등록</button>
-                        <button class="btn btn-secondary" onclick="window.open('rentshop/hoilday','_blank', 'width = 1000, height =800 ,location=no, left=500, top=50')">전체휴일 등록</button>
+                        <button class="btn btn-secondary" onclick="registerRentShopHoliday()">전체휴일 등록</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -101,17 +101,16 @@
 </a>
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">알림</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" href="login.html">Logout</a>
@@ -132,7 +131,7 @@
     } );
 
     /* 회원사 상세 페이지 이동 */
-    $('table > tbody > tr').click(function () {
+    $('table > tbody').on('click', 'tr', function () {
         let rtIdx = $(this).attr('data-value');
         if (rtIdx === "") return;
 
@@ -143,10 +142,20 @@
         window.open(url, name, option);
     });
 
+    /* 회원사 등록 */
     function registerRentShop() {
         var url = 'rentshop/register';
         var name = "test";
         var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+
+        window.open(url, name, option);
+    }
+
+    /* 회원사 휴일 등록 */
+    function registerRentShopHoliday() {
+        var url = 'rentshop/hoilday';
+        var name = "test";
+        var option = "width = 800, height =400 ,location=no, left=500, top=50";
 
         window.open(url, name, option);
     }

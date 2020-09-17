@@ -54,7 +54,6 @@
                 </div>
             </div>
         </li>
-
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
@@ -65,9 +64,9 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="collapseTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Utilities:</h6>
-                    <a class="collapse-item" href="#">예약 관리</a>
-                    <a class="collapse-item" href="#">역경매</a>
-                    <a class="collapse-item" href="#">정기 결제</a>
+                    <a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/reserve'}">예약 관리</a>
+                    <a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/reverse'}">역경매</a>
+                    <a class="collapse-item" href="#" th:href="${#request.getContextPath() + '/payment'}">정기 결제</a>
                 </div>
             </div>
         </li>

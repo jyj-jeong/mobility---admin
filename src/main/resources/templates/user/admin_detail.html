@@ -2,7 +2,10 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>전체휴일 등록 :: DoCha Admin Web</title>
+    <title>관리자 등록 :: DoCha Admin Web</title>
+
+    <script src="/js/adminMember.js" th:src="@{/js/adminMember.js}"></script>
+
 </head>
 <body id="page-top">
 
@@ -17,26 +20,43 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">전체휴일 등록</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">관리자(등록)</h6>
                     </div>
 
                     <div id="userInfoCard" class="card-body">
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <label class="form-label" for="hoilday">휴일</label>
-                                <input type="date" class="form-control" name="hoilday" id="hoilday"/>
+                                <input type="hidden" id="urIdx" />
+                                <label for="adminId">이메일(검색시 회원ID)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  placeholder="이메일" id="searchId" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" onclick="searchUserInfo();" id="btnAdminId">회원검색</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <input type="text" class="form-control" name="hoilday" id="saveHoilday"/>
+                                <input type="text" class="form-control" name="adminId" id="adminId" readonly/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="userRole">권한</label>
+                                <select type="text" class="form-control" name="userRole" id="userRole">
+                                    <option value="권한">권한</option>
+                                    <option value="전체관리자">전체관리자</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="card-footer">
                             <div class="text-right">
-                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="saveHoliday()">저장</button>
-                                <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
+                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="detailValidation('saveAdminInfo')">저장</button>
+                                <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창
+                                    닫기
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -80,13 +100,6 @@
     </div>
 </div>
 <script th:inline="javascript">
-
-    // TODO 휴일등록 처리
-    function saveHoliday() {
-        swal("저장 성공", {icon : "success"});
-        var holiday = $('#hoilday').val();
-        $('#saveHoilday').val(holiday);
-    }
 </script>
 </body>
 </html>

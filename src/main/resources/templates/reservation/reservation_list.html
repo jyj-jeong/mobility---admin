@@ -2,9 +2,9 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>통합 회원 :: DoCha Admin Web</title>
+    <title>예약 관리 :: DoCha Admin Web</title>
 
-    <script src="/js/integratedMember.js" th:src="@{/js/integratedMember.js}"></script>
+    <script src="/js/reserveMnt.js" th:src="@{/js/reserveMnt.js}"></script>
 </head>
 <body id="page-top">
 
@@ -29,43 +29,58 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">통합 회원</h6>
-                        <button class="btn btn-secondary" onclick="registerUser()">등록</button>
+                        <h6 class="m-0 font-weight-bold text-primary">예약 관리</h6>
+                        <button class="btn btn-secondary" onclick="registerReservation()">등록</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
-                                    <th>회원번호</th>
-                                    <th>아이디</th>
-                                    <th>이름</th>
-                                    <th>연락처</th>
-                                    <th>평점</th>
-                                    <th>대여횟수</th>
-                                    <th>가입일시</th>
+                                    <th>예약번호</th>
+                                    <th>예약일시</th>
+                                    <th>상태</th>
+                                    <th>회원(연락처)</th>
+                                    <th>모델(차량번호)</th>
+                                    <th>대여일시</th>
+                                    <th>반납일시</th>
+                                    <th>사용기간</th>
+                                    <th>회원사(지점)</th>
+                                    <th>대여방법</th>
+                                    <th>총 금액</th>
+                                    <th>결제금액</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>회원번호</th>
-                                    <th>아이디</th>
-                                    <th>이름</th>
-                                    <th>연락처</th>
-                                    <th>평점</th>
-                                    <th>대여횟수</th>
-                                    <th>가입일시</th>
+                                    <th>예약번호</th>
+                                    <th>예약일시</th>
+                                    <th>상태</th>
+                                    <th>회원(연락처)</th>
+                                    <th>모델(차량번호)</th>
+                                    <th>대여일시</th>
+                                    <th>반납일시</th>
+                                    <th>사용기간</th>
+                                    <th>회원사(지점)</th>
+                                    <th>대여방법</th>
+                                    <th>총 금액</th>
+                                    <th>결제금액</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="user, index : ${IntegratedUserList}" style="cursor: pointer" th:data-value="${user.getUrIdx()}">
-                                    <td th:text="${user.getUrIdx()}"></td>
-                                    <td th:text="${user.getUserId()}"></td>
-                                    <td th:text="${user.getUserName()}"></td>
-                                    <td th:text="${user.getUserContact1()}"></td>
-                                    <td>0</td>
-                                    <td></td>
-                                    <td th:text="${user.getRegDt()}"></td>
+                                <tr th:each="reservation, index : ${reserveInfoResponseList}" style="cursor: pointer" th:data-value="${reservation.getRmIdx()}">
+                                    <td th:text="${reservation.getRmIdx()}"></td>
+                                    <td th:text="${reservation.getReserveDate()}"></td>
+                                    <td th:text="${reservation.getReserveStatusName()}"></td>
+                                    <td th:text="${reservation.getUserName() +'/' +reservation.getUserContact1()}"></td>
+                                    <td th:text="${reservation.getModelName()+'/'+reservation.getCarNumber()}"></td>
+                                    <td th:text="${reservation.getRentStartDay()}"></td>
+                                    <td th:text="${reservation.getRentEndDay()}"></td>
+                                    <td th:text="${reservation.getPeriodDt()}"></td>
+                                    <td th:text="${reservation.getCompanyName()+'/'+reservation.getBranchName()}"></td>
+                                    <td th:text="${reservation.getDeliveryTypeName()}"></td>
+                                    <td th:text="${reservation.getPaymentTotalAmount()}"></td>
+                                    <td th:text="${reservation.getPaymentAmount()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -121,19 +136,19 @@
 
     /* 회원 상세 페이지 이동 */
     $('table > tbody').on('click', 'tr', function () {
-        let urIdx = $(this).attr('data-value');
-        if (urIdx === "") return;
+        let rmIdx = $(this).attr('data-value');
+        if (rmIdx === "") return;
 
-        var url = "/mem/detail/" + urIdx;
+        var url = "/reserve/detail/" + rmIdx;
         var name = "test";
         var option = "width = 1000, height =800 ,location=no, left=500, top=50";
 
         window.open(url, name, option);
     });
 
-    /* 회원 등록 */
-    function registerUser() {
-        var url = 'mem/register';
+    /* 예약 등록 */
+    function registerReservation() {
+        var url = 'reserve/register';
         var name = "test";
         var option = "width = 1000, height =800 ,location=no, left=500, top=50";
 

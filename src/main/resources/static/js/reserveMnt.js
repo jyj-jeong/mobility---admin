@@ -26,6 +26,11 @@ var CRUD_METHOD = '';		// 저장 구분자
 var CALCULABLE_MOTH = 'N';	// 요금계산 적용 여부
 var RESERVE_STATUS = '';	// 상세 화면 진입시 대여 상태 
 var BROWSEYN = "";			// 브라우저에 따른 대여일시, 반납일시 입력 input 타입 변경 및 변수 값 처리
+
+// todo 임시 user Role
+var GLOBAL_LOGIN_USER_ROLE = 'RA';
+var GLOBAL_LINK_RTIDX = '3obbyRFE';
+
 function initializingPageData(){
 	loadApi(drawTable, null, null );
 	initSearchForm();  
@@ -59,10 +64,10 @@ function initSearchForm(){
 	
 	// 상태코드
 	fn_callApi(method, target, req, function(response) {
-		let res = response;  
+		let data = response;
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) { 
-			let data = res.data.result;  
+		// if (res.code == 200) {
+		// 	let data = res.result;
 			let ignoreCode = '';
 			if(GLOBAL_LOGIN_USER_ROLE != 'RA'){
 				ignoreCode = ['IG', 'FN', 'RE', 'AP'];
@@ -72,7 +77,7 @@ function initSearchForm(){
 
 			
 			let strOption = '<option value="" >선택</option>';   
-			for ( var i=0; i<data.length; i++ ) { 
+			for ( var i=0; i<data.length; i++ ) {
 				if(!ignoreCode.contains(data[i].code)){ 
 					strOption += "<option value = '" + data[i].code + "'>" + data[i].codeValue + "</option>";
 				}
@@ -83,9 +88,9 @@ function initSearchForm(){
 			// 상세 페이지 예약 상태
 			$('#sel_reserveStatusCode').empty();
 			$('#sel_reserveStatusCode').append(strOption);
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 	
 	let gbnDayOption = '<option value="">선택</option>';
@@ -211,11 +216,11 @@ function loadApi(fnc, page, displayPageNum, division){
     	 var res = response;
 
     	 //200이라면 페이징을 구한다. 
-    	 if(res.code == 200) {
-    		 fnc(res.data, page, displayPageNum);
-    	 }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
-    		 errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-    	 }
+    	 // if(res.code == 200) {
+    		 fnc(res.result, page, displayPageNum);
+    	 // }else { //200이 아닐때 empty처리 error처리 등을 기록한다.
+    		//  errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+    	 // }
      });//end 
 
 }
@@ -445,7 +450,7 @@ function initDetailInfo(seq){
 
 	// Detail정보 조회
 	fn_callApi(method,target, req, function(res){  
-		if( res.code == 200 ){
+		// if( res.code == 200 ){
 			let data = res.data.result[0];
 			let paymentList = res.data.paymentList;
 			let dataSet = new Object();
@@ -623,7 +628,7 @@ function initDetailInfo(seq){
 
 			$("#reserveMasterInfo").iziModal('open');
 //			initDetailData(dataSet);  
-		}
+// 		}
 		
 	}); 	
 }
@@ -648,7 +653,7 @@ function initDetailSelectBox(_data){
 	fn_callApi(method, target, req, function(response) {
 		res = response;   
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 			data = res.data.result.result;
 			strOption = "<option value=''>선택</option>";     
 			for ( var i=0; i<data.length; i++ ) { 
@@ -690,9 +695,9 @@ function initDetailSelectBox(_data){
 			}
 			selectCompany($("#companyName option:selected").val(), _crIdx);
 
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 	
 	// 연료  select box
@@ -707,9 +712,9 @@ function initDetailSelectBox(_data){
 	fn_callApi(method, target, req, function (response) {
 		res = response;
 	    	 
-			if (res.code == 200) {
+			// if (res.code == 200) {
 
-				data = res.data.result;
+				data = res.result;
 				
 				strOption = "";
 				strOption += "<option value = '0'>선택하세요</option>";
@@ -729,7 +734,7 @@ function initDetailSelectBox(_data){
 				}else{
 					$("#sel_fuel").val('0').prop("selected", true);
 				}
-			}
+			// }
 	});
 
 	// 성별  select box
@@ -744,9 +749,9 @@ function initDetailSelectBox(_data){
 	fn_callApi(method, target, req, function (response) {
 		res = response;
 	    	 
-			if (res.code == 200) {
+			// if (res.code == 200) {
 
-				data = res.data.result;
+				data = res.result;
 				
 				strOption = "";
 				strOption += "<option value = '0'>선택하세요</option>";
@@ -786,7 +791,7 @@ function initDetailSelectBox(_data){
 				}else{
 					$("#sel_secondDriverGender").val('0').prop("selected", true);
 				}
-			}
+			// }
 	});
 	
 	// 면허종류  select box
@@ -801,9 +806,9 @@ function initDetailSelectBox(_data){
 	fn_callApi(method, target, req, function (response) {
 		res = response;
 	    	 
-			if (res.code == 200) {
+			// if (res.code == 200) {
 
-				data = res.data.result;
+				data = res.result;
 				
 				strOption = "";
 				strOption += "<option value='0'>선택하세요</option>";
@@ -831,7 +836,7 @@ function initDetailSelectBox(_data){
 				}else{
 					$("#sel_secondDriverLicenseCode").val('0').prop("selected", true);
 				}
-			}
+			// }
 	});
 
 	// 배달방법  select box
@@ -846,9 +851,9 @@ function initDetailSelectBox(_data){
 	fn_callApi(method, target, req, function (response) {
 		res = response;
 	    	 
-			if (res.code == 200) {
+			// if (res.code == 200) {
 
-				data = res.data.result;
+				data = res.result;
 				
 				strOption = "";
 				strOption += "<option value='0'>선택하세요</option>";
@@ -867,7 +872,7 @@ function initDetailSelectBox(_data){
 				}else{
 					$("#sel_deliveryTypeCode").val('0').prop("selected", true);
 				}
-			}
+			// }
 	});
 	
 }
@@ -902,7 +907,7 @@ function selectCompany(rtIdx, crIdx){
 	fn_callApi(method, target, req, function(response) {
 		let res = response;
 		// 200이라면 페이징을 구한다. 
-		if (res.code == 200) {
+		// if (res.code == 200) {
 			let companyInfo = res.data.result.companyInfo; 
 			if( companyInfo != undefined && companyInfo != null){
 				let staffContact = nullCheck(companyInfo.staffContact1);
@@ -939,9 +944,9 @@ function selectCompany(rtIdx, crIdx){
 				$("#sel_modelName").val(crIdx).prop("selected", true);
 				selectCarInfo(crIdx);
 			}
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		} 
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 }
@@ -1056,7 +1061,7 @@ function serachUserInfo(flag, urIdx) {
 		let res = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 			var data = res.data.result;
 			if(isEmpty(data)){
 				errorAlert('회원정보', '회원정보가 존재하지 않습니다.');
@@ -1097,9 +1102,9 @@ function serachUserInfo(flag, urIdx) {
 //					swal("회원정보 조회 완료", {icon : "success"});
 			}
 			
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 }
 
@@ -1160,7 +1165,7 @@ function DriverSetting(flag, urIdx){
 		let res = response;
 	
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 	
 			var data = res.data.result[0];
 	
@@ -1196,7 +1201,7 @@ function DriverSetting(flag, urIdx){
 				}
 			}
 			
-		}
+		// }
 	});
 
 }
@@ -1240,7 +1245,7 @@ function rentcal(){
 		let res = response;
 
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 			let data = res.data.result[0];
 			
 			let rentFee				= data.rentFee; 			//대여금
@@ -1321,7 +1326,7 @@ function rentcal(){
 			
 //			$("#deliveryFee").val('0');
 			CALCULABLE_MOTH = 'Y';
-		}
+		// }
 	});// end fn_callApi
 
 }
@@ -1686,7 +1691,7 @@ function detailSubmit(save_type, req){
 		let res = response;
 		
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
 			RESERVE_STATUS = $("#sel_reserveStatusCode option:selected").val();
 			if (res.data.result == 1) {
@@ -1697,9 +1702,9 @@ function detailSubmit(save_type, req){
 				let msg = res.data.reservemsg;
 				errorAlert('저장 실패', msg);
 			}
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('저장 실패', '관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('저장 실패', '관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 	
 }
@@ -1864,7 +1869,7 @@ function initReserveCancelWait(){
 
 	// Detail정보 조회
 	fn_callApi(method,target, req, function(res){  
-		if( res.code == 200 ){
+		// if( res.code == 200 ){
 			let data = res.data.result[0];
 
 			// 예약정보
@@ -1887,7 +1892,7 @@ function initReserveCancelWait(){
 			$("#rp_paymentTotalAmount").val(paymentTotalAmount);
 			$("#rp_paymentAmount").val(paymentAmount);
 			$("#return_refundFee").val(paymentTotalAmount);
-		}
+		// }
 		
 	}); 	
 	
@@ -1978,16 +1983,16 @@ function repatmentSubmit(){
 		let res = response;
 		
 		// 200이라면 페이징을 구한다.
-		if (res.code == 200) {
+		// if (res.code == 200) {
 
 			if (res.data.result == 1) {
 				swal("저장 성공", {icon : "success"});
 				closeDetail();
 				loadApi(drawTable, null, null);
 			}
-		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('저장 실패', '관리자에게 문의하세요.');
-		}
+		// } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+		// 	errorAlert('저장 실패', '관리자에게 문의하세요.');
+		// }
 	});// end fn_callApi
 
 

@@ -1,5 +1,6 @@
 package com.ohdocha.admin.controller;
 
+import com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateRequest;
 import com.ohdocha.admin.domain.rentCompany.*;
 import com.ohdocha.admin.domain.user.DochaAdminInsertUserInfoRequest;
 import com.ohdocha.admin.domain.user.DochaAdminUpdateUserInfoRequest;
@@ -291,7 +292,7 @@ public class UserController extends ControllerExtension {
 
         userService.selectRentCompanyReserveMinList(serviceMessage);
 
-        return serviceMessage;
+        return serviceMessage.get("result");
     }
 
     /* 회원사 전체 휴일 등록*/
@@ -303,7 +304,19 @@ public class UserController extends ControllerExtension {
         return "user/holiday_registration";
     }
 
-    /* 휴무일 리스트 */
+    /* 휴무일 리스트 추가 */
+    @PostMapping(value = "/api/v1.0/insertRentCompanyHoliday.do")
+    @ResponseBody
+    public Object insertRentCompanyHoliday(@RequestBody DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyHolidayRequest", rentCompanyHolidayRequest);
+
+        userService.insertRentCompanyHoliday(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 휴무일 리스트 조회 */
     @PostMapping(value = "/api/v1.0/selectRentCompanyHoliday.json")
     @ResponseBody
     public Object selectRentCompanyHoliday(@RequestBody DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest, HttpServletRequest request) {
@@ -329,6 +342,24 @@ public class UserController extends ControllerExtension {
         return "user/admin_list";
     }
 
+    /* 관리자 등록 화면 */
+    @GetMapping(value = "/mem/admin/register")
+    public String registerAdminView(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "user/admin_detail";
+    }
+
+    /* 권한 템플릿 리스트 추가 화면 */
+    @GetMapping(value = "/mem/template/register")
+    public String registerAuthTemplate(HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return "user/auth_template_detail";
+    }
+
     /* 권한 템플릿 리스트 */
     @GetMapping(value = "/mem/template")
     public String authTemplates(HttpServletRequest request, ModelMap modelMap) {
@@ -336,8 +367,41 @@ public class UserController extends ControllerExtension {
         userService.getAuthTemplates(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
-        return "user/auth_templates";
+        return "user/auth_template_list";
     }
 
+    /* 권한 템플릿 추가 */
+    @PostMapping(value = "/api/v1.0/insertAuthTemplate.do")
+    @ResponseBody
+    public Object insertAuthTemplates(@RequestBody DochaAdminAuthTemplateRequest authTemplateRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("authTemplateRequest",authTemplateRequest);
+
+        userService.insertAuthTemplate(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 관리자 메뉴 조회 */
+    @PostMapping(value = "/api/v1.0/insertAdminMenuTemplate.do")
+    @ResponseBody
+    public Object insertAdminMenuTemplate(HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+
+        userService.selectMenuTemplateList(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
+
+    /* 관리자 메뉴 조회 */
+    @PostMapping(value = "/api/v1.0/adminMenuTemplate.json")
+    @ResponseBody
+    public Object adminMenuTemplate(HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+
+        userService.selectMenuTemplateList(serviceMessage);
+
+        return serviceMessage.get("result");
+    }
     // endregion
 }

@@ -1,6 +1,5 @@
 package com.ohdocha.admin.controller;
 
-import com.ohdocha.admin.service.CarService;
 import com.ohdocha.admin.service.PaymentInfoService;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,7 @@ public class PaymentInfoController extends ControllerExtension {
         paymentInfoService.paymentInfoList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
-        return "reservation/payment";
+        return "calculate/payment";
     }
 
 }
