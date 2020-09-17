@@ -122,7 +122,7 @@
                      WHEN ROUND((STR_TO_DATE(A.RENT_END_DAY || A.RENT_END_TIME, '%Y%m%dHH24MI') - STR_TO_DATE(A.RENT_START_DAY || A.RENT_START_TIME, '%Y%m%dHH24MI'))*24*60) >= 24*60 THEN 'D'
                 ELSE 'T' END AS RESERVE_YMDT /* 시간구분 */
               , IFNULL(A.RESERVE_CHANNEL, 'CS') AS RESERVE_CHANNEL /* 저장 채널 구분 */
-              , CASE WHEN INSTR(D.COMPANY_A%dRESS||D.COMPANY_A%dRESS_DETAIL, '제주') > 0 THEN 'JJ' ELSE 'IL' END AS LAND_CODE /* 내륙/제주 구분 [JJ:제주,IL:내륙,IS:제주 제외한 섬] */
+              , CASE WHEN INSTR(D.COMPANY_ADDRESS||D.COMPANY_ADDRESS_DETAIL, '제주') > 0 THEN 'JJ' ELSE 'IL' END AS LAND_CODE /* 내륙/제주 구분 [JJ:제주,IL:내륙,IS:제주 제외한 섬] */
               , DATE_FORMAT(A.RESERVE_DATE, '%Y-%m-%d HH24:MI:SS') AS RESERVE_DATE /* 예약일시 */
               , CASE WHEN IFNULL(A.RESERVE_STATUS_CODE, 'RS') = 'RS' AND NOW() > STR_TO_DATE(A.RENT_END_DAY || A.RENT_END_TIME, '%Y%m%dHH24MI') THEN 'RW'
                      WHEN IFNULL(A.RESERVE_STATUS_CODE, 'RS') = 'RS' AND NOW() BETWEEN STR_TO_DATE(A.RENT_START_DAY || A.RENT_START_TIME, '%Y%m%dHH24MI') AND STR_TO_DATE(A.RENT_END_DAY || A.RENT_END_TIME, '%Y%m%dHH24MI') THEN 'RO'
@@ -661,8 +661,8 @@
       ,      IFNULL(RT_P_IDX                     , '' ) AS RT_P_IDX
       ,      IFNULL(COMPANY_NAME                 , '' ) AS COMPANY_NAME
       ,      IFNULL(COMPANY_ZIPCODE              , '' ) AS COMPANY_ZIPCODE
-      ,      IFNULL(COMPANY_A%dRESS              , '' ) AS COMPANY_A%dRESS
-      ,      IFNULL(COMPANY_A%dRESS_DETAIL       , '' ) AS COMPANY_A%dRESS_DETAIL
+      ,      IFNULL(COMPANY_ADDRESS              , '' ) AS COMPANY_ADDRESS
+      ,      IFNULL(COMPANY_ADDRESS_DETAIL       , '' ) AS COMPANY_ADDRESS_DETAIL
       ,      IFNULL(LAT                          , '' ) AS LAT
       ,      IFNULL(LNG                          , '' ) AS LNG
       ,      IFNULL(ESTABLISHED_DATE             , '' ) AS ESTABLISHED_DATE
@@ -700,8 +700,8 @@
       ,      IFNULL(T1.RT_P_IDX                     , '' ) AS RT_P_IDX
       ,      IFNULL(T1.COMPANY_NAME                 , '' ) AS COMPANY_NAME
       ,      IFNULL(T1.COMPANY_ZIPCODE              , '' ) AS COMPANY_ZIPCODE
-      ,      IFNULL(T1.COMPANY_A%dRESS              , '' ) AS COMPANY_A%dRESS
-      ,      IFNULL(T1.COMPANY_A%dRESS_DETAIL       , '' ) AS COMPANY_A%dRESS_DETAIL
+      ,      IFNULL(T1.COMPANY_ADDRESS              , '' ) AS COMPANY_ADDRESS
+      ,      IFNULL(T1.COMPANY_ADDRESS_DETAIL       , '' ) AS COMPANY_ADDRESS_DETAIL
       ,      IFNULL(T1.LAT                          , '' ) AS LAT
       ,      IFNULL(T1.LNG                          , '' ) AS LNG
       ,      IFNULL(T1.ESTABLISHED_DATE             , '' ) AS ESTABLISHED_DATE
