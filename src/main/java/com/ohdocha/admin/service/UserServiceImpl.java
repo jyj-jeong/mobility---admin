@@ -4,6 +4,7 @@ import com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoRequest;
 import com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoResponse;
 import com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateRequest;
 import com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateResponse;
+import com.ohdocha.admin.domain.menu.DochaAdminMenuTemplateResponse;
 import com.ohdocha.admin.domain.rentCompany.*;
 import com.ohdocha.admin.domain.user.*;
 import com.ohdocha.admin.mapper.DochaAdminAdminUserInfoMntMapper;
@@ -238,6 +239,18 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     }
 
     @Override
+    public void insertRentCompanyHoliday(ServiceMessage message) {
+        DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
+
+        String holIdx = KeyMaker.getInsetance().getKeyDeafult("hl");
+        rentCompanyHolidayRequest.setHolIdx(holIdx);
+
+        int res = rentCompanyInfoMapper.insertRentCompanyHoliday(rentCompanyHolidayRequest);
+
+        message.addData("result", res);
+    }
+
+    @Override
     public void selectRentCompanyHoliday(ServiceMessage message) {
         DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
 
@@ -262,6 +275,18 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
         List<DochaAdminAuthTemplateResponse> authTemplateList = adminAuthTemplateMapper.selectAdminTemplate(adminAuthTemplateRequest);
 
         message.addData("authTemplateList", authTemplateList);
+    }
+
+    @Override
+    public void insertAuthTemplate(ServiceMessage message) {
+
+    }
+
+    @Override
+    public void selectMenuTemplateList(ServiceMessage message) {
+        List<DochaAdminMenuTemplateResponse> adminMenuTemplateResponseList = adminUserInfoMntMapper.selectMenuTemplateList();
+
+        message.addData("result", adminMenuTemplateResponseList);
     }
 
 }

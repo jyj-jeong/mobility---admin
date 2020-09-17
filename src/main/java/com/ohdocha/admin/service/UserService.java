@@ -42,6 +42,8 @@ public interface UserService {
 
     void selectRentCompanyReserveMinList(ServiceMessage message);   // 회원사별 최소 예약시간 정보 조회
 
+    void insertRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 등록
+
     void selectRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 조회
 
     /* 관리자 */
@@ -49,5 +51,9 @@ public interface UserService {
     void getAdminList(ServiceMessage message);                      // 관리자 리스트 조회
 
     void getAuthTemplates(ServiceMessage message);                  // 권한 템플릿 리스트 조회
+
+    void insertAuthTemplate(ServiceMessage message);                // 권한 템플릿 등록
+
+    void selectMenuTemplateList(ServiceMessage message);            // 관리자 메뉴 조회
 
 }

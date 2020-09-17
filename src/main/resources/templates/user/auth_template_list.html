@@ -2,12 +2,10 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>관리자 관리 :: DoCha Admin Web</title>
-    <style>
-        .cursor-point{
-            cursor: pointer;
-        }
-    </style>
+    <title>권한 템플릿 :: DoCha Admin Web</title>
+
+    <script src="/js/authTemplate.js" th:src="@{/js/authTemplate.js}"></script>
+
 </head>
 <body id="page-top">
 
@@ -32,48 +30,46 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">관리자 관리</h6>
-                        <button class="btn btn-secondary" onclick="registerAdmin()">등록</button>
-                        <button class="btn btn-secondary" onclick="detailValidation('deleteAdmin()')">삭제</button>
+                        <h6 class="m-0 font-weight-bold text-primary">권한 템플릿</h6>
+                        <button class="btn btn-secondary">엑셀 다운로드</button>
+                        <button class="btn btn-secondary" onclick="registerAuth()">등록</button>
+                        <button class="btn btn-secondary" onclick="detailValidation('deleteAuthTemplate')">삭제</button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered cursor-point" id="dataTable">
+                            <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
                                     <th></th>
-                                    <th>회원번호</th>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>연락처</th>
-                                    <th>가입일시</th>
-                                    <th>권한</th>
+                                    <th>권한번호</th>
+                                    <th>템플릿명</th>
+                                    <th>설명</th>
+                                    <th>설정회원</th>
+                                    <th>등록일시</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th></th>
-                                    <th>회원번호</th>
-                                    <th>이름</th>
-                                    <th>아이디</th>
-                                    <th>연락처</th>
-                                    <th>가입일시</th>
-                                    <th>권한</th>
+                                    <th>권한번호</th>
+                                    <th>템플릿명</th>
+                                    <th>설명</th>
+                                    <th>설정회원</th>
+                                    <th>등록일시</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="adminInfo, index : ${adminUserInfoList}" style="cursor: pointer" th:data-value="${adminInfo.getAdIdx()}">
+                                <tr th:each="authTemplate, index : ${authTemplateList}" th:data-value="${authTemplate.getTemplateCd()}">
                                     <td>
                                         <label for="checkBox">
                                             <div class="ui checkbox"><input id="checkBox" type="checkbox" name="checkbox"/></div>
                                         </label>
                                     </td>
-                                    <td th:text="${adminInfo.getAdIdx()}"></td>
-                                    <td th:text="${adminInfo.getAdminName()}"></td>
-                                    <td th:text="${adminInfo.getAdminId()}"></td>
-                                    <td th:text="${adminInfo.getUserContact1()}"></td>
-                                    <td th:text="${adminInfo.getRegDt()}"></td>
-                                    <td th:text="${adminInfo.getRole()}"></td>
+                                    <td th:text="${authTemplate.getTemplateCd()}"></td>
+                                    <td th:text="${authTemplate.getTemplateNm()}"></td>
+                                    <td th:text="${authTemplate.getTemplateMemo()}"></td>
+                                    <td th:text="${authTemplate.getRegId()}"></td>
+                                    <td th:text="${authTemplate.getRegDt()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -120,10 +116,10 @@
     </div>
 </div>
 <script>
-    function registerAdmin() {
-        var url = '/mem/admin/register';
+    function registerAuth() {
+        var url = '/mem/template/register';
         var name = "test";
-        var option = "width = 800, height =500 ,location=no, left=500, top=50";
+        var option = "width = 800, height =1000 ,location=no, left=500, top=50";
 
         window.open(url, name, option);
     }
