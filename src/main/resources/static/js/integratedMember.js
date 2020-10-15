@@ -26,7 +26,6 @@ var MODEL_WIDTH = 1500;
 var CRUD = '';
 var CURRENT_PAGE = 0;
 
-// TODO 로그인 구현해서 수정하기
 var GLOBAL_LOGIN_USER_ROLE = 'RA';
 var GLOBAL_LOGIN_USER_IDX = 'ur';
 
@@ -37,17 +36,6 @@ function initializingPageData() {
 }
 
 function loadApi(page, displayPageNum, division) {
-
-    let searchSelectBox = $("#searchSelectBox option:selected").val();
-    let strSearchKeyWord = $("#searchKeyWord").val();
-    let showContents = $("#showContents option:selected").val();
-    showContents = isEmpty(showContents) ? 10 : showContents;
-
-    CURRENT_PAGE = parseInt(page);
-    displayPageNum = parseInt(displayPageNum);
-
-    CURRENT_PAGE = isNaN(page) ? 1 : (typeof page === 'number') ? page : 1;
-    displayPageNum = isNaN(displayPageNum) ? showContents : (typeof displayPageNum === 'number') ? displayPageNum : showContents;
 
     let _rtIdx = '';
 
@@ -66,125 +54,19 @@ function loadApi(page, displayPageNum, division) {
         let res = response;
 
         // 200이라면 페이징을 구한다.
-        // if (res.code == 200) {
-        // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-        // 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-        // 	return;
-        });
+        if (res.code === 200) {
+
+        } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+            errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+            return;
+        }
+    });
+
 
 
     // end FindUserInfoList
 
 }
-
-// drawTable 사용 안함, thymeleaf 사용해서 데이터 table에 넣어줌
-/*
-var drawTable = function drawTable(res, page, displayPageNum) {
-
-    page = parseInt(page);
-    displayPageNum = parseInt(displayPageNum);
-
-    page = isNaN(page) ? 1 : (typeof page === 'number') ? page : 1;
-    displayPageNum = isNaN(displayPageNum) ? DEFAULT_PAGENUM : (typeof displayPageNum === 'number') ? displayPageNum : DEFAULT_PAGENUM;
-
-    let data = res;
-
-    let rows = [];
-    let columns;
-
-    columns = [
-        { "name" : "rowNumber", "No" : "번호" , "visible": false},
-        { "name" : "urIdx", "title" : "회원번호" },
-        {
-            "name" : "userId","title" : "아이디",
-            "formatter" : function(value, options, rowData) {
-                let seq = rowData.urIdx;
-                CRUD = 'modify';
-                return '<a href="javascript:initDetailInfo(' + "'" + seq + "'" + ');" >' + value + '</a>';
-            }
-        }, {"name" : "userName","title" : "이름","breakpoints" : "xs",
-            "formatter" : function(value, options, rowData) {
-                let setText = value;
-
-                if (!isEmpty(value)) { // 값이 있으면
-                    setText = value;
-                } else {
-                    setText = '미확인';
-                }
-
-                return setText;
-            }
-        },
-        {	"name" : "userBirthday", "title" : "생년월일", "breakpoints" : "xs",
-            "formatter" : function(value, options, rowData) {
-                let setText = '';
-
-                if (!isEmpty(value)) { // 값이 있으면
-                    if(value.length >= 8){
-                        setText = YMDFormatter(value);
-                    } else {
-                        setText = '미확인';
-                    }
-
-                } else {
-                    setText = '미확인';
-                }
-
-                return setText;
-            }
-        }, {
-            "name" : "userContact1", "title" : "연락처", "breakpoints" : "xs sm",
-            "formatter" : function(value, options, rowData) {
-                let setText = '';
-
-                if (!isEmpty(value)) { // 값이 있으면
-                    if(value.length > 4){
-                        setText = phoneFomatter(value);
-                    } else {
-                        setText = '미확인';
-                    }
-                } else {
-                    setText = '미확인';
-                }
-
-                return setText;
-            }
-        }, { "name" : "userStatusCode","title" : "등급","breakpoints" : "xs sm md",
-            "formatter" : function(value, options, rowData) {
-                let setText = '';
-
-                if (!isEmpty(value)) { // 값이 있으면
-                    setText = value;
-                } else {
-                    setText = '미확인';
-                }
-
-                return setText;
-            }
-        }, { "name" : "reserveCnt", "title" : "대여횟수", "breakpoints" : "xs sm md"
-        }, { "name" : "regDt", "title" : "가입일시", "breakpoints" : "xs sm md",
-            "formatter" : function(value, options, rowData) {
-                return regDtFormatter(value);
-            }
-        }
-    ];
-
-    $('#listTable').empty();
-    $('#listTable').footable({
-        'calculateWidthOverride': function() {
-            return { width: $(window).width() };
-        },
-        'on': {
-            'postinit.ft.table': function(e, ft) {
-
-            }
-        },
-        "columns": columns,
-        "rows": data
-    });
-
-}
- */
 
 function initSelectBox() {
 
@@ -513,12 +395,12 @@ function initDetailInfo(seq) {
 
     // Detail정보 조회
     fn_callApi(method,target, req, function(response) {
-        let data = response[0];
+        let res = response;
 
         // 200이라면 페이징을 구한다.
-        // if (res.code == 200) {
+        if (res.code == 200) {
 
-        // var data = res.data.result;
+        var data = res.result[0];
 
         // 기본정보 셋팅
         let urIdx 			= data.urIdx;
@@ -547,9 +429,9 @@ function initDetailInfo(seq) {
 
         initModalSelectBox(data);
 
-        // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-        // 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-        // }
+        } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+        	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+        }
     });// end fn_callApi
 
 //	UR_IDX = urIdx; 
@@ -563,12 +445,12 @@ function initDetailInfo(seq) {
 
     // Detail정보 조회
     fn_callApi(method,target, req, function(response) {
-        let data = response[0];
+        let res = response;
 
         // 200이라면 페이징을 구한다.
-        // if (res.code == 200) {
+        if (res.code == 200) {
 
-        // var data = res.data.result[0];
+        var data = res.result[0];
 
         let licenseCode  		= '';// 면허코드
         let licenseNumber  		= '';// 운전면허 번호
@@ -639,9 +521,9 @@ function initDetailInfo(seq) {
             //END 면허종류============================================================
 
 
-            // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-            //     errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-            // }
+             } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+                 errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+             }
         }
     });// end fn_callApi
     //START 면허종류============================================================
@@ -671,7 +553,7 @@ function detailValidation(save_type){
             case 'saveUser':// 회원 정보
                 let userId 				= $("#userId").val();								//아이디
                 let userName 			= $("#userName").val();								//이름
-                let userContact        = $("#userContact").val();							//연락처
+                let userContact1        = $("#userContact1").val();							//연락처
                 let joinChannel 		= $("#joinChannel").val();							//계정타입
                 let userBirthday 		= $("#userBirthday").val();							//생년월일
                 let userRole 			= $("#sel_userRole option:selected").val();			//권한
@@ -704,12 +586,11 @@ function detailValidation(save_type){
                     userBirthday = removeHypen(userBirthday);
                 }
 
-                userContact = '111';
-                if(isEmpty(userContact)) {
+                if(isEmpty(userContact1)) {
                     errorAlert('연락처', '연락처는 필수 입력값 입니다.');
                     return;
                 }else {
-                    userContact = removeHypen(userContact);
+                    userContact1 = removeHypen(userContact1);
                 }
 
                 if(isEmpty(userRole) || userRole == 0) { //is not empty
@@ -718,7 +599,6 @@ function detailValidation(save_type){
                 }
 
                 save_type = 'saveUser';
-                let userContact1 = '111';
 
                 if(CRUD == 'modify') {
                     if(isEmpty(urIdx)) {
@@ -806,12 +686,11 @@ function detailValidation(save_type){
 
                 fn_callApi( method, target, req, function(response) {
                     let res = response;
-                    // if (res.code == 200) {
                     if(isEmpty(urIdx)) {
                         errorAlert('API ERROR', 'seq가 Null일 수 없습니다.');
                         return;
                     }
-                    if(res.length > 0) {
+                    if(res.code == 200) {
 
                         save_type = 'UPDATEuserLicenseInfo';
                         req = {
@@ -826,7 +705,7 @@ function detailValidation(save_type){
                             ,	modId : GLOBAL_LOGIN_USER_IDX
                             ,	regId : GLOBAL_LOGIN_USER_IDX
                         }
-                    }else if (res.length == 0) {
+                    }else if (res.code == 400) {
                         save_type = 'INSERTuserLicenseInfo';
                         req = {
                             urIdx				: urIdx
@@ -848,7 +727,6 @@ function detailValidation(save_type){
                     cancel_text = '취소하셨습니다.';
 
                     call_before_save(title, text, icon, cancel_text, save_type, req);
-                    // }
                 });// end fn_callApi
                 break;
 
@@ -906,7 +784,7 @@ function detailSubmit(save_type, req){
         let res = response;
 
         // 200이라면 페이징을 구한다.
-        // if (res.code == 200) {
+        if (res.code == 200) {
 
         if(res!=null){
             swal("저장 성공", { icon: "success"});
@@ -927,10 +805,10 @@ function detailSubmit(save_type, req){
 
             //left_location("/static/viewContents/member/integratedMember.html" , "" , "");
         }
-        // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-        // 	errorAlert('저장 실패', '관리자에게 문의하세요.');
-        // 	return;
-        // }
+        } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+        	errorAlert('저장 실패', '관리자에게 문의하세요.');
+        	return;
+        }
     });// end fn_callApi
 }
 
@@ -1000,11 +878,11 @@ function deleteUserInfo() {
 
         fn_callApi( method, target, req, function(response) {
             let res = response;
-            // if (res.code == 200) {
+            if (res.code == 200) {
             location.reload();
             alert("회원 탈퇴가 완료되었습니다.");
             self.close();
-        // }
+            }
         });
 
     });
@@ -1013,19 +891,84 @@ function deleteUserInfo() {
 
 }
 
-//input box auto hypen
-$("input#userContact1").click(function(){
-
+function userContactClick(){
     let num = $("#userContact1").val();
     num = getOnlyNumber(num);
 
     $("#userContact1").val(num);
-});
+}
 
-$("input#userContact1").blur(function(){
-
+//input box auto hypen
+function userContactAutoHyphen(){
     let num = $("#userContact1").val();
 
-    autoHypenFromNumber('userContact1', num);
+    autoHyphenFromNumber('phone','userContact1', num);
+}
 
-});
+function licenseNumAutoHyphen() {
+    let num = $("#licenseNumber").val();
+
+    autoHyphenFromNumber('license','licenseNumber', num);
+}
+
+/*
+ * 입력값을 취소합니다.
+ * */
+function cancelData(cancel_type) {
+    switch (cancel_type) {
+        case 'saveUserInfo':// 회원 정보
+            $("#userId").val('');
+            $("#userName").val('');
+            $("#userBirthday").val('');
+            $("#userContact1").val('');
+            $("#sel_userGender").val('');
+            $("#sel_userRole").val('');
+            break;
+
+        case 'saveLicenseInfo':// 면허 정보
+            $("#sel_LicenseCode").val('');
+            $("#licenseNumber").val('');
+            $("#licenseExpiration").val('');
+            $("#licenseIssueDt").val('');
+            break;
+    }
+
+}
+
+// 카드 변경
+function changeCardView(cardViewName) {
+    let cards = $('.card-body');
+
+    switch (cardViewName) {
+        case 'userInfoCard':
+            cards.addClass('d-none');
+            $('#integratedMemberDetail').removeClass('d-none');
+            break;
+        case 'userReviewCard':
+            cards.addClass('d-none');
+            $('#userReviewCard').removeClass('d-none');
+            break;
+        case 'userReservationHisCard':
+            cards.addClass('d-none');
+            $('#userReservationHisCard').removeClass('d-none');
+            break;
+        case 'userCouponCard':
+            cards.addClass('d-none');
+            $('#userCouponCard').removeClass('d-none');
+            break;
+        case 'userPointHisCard':
+            cards.addClass('d-none');
+            $('#userPointHisCard').removeClass('d-none');
+            break;
+        case 'userLicenseCard':
+            cards.addClass('d-none');
+            $('#userLicenseCard').removeClass('d-none');
+            break;
+        case 'userGradeCard':
+            cards.addClass('d-none');
+            $('#userGradeCard').removeClass('d-none');
+            break;
+        default:
+            break;
+    }
+}

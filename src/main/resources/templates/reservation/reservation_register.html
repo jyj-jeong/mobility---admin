@@ -32,10 +32,7 @@
                                 <div class="col-lg-3 float-l">
                                     <label>아이디</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control"  placeholder="" value="" id="firstDriverId" />
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" onclick="serachUserInfo('first');">회원검색</button>
-                                        </div>
+                                        <input type="text" class="form-control"  placeholder="" value="" id="reserveUserId" />
                                     </div>
                                 </div>
                                 <div class=" col-lg-3 float-l flex-1">
@@ -55,14 +52,14 @@
                     <div class="card-body">
                         <h5 class="card-title">제1 운전자</h5>
                         <input type="hidden" id="ulIdx1" />
-                        <span class="top-right">
+                        <span class="top-right mb-3">
                                     <div class="position-relative form-check">
-                                        <label class="form-check-label">
+                                        <label class="form-check-label mb-3">
                                             <input type="checkbox" class="form-check-input" id="DriverSettingchk" onchange="firstDriverSetting('DriverSettingchk');" />예약자와 동일
                                         </label>
                                     </div>
                                 </span>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>이름</label>
                                 <input type="text" class="form-control" id="firstDriverName" placeholder="" />
@@ -76,7 +73,7 @@
                                 <input type="date" id="firstDriverBirthDay" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>면허종류</label>
                                 <select id="sel_firstDriverLicenseCode" class="custom-select">
@@ -100,7 +97,7 @@
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">제2 운전자</h5>
                         <input type="hidden" id="ulIdx2" />
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>이름</label>
                                 <input type="text" class="form-control" id="secondDriverName"  placeholder="" />
@@ -114,7 +111,7 @@
                                 <input type="date" id="secondDriverBirthDay" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>면허종류</label>
                                 <select id="sel_secondDriverLicenseCode" class="custom-select">
@@ -137,29 +134,28 @@
                 </div>
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">사업자</h5>
-                        <!--                        <input type="hidden" id="ulIdx2" />-->
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l flex-1" >
                                 <label>회사명</label>
-                                <input type="text" class="form-control"   placeholder="" />
+                                <input type="text" id="reserveCompanyName" class="form-control"   placeholder="" />
                             </div>
                             <div class="col-lg-3 float-l flex-1" >
                                 <label>사업자 등록번호</label>
-                                <input type="text" class="form-control"  placeholder="" />
+                                <input type="text" id="companyRegistrationNumber" class="form-control"  placeholder="" />
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>담당자 이름</label>
-                                <input type="text" class="form-control"  placeholder="" />
+                                <input type="text" id="staffName" class="form-control"  placeholder="" />
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>담당자 연락처</label>
-                                <input type="text" class="form-control"  placeholder="" />
+                                <input type="text" id="staffContact" class="form-control"  placeholder="" />
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-12 float-l" style="flex:1;">
                                 <label>주소</label>
-                                <input type="text" class="form-control"  placeholder="" />
+                                <input type="text" id="companyAddress" class="form-control"  placeholder="" />
                             </div>
                         </div>
                     </div>
@@ -167,44 +163,44 @@
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">예약</h5>
                         <span class="top-right">
-                            <div class="position-relative form-check">
-                                <label class="mr-4 form-check-label" for="1">
+                            <div class="position-relative form-check mb-3">
+                                <label class="mr-4 form-check-label mr-5" for="1">
                                     <input type="checkbox" class="form-check-input" id="1" onchange="firstDriverSetting('DriverSettingchk');" />배달대여</label>
                                 <label class="form-check-label" for="2">
                                     <input type="checkbox" class="form-check-input" id="2" onchange="firstDriverSetting('DriverSettingchk');" />지점방문</label>
                             </div>
                         </span>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>대여일시</label>
-                                <input type="text" class="form-control " id="gbn" placeholder="" />
+                                <input type="datetime-local" class="form-control" id="rentStartDay" placeholder="" />
                             </div>
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>반납일시</label>
-                                <input type="text" class="form-control " placeholder="" />
+                                <input type="datetime-local" class="form-control" id="rentEndDay" placeholder="" />
                             </div>
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>대여기간</label>
-                                <input type="date" class="form-control " placeholder="" />
+                                <input type="text" class="form-control" id="periodDt" placeholder="'요금 계산'시 확인 가능" />
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-12 float-l flex-1" >
                                 <label>대여위치</label>
-                                <input type="text" class="form-control " placeholder="" />
+                                <input type="text" class="form-control" id="deliveryAddr" placeholder="" />
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-12 float-l flex-1" >
                                 <label>반납위치</label>
-                                <input type="text" class="form-control " placeholder="" />
+                                <input type="text" class="form-control" id="returnAddr" placeholder="" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">차량</h5>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l flex-1" >
                                 <label>회사명(지점)</label>
                                 <select id="companyName" class="custom-select" onchange="selectCompany(this.value);">
@@ -225,7 +221,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l flex-1" >
                                 <label>연료</label>
                                 <select id="sel_fuel" class="custom-select">
@@ -244,13 +240,13 @@
                                 <input type="text"  class="form-control " id="mileage" value="">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12 mt-3 float-l" id="optionDetailCode" >
+                        <div class="row mb-3">
+                            <div class="col-lg-12 float-l" id="optionDetailCode" >
                                 <label class="carInsuranceInfoOption" >옵션</label>
                                 <input type="text" id="optionCodeValue"  class="form-control " value="">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l">
                                 <label>대인</label>
                                 <input type="text" id="personalCover"  class="form-control " value="">
@@ -279,7 +275,7 @@
                 </div>
                 <div class="main-card mb-3 card paymentDiv">
                     <div class="card-body"><h5 class="card-title">결제</h5>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>차량대여금액</label>
                                 <input type="text"  class="form-control" id="rentFee" placeholder="" />
@@ -293,7 +289,7 @@
                                 <input type="text" id="insuranceFee"  class="form-control" value="">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>총 대여금액</label>
                                 <input type="text" id="paymentTotalAmount"  class="form-control" value="">
@@ -307,7 +303,7 @@
                                 <input type="text" id="discountFee"  class="form-control" value="">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>쿠폰</label>
                                 <input type="text"  class="form-control" value="">
@@ -321,7 +317,7 @@
                                 <input type="text" class="form-control" value="">
                             </div>
                         </div>
-                        <div class="col-lg-12 mt-3 mt-3 float-l" >
+                        <div class="col-lg-12 mb-3 mb-3 float-l" >
                             <label id="calRentTotAmountEtc"></label>
                         </div>
                     </div>
@@ -329,8 +325,8 @@
 
                 <div class="card-footer">
                     <div class="text-right">
-                        <button class="btn btn-primary" type="button" onclick="self.close()">저장</button>
-                        <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
+                        <button class="btn btn-primary" type="button" onclick="detailValidation()" id="btnReserveSave">저장</button>
+                        <button id="btnClose" class="btn btn-primary" type="button" onclick="closeDetail()">창 닫기</button>
                     </div>
                 </div>
             </div>
@@ -366,7 +362,7 @@
             <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="/api/v1.0/carssum.logout">Logout</a>
+                <a class="btn btn-primary" href="/api/v1.0/docha.logout">Logout</a>
             </div>
         </div>
     </div>
@@ -376,13 +372,8 @@
     // swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
 
     rtIdx = /*[[${rtIdx}]]*/'';
-    CRUD = /*[[${CRUD}]]*/'';
 
-    if(CRUD === "insert"){
-        openCreateRentCompany();
-    }else if (CRUD === "modify"){
-        initDetailInfo(rtIdx)
-    }
+    initDetailData('insert');
 
 </script>
 </body>

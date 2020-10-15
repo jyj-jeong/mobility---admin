@@ -2,7 +2,7 @@ package com.ohdocha.admin.service;
 
 import com.ohdocha.admin.util.ServiceMessage;
 
-public interface MainService {
+public interface LoginService {
 
-    void selectCommonCodeInfo(ServiceMessage message);
+    void login(ServiceMessage message);
 }

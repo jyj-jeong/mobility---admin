@@ -32,6 +32,8 @@ public interface UserService {
 
     void insertRentCompanyStaff(ServiceMessage message);            // 회원사 직원 등록
 
+    void updateRentCompanyStaff(ServiceMessage message);            // 회원사 직원 수정
+
     void getRentShopStaffList(ServiceMessage message);              // 회원사 직원 리스트 조회
 
     void updateRentCompanyCommission(ServiceMessage message);       // 회원사 수수료 정보 등록

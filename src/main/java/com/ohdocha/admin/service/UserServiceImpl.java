@@ -32,18 +32,21 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
     @Override
     public void getIntegratedUserList(ServiceMessage message) {
-        if (message.get("test") != null){
-            DochaAdminUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminUserInfoRequest.class);
+        DochaAdminUserInfoRequest userInfoRequest;
+        if (message.get("userInfoRequest") != null){
+            userInfoRequest = message.getObject("userInfoRequest", DochaAdminUserInfoRequest.class);
+        }else {
+            userInfoRequest = new DochaAdminUserInfoRequest();
+        }
 
-            List<DochaAdminUserInfoResponse> userInfoResponseList = userInfoMntMapper.selectUserInfo(userInfoRequest);
+        List<DochaAdminUserInfoResponse> userInfoResponseList = userInfoMntMapper.selectUserInfo(userInfoRequest);
 
+        if (userInfoResponseList.size() != 0){
+            message.addData("code", 200);
             message.addData("result", userInfoResponseList);
         }else {
-            DochaAdminUserInfoRequest userInfoRequest = new DochaAdminUserInfoRequest();
-
-            List<DochaAdminUserInfoResponse> IntegratedUserList = userInfoMntMapper.selectUserInfo(userInfoRequest);
-
-            message.addData("IntegratedUserList", IntegratedUserList);
+            message.addData("code", 400);
+            message.addData("errMsg", "유저 정보를 불러오는데 실패했습니다.");
         }
     }
 
@@ -56,26 +59,39 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         int res = userInfoMntMapper.insertUserInfo(insertUserInfoRequest);
 
-        message.addData("res", res);
-        // TODO DB 저장된 urIdx 불러오도록 수정
-        message.addData("urIdx", insertUserInfoRequest.getUrIdx());
+        if (res == 1){
+            message.addData("code", 200);
+            // TODO DB 저장된 urIdx 불러오도록 수정
+            message.addData("urIdx", insertUserInfoRequest.getUrIdx());
+        }else{
+            message.addData("code", 400);
+            message.addData("errMsg", "회원 저장에 실패했습니다.");
+        }
     }
 
     @Override
     public void getUserDetail(ServiceMessage message) {
         DochaAdminUserInfoRequest userInfoRequest = new DochaAdminUserInfoRequest();
+        List<DochaAdminUserInfoDetailResponse> userResponse;
+
         if (message.getObject("userInfoRequest",DochaAdminUserInfoRequest.class) == null){
+
             String urIdx = message.getString("urIdx", "");
-
             userInfoRequest.setUrIdx(urIdx);
-            List<DochaAdminUserInfoDetailResponse> userResponse = userInfoMntMapper.selectUserInfoDetail(userInfoRequest);
 
-            message.addData("user", userResponse);
         }else{
-            userInfoRequest =  message.getObject("userInfoRequest",DochaAdminUserInfoRequest.class);
-            List<DochaAdminUserInfoDetailResponse> userResponse = userInfoMntMapper.selectUserInfoDetail(userInfoRequest);
 
+            userInfoRequest =  message.getObject("userInfoRequest",DochaAdminUserInfoRequest.class);
+
+        }
+
+        userResponse = userInfoMntMapper.selectUserInfoDetail(userInfoRequest);
+
+        if (userResponse.size() != 0){
+            message.addData("code", 200);
             message.addData("result", userResponse);
+        }else {
+            message.addData("code", 400);
         }
 
     }
@@ -83,20 +99,26 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     @Override
     public void getUserLicenseInfo(ServiceMessage message) {
         DochaAdminUserInfoUserLicenseInfoRequest userLicenseInfoRequest = new DochaAdminUserInfoUserLicenseInfoRequest();
-        if (message.getObject("userLicenseInfoRequest",DochaAdminUserInfoUserLicenseInfoRequest.class) == null) {
-            String urIdx = message.getString("urIdx", "");
+        List<DochaAdminUserInfoUserLicenseInfoResponse> userLicenseInfo;
 
+        if (message.getObject("userLicenseInfoRequest",DochaAdminUserInfoUserLicenseInfoRequest.class) == null) {
+
+            String urIdx = message.getString("urIdx", "");
             userLicenseInfoRequest.setUrIdx(urIdx);
 
-            List<DochaAdminUserInfoUserLicenseInfoResponse> userLicenseInfo = userInfoMntMapper.selectLicenseInfo(userLicenseInfoRequest);
-
-            message.addData("userLicenseInfo", userLicenseInfo);
         }else {
+
             userLicenseInfoRequest = message.getObject("userLicenseInfoRequest", DochaAdminUserInfoUserLicenseInfoRequest.class);
 
-            List<DochaAdminUserInfoUserLicenseInfoResponse> userLicenseInfo = userInfoMntMapper.selectLicenseInfo(userLicenseInfoRequest);
+        }
 
-            message.addData("userLicenseInfo", userLicenseInfo);
+        userLicenseInfo = userInfoMntMapper.selectLicenseInfo(userLicenseInfoRequest);
+
+        if (userLicenseInfo.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", userLicenseInfo);
+        }else {
+            message.addData("code", 400);
         }
     }
 
@@ -105,6 +127,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
         DochaAdminUpdateUserInfoRequest updateUserInfoRequest = message.getObject("updateUserInfoRequest", DochaAdminUpdateUserInfoRequest.class);
 
         int res = userInfoMntMapper.updateUserInfoDetail(updateUserInfoRequest);
+
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -112,6 +140,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
         DochaAdminUserInfoUserLicenseInfoRequest updateLicenseInfoRequest = message.getObject("updateLicenseInfoRequest", DochaAdminUserInfoUserLicenseInfoRequest.class);
 
         int res = userInfoMntMapper.updateUserLicenseInfo(updateLicenseInfoRequest);
+
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -120,6 +154,11 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         int res = userInfoMntMapper.deleteUserInfo(userInfoRequest);
 
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+        }
 
     }
 
@@ -131,6 +170,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
         insertUserLicenseInfo.setUlIdx(ulIdx);
 
         int res = userInfoMntMapper.insertUserLicenseInfo(insertUserLicenseInfo);
+
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -142,7 +187,13 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         int res = rentCompanyInfoMapper.insertDcRentCompany(rentCompanyDetailRequest);
 
-        message.addData("rtIdx",rtIdx);
+        if (res == 1){
+            message.addData("code", 200);
+            message.addData("rtIdx",rtIdx);
+        }else {
+            message.addData("code", 400);
+            message.addData("errMsg", "회원사 정보 저장에 실패했습니다.");
+        }
     }
 
     @Override
@@ -151,7 +202,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminRentCompanyInfoResponse> rentCompanyDetailResponseList = rentCompanyInfoMapper.selectRentCompanyDetailInfo(rentCompanyDetailRequest);
 
-        message.addData("rentCompanyDetailResponseList",rentCompanyDetailResponseList);
+        if (rentCompanyDetailResponseList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result",rentCompanyDetailResponseList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -160,7 +216,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminRentCompanyInfoResponse> rentCompanyInfoList = rentCompanyInfoMapper.selectRentCompanyInfo(rentCompanyInfoRequest);
 
-        message.addData("rentCompanyInfoList", rentCompanyInfoList);
+        if (rentCompanyInfoList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", rentCompanyInfoList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -169,7 +230,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminDcRentCompanyStaffResponse> rentCompanyStaffResponsesList = rentCompanyInfoMapper.selectrentCompanyStaffList(rentCompanyStaffRequest);
 
-        message.addData("result", rentCompanyStaffResponsesList);
+        if (rentCompanyStaffResponsesList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", rentCompanyStaffResponsesList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -187,7 +253,9 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
             res = rentCompanyInfoMapper.updateDcRentCompanyComission(rentCompanyCommissionRequest);
         }
 
-        message.addData("res ", res);
+        if (res == 1){
+            message.addData("code", 200);
+        }else message.addData("code", 400);
 
     }
 
@@ -206,27 +274,51 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
             res = rentCompanyInfoMapper.updateDcRentCompanyTime(rentCompanyTimeRequest);
         }
 
-        message.addData("res ", res);
+        if (res == 1){
+            message.addData("code", 200);
+        }else message.addData("code", 400);
+
     }
 
     @Override
     public void insertRentCompanyReserveMinList(ServiceMessage message) {
         DochaAdminDcRentCompanyReserveMinRequest rentCompanyReserveMinRequest = message.getObject("rentCompanyReserveMinRequest", DochaAdminDcRentCompanyReserveMinRequest.class);
+
         String minIdx = KeyMaker.getInsetance().getKeyDeafult("min");
         rentCompanyReserveMinRequest.setMinIdx(minIdx);
 
         int res = rentCompanyInfoMapper.insertDcRentCompanyReserveMin(rentCompanyReserveMinRequest);
 
-        message.addData("result", res);
+        if (res == 1){
+            message.addData("code", 200);
+        }else message.addData("code", 400);
+
     }
 
     @Override
     public void insertRentCompanyStaff(ServiceMessage message) {
         DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest = message.getObject("rentCompanyStaffRequest", DochaAdminDcRentCompanyStaffRequest.class);
 
-         int res = rentCompanyInfoMapper.insertDcRentCompanyStaff(rentCompanyStaffRequest);
+        int res = rentCompanyInfoMapper.insertDcRentCompanyStaff(rentCompanyStaffRequest);
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+            message.addData("errMsg", "담당자 정보 저장에 실패했습니다.");
+        }
+    }
 
-        message.addData("res", res);
+    @Override
+    public void updateRentCompanyStaff(ServiceMessage message) {
+        DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest = message.getObject("rentCompanyStaffRequest", DochaAdminDcRentCompanyStaffRequest.class);
+
+        int res = rentCompanyInfoMapper.updateDcRentStaff(rentCompanyStaffRequest);
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+            message.addData("errMsg", "담당자 정보 저장에 실패했습니다.");
+        }
     }
 
     @Override
@@ -235,7 +327,10 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminDcRentCompanyReserveMinResponse> rentCompanyReserveMinResponseList = rentCompanyInfoMapper.selectDcRentCompanyReserveMinList(rentCompanyReserveMinRequest);
 
-        message.addData("result", rentCompanyReserveMinResponseList);
+        if (rentCompanyReserveMinResponseList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", rentCompanyReserveMinResponseList);
+        }
     }
 
     @Override
@@ -247,7 +342,10 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         int res = rentCompanyInfoMapper.insertRentCompanyHoliday(rentCompanyHolidayRequest);
 
-        message.addData("result", res);
+        if (res == 1){
+            message.addData("code", 200);
+        }else message.addData("code", 400);
+
     }
 
     @Override
@@ -256,7 +354,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminRentCompanyHolidayResponse> rentCompanyHolidayResponseList = rentCompanyInfoMapper.selectRentCompanyHoliday(rentCompanyHolidayRequest);
 
-        message.addData("result", rentCompanyHolidayResponseList);
+        if (rentCompanyHolidayResponseList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", rentCompanyHolidayResponseList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -265,7 +368,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminAdminUserInfoResponse> adminUserInfoList = adminUserInfoMntMapper.selectAdminUserInfo(adminUserInfoRequest);
 
-        message.addData("adminUserInfoList", adminUserInfoList);
+        if (adminUserInfoList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", adminUserInfoList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -274,7 +382,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         List<DochaAdminAuthTemplateResponse> authTemplateList = adminAuthTemplateMapper.selectAdminTemplate(adminAuthTemplateRequest);
 
-        message.addData("authTemplateList", authTemplateList);
+        if (authTemplateList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", authTemplateList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
     @Override
@@ -286,7 +399,12 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     public void selectMenuTemplateList(ServiceMessage message) {
         List<DochaAdminMenuTemplateResponse> adminMenuTemplateResponseList = adminUserInfoMntMapper.selectMenuTemplateList();
 
-        message.addData("result", adminMenuTemplateResponseList);
+        if (adminMenuTemplateResponseList.size() != 0){
+            message.addData("code", 200);
+            message.addData("result", adminMenuTemplateResponseList);
+        }else {
+            message.addData("code", 400);
+        }
     }
 
 }

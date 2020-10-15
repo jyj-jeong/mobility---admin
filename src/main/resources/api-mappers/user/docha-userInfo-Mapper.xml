@@ -7,63 +7,27 @@
     <select id="selectUserInfo" parameterType="userInfoRequest"
             resultType="userInfoResponse">
         <![CDATA[
--- 				SELECT * FROM (SELECT ROWNUM AS ROW_NUMBER, COUNT(*) OVER() TOTAL_ROW_COUNT, A.*
--- 					FROM (
-  							SELECT 
-								        IFNULL(A.UR_IDX                  , '' )  AS UR_IDX					 /*  회원IDX 		*/            
-								    ,	IFNULL(A.USER_ID                 , '' )  AS USER_ID                 /*  회원ID 		*/
-								    ,	IFNULL(A.USER_NAME               , '' )  AS USER_NAME               /*  이름 		*/	
-								    ,	IFNULL(A.USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY           /*  생년월일 		*/
-								    ,	IFNULL(A.USER_CONTACT1           , '' )  AS USER_CONTACT1           /*  연락처1 		*/
-								    ,	IFNULL(A.USER_CONTACT2           , '' )  AS USER_CONTACT2           /*  연락처2 		*/
-								    , 	IFNULL(A.USER_STATUS_CODE		  , '' )  AS USER_STATUS_CODE		 /*  상태			*/
-									,	IFNULL(DATE_FORMAT(A.REG_DT , '%Y%M%d%H%i%s')  	, ' ' )  AS REG_DT 				 /*  등록일시         */
-					        		,	(SELECT COUNT(*) reserveCnt FROM DC_RESERVE_MASTER
-					        									   WHERE UR_IDX = A.UR_IDX
-					        									     AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
--- 					        									     AND RESERVE_STATUS_CODE='QC'
--- 					        									     AND RESERVE_STATUS_CODE != 'CC'
-					        			) AS RESERVE_CNT   /*대여횟수*/
-										FROM DC_USER_INFO A
-		                                LEFT OUTER JOIN DC_COMMON_CODE B
-		                                             ON B.RT_CODE='RL'
-		                                            AND A.USER_ROLE = B.CODE
-
-
+  		SELECT
+			        IFNULL(A.UR_IDX                  , '' )  AS UR_IDX					 /*  회원IDX 		*/
+			    ,	IFNULL(A.USER_ID                 , '' )  AS USER_ID                 /*  회원ID 		*/
+			    ,	IFNULL(A.USER_NAME               , '' )  AS USER_NAME               /*  이름 		*/
+			    ,	IFNULL(A.USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY           /*  생년월일 		*/
+			    ,	IFNULL(A.USER_CONTACT1           , '' )  AS USER_CONTACT1           /*  연락처1 		*/
+			    ,	IFNULL(A.USER_CONTACT2           , '' )  AS USER_CONTACT2           /*  연락처2 		*/
+			    , 	IFNULL(A.USER_STATUS_CODE		  , '' )  AS USER_STATUS_CODE		 /*  상태			*/
+				,	IFNULL(DATE_FORMAT(A.REG_DT , '%Y%m%d')  	, ' ' )  AS REG_DT 				 /*  등록일시         */
+				,	(SELECT COUNT(*) reserveCnt FROM DC_RESERVE_MASTER
+											   WHERE UR_IDX = A.UR_IDX
+											     AND RESERVE_STATUS_CODE in ('RS', 'RO', 'RW', 'RS')
+-- 											     AND RESERVE_STATUS_CODE='QC'
+-- 											     AND RESERVE_STATUS_CODE != 'CC'
+					) AS RESERVE_CNT   /*대여횟수*/
+					FROM DC_USER_INFO A
+		            LEFT OUTER JOIN DC_COMMON_CODE B
+		                         ON B.RT_CODE='RL'
+		                        AND A.USER_ROLE = B.CODE
 		]]>
-        <trim prefix="WHERE" prefixOverrides="AND|OR">
-            1=1
-        </trim>
-
-        <if test="searchType != null and searchType != '' ">
-            <choose>
-                <when test =' searchType == "urIdx" '>
-                    AND <![CDATA[ A.UR_IDX  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-                </when>
-                <when test =' searchType == "userId" '>
-                    AND <![CDATA[ A.USER_ID  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-                </when>
-                <when test =' searchType == "userName" '>
-                    AND <![CDATA[ A.USER_NAME  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-                </when>
-                <when test =' searchType == "userBirthday" '>
-                    AND <![CDATA[ A.USER_BIRTHDAY  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-                </when>
-                <when test =' searchType == "userContact1" '>
-                    AND <![CDATA[ A.USER_CONTACT1  LIKE '%' ||  #{searchKeyWord} || '%'  ]]>
-                </when>
-                <otherwise>
-                </otherwise>
-            </choose>
-        </if>
-        <![CDATA[	ORDER BY A.REG_DT DESC]]>
-        <!--		<![CDATA[	) A )]]> -->
-        <!--        <trim prefix="WHERE" prefixOverrides="AND|OR">-->
-        <!--         	<![CDATA[	ROWNUM <= #{displayPageNum} AND ROW_NUMBER > (#{page}-1) * #{displayPageNum} ]]>-->
-        <!--	        <if test="userPassword != null and userPassword != ''">-->
-        <!--	     		<![CDATA[	AND USER_PASSWORD = #{userPassword}]]>-->
-        <!--	        </if>-->
-        <!--       	</trim>-->
+        <![CDATA[	ORDER BY A.REG_DT DESC ]]>
     </select>
 
     <select id="selectUserInfoDetail" parameterType="userInfoRequest"
@@ -101,9 +65,9 @@
 						    ,  IFNULL(A.SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL       /* 	연동로그인메일 		*/
 						    ,  IFNULL(A.USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE       /* 	회원탈퇴일시 		*/
 						    ,  IFNULL(A.LOGIN_FAIL_COUNT        , 0 )  AS LOGIN_FAIL_COUNT         /* 	로그인시도횟수 		*/
-							,  DATE_FORMAT(A.REG_DT              ,  '%Y%M%d%H%i%s')  AS    REG_DT  /*   등록일시                    */
+							,  DATE_FORMAT(A.REG_DT              ,  '%Y%m%d')  AS    REG_DT  /*   등록일시                    */
 							,  IFNULL(A.REG_ID                  , '' )  AS  				REG_ID   /*   등록자                       */
-							,  DATE_FORMAT(A.MOD_DT              ,  '%Y%M%d%H%i%s')  AS    MOD_DT  /*   수정일시                     */
+							,  DATE_FORMAT(A.MOD_DT              ,  '%Y%m%d')  AS    MOD_DT  /*   수정일시                     */
 							,  IFNULL(A.MOD_ID				   , '' )  AS  				MOD_ID       /*   수정자                       */
 							,  IFNULL(C.UL_IDX             , '' )  AS UL_IDX					         /*   면허정보idx         */
 							,  IFNULL(C.LICENSE_NUMBER     , '' )  AS LICENSE_NUMBER                  /*   면허번호                     */

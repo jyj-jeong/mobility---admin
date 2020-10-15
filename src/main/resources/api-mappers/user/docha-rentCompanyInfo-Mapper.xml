@@ -29,7 +29,7 @@
 							,	IFNULL(T1.COMPANY_REGISTRATION_NAME 						, '' ) AS COMPANY_REGISTRATION_NAME  								/* 법인명		  */
 							,	IFNULL(T1.BRANCH_NAME               						, '' ) AS BRANCH_NAME                								/* 지점명               */
 							,	IFNULL(T1.ACCESS_YN                 						, '' ) AS ACCESS_YN                  								/* 접속허용 여부       */
-							,   IFNULL(DATE_FORMAT(T1.REG_DT , '%Y%M%d%H%i%s')           	, '' ) AS REG_DT
+							,   IFNULL(DATE_FORMAT(T1.REG_DT , '%Y%m%d')           	, '' ) AS REG_DT
 					FROM DC_RENT_COMPANY T1
 					LEFT OUTER JOIN
 					(
@@ -114,6 +114,7 @@
 		, IFNULL(T1.ALLIANCE_STATUS             	, '') AS ALLIANCE_STATUS                /*제휴상태*/
 		, IFNULL(T1.BRANCH_ABLE_YN              	, '') AS BRANCH_ABLE_YN                 /*지점보유가능여부*/
 		, IFNULL(T1.CAR_COUNT                   	, '') AS CAR_COUNT                      /*보유차량대수*/
+		, IFNULL(T1.REG_CAR_COUNT                	, '') AS REG_CAR_COUNT                      /*보유차량대수*/
 		, IFNULL(T1.ETC                         	, '') AS ETC                            /*비고*/
 		, IFNULL(T1.REG_ID                      	, '') AS REG_ID                         /*등록자*/
 		, IFNULL(T1.REG_DT                      	, '') AS REG_DT                         /*등록일시*/
@@ -233,7 +234,9 @@
 				,	COMPANY_REGISTRATION_NUMBER	
 				,	ACCOUNT_BANK					
 				,	ACCOUNT_NUMBER				
-				,	ACCOUNT_HOLDER				
+				,	ACCOUNT_HOLDER
+				,   CAR_COUNT
+				,   REG_CAR_COUNT
 				,	ALARM_YN 						
 				,	COMPANY_REGISTRATION_NAME 	
 				,	BRANCH_NAME 					
@@ -252,10 +255,12 @@
 				,	#{accountBank}				
 				,	#{accountNumber}				
 				,	#{accountHolder}				
-				,	#{accessYn}					
-				,	#{companyRegistrationName}	
-				,	#{branchName}					
+				,	#{carCount}
+				,	#{regCarCount}
 				,	#{alarmYn}
+				,	#{companyRegistrationName}
+				,	#{branchName}					
+				,	#{accessYn}
 				,   #{regId}
 				,   NOW()
 				,   'N'
@@ -430,7 +435,7 @@
 	    		OR A.MINIMUM_END_DT between #{minimumStartDt} and #{minimumEndDt}
 	    		OR #{minimumStartDt} BETWEEN A.MINIMUM_START_DT AND A.MINIMUM_END_DT
 	    		OR #{minimumEndDt} BETWEEN A.MINIMUM_START_DT AND A.MINIMUM_END_DT
-	    		) 
+	    		)
 	    		]]>
 			</if>
 		</trim>

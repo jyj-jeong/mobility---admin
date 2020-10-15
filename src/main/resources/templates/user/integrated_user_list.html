@@ -37,6 +37,7 @@
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>회원번호</th>
                                     <th>아이디</th>
                                     <th>이름</th>
@@ -48,6 +49,7 @@
                                 </thead>
                                 <tfoot>
                                 <tr>
+                                    <th>No</th>
                                     <th>회원번호</th>
                                     <th>아이디</th>
                                     <th>이름</th>
@@ -58,7 +60,8 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="user, index : ${IntegratedUserList}" style="cursor: pointer" th:data-value="${user.getUrIdx()}">
+                                <tr th:each="user, index : ${result}" style="cursor: pointer" th:data-value="${user.getUrIdx()}">
+                                    <td th:text="${index.count}"></td>
                                     <td th:text="${user.getUrIdx()}"></td>
                                     <td th:text="${user.getUserId()}"></td>
                                     <td th:text="${user.getUserName()}"></td>
@@ -107,7 +110,7 @@
             <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="/api/v1.0/carssum.logout">Logout</a>
+                <a class="btn btn-primary" href="/api/v1.0/docha.logout">Logout</a>
             </div>
         </div>
     </div>
@@ -134,8 +137,15 @@
     /* 회원 등록 */
     function registerUser() {
         var url = 'mem/register';
-        var name = "test";
-        var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+        var name = "_blank";
+        var width = (parseInt(window.innerWidth) * 0.8);
+        var height = (parseInt(window.innerHeight) * 0.9);
+        var left =  (window.screen.width / 2) - (width / 2);
+        var top = (window.screen.height / 2) - (height / 2);
+
+
+        var option = "width=" + width +", height=" + height + " ,location=no, left=" + left + ", top=" + top;
+
 
         window.open(url, name, option);
     }

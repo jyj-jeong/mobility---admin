@@ -22,30 +22,7 @@ import java.util.List;
 @Service
 public class MainServiceImpl extends ServiceExtension implements MainService {
 
-    private final DochaAdminLoginMapper loginMapper;
     private final DochaAdminCommonCodeMapper commonCodeMapper;
-
-    @Override
-    public void login(ServiceMessage message) {
-        DochaAdminDcUserInfoRequest userInfoRequest = message.getObject("userInfoRequest", DochaAdminDcUserInfoRequest.class);
-
-        DochaAdminDcUserInfoResponse userInfoResponse = loginMapper.chkLoginUserInfo(userInfoRequest);
-        if (userInfoResponse != null){
-
-            DochaMap userInfo = new DochaMap();
-            userInfo.set("urIdx", userInfoResponse.getUrIdx());
-            userInfo.set("userName", userInfoResponse.getUserName());
-            userInfo.set("userRole", userInfoResponse.getUserRole());
-            userInfo.set("rtIdx", userInfoResponse.getRtIdx());
-            userInfo.set("companyName", userInfoResponse.getCompanyName());
-            userInfo.set("branchName", userInfoResponse.getBranchName());
-
-            message.addData("userInfo", userInfo);
-        }else {
-            message.addData("err", "error");
-            throw new BadRequestException(500,"로그인 실패");
-        }
-    }
 
     @Override
     public void selectCommonCodeInfo(ServiceMessage message) {
