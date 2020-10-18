@@ -2,6 +2,7 @@ package com.ohdocha.admin.service;
 
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.*;
 import com.ohdocha.admin.mapper.DochaAdminReserveInfoMapper;
+import com.ohdocha.admin.util.KeyMaker;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,26 @@ public class ReserveServiceImpl extends ServiceExtension implements ReserveServi
         List<DochaAdminReserveInfoResponse> reserveInfoResponseList = reserveInfoMapper.selectReserveInfoList(reserveInfoRequest);
 
         message.addData("result", reserveInfoResponseList);
+    }
+
+    @Override
+    public void addReserveInfo(ServiceMessage message) {
+        DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest = message.getObject("reserveInfoDetailRequest", DochaAdminReserveInfoDetailRequest.class);
+        String rmIdx = KeyMaker.getInsetance().getKeyDeafult("RM");
+        reserveInfoDetailRequest.setRmIdx(rmIdx);
+
+        int res = reserveInfoMapper.insertReserveInfo(reserveInfoDetailRequest);
+
+        message.addData("result", res);
+    }
+
+    @Override
+    public void updateReserveInfo(ServiceMessage message) {
+        DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest = message.getObject("reserveInfoDetailRequest", DochaAdminReserveInfoDetailRequest.class);
+
+        int res = reserveInfoMapper.updateReserveInfo(reserveInfoDetailRequest);
+
+        message.addData("result", res);
     }
 
     @Override

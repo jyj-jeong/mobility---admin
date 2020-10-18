@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohdocha.admin.mapper.DochaAdminPeriodPlanSettingMapper">
+
+	<!-- 기본요금제 List  -->
+	<select id="selectPeriodPlanInfo"  parameterType="periodPlanRequest" 
+      			   				  	 resultType="periodPlanResponse">
+      	<![CDATA[
+-- 		SELECT * FROM (
+     				 SELECT 
+				     		IFNULL(T2.COMPANY_NAME, '') AS COMPANY_NAME 							 					/* 회원사명 */
+				     	,	IFNULL(T2.BRANCH_NAME, '') AS BRANCH_NAME 								 					/* 지점명 */
+						,	IFNULL(T1.PER_IDX                   , '') AS PER_IDX                    					/*기간요금idx*/
+						,	IFNULL(T1.CR_IDX                    , '') AS CR_IDX                     					/*차량idx*/
+						,	IFNULL(T1.RT_IDX                    , '') AS RT_IDX                     					/*회원사idx*/
+						,	IFNULL(T1.PERIOD_START_DT           , '') AS PERIOD_START_DT            					/*기간시작일*/
+						,	IFNULL(T1.PERIOD_END_DT             , '') AS PERIOD_END_DT              					/*기간종료일*/
+						,	IFNULL(T1.DISCOUNT_EXTRACHARGE_CODE , '') AS DISCOUNT_EXTRACHARGE_CODE  					/*할인할증구분*/
+						,	IFNULL(T1.PERIOD_PAY                , '') AS PERIOD_PAY                 					/*기간요금*/
+						,	IFNULL(T1.PERIOD_ETC                , '') AS PERIOD_ETC                 					/*내용*/
+						,	IFNULL(T1.REG_ID                    , '') AS REG_ID                     					/*등록자*/
+						,	IFNULL(T1.REG_DT                    , '') AS REG_DT                     					/*등록일시*/
+						,	IFNULL(T1.MOD_ID                    , '') AS MOD_ID                     					/*수정자*/
+						,	IFNULL(T1.MOD_DT                    , '') AS MOD_DT                     					/*수정일시*/
+						,	IFNULL(T1.DEL_YN				     , '') AS DEL_YN				     					/*삭제여부*/
+				     	,	(SELECT COUNT(CR_IDX) FROM DC_CAR_INFO WHERE PER_IDX = T1.PER_IDX) AS SETTING_CAR_CNT 	/* 설정차량대수 */
+				     FROM DC_PAYMENT_PERIOD T1
+				     INNER JOIN DC_RENT_COMPANY T2
+				     		 ON T1.RT_IDX = T2.RT_IDX
+
+         ]]>
+
+
+	</select>    
+	
+	
+	<!-- 기본요금제 List  -->
+	<select id="selectPeriodPlanDetail"  parameterType="periodPlanDetailRequest" 
+      			   				  	 resultType="periodPlanDetailResponse">
+      	<![CDATA[
+     				 SELECT 
+     				 		
+							IFNULL(T2.COMPANY_NAME, '') 			   AS COMPANY_NAME 							 		/* 회원사명 */
+				     	,	IFNULL(T2.BRANCH_NAME, '') 			   AS BRANCH_NAME 								 	/* 지점명 */
+						,	IFNULL(T1.PER_IDX                   , '') AS PER_IDX                    					/*기간요금idx*/
+						,	IFNULL(T1.CR_IDX                    , '') AS CR_IDX                     					/*차량idx*/
+						,	IFNULL(T1.RT_IDX                    , '') AS RT_IDX                     					/*회원사idx*/
+						,	IFNULL(T1.PERIOD_START_DT           , '') AS PERIOD_START_DT            					/*기간시작일*/
+						,	IFNULL(T1.PERIOD_END_DT             , '') AS PERIOD_END_DT              					/*기간종료일*/
+						,	IFNULL(T1.DISCOUNT_EXTRACHARGE_CODE , '') AS DISCOUNT_EXTRACHARGE_CODE  					/*할인할증구분*/
+						,	IFNULL(T1.PERIOD_PAY                , '') AS PERIOD_PAY                 					/*기간요금*/
+						,	IFNULL(T1.PERIOD_ETC                , '') AS PERIOD_ETC                 					/*내용*/
+						,	IFNULL(T1.REG_ID                    , '') AS REG_ID                     					/*등록자*/
+						,	IFNULL(T1.REG_DT                    , '') AS REG_DT                     					/*등록일시*/
+						,	IFNULL(T1.MOD_ID                    , '') AS MOD_ID                     					/*수정자*/
+						,	IFNULL(T1.MOD_DT                    , '') AS MOD_DT                     					/*수정일시*/
+						,	IFNULL(T1.DEL_YN				     , '') AS DEL_YN				     					/*삭제여부*/
+				     	,	IFNULL(T1.PERIOD_ETC				     , '') AS PERIOD_ETC				     			/*내용*/
+				     FROM DC_PAYMENT_PERIOD T1
+				     INNER JOIN DC_RENT_COMPANY T2
+				     		 ON T1.RT_IDX = T2.RT_IDX
+		]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+        	<if test="rtIdx != null  and rtIdx != '' ">
+		       		<![CDATA[	T1.RT_IDX = #{rtIdx} ]]>
+			</if>
+         		<if test="perIdx != null  and perIdx != '' ">
+			      AND <![CDATA[ T1.PER_IDX = #{perIdx} ]]>
+				</if>
+       	</trim>						  		
+	</select>
+	
+	
+	<!-- 기간요금설정 UPDATE -->
+	<update  id="updatePlanSettingDetail" parameterType="periodPlanDetailRequest">
+    	<![CDATA[ UPDATE DC_PAYMENT_PERIOD ]]>
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="perIdx                 	!= null"><![CDATA[    PER_IDX					= #{perIdx}  				]]></if>	<!--기간요금idx -->
+			<if test="rtIdx                  	!= null"><![CDATA[  , RT_IDX					= #{rtIdx}  				]]></if>	<!--회원사idx -->
+			<if test="periodStartDt          	!= null"><![CDATA[  , PERIOD_START_DT			= #{periodStartDt}  		]]></if>	<!--기간시작일 -->
+			<if test="periodEndDt            	!= null"><![CDATA[  , PERIOD_END_DT				= #{periodEndDt}  			]]></if>	<!--기간종료일 -->
+			<if test="discountExtrachargeCode	!= null"><![CDATA[  , DISCOUNT_EXTRACHARGE_CODE	= #{discountExtrachargeCode}]]></if>	<!--할인할증구분 -->
+ 			<if test="periodPay              	!= null"><![CDATA[  , PERIOD_PAY				= #{periodPay}  			]]></if>	<!--기간요금 -->
+ 			<if test="periodEtc              	!= null"><![CDATA[  , PERIOD_ETC				= #{periodEtc} 				]]></if>	<!--내용 --> 
+			<if test="delYn                   	!= null"><![CDATA[  , DEL_YN 					= #{delYn}				  	]]></if> 	<!--삭제여부 -->
+ 			<if test="modId                   	!= null"><![CDATA[  , MOD_ID 					= #{modId}  				]]></if> 	<!--수정자 -->
+ 			, MOD_DT = NOW()
+		</trim>       				  
+    	<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="perIdx != null and perIdx != ''">
+	     		<![CDATA[ PER_IDX = #{perIdx} ]]>
+	        </if>
+		</trim>		
+    </update>
+    
+    <!-- 기간요금설정 INSERT -->
+    <insert  id="insertPlanSettingDetail" parameterType="periodPlanDetailRequest">			
+	<![CDATA[ 
+	     INSERT INTO DC_PAYMENT_PERIOD (
+	     	   RT_IDX
+			,  PERIOD_ETC
+			,  PERIOD_START_DT
+			,  PERIOD_END_DT
+			,  DISCOUNT_EXTRACHARGE_CODE
+			,  PERIOD_PAY
+			,  DEL_YN
+			,  REG_ID
+			,  REG_DT
+		) VALUES (
+				#{rtIdx}
+			,	#{periodEtc}              
+			,  	#{periodStartDt}    
+			,  	#{periodEndDt}
+			,  	#{discountExtrachargeCode}
+			,  	#{periodPay}
+			,  	'N'
+			,  	#{regId}
+			,	NOW()
+		)
+	]]>
+    </insert>
+	 
+</mapper>

@@ -1,5 +1,6 @@
 package com.ohdocha.admin.controller;
 
+import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoDetailRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaCarDto;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto;
@@ -43,6 +44,32 @@ public class ReserveController extends ControllerExtension{
         serviceMessage.addData("reserveInfoRequest",reserveInfoRequest);
 
         reserveService.getReserveInfoList(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return serviceMessage;
+    }
+
+    /* 예약 등록 */
+    @PostMapping(value = "/api/v1.0/insertReserveInfo.do")
+    @ResponseBody
+    public Object registerReserveInfo(@RequestBody DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest , HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoDetailRequest",reserveInfoDetailRequest);
+
+        reserveService.addReserveInfo(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return serviceMessage;
+    }
+
+    /* 예약 수정 */
+    @PostMapping(value = "/api/v1.0/updateReserveInfo.do")
+    @ResponseBody
+    public Object updateReserveInfo(@RequestBody DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest , HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoDetailRequest",reserveInfoDetailRequest);
+
+        reserveService.updateReserveInfo(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return serviceMessage;

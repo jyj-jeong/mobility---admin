@@ -1,0 +1,256 @@
+{
+  "groups": [
+    {
+      "name": "admin.datasource",
+      "type": "com.ohdocha.admin.config.CustomDataSourceProperties",
+      "sourceType": "com.ohdocha.admin.config.DataSourceConfig",
+      "sourceMethod": "dataSourceProperties()"
+    },
+    {
+      "name": "admin.datasource.configuration",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.ohdocha.admin.config.DataSourceConfig",
+      "sourceMethod": "dataSource(com.ohdocha.admin.config.CustomDataSourceProperties)"
+    },
+    {
+      "name": "com.ohdocha.admin",
+      "type": "com.ohdocha.admin.config.Properties",
+      "sourceType": "com.ohdocha.admin.config.Properties"
+    },
+    {
+      "name": "spring.datasource",
+      "type": "com.ohdocha.admin.config.CustomDataSourceProperties",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "admin.datasource.continue-on-error",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.data",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.data-password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.data-username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.generate-unique-name",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.initialization-mode",
+      "type": "org.springframework.boot.jdbc.DataSourceInitializationMode",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.jndi-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.maximum-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "admin.datasource.name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.platform",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.schema",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.schema-password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.schema-username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.separator",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.sql-script-encoding",
+      "type": "java.nio.charset.Charset",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.type",
+      "type": "java.lang.Class<? extends javax.sql.DataSource>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.url",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "admin.datasource.xa",
+      "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$Xa",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "com.ohdocha.admin.server-host",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.Properties"
+    },
+    {
+      "name": "com.ohdocha.admin.server-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.Properties"
+    },
+    {
+      "name": "com.ohdocha.admin.server-version",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.Properties"
+    },
+    {
+      "name": "spring.datasource.continue-on-error",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.data",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.data-password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.data-username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.generate-unique-name",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.initialization-mode",
+      "type": "org.springframework.boot.jdbc.DataSourceInitializationMode",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.jndi-name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.maximum-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "spring.datasource.name",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.platform",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.schema",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.schema-password",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.schema-username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.separator",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.sql-script-encoding",
+      "type": "java.nio.charset.Charset",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.type",
+      "type": "java.lang.Class<? extends javax.sql.DataSource>",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.url",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.username",
+      "type": "java.lang.String",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    },
+    {
+      "name": "spring.datasource.xa",
+      "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties$Xa",
+      "sourceType": "com.ohdocha.admin.config.CustomDataSourceProperties"
+    }
+  ],
+  "hints": []
+}

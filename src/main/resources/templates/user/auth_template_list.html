@@ -31,11 +31,13 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">권한 템플릿</h6>
-                        <button class="btn btn-secondary">엑셀 다운로드</button>
-                        <button class="btn btn-secondary" onclick="registerAuth()">등록</button>
-                        <button class="btn btn-secondary" onclick="detailValidation('deleteAuthTemplate')">삭제</button>
                     </div>
                     <div class="card-body">
+                        <div class="mb-4 text-right">
+                            <button class="btn btn-primary" onclick="registerAuth()">등록</button>
+                            <button class="btn btn-primary" onclick="detailValidation('deleteAuthTemplate')">삭제</button>
+                            <button class="btn" id="btnExcel"></button>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
@@ -116,6 +118,9 @@
     </div>
 </div>
 <script>
+
+    initDataTables();
+
     function registerAuth() {
         var url = '/mem/template/register';
         var name = "test";

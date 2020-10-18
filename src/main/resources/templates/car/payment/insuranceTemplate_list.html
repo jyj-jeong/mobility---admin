@@ -30,9 +30,14 @@
                         <h6 class="m-0 font-weight-bold text-primary">보험 템플릿</h6>
                     </div>
                     <div class="card-body">
+                        <div class="mb-4 text-right">
+                            <button class="btn btn-primary" onclick="addInsuranceTemplate()">보험템플릿 등록</button>
+                            <button class="btn" id="btnExcel"></button>
+                        </div>
                         <div class="table-responsive">
+                            <div class="mb-4 text-right">
+                            </div>
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <button class="btn btn-info" onclick="addInsuranceTemplate()">보험템플릿 등록</button>
                                 <script th:inline="javascript">
                                     /* 보험템플릿 등록 */
                                     function addInsuranceTemplate() {
@@ -132,18 +137,7 @@
     </div>
 </div>
 <script th:inline="javascript">
-
-    $('#dataTable').DataTable( {
-        dom: 'Blfrtip',
-        buttons: [{
-            extend: 'csvHtml5',
-            text: 'Export CSV',
-            footer: true,
-            className: 'exportBtn'
-        }]
-    } );
-
-
+    initDataTables();
 
 </script>
 </body>

@@ -38,8 +38,11 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            <div class="mb-4 text-right">
+                                <button class="btn btn-primary" onclick="addRegCar()">차량 등록</button>
+                                <button class="btn" id="btnExcel"></button>
+                            </div>
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <button class="btn btn-info" onclick="addRegCar()">차량 등록</button>
                                 <script th:inline="javascript">
                                     /* 차량 등록 */
                                     function addRegCar() {
@@ -93,15 +96,15 @@
                                 <script th:inline="javascript">
                                     // 상세보기 이동
                                     $('#dataTable > tbody > tr >').click(function () {
-                                    var crIdx = $(this).parent().attr('data-value');
-                                    if (crIdx === "") return;
+                                        var crIdx = $(this).parent().attr('data-value');
+                                        if (crIdx === "") return;
 
-                                    var url = "car/detail/" + crIdx;
-                                    var name = "차량 수정";
-                                    var option = "width = 1000, height =800 ,location=no, left=500, top=50";
+                                        var url = "car/detail/" + crIdx;
+                                        var name = "차량 수정";
+                                        var option = "width = 1000, height =800 ,location=no, left=500, top=50";
 
-                                    window.open(url, name, option);
-                                });
+                                        window.open(url, name, option);
+                                    });
                                 </script>
                                 </tbody>
                             </table>
@@ -148,6 +151,8 @@
     </div>
 </div>
 <script th:inline="javascript">
+    initDataTables();
+
     // $(document).ready(function() {
     //     // Setup - add a text input to each footer cell
     //     $('#example tfoot th').each( function () {
@@ -173,18 +178,6 @@
     //         }
     //     });
     // } );
-
-    $('#dataTable').DataTable( {
-        dom: 'Blfrtip',
-        buttons: [{
-            extend: 'csvHtml5',
-            text: 'Export CSV',
-            footer: true,
-            className: 'exportBtn'
-        }]
-    } );
-
-
 
 </script>
 </body>

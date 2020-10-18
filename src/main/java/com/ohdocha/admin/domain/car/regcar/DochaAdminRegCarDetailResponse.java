@@ -42,13 +42,13 @@ public class DochaAdminRegCarDetailResponse {
 	private String personalCover      ; //대인보상금액
 	private String propertyDamageCover; //대물보상금액
 	private String onselfDamageCover  ; //자손보상금액
-	private String insuranceCompanyment ; //고객부담금(보험료)
+	private String insuranceCopayment ; //고객부담금(보험료)
 	private String carDamageCover     ; //자차보상금(면책금)
-	private String insuranceCompanyment2; //고객부담금2(보험료)
+	private String insuranceCopayment2; //고객부담금2(보험료)
 	private String carDamageCover2    ; //자차보상금2(면책금)
-	private String insuranceCompanyment3; //고객부담금3(보험료)
+	private String insuranceCopayment3; //고객부담금3(보험료)
 	private String carDamageCover3    ; //자차보상금3(면책금)
-	private String insuranceCompanyment4; //고객부담금4(보험료)
+	private String insuranceCopayment4; //고객부담금4(보험료)
 	private String carDamageCover4    ; //자차보상금4(면책금)
 	private String carDamage1Yn       ; //자차1사용유무
 	private String carDamage2Yn       ; //자차2사용유무
@@ -283,11 +283,11 @@ public class DochaAdminRegCarDetailResponse {
 	public void setOnselfDamageCover(String onselfDamageCover) {
 		this.onselfDamageCover = onselfDamageCover;
 	}
-	public String getInsuranceCompanyment() {
-		return insuranceCompanyment;
+	public String getInsuranceCopayment() {
+		return insuranceCopayment;
 	}
-	public void setInsuranceCompanyment(String insuranceCompanyment) {
-		this.insuranceCompanyment = insuranceCompanyment;
+	public void setInsuranceCopayment(String insuranceCopayment) {
+		this.insuranceCopayment = insuranceCopayment;
 	}
 	public String getCarDamageCover() {
 		return carDamageCover;
@@ -295,11 +295,11 @@ public class DochaAdminRegCarDetailResponse {
 	public void setCarDamageCover(String carDamageCover) {
 		this.carDamageCover = carDamageCover;
 	}
-	public String getInsuranceCompanyment2() {
-		return insuranceCompanyment2;
+	public String getInsuranceCopayment2() {
+		return insuranceCopayment2;
 	}
-	public void setInsuranceCompanyment2(String insuranceCompanyment2) {
-		this.insuranceCompanyment2 = insuranceCompanyment2;
+	public void setInsuranceCopayment2(String insuranceCopayment2) {
+		this.insuranceCopayment2 = insuranceCopayment2;
 	}
 	public String getCarDamageCover2() {
 		return carDamageCover2;
@@ -307,11 +307,11 @@ public class DochaAdminRegCarDetailResponse {
 	public void setCarDamageCover2(String carDamageCover2) {
 		this.carDamageCover2 = carDamageCover2;
 	}
-	public String getInsuranceCompanyment3() {
-		return insuranceCompanyment3;
+	public String getInsuranceCopayment3() {
+		return insuranceCopayment3;
 	}
-	public void setInsuranceCompanyment3(String insuranceCompanyment3) {
-		this.insuranceCompanyment3 = insuranceCompanyment3;
+	public void setInsuranceCopayment3(String insuranceCopayment3) {
+		this.insuranceCopayment3 = insuranceCopayment3;
 	}
 	public String getCarDamageCover3() {
 		return carDamageCover3;
@@ -319,11 +319,11 @@ public class DochaAdminRegCarDetailResponse {
 	public void setCarDamageCover3(String carDamageCover3) {
 		this.carDamageCover3 = carDamageCover3;
 	}
-	public String getInsuranceCompanyment4() {
-		return insuranceCompanyment4;
+	public String getInsuranceCopayment4() {
+		return insuranceCopayment4;
 	}
-	public void setInsuranceCompanyment4(String insuranceCompanyment4) {
-		this.insuranceCompanyment4 = insuranceCompanyment4;
+	public void setInsuranceCopayment4(String insuranceCopayment4) {
+		this.insuranceCopayment4 = insuranceCopayment4;
 	}
 	public String getCarDamageCover4() {
 		return carDamageCover4;

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohdocha.admin.mapper.DochaAdminAdminUserInfoMntMapper">
+
+
+    <select id="selectAdminUserInfo" parameterType="adminUserInfoRequest"
+            resultType="adminUserInfoResponse">
+        <![CDATA[
+							SELECT 
+			  					   IFNULL(T1.AD_IDX               , '') AS AD_IDX
+								,  IFNULL(T1.ADMIN_ID             , '') AS ADMIN_ID
+								,  IFNULL(T1.ADMIN_PASSWORD       , '') AS ADMIN_PASSWORD
+								,  IFNULL(T1.ADMIN_NAME           , '') AS ADMIN_NAME
+								,  IFNULL(T1.ADMIN_CONTACT1        , '') AS USER_CONTACT1
+								,  IFNULL(T1.ADMIN_CONTACT2        , '') AS USER_CONTACT2
+								,  IFNULL(T1.ADMIN_ROLE            , '') AS USER_ROLE
+			                    ,  IFNULL(T2.TEMPLATE_NM          , '') AS ROLE
+								,  IFNULL(T1.RT_IDX               , '') AS RT_IDX
+								,  IFNULL(T1.REG_DT               , '') AS REG_DT
+								,  IFNULL(T1.REG_ID               , '') AS REG_ID
+								,  IFNULL(T1.MOD_DT               , '') AS MOD_DT
+								,  IFNULL(T1.MOD_ID               , '') AS MOD_ID
+								,  IFNULL(T1.DEL_YN               , '') AS DEL_YN
+							FROM DC_ADMIN_INFO T1
+			     			LEFT OUTER JOIN DC_MENU_TEMPLATE T2
+			                  				 ON T1.ADMIN_ROLE = T2.TEMPLATE_CD
+         ]]>
+        <!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
+        <!--&lt;!&ndash;         		<![CDATA[	ROWNUM <= #{displayPageNum} AND ROWNUM > (#{page}-1) * #{displayPageNum} ]]>&ndash;&gt;-->
+        <!--	        <if test="adIdx != null and adIdx != ''">-->
+        <!--	     		<![CDATA[	AND A.AD_IDX = #{adIdx} ]]>-->
+        <!--	        </if>-->
+        <!--	        <if test="adminId != null and adminId != ''">-->
+        <!--	     		<![CDATA[	AND A.ADMIN_ID = #{adminId}]]>-->
+        <!--	        </if>-->
+        <!--       	</trim>-->
+    </select>
+
+    <select id="selectAdminUserInfoDetail" parameterType="adminUserInfoRequest"
+            resultType="adminUserInfoResponse">
+        <![CDATA[
+					SELECT 
+			  					   IFNULL(T1.AD_IDX                  , '') AS AD_IDX
+								,  IFNULL(T1.ADMIN_ID             , '') AS ADMIN_ID
+								,  IFNULL(T1.ADMIN_PASSWORD       , '') AS ADMIN_PASSWORD
+								,  IFNULL(T1.ADMIN_NAME           , '') AS ADMIN_NAME
+								,  IFNULL(T1.USER_CONTACT1        , '') AS USER_CONTACT1
+								,  IFNULL(T1.USER_CONTACT2        , '') AS USER_CONTACT2
+								,  IFNULL(T1.USER_ROLE            , '') AS USER_ROLE
+			                    ,  IFNULL(T2.TEMPLATE_NM          , '') AS ROLE
+								,  IFNULL(T1.RT_IDX               , '') AS RT_IDX
+								,  IFNULL(T1.REG_DT               , '') AS REG_DT
+								,  IFNULL(T1.REG_ID               , '') AS REG_ID
+								,  IFNULL(T1.MOD_DT               , '') AS MOD_DT
+								,  IFNULL(T1.MOD_ID               , '') AS MOD_ID
+								,  IFNULL(T1.DEL_YN               , '') AS DEL_YN
+							FROM DC_ADMIN_INFO T1
+			     			LEFT OUTER JOIN DC_MENU_TEMPLATE T2
+			                  				 ON T1.USER_ROLE = T2.TEMPLATE_CD
+         ]]>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="adIdx != null and adIdx != ''">
+                <![CDATA[	AND T1.AD_IDX = #{adIdx} ]]>
+            </if>
+        </trim>
+    </select>
+
+    <update id="updateAdminUserInfoDetail" parameterType="adminUserInfoRequest">
+        <![CDATA[ UPDATE DC_ADMIN_INFO ]]>
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="adminId 		!= null"><![CDATA[   ADMIN_ID		= #{adminId}  		]]></if>
+            <if test="adminPassword != null"><![CDATA[ , ADMIN_PASSWORD	= #{adminPassword} 	]]></if>
+            <if test="userContact1 	!= null"><![CDATA[ , USER_CONTACT1	= #{userContact1}  	]]></if>
+            <if test="userContact2 	!= null"><![CDATA[ , USER_CONTACT2	= #{userContact2}  	]]></if>
+            <if test="userRole 		!= null"><![CDATA[ , USER_ROLE		= #{userRole}  		]]></if>
+            <if test="modDt 		!= null"><![CDATA[ , MOD_DT			= SYSDATE  			]]></if>
+            <if test="modId 		!= null"><![CDATA[ , MOD_ID			=  #{modId}  		]]></if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="adIdx != null and adIdx != ''">
+                <![CDATA[ AD_IDX = #{adIdx} ]]>
+            </if>
+        </trim>
+
+    </update>
+
+
+    <insert id="insertAdminUserInfo" parameterType="adminUserInfoRequest">
+    
+    <![CDATA[
+         INSERT DC_ADMIN_INFO
+            (
+                   AD_IDX
+                ,  ADMIN_ID
+                ,  ADMIN_PASSWORD
+                ,  ADMIN_NAME
+                ,  USER_CONTACT1
+                ,  USER_CONTACT2
+                ,  USER_ROLE
+                ,  RT_IDX
+                ,  REG_DT
+                ,  REG_ID
+                ,  DEL_YN
+            ) VALUES (
+                  #{adIdx}
+                , #{adminId}
+                , #{adminPassword}
+                , #{adminName}
+                , #{userContact1}
+                , #{userContact2}
+                , #{userRole}
+                , #{rtIdx}
+                , SYSDATE
+                , #{regId}
+                , #{delYn}
+            )
+
+
+        ]]>
+    
+    </insert>
+
+    <!-- 회원 > 관리자 > 관리자 관리 에서 사용-->
+    <select id="selectMenuTemplateList" resultType="adminMenuTemplateResponse">
+		<![CDATA[
+
+                        SELECT
+                                         IFNULL(TEMPLATE_CD   , '') AS TEMPLATE_CD    /*템플릿코드*/
+                                    ,  IFNULL(TEMPLATE_NM   , '') AS TEMPLATE_NM    /*템플릿명*/
+                                    ,  IFNULL(TEMPLATE_MEMO , '') AS TEMPLATE_MEMO  /*템플릿설명*/
+                                    ,  IFNULL(REG_DT        , '') AS REG_DT         /*등록일*/
+                                    ,  IFNULL(REG_ID        , '') AS REG_ID         /*등록자*/
+                                    ,  IFNULL(MOD_DT        , '') AS MOD_DT         /*수정자*/
+                                    ,  IFNULL(MOD_ID        , '') AS MOD_ID         /*수정자*/
+                                    ,  IFNULL(ROLE          , '') AS ROLE           /**/
+                          FROM DC_MENU_TEMPLATE
+
+        ]]>
+    </select>
+
+</mapper>
+
+
+    
+    
+    
+    
+  
+    
+    
+    

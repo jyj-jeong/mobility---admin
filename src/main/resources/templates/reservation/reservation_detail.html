@@ -179,7 +179,7 @@
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>사용기간</label>
-                                <input type="text" id="periodDt" class="form-control" value="" placeholder="'요금 계산'시 확인 가능">
+                                <input type="text" id="periodDt" class="form-control" value="" placeholder="'요금 계산'시 확인 가능" readonly>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -432,7 +432,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">저장</button>
+                        <button id="btnClose" class="btn btn-primary" type="button" onclick="detailValidation()">저장</button>
                         <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
                         <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">반납</button>
                     </div>
@@ -480,6 +480,7 @@
     // swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
 
     rmIdx = /*[[${rmIdx}]]*/'';
+    CRUD_METHOD = 'update';
 
     initDetailInfo(rmIdx)
 

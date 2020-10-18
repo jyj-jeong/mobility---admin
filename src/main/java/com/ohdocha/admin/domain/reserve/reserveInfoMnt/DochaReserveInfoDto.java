@@ -58,14 +58,14 @@ public class DochaReserveInfoDto {
 	private String addFee; 
 	private String repatmentFee;
 	private String rentTotalFee;
-	private String insuranceCompanyment;
+	private String insuranceCopayment;
 	private String carDamageCover;
 	
-	public String getInsuranceCompanyment() {
-		return insuranceCompanyment;
+	public String getInsuranceCopayment() {
+		return insuranceCopayment;
 	}
-	public void setInsuranceCompanyment(String insuranceCompanyment) {
-		this.insuranceCompanyment = insuranceCompanyment;
+	public void setInsuranceCopayment(String insuranceCopayment) {
+		this.insuranceCopayment = insuranceCopayment;
 	}
 	public String getCarDamageCover() {
 		return carDamageCover;
