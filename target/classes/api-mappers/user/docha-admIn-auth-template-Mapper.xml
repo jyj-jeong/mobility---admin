@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.DochaAdminAuthTemplateMapper">
+
+
+    <select id="selectAdminTemplate" parameterType="adminAuthTemplateRequest" 
+      								 resultType="adminAuthTemplateResponse">
+		<![CDATA[
+  							SELECT 
+								   IFNULL(T1.TEMPLATE_CD   , '') AS TEMPLATE_CD     /*템플릿코드*/
+								,  IFNULL(T1.TEMPLATE_NM   , '') AS TEMPLATE_NM     /*템플릿명*/
+								,  IFNULL(T1.TEMPLATE_MEMO , '') AS TEMPLATE_MEMO     /*템플릿설명*/
+								,  IFNULL(T1.REG_DT        , '') AS REG_DT          /*등록일*/
+								,  IFNULL(T1.REG_ID        , '') AS REG_ID          /*등록자*/
+								,  IFNULL(T1.MOD_DT        , '') AS MOD_DT          /*수정자*/
+								,  IFNULL(T1.MOD_ID        , '') AS MOD_ID          /*수정자*/
+								,  IFNULL(T1.ROLE          , '') AS ROLE            /*역할*/
+								,(SELECT COUNT(AD_IDX) FROM DC_ADMIN_INFO WHERE ROLE = T1.TEMPLATE_CD) AS USE_CNT /* 사용한 숫자 카운트 */
+							FROM DC_MENU_TEMPLATE T1
+         ]]>
+<!--         <trim prefix="WHERE" prefixOverrides="AND|OR">-->
+<!--         	<![CDATA[	ROWNUM <= #{displayPageNum} AND ROWNUM > (#{page}-1) * #{displayPageNum} ]]>-->
+<!--       	</trim>-->
+    </select>
+    
+   
+
+</mapper>
+
+
+    
+    
+    
+    
+  
+    
+    
+    

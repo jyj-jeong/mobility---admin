@@ -20,22 +20,50 @@
                         <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer">전체휴일 등록</h6>
                     </div>
 
-                    <div id="userInfoCard" class="card-body">
-                        <div class="row">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="holiday">휴일</label>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-6 mb-3">
-                                <label class="form-label" for="hoilday">휴일</label>
-                                <input type="date" class="form-control" name="hoilday" id="hoilday"/>
+                                <input id="holiday" type="date" class="form-control" name="holiday"/>
+                            </div>
+                            <div class="col-2 mb-3">
+                                <button id="btnSave" class="btn btn-primary" type="button" onclick="saveHoliday()">등록</button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <input type="text" class="form-control" name="hoilday" id="saveHoilday"/>
+
+                        <div id="selectedHolidayData" class="row mb-3">
+                            <div class="col-md-3 mb-3" th:each="holiday, index : ${result}" th:data-value="${holiday.getHolIdx()}">
+                                <div class="alert alert-primary" role="alert">
+                                    <span th:text="${holiday.getHolidayStartDt()}"></span>
+                                    <button type="button" class="close" aria-label="Close" onclick="deleteHolidayDt(this)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                             </div>
+                            <script th:inline="javascript">
+                                function deleteHolidayDt(data) {
+                                    var deleteDtIdx = data.parentElement.parentElement.dataset.value;
+
+                                    var save_type = 'delete';
+                                    var req = {
+                                        "holIdx": deleteDtIdx
+                                    };
+
+                                    let title = '전체휴일 삭제';
+                                    let text = '삭제하시겠습니까?';
+                                    let icon = 'info';
+                                    let cancel_text = '취소하셨습니다.';
+
+                                    call_before_save(title, text, icon, cancel_text, save_type, req);
+
+                                }
+                            </script>
                         </div>
 
                         <div class="card-footer">
                             <div class="text-right">
-                                <button id="btnSave" class="btn btn-secondary" type="button" onclick="saveHoliday()">저장</button>
                                 <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
                             </div>
                         </div>
@@ -74,19 +102,75 @@
             <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="/api/v1.0/docha.logout">Logout</a>
             </div>
         </div>
     </div>
 </div>
 <script th:inline="javascript">
 
-    // TODO 휴일등록 처리
+
     function saveHoliday() {
-        swal("저장 성공", {icon : "success"});
-        var holiday = $('#hoilday').val();
-        $('#saveHoilday').val(holiday);
+        var holidayDt = $('#holiday').val();
+
+        if (isEmpty(holidayDt)){
+            errorAlert('전체휴일','날짜를 선택해주세요');
+            return;
+        }else if (holidayDt < getFormatDate(new Date())){
+            errorAlert('전체휴일','전체휴무일은 과거가 될 수 없습니다.');
+            return;
+        }
+
+        var save_type = 'insert';
+        var req = {
+            "holidayStartDt": holidayDt,
+            "holidayEndDt" : holidayDt,
+            "holidayName" : "전체 휴무일"
+        };
+
+        let title = '전체휴일 저장';
+        let text = '저장하시겠습니까?';
+        let icon = 'info';
+        let cancel_text = '취소하셨습니다.';
+
+        call_before_save(title, text, icon, cancel_text, save_type, req);
     }
+
+    function detailSubmit(save_type, req) {
+
+        let target;
+        let method;
+
+        if (save_type === 'insert'){
+            target = 'insertRentCompanyHoliday';
+            method = 'insert';
+        }else if (save_type === 'delete'){
+            target = 'deleteRentCompanyHoliday';
+            method = 'delete';
+        }
+
+        fn_callApi(method, target, req, function(response) {
+            let data = response;
+
+            // 200이라면 페이징을 구한다.
+            if (data.code == 200) {
+
+                location.reload();
+            }
+            else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+                switch (save_type) {
+                    case 'insert':
+                        errorAlert('저장 실패', '관리자에게 문의하세요.');
+                        break;
+                    case 'delete':
+                        break;
+                }
+
+            }
+        });// end fn_callApi
+    }
+
+
 </script>
 </body>
 </html>

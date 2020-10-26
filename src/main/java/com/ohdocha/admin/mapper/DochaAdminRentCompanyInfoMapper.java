@@ -52,6 +52,8 @@ public interface DochaAdminRentCompanyInfoMapper {
 
     public int insertRentCompanyHoliday(DochaAdminRentCompanyHolidayRequest reqParam);
 
+    public int deleteRentCompanyHoliday(DochaAdminRentCompanyHolidayRequest reqParam);
+
     public int updateRentCompanyHoliday(DochaAdminRentCompanyHolidayRequest reqParam);
 
     // 회원사 - 장단기 배달지역

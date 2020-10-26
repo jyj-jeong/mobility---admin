@@ -129,8 +129,6 @@ public class CarController extends ControllerExtension {
         return serviceMessage;
     }
 
-
-
     //region [ 등록차량 옵션 선택 ]
     /* 회사 옵션 선택 */
     @PostMapping(value = "/api/v1.0/selectCompanyList.json")
@@ -144,6 +142,8 @@ public class CarController extends ControllerExtension {
         return serviceMessage.get("result");
 
     }
+    //endregion
+
 
     /* 차종 옵션 선택 */
     @PostMapping(value = "/api/v1.0/selectCarModelForSelectBox.json")
@@ -184,11 +184,6 @@ public class CarController extends ControllerExtension {
 
     }
     //endregion
-    //endregion
-
-
-
-
 
     //region [ 차량 모델 ]
     /* 차량모델 등록 화면 */
@@ -393,10 +388,6 @@ public class CarController extends ControllerExtension {
     }
     //endregion
 
-
-
-
-
     //region [ 요금제 ]
     /* 기간요금제 등록 화면 */
     @GetMapping(value = "/car/payment/period/add")
@@ -534,15 +525,6 @@ public class CarController extends ControllerExtension {
         return serviceMessage;
     }
 
-
-
-
-
-
-
-
-
-
     /* 보험템플릿 등록 화면 */
     @GetMapping(value = "/car/payment/insurance/add")
     public String insertInsuranceTemplateView(HttpServletRequest request, ModelMap modelMap) {
@@ -612,19 +594,7 @@ public class CarController extends ControllerExtension {
         return serviceMessage;
     }
 
-
-
     //endregion
-
-
-
-
-
-
-
-
-
-
 
     /* 등록차량 상세 옵션 리스트 상세 */
     @PostMapping(value = "/api/v1.0/regCarDetailOption.json")
@@ -638,16 +608,6 @@ public class CarController extends ControllerExtension {
         return serviceMessage.get("result");
     }
 
-
-
-
-
-
-
-
-
-
-    //region [ 메뉴 준비 중.. ]
     /* 차량 관제 */
     @GetMapping(value = "/car/control")
     public String carControlList(HttpServletRequest request, ModelMap modelMap) {
@@ -667,5 +627,4 @@ public class CarController extends ControllerExtension {
         modelMap.addAllAttributes(serviceMessage);
         return "car/car_maintain_list";
     }
-    //endregion
 }

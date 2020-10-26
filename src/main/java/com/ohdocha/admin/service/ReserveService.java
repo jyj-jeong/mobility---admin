@@ -6,4 +6,14 @@ public interface ReserveService {
 
     void getReserveInfoList(ServiceMessage serviceMessage);
 
+    void addReserveInfo(ServiceMessage serviceMessage);
+
+    void updateReserveInfo(ServiceMessage serviceMessage);
+
+    void getReserveInfo(ServiceMessage serviceMessage);
+
+    void selectCompanyInfo(ServiceMessage serviceMessage);
+
+    void selectCompanyInfoAndCarInfo(ServiceMessage serviceMessage);
+
 }

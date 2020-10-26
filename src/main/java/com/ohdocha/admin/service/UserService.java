@@ -32,6 +32,8 @@ public interface UserService {
 
     void insertRentCompanyStaff(ServiceMessage message);            // 회원사 직원 등록
 
+    void updateRentCompanyStaff(ServiceMessage message);            // 회원사 직원 수정
+
     void getRentShopStaffList(ServiceMessage message);              // 회원사 직원 리스트 조회
 
     void updateRentCompanyCommission(ServiceMessage message);       // 회원사 수수료 정보 등록
@@ -43,6 +45,8 @@ public interface UserService {
     void selectRentCompanyReserveMinList(ServiceMessage message);   // 회원사별 최소 예약시간 정보 조회
 
     void insertRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 등록
+
+    void deleteRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 삭제
 
     void selectRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 조회
 

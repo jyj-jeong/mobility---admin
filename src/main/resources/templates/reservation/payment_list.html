@@ -32,6 +32,9 @@
                         <h6 class="m-0 font-weight-bold text-primary">정기 결제</h6>
                     </div>
                     <div class="card-body">
+                        <div class="mb-4 text-right">
+                            <button class="btn" id="btnExcel"></button>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
@@ -69,20 +72,35 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr th:each="reservation, index : ${reserveInfoResponseList}" style="cursor: pointer" th:data-value="${reservation.getRmIdx()}">
-                                    <td th:text="${reservation.getRmIdx()}"></td>
-                                    <td th:text="${reservation.getReserveDate()}"></td>
-                                    <td th:text="${reservation.getReserveStatusName()}"></td>
-                                    <td th:text="${reservation.getUserName() +'/' +reservation.getUserContact1()}"></td>
-                                    <td th:text="${reservation.getModelName()+'/'+reservation.getCarNumber()}"></td>
-                                    <td th:text="${reservation.getRentStartDay()}"></td>
-                                    <td th:text="${reservation.getRentEndDay()}"></td>
-                                    <td th:text="${reservation.getPeriodDt()}"></td>
-                                    <td th:text="${reservation.getCompanyName()+'/'+reservation.getBranchName()}"></td>
-                                    <td th:text="${reservation.getDeliveryTypeName()}"></td>
-                                    <td th:text="${reservation.getPaymentTotalAmount()}"></td>
-                                    <td th:text="${reservation.getPaymentAmount()}"></td>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
+<!--                                <tr th:each="reservation, index : ${reserveInfoResponseList}" style="cursor: pointer" th:data-value="${reservation.getRmIdx()}">-->
+<!--                                    <td th:text="${reservation.getRmIdx()}"></td>-->
+<!--                                    <td th:text="${reservation.getReserveDate()}"></td>-->
+<!--                                    <td th:text="${reservation.getReserveStatusName()}"></td>-->
+<!--                                    <td th:text="${reservation.getUserName() +'/' +reservation.getUserContact1()}"></td>-->
+<!--                                    <td th:text="${reservation.getModelName()+'/'+reservation.getCarNumber()}"></td>-->
+<!--                                    <td th:text="${reservation.getRentStartDay()}"></td>-->
+<!--                                    <td th:text="${reservation.getRentEndDay()}"></td>-->
+<!--                                    <td th:text="${reservation.getPeriodDt()}"></td>-->
+<!--                                    <td th:text="${reservation.getCompanyName()+'/'+reservation.getBranchName()}"></td>-->
+<!--                                    <td th:text="${reservation.getDeliveryTypeName()}"></td>-->
+<!--                                    <td th:text="${reservation.getPaymentTotalAmount()}"></td>-->
+<!--                                    <td th:text="${reservation.getPaymentAmount()}"></td>-->
+<!--                                </tr>-->
                                 </tbody>
                             </table>
                         </div>
@@ -123,7 +141,7 @@
             <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="/api/v1.0/docha.logout">Logout</a>
             </div>
         </div>
     </div>
@@ -131,6 +149,7 @@
 <script th:inline="javascript">
 
     initializingPageData();
+    initDataTables();
 
     $('#dataTable').DataTable( {} );
 

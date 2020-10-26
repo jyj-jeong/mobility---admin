@@ -25,7 +25,7 @@ public class PaymentInfoController extends ControllerExtension {
         paymentInfoService.paymentInfoList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
-        return "calculate/payment";
+        return "calculate/payment_list";
     }
 
 }

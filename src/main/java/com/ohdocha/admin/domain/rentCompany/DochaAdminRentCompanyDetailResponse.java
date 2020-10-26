@@ -83,8 +83,8 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 	
 	private String raGbnLt                 					 ; // 배달가능지역 장기 카운트
 	private String raGbnSt                 					 ; // 배달가능지역 단기 카운트
-	private int regCarCount;
-	
+	private String regCarCount;
+
 	
 	public String getRtIdx() {
 		return rtIdx;
@@ -468,10 +468,10 @@ public class DochaAdminRentCompanyDetailResponse extends CommonResponseDto {
 //	public void setMinimumTime(String minimumTime) {
 //		this.minimumTime = minimumTime;
 //	}
-	public int getRegCarCount() {
+	public String getRegCarCount() {
 		return regCarCount;
 	}
-	public void setRegCarCount(int regCarCount) {
+	public void setRegCarCount(String regCarCount) {
 		this.regCarCount = regCarCount;
 	}
 	

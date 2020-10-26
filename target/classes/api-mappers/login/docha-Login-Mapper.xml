@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.admin.mapper.DochaAdminLoginMapper">
+    
+	<select id="chkLoginUserInfo" parameterType="dcUserInfoRequest" resultType="dcUserInfoResponse" >
+		<![CDATA[
+				SELECT	IFNULL(T1.UR_IDX               , '' )  AS UR_IDX					/* 	회원IDX 			*/
+			    ,       IFNULL(T1.USER_ROLE            , '' )  AS USER_ROLE                /* 	멤버역할(ROLE) 	*/
+			    ,       IFNULL(T1.USER_NAME      		, '' )  AS USER_NAME  				/* 	회원이름 	*/
+			    ,       IFNULL(T1.RT_IDX      			, '' )  AS RT_IDX 	 				/* 	회원이 속해있는 회원사 IDX 	*/
+          		,       IFNULL(T2.COMPANY_NAME  , '' ) AS COMPANY_NAME						/* 	회원이 속해있는 회원사 명 	*/
+				,       IFNULL(T2.BRANCH_NAME , '' ) AS BRANCH_NAME						/* 	회원이 속해있는 회원사의 지점명  	*/
+				FROM    DC_USER_INFO T1
+				LEFT JOIN DC_RENT_COMPANY  T2
+        			   ON T1.RT_IDX IS NOT NULL
+      				  AND T1.RT_IDX = T2.RT_IDX
+         ]]>
+         <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="userId != null and userId != ''">
+	     		<![CDATA[ USER_ID = #{userId} ]]>
+	        </if>
+	        <if test="userPassword != null and userPassword != ''">
+	     		<![CDATA[AND USER_PASSWORD = #{userPassword}]]>
+	        </if>
+       	</trim>
+    
+    </select>
+
+</mapper>
+
+
+    
+    
+    
+    
+    
+    
+    
+    

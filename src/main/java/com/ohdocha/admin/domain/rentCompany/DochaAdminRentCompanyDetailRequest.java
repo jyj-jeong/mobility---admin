@@ -28,6 +28,7 @@ public class DochaAdminRentCompanyDetailRequest extends CommonRequestDto {
 	private String alliance_status           ; //제휴상태
 	private String branchAbleYn              ; //지점보유가능여부
 	private String carCount                  ; //보유차량대수
+	private String regCarCount               ; //등록차량대수
 	private String etc                       ; //비고
 	private String regId                     ; //등록자
 	private String regDt                     ; //등록일시

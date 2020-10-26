@@ -6,6 +6,7 @@
     <title th:if="${CRUD == 'modify'}">회원사 수정 :: DoCha Admin Web</title>
 
     <script src="/js/rentCompany.js" th:src="@{/js/rentCompany.js}"></script>
+
 </head>
 <body id="page-top">
 
@@ -20,7 +21,7 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">회원사 - 00렌트카 / 00지점</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">회원사</h6>
                     </div>
 
                     <div class="row">
@@ -28,33 +29,33 @@
                             <div class="main-card mb-3 card">
 
                                 <div class="card-body"><h5 class="card-title">회원사정보</h5>
-                                    <div class="row mt-2">
+                                    <div class="row mt-3">
                                         <input type="hidden" id="rtIdx" name="rtIdx" />
-                                        <div class="col-md-6" >
+                                        <div class="col-lg-6 mb-3" >
                                             <label>회사명</label>
                                             <input type="text" class="form-control" placeholder="회사명" value="" id="companyName" name="companyName" required/>
                                         </div>
-                                        <div class="col-md-6" >
+                                        <div class="col-lg-6 mb-3" >
                                             <label>지점명</label>
                                             <input type="text" class="form-control" placeholder="지점명" value="" id="branchName" />
                                         </div>
-                                        <div class="col-lg-6 float-l " >
+                                        <div class="col-lg-6 mb-3 float-l " >
                                             <label>법인명</label>
                                             <input type="text" class="form-control" placeholder="법인명"  value="" id="companyRegistrationName" >
                                         </div>
-                                        <div class="col-lg-6 float-l " >
+                                        <div class="col-lg-6 mb-3 float-l " >
                                             <label>사업자등록번호</label>
-                                            <input type="text" class="form-control" placeholder="사업자등록번호"  value="" id="companyRegistrationNumber" onkeypress="inNumber();"/>
+                                            <input type="text" class="form-control" placeholder="사업자등록번호"  value="" id="companyRegistrationNumber" onblur="companyRegistrationAutoHyphen()" onkeypress="inNumber();"/>
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1">
+                                        <div class="col-lg-6 mb-3 float-l flex-1">
                                             <label>총 차량 대수</label>
                                             <input type="text"  class="form-control" placeholder="총 차량 대수"  value="" id="carCount">
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1">
+                                        <div class="col-lg-6 mb-3 float-l flex-1">
                                             <label>등록 차량 대수</label>
-                                            <input type="text"  class="form-control" placeholder="등록 차량 대수"  value="" id="regCarCount" readonly>
+                                            <input type="text"  class="form-control" placeholder="등록 차량 대수"  value="" id="regCarCount">
                                         </div>
-                                        <div class="col-lg-12 float-l" >
+                                        <div class="col-lg-12 mb-3 float-l" >
                                             <label>주소</label>
                                             <div class="input-group">
                                                 <input type="text"  class="form-control" placeholder="주소"  id="companyAddress">
@@ -63,30 +64,30 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12 float-l flex-1">
+                                        <div class="col-lg-12 mb-3 float-l flex-1">
                                             <label>상세주소</label>
                                             <input type="text"  class="form-control" placeholder="상세주소" id="companyAddressDetail">
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1" >
+                                        <div class="col-lg-6 mb-3 float-l flex-1" >
                                             <label>은행</label>
                                             <select id="sel_bank" name="sel_bank" class="custom-select" >
                                             </select>
                                         </div>
-                                        <div class="col-lg-6 float-l " >
+                                        <div class="col-lg-6 mb-3 float-l " >
                                             <label>계좌번호</label>
                                             <input type="text" class="form-control" placeholder="계좌번호" value="" id="accountNumber" onkeypress="inNumber();"/>
                                         </div>
-                                        <div class="col-lg-6 float-l " >
+                                        <div class="col-lg-6 mb-3 float-l " >
                                             <label>예금주</label>
                                             <input type="text"  class="form-control" placeholder="예금주" value="" id="accountHolder" />
                                         </div>
 
                                         <!--
-                                        <div class="col-lg-3 float-l " >
+                                        <div class="col-lg-3 mb-3 float-l " >
                                             <label>대표번호</label>
                                             <input type="text" class="form-control" placeholder="대표번호" value="" id="companyContact1" onkeypress="inNumber();"/>
                                         </div>
-                                        <div class="col-lg-3 float-l flex-1" >
+                                        <div class="col-lg-3 mb-3 float-l flex-1" >
                                             <label>알림톡 설정 여부</label>
                                             <select id="sel_alarmYn" name="sel_alarmYn" class="custom-select" >
                                                 <option value="0">선택</option>
@@ -96,7 +97,7 @@
                                         </div>
                                         -->
 
-                                        <div class="col-lg-6 float-l flex-1" >
+                                        <div class="col-lg-6 mb-3 float-l flex-1" >
                                             <label>접속 허용 여부</label>
                                             <select id="sel_accessYn" name="sel_accessYn" class="custom-select" >
                                                 <option value="0">선택</option>
@@ -116,10 +117,10 @@
                         <div class="col-6">
                             <div class="main-card mb-3 card">
                                 <div class="card-body"><h5 class="card-title">담당자 정보</h5>
-                                    <div class="row mt-2">
+                                    <div class="row mt-3">
                                         <input type="hidden" id="staffurIdx" />
                                         <input type="hidden" id="rsIdx" />
-                                        <div class="col-lg-12 float-l">
+                                        <div class="col-lg-12 mb-3 float-l">
                                             <label>이메일(검색시 회원ID)</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control"  placeholder="이메일" value="" id="staffEmail" />
@@ -128,17 +129,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1">
+                                        <div class="col-lg-6 mb-3 float-l flex-1">
                                             <label>이름</label>
                                             <input type="text" class="form-control" placeholder="이름" value="" id="staffName" readonly />
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1" >
+                                        <div class="col-lg-6 mb-3 float-l flex-1" >
                                             <label>직위</label>
                                             <!-- <select id="sel_staffTypeCode" name="sel_staffTypeCode" class="custom-select" >
                                             </select> -->
                                             <input type="text" class="form-control" placeholder="직위" value="" id="staffTitle" />
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1" >
+                                        <div class="col-lg-6 mb-3 float-l flex-1" >
                                             <label>대표여부</label>
                                             <select id="sel_ownerYn" name="sel_ownerYn" class="custom-select" >
                                                 <option value="0">선택</option>
@@ -146,27 +147,27 @@
                                                 <option value="N">아니요</option>
                                             </select>
                                         </div>
-                                        <div class="col-lg-6 float-l">
+                                        <div class="col-lg-6 mb-3 float-l">
                                             <label>연락처</label>
-                                            <input type="text" class="form-control"  placeholder="연락처" value="" id="staffContact1" readonly onkeypress="inNumber();"/>
+                                            <input type="text" class="form-control"  placeholder="연락처" value="" id="staffContact1" onkeypress="inNumber();"/>
                                         </div>
-                                        <div class="col-lg-6 float-l flex-1" >
+                                        <div class="col-lg-6 mb-3 float-l flex-1" >
                                             <label>사용유무</label>
                                             <select id="sel_staffdelYn" name="sel_staffdelYn" class="custom-select" >
                                                 <option value="N">예</option>
                                                 <option value="Y">아니요</option>
                                             </select>
                                         </div>
-                                        <!-- <div class="col-lg-3 float-l">
+                                        <!-- <div class="col-lg-3 mb-3 float-l">
                                              <label>비밀번호</label>
                                         </div>	 -->
                                         <input type="hidden" class="form-control"  placeholder="비밀번호" value="" id="userPassword" />
-                                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                                        <div class="col-lg-12 mt-2 mb-3 float-l flex-1 text-right p-b-10">
                                             <br><p>
                                             <button class="btn btn-primary" type="button" onclick="detailValidation('saveStaff');">담당자정보 저장</button>
                                             <button class="btn btn-danger" type="button"  onclick="cancelData('saveStaff')">취소</button>
                                         </div>
-                                        <div class="col-lg-12 float-l">
+                                        <div class="col-lg-12 mb-3 float-l">
                                             <table id="rentStaffList" class="table table-hover" data-show-toggle="false" data-sorting="true">
                                                 <thead>
 
@@ -181,11 +182,11 @@
                             </div><!-- end 담당자 정보 -->
                             <div class="main-card mb-3 card">
                                 <div class="card-body"><h5 class="card-title">수수료 (%)</h5>
-                                    <div class="col-lg-12 float-l flex-1">
+                                    <div class="col-lg-12 mb-3 float-l flex-1">
                                         <label>부가세 포함 수수료</label>
                                         <input type="text" class="form-control" placeholder="부가세 포함 수수료" value="" id="commissionPer" />
                                     </div>
-                                    <!-- <div class="col-lg-3 float-l flex-1">
+                                    <!-- <div class="col-lg-3 mb-3 float-l flex-1">
                                          <label>세금계산서 발행주체</label>
                                          <input type="text" class="form-control"  placeholder="세금계산서발행주체" value="" id="taxInvoiceCode"/>
                                     </div> -->
@@ -201,92 +202,92 @@
                     </div>
                     <div class="main-card mb-3 card">
                         <div class="card-body"><h5 class="card-title">예약정보</h5>
-                            <div class="row mt-2">
-                                <div class="col-lg-3 float-l flex-1" >
+                            <div class="row mt-3">
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>평일 영업시간 시작</label>
                                     <select id="sel_weekdayOpenStart" name="sel_weekdayOpenStart" class="custom-select" ></select>
                                     <!-- <input type="text" class="form-control " placeholder="평일 영업시간 시작  예) 09:00 or 0009" id="weekdayOpenStart" > -->
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>종료</label>
                                     <select id="sel_weekdayOpenEnd" name="sel_weekdayOpenEnd" class="custom-select" ></select>
                                     <!-- <input type="text" class="form-control " placeholder="평일 영업시간 종료  예) 23:00 or 2300" id="weekdayOpenEnd" > -->
                                 </div>
-                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     평일 영업시간<br>
                                     00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>주말/공휴일 영업시간 시작</label>
                                     <select id="sel_weekendOpenStart" name="sel_weekendOpenStart" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="주말/공휴일 영업시간 시작  예) 09:00 or 0009" id="weekendOpenStart"  class="form-control"> -->
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>종료</label>
                                     <select id="sel_weekendOpenEnd" name="sel_weekendOpenEnd" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="주말/공휴일 영업시간 종료 예) 23:00 or 2300" id="weekendOpenEnd"  class="form-control"> -->
                                 </div>
-                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     주말/공휴일 영업시간<br>
                                     00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
                                 </div>
-                                <div class="col-lg-3 float-l flex-1">
+                                <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>평일 왕복배달가능 시간 시작</label>
                                     <select id="sel_weekdayDeliveryStart" name="sel_weekdayDeliveryStart" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="평일 왕복배달가능 시간 시작  예) 09:00 or 0009" id="weekdayDeliveryStart"   class="form-control"> -->
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>종료</label>
                                     <select id="sel_weekdayDeliveryEnd" name="sel_weekdayDeliveryEnd" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="평일 왕복배달가능 시간 종료 예) 23:00 or 2300" id="weekdayDeliveryEnd"  class="form-control"> -->
                                 </div>
-                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     평일 왕복배달가능 시간<br>
                                     00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>주말/공휴일 왕복배달가능 시작</label>
                                     <select id="sel_weekendDeliveryStart" name="sel_weekendDeliveryStart" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="주말/공휴일 왕복배달가능시간 시작 예) 09:00 or 0009" id="weekendDeliveryStart"    class="form-control"> -->
                                 </div>
-                                <div class="col-lg-3 float-l">
+                                <div class="col-lg-3 mb-3 float-l">
                                     <label>종료</label>
                                     <select id="sel_weekendDeliveryEnd" name="sel_weekendDeliveryEnd" class="custom-select" ></select>
                                     <!-- <input type="text" placeholder="주말/공휴일 왕복배달가능시간 종료 예) 23:00 or 2300" id="weekendDeliveryEnd"  class="form-control"> -->
                                 </div>
-                                <div class="col-lg-6 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
+                                <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     주말/공휴일 왕복배달가능 시간<br>
                                     00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
                                 </div>
-                                <div class="col-lg-3 float-l " >
+                                <div class="col-lg-3 mb-3 float-l " >
                                     <br><p>
                                     <label>평일 왕복배달가능 시간대 설정</label>
                                     <select id="sel_weekdayAbleDeliveryTime" name="sel_weekdayAbleDeliveryTime" class="custom-select" >
                                     </select>
                                 </div>
-                                <div class="col-lg-3 float-l " >
+                                <div class="col-lg-3 mb-3 float-l " >
                                     <br><p>
                                     <label>주말  왕복배달가능 시간대 설정</label>
                                     <select id="sel_weekendAbleDeliveryTime" name="sel_weekendAbleDeliveryTime" class="custom-select" >
                                     </select>
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <br><p>
                                     <label>반납정비 시간 시간대 설정</label>
                                     <select id="sel_returnInspectionTime" name="sel_returnInspectionTime" class="custom-select" >
                                     </select>
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <br><p>
                                     <label>주말/공휴일 최소 예약 시간</label>
                                     <select id="sel_weekendReserveMinimumTime" name="sel_weekendReserveMinimumTime" class="custom-select" >
                                     </select>
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>주말/공휴일 할증율</label>
                                     <input type="text" placeholder="15%" id="weekendReserveMinimumRate"  class="form-control">
                                 </div>
-                                <div class="col-lg-12 float-l text-right">
+                                <div class="col-lg-12 mb-3 float-l text-right">
                                     <div class="p-t-20 p-b-20 text-right">
                                         <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyTime');">예약정보 저장</button>
                                         <button class="btn btn-danger" type="button" onclick="cancelData('saveRentCompanyTime')">취소</button>
@@ -297,22 +298,22 @@
                     </div><!-- end 예약정보 -->
                     <div class="main-card mb-3 card">
                         <div class="card-body"><h5 class="card-title">예약정보(선택 입력 항목) - 특정 기간 최소 예약 시간</h5>
-                            <div class="row mt-2">
+                            <div class="row mt-3">
                                 <input type="hidden" id="minIdx" name="minIdx" />
-                                <div class="col-lg-3 float-l flex-1">
+                                <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
                                     <input type="date" id="minimumStartDt" class="form-control" />
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
                                     <input type="date" id="minimumEndDt" placeholder="종료일" value="" class="form-control" />
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>최소시간</label>
                                     <select id="sel_minimumTime" name="sel_minimumTime" class="custom-select" >
                                     </select>
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>사용유무</label>
                                     <select id="sel_mindelYn" name="sel_mindelYn" class="custom-select" >
                                         <option value="N">예</option>
@@ -321,13 +322,13 @@
                                 </div>
                             </div>
                             <br/>
-                            <div class="col-lg-12 float-l text-right">
+                            <div class="col-lg-12 mb-3 float-l text-right">
                                 <div class="p-t-20 p-b-20 text-right">
                                     <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyMin');">특정기간 저장</button>
                                     <button class="btn btn-danger" type="button"  onclick="cancelData('saveRentCompanyMin')">취소</button>
                                 </div>
                             </div>
-                            <div class="col-lg-12 float-l">
+                            <div class="col-lg-12 mb-3 float-l">
                                 <table id="rentReserveMinList" class="table table-hover" data-show-toggle="false" data-sorting="true">
                                     <thead>
 
@@ -341,17 +342,17 @@
                     </div><!-- end 예약정보(선택입력항목) -->
                     <div class="main-card mb-3 card">
                         <div class="card-body"><h5 class="card-title">예약정보(선택 입력 항목) - 자체휴무일</h5>
-                            <div class="row mt-2">
+                            <div class="row mt-3">
                                 <input type="hidden" id="holIdx" name="minIdx" />
-                                <div class="col-lg-3 float-l flex-1">
+                                <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
                                     <input type="date" id="holidayStartDt" placeholder="시작일" value="" class="form-control" />
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
                                     <input type="date" id="holidayEndDt" placeholder="종료일" value="" class="form-control" />
                                 </div>
-                                <div class="col-lg-3 float-l flex-1" >
+                                <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>휴일명</label>
                                     <input type="text" id="holidayName" placeholder="휴일명" value="" class="form-control" />
                                 </div>
@@ -364,13 +365,13 @@
                                 </div>
                             </div>
                             <br/>
-                            <div class="col-lg-12 float-l text-right">
+                            <div class="col-lg-12 mb-3 float-l text-right">
                                 <div class="p-t-20 p-b-20 text-right">
                                     <button class="btn btn-primary" type="button" onclick="detailValidation('saveRentCompanyHoliday');">자체휴무일 저장</button>
                                     <button class="btn btn-danger" type="button"  onclick="cancelData('saveRentCompanyHoliday')">취소</button>
                                 </div>
                             </div>
-                            <div class="col-lg-12 float-l">
+                            <div class="col-lg-12 mb-3 float-l">
                                 <table id="holidayList" class="table table-hover" data-show-toggle="false" data-sorting="true">
                                     <thead>
 
@@ -384,19 +385,19 @@
                     </div><!-- end 예약정보(선택입력항목) -->
                     <div class="main-card mb-3 card">
                         <div class="card-body"><h5 class="card-title">왕복 배달지역 설정</h5>
-                            <div class="col-lg-6 float-l flex-1">
+                            <div class="col-lg-6 mb-3 float-l flex-1">
                                 <label>일대여</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control"  id="raGbnSt" readonly>
+                                    <input type="text" class="form-control"  id="raGbnSt">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="button" onclick="openDaumPolygon('ST');">일대여 설정하기</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 float-l flex-1">
+                            <div class="col-lg-6 mb-3 float-l flex-1">
                                 <label>월대여</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control"  id="raGbnLt" readonly>
+                                    <input type="text" class="form-control"  id="raGbnLt">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="button" onclick="openDaumPolygon('LT');">월대여 설정하기</button>
                                     </div>
@@ -450,14 +451,12 @@
             <div class="modal-body">로그아웃을 하시겠습니까?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <a class="btn btn-primary" href="/api/v1.0/docha.logout">Logout</a>
             </div>
         </div>
     </div>
 </div>
 <script th:inline="javascript">
-
-    swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
 
     rtIdx = /*[[${rtIdx}]]*/'';
     CRUD = /*[[${CRUD}]]*/'';
@@ -467,6 +466,7 @@
     }else if (CRUD === "modify"){
         initDetailInfo(rtIdx)
     }
+
 
 </script>
 </body>

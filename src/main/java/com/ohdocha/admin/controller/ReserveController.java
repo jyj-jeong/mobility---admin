@@ -1,7 +1,11 @@
 package com.ohdocha.admin.controller;
 
+import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoDetailRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
+import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaCarDto;
+import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto;
 import com.ohdocha.admin.service.ReserveService;
+import com.ohdocha.admin.util.DochaMap;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -41,13 +46,66 @@ public class ReserveController extends ControllerExtension{
         reserveService.getReserveInfoList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
-        return serviceMessage.get("result");
+        return serviceMessage;
+    }
+
+    /* 예약 등록 */
+    @PostMapping(value = "/api/v1.0/insertReserveInfo.do")
+    @ResponseBody
+    public Object registerReserveInfo(@RequestBody DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest , HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoDetailRequest",reserveInfoDetailRequest);
+
+        reserveService.addReserveInfo(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return serviceMessage;
+    }
+
+    /* 예약 수정 */
+    @PostMapping(value = "/api/v1.0/updateReserveInfo.do")
+    @ResponseBody
+    public Object updateReserveInfo(@RequestBody DochaAdminReserveInfoDetailRequest reserveInfoDetailRequest , HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoDetailRequest",reserveInfoDetailRequest);
+
+        reserveService.updateReserveInfo(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return serviceMessage;
+    }
+
+    /* 예약 조회 */
+    @PostMapping(value = "/api/v1.0/reserveInfo.json")
+    @ResponseBody
+    public Object reserveInfo(@RequestBody DochaAdminReserveInfoRequest reserveInfoRequest , HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoRequest",reserveInfoRequest);
+
+        reserveService.getReserveInfo(serviceMessage);
+
+        modelMap.addAllAttributes(serviceMessage);
+        return serviceMessage;
+    }
+
+    /* 회사, 차량 정보 조회 */
+    @PostMapping("/api/v1.0/selectCompanyInfoAndCarInfo.json")
+    @ResponseBody
+    public Object selectCompanyInfoAndCarInfo(@RequestBody DochaAdminReserveInfoRequest reserveInfoRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("reserveInfoRequest", reserveInfoRequest);
+
+        reserveService.selectCompanyInfo(serviceMessage);
+        reserveService.selectCompanyInfoAndCarInfo(serviceMessage);
+
+        return serviceMessage;
     }
 
     /* 예약 등록 화면 */
     @GetMapping(value = "/reserve/register")
     public String reserveInfoView(HttpServletRequest request, ModelMap modelMap) {
-        ServiceMessage serviceMessage = createServiceMessage(request);
+        ServiceMessage serviceMessage = createServiceMessage(request)
+                .addData("CRUD", "insert");
 
         modelMap.addAllAttributes(serviceMessage);
         return "reservation/reservation_register";
@@ -57,6 +115,7 @@ public class ReserveController extends ControllerExtension{
     @GetMapping(value = "/reserve/detail/{rmIdx}")
     public String reserveInfoView(@PathVariable String rmIdx, HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rmIdx", rmIdx);
 
         modelMap.addAllAttributes(serviceMessage);
         return "reservation/reservation_detail";

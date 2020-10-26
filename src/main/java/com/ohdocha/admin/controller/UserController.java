@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -41,12 +42,11 @@ public class UserController extends ControllerExtension {
     public Object userInfoList(@RequestBody DochaAdminUserInfoRequest userInfoRequest , HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
         serviceMessage.addData("userInfoRequest",userInfoRequest);
-        serviceMessage.addData("test","test");
 
         userService.getIntegratedUserList(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원 상세 페이지 */
@@ -97,7 +97,7 @@ public class UserController extends ControllerExtension {
 
         userService.getUserDetail(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원 정보 수정 */
@@ -109,7 +109,7 @@ public class UserController extends ControllerExtension {
 
         userService.updateUserInfo(serviceMessage);
 
-        return serviceMessage.addData("res", "success");
+        return serviceMessage;
     }
 
     /* 회원 정보 삭제 */
@@ -121,7 +121,7 @@ public class UserController extends ControllerExtension {
 
         userService.deleteUserInfo(serviceMessage);
 
-        return serviceMessage.addData("res", "success");
+        return serviceMessage;
     }
 
     /* 회원 면허정보 등록 */
@@ -134,7 +134,7 @@ public class UserController extends ControllerExtension {
 
         userService.addUserLicenseInfo(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원 면허정보 조회 */
@@ -146,7 +146,7 @@ public class UserController extends ControllerExtension {
 
         userService.getUserLicenseInfo(serviceMessage);
 
-        return serviceMessage.get("userLicenseInfo");
+        return serviceMessage;
     }
 
     /* 회원 면허정보 수정 */
@@ -158,7 +158,7 @@ public class UserController extends ControllerExtension {
 
         userService.updateUserLicenseInfo(serviceMessage);
 
-        return serviceMessage.addData("res", "success");
+        return serviceMessage;
     }
 
     // endregion
@@ -206,7 +206,7 @@ public class UserController extends ControllerExtension {
 
         userService.getRentShopDetail(serviceMessage);
 
-        return serviceMessage.get("rentCompanyDetailResponseList");
+        return serviceMessage;
     }
 
 
@@ -230,7 +230,7 @@ public class UserController extends ControllerExtension {
 
         userService.getRentShopStaffList(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원사 직원 추가 */
@@ -242,7 +242,19 @@ public class UserController extends ControllerExtension {
 
         userService.insertRentCompanyStaff(serviceMessage);
 
-        return serviceMessage.get("res");
+        return serviceMessage;
+    }
+
+    /* 회원사 직원 수정 */
+    @PostMapping(value = "/api/v1.0/updateDcRentCompanyStaff.do")
+    @ResponseBody
+    public Object updateRentCompanyStaff(@RequestBody DochaAdminDcRentCompanyStaffRequest rentCompanyStaffRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyStaffRequest", rentCompanyStaffRequest);
+
+        userService.updateRentCompanyStaff(serviceMessage);
+
+        return serviceMessage;
     }
 
     /* 회원사 수수료 정보 추가 */
@@ -254,7 +266,7 @@ public class UserController extends ControllerExtension {
 
         userService.updateRentCompanyCommission(serviceMessage);
 
-        return serviceMessage.get("res");
+        return serviceMessage;
     }
 
     /* 회원사 영업시간 추가 */
@@ -266,7 +278,7 @@ public class UserController extends ControllerExtension {
 
         userService.updateRentCompanyTime(serviceMessage);
 
-        return serviceMessage.get("res");
+        return serviceMessage;
 
     }
 
@@ -292,13 +304,16 @@ public class UserController extends ControllerExtension {
 
         userService.selectRentCompanyReserveMinList(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 회원사 전체 휴일 등록*/
     @GetMapping(value = "/mem/rentshop/hoilday")
     public String rentShopRegisterHoildayView(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyHolidayRequest", new DochaAdminRentCompanyHolidayRequest());
+
+        userService.selectRentCompanyHoliday(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return "user/holiday_registration";
@@ -313,7 +328,19 @@ public class UserController extends ControllerExtension {
 
         userService.insertRentCompanyHoliday(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
+    }
+
+    /* 휴무일 삭제 */
+    @PostMapping(value = "/api/v1.0/deleteRentCompanyHoliday.do")
+    @ResponseBody
+    public Object deleteRentCompanyHoliday(@RequestBody DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyHolidayRequest", rentCompanyHolidayRequest);
+
+        userService.deleteRentCompanyHoliday(serviceMessage);
+
+        return serviceMessage;
     }
 
     /* 휴무일 리스트 조회 */
@@ -325,7 +352,7 @@ public class UserController extends ControllerExtension {
 
         userService.selectRentCompanyHoliday(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     // endregion
@@ -379,7 +406,7 @@ public class UserController extends ControllerExtension {
 
         userService.insertAuthTemplate(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 관리자 메뉴 조회 */
@@ -390,7 +417,7 @@ public class UserController extends ControllerExtension {
 
         userService.selectMenuTemplateList(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
 
     /* 관리자 메뉴 조회 */
@@ -401,7 +428,7 @@ public class UserController extends ControllerExtension {
 
         userService.selectMenuTemplateList(serviceMessage);
 
-        return serviceMessage.get("result");
+        return serviceMessage;
     }
     // endregion
 }
