@@ -46,6 +46,8 @@ public interface UserService {
 
     void insertRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 등록
 
+    void deleteRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 삭제
+
     void selectRentCompanyHoliday(ServiceMessage message);          // 회원사 휴무일정보 조회
 
     /* 관리자 */

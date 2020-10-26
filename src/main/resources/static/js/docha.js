@@ -10,7 +10,7 @@ var GLOBAL_LINK_RTIDX = ''; // 회원사 링크 버튼 클릭시 이동전 저�
 /**
 
  * 데이터테이블 초기화
-h
+ h
  */
 function initDataTables() {
     var table = $('#dataTable').DataTable( {
@@ -1256,3 +1256,17 @@ Array.prototype.contains = function(element) {
     return false;
 }
 
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}

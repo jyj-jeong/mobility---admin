@@ -1944,7 +1944,7 @@ function searchUserInfo() {
 		}
 
 		} else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-			errorAlert('API ERROR', '전체 메일을 입력 후 검생르 해야합니다. 이메일을 다시 확인해주세요.\r\n 관리자에게 문의하세요.');
+			errorAlert('API ERROR', '전체 메일을 입력 후 검색을 해야합니다.');
 		}
 	});// end fn_callApi
 }

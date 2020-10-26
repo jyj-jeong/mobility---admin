@@ -632,27 +632,19 @@
 			, 	IFNULL(HOLIDAY_NAME		, '') AS HOLIDAY_NAME       /*휴일명*/
 			, 	IFNULL(DEL_YN          	, '') AS DEL_YN             /*삭제여부*/
 			FROM DC_HOLIDAYS
-		
 		  ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<![CDATA[	IFNULL(DEL_YN, 'N') = 'N'  ]]>
 			<if test="rtIdx != null and rtIdx != ''">
 				AND <![CDATA[ RT_IDX = #{rtIdx} ]]>
 			</if>
 			<if test="holIdx != null and holIdx != ''">
 				AND <![CDATA[ HOL_IDX = #{holIdx} ]]>
 			</if>
-			<if test="tholIdx != null and tholIdx != ''">
-				AND <![CDATA[ HOL_IDX != #{tholIdx} ]]>
+			<if test="holIdx != null and holIdx != ''">
+				AND <![CDATA[ HOL_IDX != #{holIdx} ]]>
 			</if>
 			<if test="holidayStartDt != null and holidayStartDt != ''">
-				AND <![CDATA[
-	    		( HOLIDAY_START_DT between #{holidayStartDt} and #{holidayEndDt} 
-	    		OR HOLIDAY_END_DT between #{holidayStartDt} and #{holidayEndDt} 
-	    		OR #{holidayStartDt} BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT
-	    		OR #{holidayEndDt} BETWEEN HOLIDAY_START_DT AND HOLIDAY_END_DT
-	    		) 
-	    		]]>
+				AND <![CDATA[ HOLIDAY_START_DT >= #{holidayStartDt} ]]>
 			</if>
 		</trim>
 	</select>
@@ -700,6 +692,11 @@
 				)				
     ]]>
     </insert>
+
+	<!-- 회원사 휴무일 DELETE -->
+	<delete  id="deleteRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">
+		<![CDATA[ DELETE FROM DC_HOLIDAYS WHERE HOL_IDX = #{holIdx}]]>
+	</delete>
 
 	<select id="selectDcRentCompanyAblearea" parameterType="DcRentCompanyAbleareaRequest"
 			resultType="DcRentCompanyAbleareaResponse">

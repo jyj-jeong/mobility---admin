@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -349,8 +351,23 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     }
 
     @Override
+    public void deleteRentCompanyHoliday(ServiceMessage message) {
+        DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
+
+        int res = rentCompanyInfoMapper.deleteRentCompanyHoliday(rentCompanyHolidayRequest);
+
+        if (res == 1){
+            message.addData("code", 200);
+        }else message.addData("code", 400);
+
+    }
+
+    @Override
     public void selectRentCompanyHoliday(ServiceMessage message) {
         DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = simpleDateFormat.format(new Date());
+        rentCompanyHolidayRequest.setHolidayStartDt(today);
 
         List<DochaAdminRentCompanyHolidayResponse> rentCompanyHolidayResponseList = rentCompanyInfoMapper.selectRentCompanyHoliday(rentCompanyHolidayRequest);
 

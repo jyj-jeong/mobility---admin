@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -310,6 +311,9 @@ public class UserController extends ControllerExtension {
     @GetMapping(value = "/mem/rentshop/hoilday")
     public String rentShopRegisterHoildayView(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyHolidayRequest", new DochaAdminRentCompanyHolidayRequest());
+
+        userService.selectRentCompanyHoliday(serviceMessage);
 
         modelMap.addAllAttributes(serviceMessage);
         return "user/holiday_registration";
@@ -323,6 +327,18 @@ public class UserController extends ControllerExtension {
         serviceMessage.addData("rentCompanyHolidayRequest", rentCompanyHolidayRequest);
 
         userService.insertRentCompanyHoliday(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 휴무일 삭제 */
+    @PostMapping(value = "/api/v1.0/deleteRentCompanyHoliday.do")
+    @ResponseBody
+    public Object deleteRentCompanyHoliday(@RequestBody DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyHolidayRequest", rentCompanyHolidayRequest);
+
+        userService.deleteRentCompanyHoliday(serviceMessage);
 
         return serviceMessage;
     }
