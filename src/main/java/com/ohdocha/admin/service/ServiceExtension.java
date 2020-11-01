@@ -10,9 +10,7 @@ import java.util.UUID;
 public class ServiceExtension implements ErrorCode {
 
     protected String createIdx() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
-        String node = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        return sdf.format(new Date(System.currentTimeMillis())) + "-" + node;
+        return UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
 }
