@@ -206,14 +206,7 @@
          ,  YEAR
          ,  MANUFACTURER_CODE
          ,  COUNTRY_CODE
-         ,  IMPORT_CODE
          ,  CARTYPE_CODE
-         ,  FUEL_CODE
-         ,  TRANSMISSION_CODE
-         ,  DRIVE_TYPE_CODE
-         ,  DRIVE_LICENSE_CODE
-         ,  DISPLACEMENT
-         ,  MAXIMUM_PASSENGER
          ,  DEL_YN
          ,  REG_ID
          ,  REG_DT
@@ -223,14 +216,7 @@
          ,     #{year}
          ,     #{manufacturerCode}
          ,     #{countryCode}
-         ,     #{importCode}
          ,     #{cartypeCode}
-         ,     #{fuelCode}
-         ,     #{transmissionCode}
-         ,     #{driveTypeCode}
-         ,     #{driveLicenseCode}
-         ,     #{displacement}
-         ,     #{maximumPassenger}
          ,   'N'
          ,     #{regId}
          ,   NOW()

@@ -61,7 +61,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     public void regCarAdd(ServiceMessage message) {
         DochaAdminRegCarDetailRequest regCarDetailRequest = message.getObject("regCarDetailRequest", DochaAdminRegCarDetailRequest.class);
 
-        regCarDetailRequest.setCrIdx(createIdx());
+        regCarDetailRequest.setCrIdx("CR" + createIdx());
 
         int res = regCarMapper.insertDcCarInfo(regCarDetailRequest);
 
