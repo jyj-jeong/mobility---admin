@@ -11,11 +11,19 @@ import com.ohdocha.admin.service.CarService;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @AllArgsConstructor
@@ -195,6 +203,18 @@ public class CarController extends ControllerExtension {
         modelMap.addAllAttributes(serviceMessage);
 
         return "car/carModel";
+    }
+
+    /* 차량모델 사진 등록 */
+    @PostMapping(value = "/api/v1.0/uploadCarImage.do")
+    @ResponseBody
+    public Object uploadCarImage(@RequestParam("image") MultipartFile uploadImage, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("uploadImage", uploadImage);
+
+        carService.uploadCarImage(serviceMessage);
+
+        return serviceMessage;
     }
 
     /* 차량모델 등록 */

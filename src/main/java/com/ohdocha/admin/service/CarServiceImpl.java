@@ -1,5 +1,6 @@
 package com.ohdocha.admin.service;
 
+import com.ohdocha.admin.config.Properties;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailResponse;
 import com.ohdocha.admin.domain.car.model.DochaAdminCarModelRequest;
@@ -23,18 +24,25 @@ import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarRequest;
 import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarResponse;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaAdminReserveInfoRequest;
 import com.ohdocha.admin.domain.reserve.reserveInfoMnt.DochaRentCompanyDto;
+import com.ohdocha.admin.exception.BadRequestException;
 import com.ohdocha.admin.mapper.*;
+import com.ohdocha.admin.util.FileHelper;
 import com.ohdocha.admin.util.ServiceMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class CarServiceImpl extends ServiceExtension implements CarService {
+
+    private Properties properties;
 
     private final DochaAdminCarModelMapper carModelMapper;
     private final DochaAdminRegCarMapper regCarMapper;
@@ -171,9 +179,6 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     //endregion
 
 
-
-
-
     //region [ 차량 모델 ]
     /* 차량모델 등록 */
     @Override
@@ -184,6 +189,61 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         message.addData("res", res);
         message.addData("mdIdx", carModelDetailRequest.getMdIdx());
+    }
+
+    @Override
+    public void uploadCarImage(ServiceMessage message) {
+        String path = "/home/ohdocha/img/car/";
+        Object uploadImageObj = message.get("uploadImage");
+        if (!(uploadImageObj instanceof MultipartFile))
+            throw new BadRequestException(IMAGE_NOT_MULTIPART_FILE, IMAGE_NOT_MULTIPART_FILE_MSG);
+
+        MultipartFile uploadImage = (MultipartFile) uploadImageObj;
+
+        if (uploadImage.isEmpty())
+            throw new BadRequestException(IMAGE_IS_EMPTY, IMAGE_IS_EMPTY_MSG);
+
+        String uploadImageName = uploadImage.getOriginalFilename();
+        if (uploadImageName == null || uploadImageName.isEmpty())
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 파일이름이 없습니다.)");
+
+        String uploadImageMime = uploadImage.getContentType();
+        if (uploadImageMime == null || uploadImageMime.isEmpty() || !uploadImageMime.contains("image/"))
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 MIME 이 올바르지 않습니다.)");
+
+        int extensionIndexOf = uploadImageName.lastIndexOf('.');
+        if (extensionIndexOf == -1)
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(확장자가 존재하지 않습니다.)");
+
+        String uploadImageExtension = uploadImageName.substring(extensionIndexOf).replaceAll("\\.", "").toLowerCase();
+        if (!properties.getSupportImageExtension().contains(uploadImageExtension))
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(지원하지 않는 이미지 확장자 입니다.)");
+
+        long uploadImageSize = uploadImage.getSize();
+        if (uploadImageSize > properties.getUploadImageSize())
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 크기가 20MB를 초과 합니다.)");
+
+
+        File file = new File(properties.getTempFolderPath() + UUID.randomUUID().toString() + "." + uploadImageExtension);
+        FileHelper.makeFolder(file.getParentFile());
+
+        try {
+            file.createNewFile();
+            uploadImage.transferTo(file);
+        } catch (Exception e) {
+            throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+        }
+
+//            cdnHelper.uploadObject(properties.getCdnPublicBucket(), "car/", file);
+//            file.delete();
+
+//            message.addData("url", "/car/" + file.getName());
+
+
+
+
+
+
     }
 
     /* 차량모델 리스트 */
@@ -219,14 +279,11 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     // endregion
 
 
-
-
-
     //region [ 차량 속성 ]
     /* 차량속성 추가 : 국가 */
     @Override
     public void insertCarPropertyCountry(ServiceMessage message) {
-        String value = message.getString("value","");
+        String value = message.getString("value", "");
         DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
                 .rtCode("CN")
                 .pCode("CN")
@@ -242,9 +299,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량 속성 리스트 : 국가 */
     @Override
     public void carCountryProperty(ServiceMessage message) {
-        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest", DochaAdminCarPropertyRequest.class);
 
-        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarCountryPropertyInfo(carPropertyRequest);
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList = propertyMapper.selectCarCountryPropertyInfo(carPropertyRequest);
 
         message.addData("propertyList", carPropertyResponseList);
 
@@ -253,7 +310,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량속성 추가 : 제조사 */
     @Override
     public void insertCarPropertyManufacturer(ServiceMessage message) {
-        String value = message.getString("value","");
+        String value = message.getString("value", "");
         DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
                 .rtCode("CR")
                 .pCode("MF")
@@ -269,9 +326,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량 속성 리스트 : 제조사 */
     @Override
     public void carManufacturerProperty(ServiceMessage message) {
-        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest", DochaAdminCarPropertyRequest.class);
 
-        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarCountryManufacturerInfo(carPropertyRequest);
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList = propertyMapper.selectCarCountryManufacturerInfo(carPropertyRequest);
 
         message.addData("propertyList", carPropertyResponseList);
 
@@ -280,7 +337,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량속성 추가 : 등급 */
     @Override
     public void insertCarPropertyCarType(ServiceMessage message) {
-        String value = message.getString("value","");
+        String value = message.getString("value", "");
         DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
                 .rtCode("CR")
                 .pCode("CTY")
@@ -296,9 +353,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량 속성 리스트 : 등급 */
     @Override
     public void carCarTypeProperty(ServiceMessage message) {
-        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest", DochaAdminCarPropertyRequest.class);
 
-        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarTypePropertyInfo(carPropertyRequest);
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList = propertyMapper.selectCarTypePropertyInfo(carPropertyRequest);
 
         message.addData("propertyList", carPropertyResponseList);
 
@@ -307,7 +364,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량속성 추가 : 옵션 */
     @Override
     public void insertCarPropertyOption(ServiceMessage message) {
-        String value = message.getString("value","");
+        String value = message.getString("value", "");
         DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
                 .rtCode("CR")
                 .pCode("OT")
@@ -323,9 +380,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량 속성 리스트 : 옵션 */
     @Override
     public void carOptionProperty(ServiceMessage message) {
-        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest", DochaAdminCarPropertyRequest.class);
 
-        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarOptionPropertyInfo(carPropertyRequest);
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList = propertyMapper.selectCarOptionPropertyInfo(carPropertyRequest);
 
         message.addData("propertyList", carPropertyResponseList);
     }
@@ -333,7 +390,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량속성 추가 : 연료 */
     @Override
     public void insertCarPropertyFuel(ServiceMessage message) {
-        String value = message.getString("value","");
+        String value = message.getString("value", "");
         DochaAdminCarPropertyRequest carPropertyRequest = DochaAdminCarPropertyRequest.builder()
                 .rtCode("CR")
                 .pCode("FL")
@@ -349,12 +406,13 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     /* 차량 속성 리스트 : 연료 */
     @Override
     public void carFuelProperty(ServiceMessage message) {
-        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest",DochaAdminCarPropertyRequest.class);
+        DochaAdminCarPropertyRequest carPropertyRequest = message.getObject("carPropertyRequest", DochaAdminCarPropertyRequest.class);
 
-        List<DochaAdminCarPropertyResponse> carPropertyResponseList =  propertyMapper.selectCarFuelPropertyInfo(carPropertyRequest);
+        List<DochaAdminCarPropertyResponse> carPropertyResponseList = propertyMapper.selectCarFuelPropertyInfo(carPropertyRequest);
 
         message.addData("propertyList", carPropertyResponseList);
     }
+
     /* 속성 삭제 */
     @Override
     public void deleteProperty(ServiceMessage message) {
@@ -363,9 +421,6 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         int res = propertyMapper.deleteProperty(codeIdx);
     }
     //endregion
-
-
-
 
 
     //region [ 요금제 ]
@@ -450,7 +505,6 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
     }
 
 
-
     /* 보험템플릿 등록 */
     @Override
     public void insertInsuranceTemplate(ServiceMessage message) {
@@ -470,6 +524,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         message.addData("insuranceList", insuranceTemplateResponseList);
     }
+
     /* 기본 요금제 상세 */
     @Override
     public void InsuranceTemplateDetail(ServiceMessage message) {
@@ -486,20 +541,10 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         DochaAdminInsuranceTemplateDetailRequest insuranceTemplateDetailRequest = message.getObject("insuranceTemplateDetailRequest", DochaAdminInsuranceTemplateDetailRequest.class);
 
 
-
         int res = insuranceTemplateMapper.updateInsuranceTemplate(insuranceTemplateDetailRequest);
 
         message.addData("res", res);
     }
-
-
-
-
-
-
-
-
-
 
 
     /* 등록차량 상세 옵션 */
