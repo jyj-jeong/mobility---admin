@@ -81,4 +81,6 @@ public interface CarService {
     void selectReserveAmt(ServiceMessage message);
 
     void insertRegCarPayment(ServiceMessage message);
+
+    void uploadCarImage(ServiceMessage message);
 }
