@@ -73,6 +73,12 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         int res = regCarMapper.insertDcCarInfo(regCarDetailRequest);
 
+        DochaAdminCarModelDetailResponse carModelResponse = carModelMapper.selectCarModelImg(regCarDetailRequest.getMdIdx());
+
+        regCarDetailRequest.setImgIdx(carModelResponse.getImgIdx());
+
+        regCarMapper.updateRegCarImg(regCarDetailRequest);
+
         message.addData("res", res);
         message.addData("crIdx", regCarDetailRequest.getCrIdx());
     }
@@ -193,7 +199,9 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
     @Override
     public void uploadCarImage(ServiceMessage message) {
-        String path = "/home/ohdocha/img/car/";
+        int mdIdx = message.getInt("mdIdx", 0);
+        DochaAdminCarModelDetailResponse carModelResponse;
+
         Object uploadImageObj = message.get("uploadImage");
         if (!(uploadImageObj instanceof MultipartFile))
             throw new BadRequestException(IMAGE_NOT_MULTIPART_FILE, IMAGE_NOT_MULTIPART_FILE_MSG);
@@ -223,26 +231,55 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         if (uploadImageSize > properties.getUploadImageSize())
             throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 크기가 20MB를 초과 합니다.)");
 
-
-        File file = new File(properties.getTempFolderPath() + UUID.randomUUID().toString() + "." + uploadImageExtension);
+        // 파일 랜덤 UUID 생성 (파일 명 중복시 파일 생성 안됌)
+        String saveImgName = UUID.randomUUID().toString();
+        File file = new File(properties.getTempFolderPath() + "car/" + saveImgName + "." + uploadImageExtension);
         FileHelper.makeFolder(file.getParentFile());
 
-        try {
-            file.createNewFile();
-            uploadImage.transferTo(file);
-        } catch (Exception e) {
-            throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+        // 해당 모델의 정보를 가져옴 ( 이미지 파일 체크하기 위함 )
+        carModelResponse = carModelMapper.selectCarModelImg(mdIdx);
+
+        // 이미 DB에 img 정보가 있는지 여부
+        if (carModelResponse.getImgIdx() == null || carModelResponse.getImgIdx().equals("")) {
+            // 저장된 이미지가 없을 경우
+            try {
+                // 바로 이미지 생성
+                file.createNewFile();
+                uploadImage.transferTo(file);
+            } catch (Exception e) {
+                throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+            }
+        } else {
+            // 현재 DB에 이미지가 있으면
+            File FileList = new File(properties.getTempFolderPath() + "car/");
+            String[] fileList = FileList.list();
+            for(int i = 0; i<fileList.length; i++){
+                // DB에서 파일 명을 가져와서 일치하는 것이 있는지 검사
+                String FileName = fileList[i];
+
+                if(FileName.contains(carModelResponse.getImgIdx())){
+                    File deleteFile = new File(properties.getTempFolderPath() + "car/" + carModelResponse.getImgIdx());
+                    // path에서 이미 있는 파일을 제거 후
+                    deleteFile.delete();
+                }
+            }
+            try {
+                // 이미지 생성
+                file.createNewFile();
+                uploadImage.transferTo(file);
+            } catch (Exception e) {
+                throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+            }
         }
 
-//            cdnHelper.uploadObject(properties.getCdnPublicBucket(), "car/", file);
-//            file.delete();
+        DochaAdminCarModelDetailRequest carModelDetailRequest = new DochaAdminCarModelDetailRequest();
+        // 저장 할 mdIdx
+        carModelDetailRequest.setMdIdx(mdIdx);
+        // 새로운 파일 명
+        carModelDetailRequest.setImgIdx(saveImgName + "." + uploadImageExtension);
 
-//            message.addData("url", "/car/" + file.getName());
-
-
-
-
-
+        // 파일을 path에 저장 후, DB에 파일 명 저장
+        carModelMapper.updateCarModelImg(carModelDetailRequest);
 
     }
 
