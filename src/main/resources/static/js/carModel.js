@@ -313,10 +313,10 @@ function initDetailInfo(seq){
 			$("#sel_countryCode").val(country).prop("sel_countryCode", true);
 
 			// devleop
-			$('#car_img').attr('src','C:/ohdocha/data/temp/' + imgIdx);
+			// $('#car_img').attr('src','C:/ohdocha/data/temp/' + imgIdx);
 
 			//product
-			// $('#car_img').attr('src','https://admin-ohdocha.sharenshare.kr/img/car/' + imgIdx);
+			$('#car_img').attr('src','https://admin-ohdocha.sharenshare.kr/img/car/' + imgIdx);
 
     		if(!isEmpty(delYn)){
         		$("#delYn").val(delYn).prop("delYn", true);
