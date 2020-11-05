@@ -26,7 +26,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-6 mb-3">
-                                <input id="holiday" type="date" class="form-control" name="holiday"/>
+                                <div id="holiday" name="holiday" class="btn form-control"></div>
                             </div>
                             <div class="col-2 mb-3">
                                 <button id="btnSave" class="btn btn-primary" type="button" onclick="saveHoliday()">등록</button>
@@ -109,17 +109,25 @@
 </div>
 <script th:inline="javascript">
 
+    var holiday = new WinkelCalendar({
+        container: 'holiday',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
 
     function saveHoliday() {
-        var holidayDt = $('#holiday').val();
+        var holidayDt = holiday.date;
 
         if (isEmpty(holidayDt)){
             errorAlert('전체휴일','날짜를 선택해주세요');
             return;
-        }else if (holidayDt < getFormatDate(new Date())){
+        }else if (holidayDt < new Date()){
             errorAlert('전체휴일','전체휴무일은 과거가 될 수 없습니다.');
             return;
         }
+
+        holidayDt = formatDate(holidayDt);
 
         var save_type = 'insert';
         var req = {
