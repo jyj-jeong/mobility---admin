@@ -273,6 +273,7 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
         }
 
         DochaAdminCarModelDetailRequest carModelDetailRequest = new DochaAdminCarModelDetailRequest();
+        DochaAdminRegCarDetailRequest regCarDetailRequest = new DochaAdminRegCarDetailRequest();
         // 저장 할 mdIdx
         carModelDetailRequest.setMdIdx(mdIdx);
         // 새로운 파일 명
@@ -280,6 +281,11 @@ public class CarServiceImpl extends ServiceExtension implements CarService {
 
         // 파일을 path에 저장 후, DB에 파일 명 저장
         carModelMapper.updateCarModelImg(carModelDetailRequest);
+
+        // 미리 등록되어있던 차량들의 이미지도 수정
+        regCarDetailRequest.setImgIdx(saveImgName + "." + uploadImageExtension);
+        regCarDetailRequest.setMdIdx(carModelDetailRequest.getMdIdx());
+        regCarMapper.updateRegCarImgByMdIdx(regCarDetailRequest);
 
     }
 

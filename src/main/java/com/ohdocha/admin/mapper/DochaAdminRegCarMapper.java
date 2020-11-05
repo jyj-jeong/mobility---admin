@@ -28,6 +28,9 @@ public interface DochaAdminRegCarMapper {
     //등록차량 사진 수정
     public int updateRegCarImg(DochaAdminRegCarDetailRequest reqParam);
 
+    //등록차량 사진 수정 ( 모델에서 수정 시 )
+    public int updateRegCarImgByMdIdx(DochaAdminRegCarDetailRequest reqParam);
+
     //등록차량 보험 저장
     public int insertRegCarInsurance(DochaAdminInsuranceTemplateDetailRequest reqParam);
 
