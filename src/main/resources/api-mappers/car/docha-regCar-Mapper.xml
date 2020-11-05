@@ -104,6 +104,20 @@
 		</trim>
 	</update>
 
+	<!-- 차량 사진정보 UPDATE ( 모델에서 수정 시 ) -->
+	<update  id="updateRegCarImgByMdIdx" parameterType="regCarDetailRequest">
+		<![CDATA[ UPDATE DC_CAR_INFO ]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<!-- 차량 기본정보 -->
+			<if test="imgIdx      != null"><![CDATA[   IMG_IDX          = #{imgIdx}        ]]></if>    <!-- imgIDX -->
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="mdIdx != null and mdIdx != ''">
+				<![CDATA[ MD_IDX = #{mdIdx} ]]>
+			</if>
+		</trim>
+	</update>
+
 
 	<!-- 등록차량 상세 -->
 	<select id="selectRegCarDetail" parameterType="regCarDetailRequest"
