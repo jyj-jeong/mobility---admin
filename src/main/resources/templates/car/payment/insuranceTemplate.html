@@ -20,7 +20,7 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4 mt-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">보험 템플릿</h6>
+                        <h6 class="m-0 font-weight-bold text-primary" th:text="${ciIdx == null ? '보험 템플릿 등록' : '보험 템플릿 - ' +  ciIdx}"></h6>
                     </div>
 
                     <!--region 차량정보 카드  -->
