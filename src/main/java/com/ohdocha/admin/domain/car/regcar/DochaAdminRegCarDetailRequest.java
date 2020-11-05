@@ -14,7 +14,7 @@ public class DochaAdminRegCarDetailRequest extends CommonRequestDto {
     private String companyName        ; //회사명
     private String branchName         ; //지점명
 	private String year               ; //연식
-	private String mdIdx              ; //모델idx
+	private int mdIdx              ; //모델idx
 	private String modelName    	  ; //모델명
 	private String modelDetailName    ; //모델상세명
 	private String fuelCode           ; //연료구분code
@@ -116,10 +116,10 @@ public class DochaAdminRegCarDetailRequest extends CommonRequestDto {
 	public void setYear(String year) {
 		this.year = year;
 	}
-	public String getMdIdx() {
+	public int getMdIdx() {
 		return mdIdx;
 	}
-	public void setMdIdx(String mdIdx) {
+	public void setMdIdx(int mdIdx) {
 		this.mdIdx = mdIdx;
 	}
 	public String getModelName() {

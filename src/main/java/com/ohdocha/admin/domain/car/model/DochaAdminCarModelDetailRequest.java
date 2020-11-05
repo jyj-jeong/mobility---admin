@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("carModelDetailRequest")
 public class DochaAdminCarModelDetailRequest extends CommonRequestDto {
 	
-	private String mdIdx            ; //모델idx
+	private int mdIdx            ; //모델idx
 	private String modelName        ; //모델명
 	private String modelDetailName  ; //모델상세명
 	private String manufacturerCode ; //제조사code
@@ -38,10 +38,10 @@ public class DochaAdminCarModelDetailRequest extends CommonRequestDto {
 	private String modDt            ; //수정일시
 	private String delYn            ; //삭제여부
 	private String imgIdx           ; //이미지IDX
-	public String getMdIdx() {
+	public int getMdIdx() {
 		return mdIdx;
 	}
-	public void setMdIdx(String mdIdx) {
+	public void setMdIdx(int mdIdx) {
 		this.mdIdx = mdIdx;
 	}
 	public String getModelName() {

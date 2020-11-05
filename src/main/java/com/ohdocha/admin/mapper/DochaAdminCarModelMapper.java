@@ -17,6 +17,10 @@ public interface DochaAdminCarModelMapper {
     //차량-차량모델 상세
     public List<DochaAdminCarModelDetailResponse> selectCarModelDetail(DochaAdminCarModelDetailRequest reqParam);
 
+    public DochaAdminCarModelDetailResponse selectCarModelImg(int mdIdx);
+
+    public int updateCarModelImg(DochaAdminCarModelDetailRequest carModelDetailRequest);
+
 
     public List<DochaAdminCarModelDetailResponse> selectCarModelForSelectBox(DochaAdminCarModelDetailRequest reqParam);
 

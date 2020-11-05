@@ -208,9 +208,10 @@ public class CarController extends ControllerExtension {
     /* 차량모델 사진 등록 */
     @PostMapping(value = "/api/v1.0/uploadCarImage.do")
     @ResponseBody
-    public Object uploadCarImage(@RequestParam("image") MultipartFile uploadImage, HttpServletRequest request) {
+    public Object uploadCarImage(@RequestParam("image") MultipartFile uploadImage, int mdIdx,  HttpServletRequest request) {
         ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("uploadImage", uploadImage);
+        serviceMessage.addData("uploadImage", uploadImage)
+                .addData("mdIdx", mdIdx);
 
         carService.uploadCarImage(serviceMessage);
 

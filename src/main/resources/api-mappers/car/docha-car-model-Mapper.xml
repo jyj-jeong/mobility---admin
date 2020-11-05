@@ -74,6 +74,34 @@
 	</select>
 
 
+	<select id="selectCarModelImg" parameterType="int"	resultType="carModelDetailResponse">
+		<![CDATA[
+				SELECT
+						  	   IFNULL(MD_IDX   , '') AS MD_IDX    /*모델 IDX*/
+							,  IFNULL(IMG_IDX   , '') AS IMG_IDX    /*이미지 IDX*/
+				  FROM DC_CAR_MODEL
+                      ]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+				<![CDATA[ AND MD_IDX =#{mdIdx}        ]]>
+
+		</trim>
+	</select>
+
+	<!-- 차량 사진정보 UPDATE -->
+	<update  id="updateCarModelImg" parameterType="carModelDetailRequest">
+		<![CDATA[ UPDATE DC_CAR_MODEL ]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<!-- 차량 기본정보 -->
+			<if test="imgIdx      != null"><![CDATA[   IMG_IDX          = #{imgIdx}        ]]></if>    <!-- imgIDX -->
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="mdIdx != null and mdIdx != ''">
+				<![CDATA[ MD_IDX = #{mdIdx} ]]>
+			</if>
+		</trim>
+	</update>
+
+
 	<!-- 차량모델 Detail -->
 	<select id="selectCarModelDetail"  parameterType="carModelDetailRequest"
 			resultType="CarModelDetailResponse">
@@ -108,7 +136,8 @@
                    ,  IFNULL(T1.MOD_ID              , '') AS MOD_ID                                              /*수정자*/
                    ,  IFNULL(T1.MOD_DT              , '') AS MOD_DT                                              /*수정일시*/
                    ,  IFNULL(T1.DEL_YN              , '') AS DEL_YN                                              /*삭제여부*/
-                   ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                                     /* 이미지 등록 여부 */
+                   ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                                     /* 이미지 파일명 */
+--                    ,  IFNULL(T1.IMG_IDX            , '') AS IMG_IDX                                                     /* 이미지 등록 여부 */
                     FROM
                           DC_CAR_MODEL T1 , DC_COMMON_CODE T2
          ]]>
@@ -121,7 +150,7 @@
 	</select>
 
 
-	<!-- 차량모델 select box 용 -->
+	<!-- 차량모델 selectBox -->
 	<select id="selectCarModelForSelectBox"  parameterType="carModelDetailRequest"
 			resultType="CarModelDetailResponse">
 		<![CDATA[
@@ -141,6 +170,7 @@
 			<![CDATA[ AND T1.MODEL_NAME IS NOT NULL ]]>
 		</trim>
 	</select>
+
 
 	<!-- 차량모델 Detail -->
 	<select id="selectCarModelDetailForSelectBox"  parameterType="carModelDetailRequest"
@@ -211,7 +241,7 @@
          ,  REG_ID
          ,  REG_DT
       ) VALUES (
-            #{modelName}
+           #{modelName}
          ,     #{modelDetailName}
          ,     #{year}
          ,     #{manufacturerCode}
@@ -222,6 +252,9 @@
          ,   NOW()
       )
    ]]>
+		<selectKey keyProperty="mdIdx" resultType="Integer" order="AFTER">
+   			SELECT LAST_INSERT_ID();
+   </selectKey>
     </insert>
 
 </mapper>

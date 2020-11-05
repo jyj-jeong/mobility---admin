@@ -68,7 +68,8 @@
                                     <td th:text="${carModelInfo.getYear()}"></td>
                                     <td th:text="${carModelInfo.getModelName()}"></td>
                                     <td th:text="${carModelInfo.getCarTypeCode()}"></td>
-                                    <td th:text="${carModelInfo.getImgIdx()}"></td>
+                                    <td th:text="${carModelInfo.getImgIdx() == '' ? '' : 'O'}"></td>
+<!--                                    <td th:text="${carModelInfo.getImgIdx()}"></td>-->
                                 </tr>
                                 <script th:inline="javascript">
                                     /* 회원 상세 페이지 이동 */
