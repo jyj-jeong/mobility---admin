@@ -523,10 +523,10 @@ function initDetailInfo(seq) {
 			let weekendReserveMinimumRate = data.weekendReserveMinimumRate; // 주말/공휴일 할증율
 			let weekendReserveMinimumTime = data.weekendReserveMinimumTime; // 주말공휴일최소예약시간(분)
 
-//			let minIdx = data.minIdx; // 특정기간idx
-//			let minimumStartDt = data.minimumStartDt; // 최소예약시간시작일
-//			let minimumEndDt = data.minimumEndDt; // 최소에약시간종료일
-//			let minimumTime = data.minimumTime; // 최소시간(분)
+			let minIdx = data.minIdx; // 특정기간idx
+			let minimumStartDt = data.minimumStartDt; // 최소예약시간시작일
+			let minimumEndDt = data.minimumEndDt; // 최소에약시간종료일
+			let minimumTime = data.minimumTime; // 최소시간(분)
 			let raGbnLt = data.raGbnLt;
 			if (raGbnLt > 0) {
 				$("#raGbnLt").attr("placeholder", "설정완료");
@@ -658,10 +658,10 @@ function initDetailInfo(seq) {
 //			}
 
 			// 예약정보(선택사항) 설정
-//			$('#minIdx').val(minIdx);
-//			$('#minimumStartDt').val(minimumStartDt);
-//			$('#minimumEndDt').val(minimumEndDt);
-			// $('#sel_minimumTime').val(minimumMi);
+			$('#minIdx').val(minIdx);
+			initDatePicker('minimumStartDt' , minimumStartDt);
+			initDatePicker('minimumEndDt' , minimumEndDt);
+			$('#sel_minimumTime').val(minimumMi);
 
 			CRUD = 'modify';
 //			openIziModal(MODAL_NAME);
@@ -866,7 +866,7 @@ function detailValidation(save_type) {
 	let target = '';
 	let method = '';
 
-	let _rtIdx = $('#rtIdx').val();
+	let _rtIdx = 'test';
 
 	if (save_type !== 'saveRentCompanyInfo' && isEmpty(_rtIdx)) {
 		errorAlert('회원사정보', '회원사 정보를 먼저 저장해 주세요.');
@@ -1003,7 +1003,6 @@ function detailValidation(save_type) {
 				let ownerYn = $("#sel_ownerYn option:selected").val();	// 대표여부
 				let staffTypeCode = $('#staffTypeCode').val(); 			// 직원분류code
 				let alramYn = $("#sel_alarmYn option:selected").val();	// 알람여부
-				let staffdelYn = $("#sel_staffdelYn option:selected").val();	// 사용여부
 
 				if (isEmpty(staffName)) { // is not empty
 					errorAlert('직원이름', '직원이름은 필수 입력값 입니다.\n\r회원검색을 하여주세요');
@@ -1268,8 +1267,8 @@ function detailValidation(save_type) {
 				break;
 			case 'saveRentCompanyMin':// 회원사정보 - 특정기간
 				let minIdx = $('#minIdx').val(); 								// 특정기간 순번
-				let minimumStartDt = $('#minimumStartDt').val(); 				// 특정기간 최소 예약  시간 시작
-				let minimumEndDt = $('#minimumEndDt').val(); 					// 특정기간 최소 예약  시간 종료
+				let minimumStartDt = formatDate(getMinimumStartDt()); 			// 특정기간 최소 예약  시간 시작
+				let minimumEndDt = formatDate(getMinimumEndDt());               // 특정기간 최소 예약  시간 종료
 				let minimumTime = $("#sel_minimumTime option:selected").val();	// 특정기간 최소시간
 				let mindelYn = $("#sel_mindelYn option:selected").val();		// 사용여부
 
@@ -1367,8 +1366,8 @@ function detailValidation(save_type) {
 				break;
 			case 'saveRentCompanyHoliday':// 회원사정보 - 휴무일정보
 				let holIdx = $('#holIdx').val(); 								// 휴무일 순번
-				let holidayStartDt = $('#holidayStartDt').val(); 				// 휴무일 시작일
-				let holidayEndDt = $('#holidayEndDt').val(); 					// 휴무일 종료일
+				let holidayStartDt = formatDate(getHolidayStartDt()); 			// 휴무일 시작일
+				let holidayEndDt = formatDate(getHolidayEndDt());				// 휴무일 종료일
 				let holidayName = $("#holidayName").val();						// 휴무일명
 				let holidaydelYn = $("#sel_holidaydelYn option:selected").val();// 사용여부
 
@@ -1662,7 +1661,6 @@ function openCreateRentCompany() {
 	$('#accountNumber').val(''); // 계좌번호
 	$('#carCount').val('');
 	$('#companyContact1').val('');
-	$('#commissionPer').val('');
 //	$('#taxInvoiceCode').val('');
 
 	// 스텝 초기화
@@ -1733,11 +1731,6 @@ $('#rentStaffList').on("click", "tbody tr ", function () {
 		$("#sel_ownerYn").val("N").prop("selected", true);
 	}
 
-	if (isEmpty(staffdelYn)) {
-		$("#sel_staffdelYn").val("N").prop("selected", true);
-	} else {
-		$("#sel_staffdelYn").val(staffdelYn).prop("selected", true);
-	}
 
 });
 
@@ -1794,8 +1787,8 @@ $('#holidayList').on("click", "tbody tr ", function () {
 	let holidaydelYn = td.eq(5).text();
 
 	$("#holIdx").val(holIdx);
-	$("#holidayStartDt").val(holidayStartDt);
-	$("#holidayEndDt").val(holidayEndDt);
+	initDatePicker('holidayStartDt' , holidayStartDt);
+	initDatePicker('holidayEndDt' , holidayEndDt);
 	$("#holidayName").val(holidayName);
 
 	if (isEmpty(holidaydelYn)) {
@@ -1859,7 +1852,6 @@ function cancelData(cancel_type) {
 			$("#staffContact1").val('');
 			$("#staffEmail").val('');
 			// $("#btnstaffEmail").attr("disabled", true);
-			$("#sel_staffdelYn").val('N');
 
 			break;
 		case 'updateCommission': // 수수료 정보 업데이트

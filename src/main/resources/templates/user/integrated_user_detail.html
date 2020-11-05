@@ -44,7 +44,7 @@
 
                             <div class="col-4 mb-3">
                                 <label class="form-label" for="userBirthday">생년월일</label>
-                                <input type="date" class="form-control" name="userBirthday" id="userBirthday"/>
+                                <div id="userBirthday" name="userBirthday" class="btn form-control"></div>
                             </div>
                             <div class="col-4 mb-3">
                                 <label class="form-label" for="userContact1">연락처</label>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-4 mb-3">
                                 <label class="form-label" for="userRegDt">가입일시</label>
-                                <input type="date" class="form-control" name="userRegDt" id="userRegDt" readonly/>
+                                <div id="userRegDt" name="userRegDt" class="btn form-control"></div>
                             </div>
 
                             <div class="col-4 mb-3">
@@ -93,11 +93,11 @@
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="licenseExpiration">적성검사 만료일</label>
-                                <input type="date" class="form-control" name="licenseExpiration" id="licenseExpiration" />
+                                <div id="licenseExpiration" name="licenseExpiration" class="btn form-control"></div>
                             </div>
                             <div class="col-3 mb-3">
                                 <label class="form-label" for="licenseIssueDt">발급일</label>
-                                <input type="date" class="form-control" name="licenseIssueDt" id="licenseIssueDt" />
+                                <div id="licenseIssueDt" name="licenseIssueDt" class="btn form-control"></div>
                             </div>
                             <div class="col-3 mb-3">
                                 <div class="custom-control custom-switch">
@@ -157,7 +157,6 @@
                             </div>
                         </div>
                         <img class="d-block mx-auto bg-gray-200 mb-4" src="" width="500" height="300" alt="IMG">
-                        <!-- 면허정보 OCR 2차
                         <div class="row">
                             <h6 class="col-12 mb-3 font-weight-bold">면허정보</h6>
                             <div class="col-4 mb-3">
@@ -187,7 +186,7 @@
                                 <input type="text" class="form-control" name="licenseOwnerName" id="licenseOwnerName" />
                             </div>
                         </div>
-                        -->
+
                         <div class="col-lg-12 float-l flex-1 text-right p-b-10">
                             <p><br></p>
                             <button class="btn btn-primary" type="button" onclick="detailValidation('saveUserLicenseInfo');">면허사진 저장</button>
@@ -281,8 +280,6 @@
 </div>
 <script th:inline="javascript">
 
-    // todo 각 card 클릭 시에만 swal 동작
-
     CRUD = /*[[${CRUD}]]*/'';
     urIdx = /*[[${urIdx}]]*/'';
 
@@ -291,6 +288,65 @@
     }else if (CRUD === "modify"){
         initDetailInfo(urIdx)
     }
+
+    var userBirthday = new WinkelCalendar({
+        container: 'userBirthday',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var userRegDt = new WinkelCalendar({
+        container: 'userRegDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var licenseExpiration = new WinkelCalendar({
+        container: 'licenseExpiration',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var licenseIssueDt = new WinkelCalendar({
+        container: 'licenseIssueDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    function getUserBirthday() {
+        return userBirthday.date;
+    }
+
+    function getUserRegDt() {
+        return userRegDt.date;
+    }
+    
+    function getLicenseExpiration() {
+        return licenseExpiration.date;
+    }
+
+    function getLicenseIssueDt() {
+        return licenseIssueDt.date;
+    }
+
+    function initDatePicker(id, value) {
+        switch (id) {
+            case 'userBirthday':
+                userBirthday.setDate(new Date(value));
+                break;
+            case 'licenseExpiration':
+                licenseExpiration.setDate(new Date(value));
+                break;
+            case '':
+                licenseIssueDt.setDate(new Date(value));
+                break;
+        }
+    }
+
 </script>
 </body>
 </html>

@@ -400,37 +400,37 @@ function initDetailInfo(seq) {
         // 200이라면 페이징을 구한다.
         if (res.code == 200) {
 
-        var data = res.result[0];
+            var data = res.result[0];
 
-        // 기본정보 셋팅
-        let urIdx 			= data.urIdx;
-        let userId 			= data.userId;
-        let userName 		= data.userName;
-        let joinChannel 	= data.joinChannel;
-        let userBirthday 	= YMDFormatter(data.userBirthday);
-        let userContact1 	= phoneFomatter(data.userContact1);
-        let regDt 			= dateFormatter(data.regDt , "-");
-
-
-        $("#urIdx").val(urIdx);
-        $("#userId").val(userId);
-        $("#userName").val(userName);
+            // 기본정보 셋팅
+            let urIdx 			= data.urIdx;
+            let userId 			= data.userId;
+            let userName 		= data.userName;
+            let joinChannel 	= data.joinChannel;
+            let userBirthday 	= YMDFormatter(data.userBirthday);
+            let userContact1 	= phoneFomatter(data.userContact1);
+            let regDt 			= dateFormatter(data.regDt , "-");
 
 
-        if(joinChannel =='web') {
-            $("#joinChannel").val(joinChannel);
-        }
+            $("#urIdx").val(urIdx);
+            $("#userId").val(userId);
+            $("#userName").val(userName);
 
-        $("#userContact1").val(userContact1);
-        $("#userRegDt").val(regDt);
 
-        //initDatePicker('#userBirthday' , userBirthday);
-        $("#userBirthday").val(userBirthday);
+            if(joinChannel =='web') {
+                $("#joinChannel").val(joinChannel);
+            }
 
-        initModalSelectBox(data);
+            $("#userContact1").val(userContact1);
+            $("#userRegDt").val(regDt);
+
+            initDatePicker('userBirthday' , userBirthday);
+            // $("#userBirthday").val(userBirthday);
+
+            initModalSelectBox(data);
 
         } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-        	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+            errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
         }
     });// end fn_callApi
 
@@ -450,80 +450,80 @@ function initDetailInfo(seq) {
         // 200이라면 페이징을 구한다.
         if (res.code == 200) {
 
-        var data = res.result[0];
+            var data = res.result[0];
 
-        let licenseCode  		= '';// 면허코드
-        let licenseNumber  		= '';// 운전면허 번호
-        let licenseExpiration  	= '';// 적성검사만료일
-        let licenseIssueDt  	= '';// 면허 발급일
-        let userLicenseOwnYn 	= '';
-        let licenseLocation     = '';// 면허지역
-        let useYn				= '';// 사용여부
+            let licenseCode  		= '';// 면허코드
+            let licenseNumber  		= '';// 운전면허 번호
+            let licenseExpiration  	= '';// 적성검사만료일
+            let licenseIssueDt  	= '';// 면허 발급일
+            let userLicenseOwnYn 	= '';
+            let licenseLocation     = '';// 면허지역
+            let useYn				= '';// 사용여부
 
-        if(CRUD =='modify') {
-            if (data != null) {
-                licenseCode = data.licenseCode;
-                licenseNumber = data.licenseNumber;
-                licenseExpiration = data.licenseExpiration;
-                licenseIssueDt = data.licenseIssueDt;
-                userLicenseOwnYn = data.userLicenseOwnYn;
-                licenseLocation = data.licenseLocation;
-                useYn = data.useYn;
+            if(CRUD =='modify') {
+                if (data != null) {
+                    licenseCode = data.licenseCode;
+                    licenseNumber = data.licenseNumber;
+                    licenseExpiration = data.licenseExpiration;
+                    licenseIssueDt = data.licenseIssueDt;
+                    userLicenseOwnYn = data.userLicenseOwnYn;
+                    licenseLocation = data.licenseLocation;
+                    useYn = data.useYn;
 
-            }
-            // }
+                }
+                // }
 
 //			$('#licenseCode').val(licenseCode);
-            $('#licenseNumber').val(licenseNumber);
-            $('#licenseExpiration').val(licenseExpiration);
-            $('#licenseIssueDt').val(licenseIssueDt);
+                $('#licenseNumber').val(licenseNumber);
+                $('#licenseExpiration').val(licenseExpiration);
+                $('#licenseIssueDt').val(licenseIssueDt);
 
-            //면허정보 조회
-//			initDatePicker('#licenseExpiration' , licenseExpiration);
-//			initDatePicker('#licenseIssueDt' , licenseIssueDt);
+                //면허정보 조회
+			initDatePicker('licenseExpiration' , licenseExpiration);
+			initDatePicker('licenseIssueDt' , licenseIssueDt);
 
-            //START 면허종류============================================================
-            let target = 'commonCodeInfo';
-            let method = 'select';
-            let req = {};
-            req = {
-                rtCode: "CR",
-                pCode: "DL"
-            };
+                //START 면허종류============================================================
+                let target = 'commonCodeInfo';
+                let method = 'select';
+                let req = {};
+                req = {
+                    rtCode: "CR",
+                    pCode: "DL"
+                };
 
-            fn_callApi(method, target, req, function (response) {
-                let data = response;
+                fn_callApi(method, target, req, function (response) {
+                    let data = response;
 
-                // 200이라면 페이징을 구한다.
-                // if (res.code == 200) {
+                    // 200이라면 페이징을 구한다.
+                    // if (res.code == 200) {
 
-                // let data = res.data.result;
+                    // let data = res.data.result;
 
-                let strOption = "";
+                    let strOption = "";
 
-                strOption += "<option value = '0'>선택</option>";
+                    strOption += "<option value = '0'>선택</option>";
 
-                for (let i in data) {
-                    if (data[i].codeValue) {
-                        strOption += "<option value = '" + data[i].code + "'>" + data[i].codeValue + "</option>";
+                    for (let i in data) {
+                        if (data[i].codeValue) {
+                            strOption += "<option value = '" + data[i].code + "'>" + data[i].codeValue + "</option>";
+                        }
                     }
-                }
-                $('#sel_LicenseCode').empty();
-                $('#sel_LicenseCode').append(strOption);
+                    $('#sel_LicenseCode').empty();
+                    $('#sel_LicenseCode').append(strOption);
 
-                $("#sel_LicenseCode").val(licenseCode).prop("selected", true);
-
-
-                // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-                // 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-                // }
-            });// end fn_callApi
-            //END 면허종류============================================================
+                    $("#sel_LicenseCode").val(licenseCode).prop("selected", true);
 
 
-             } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-                 errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
-             }
+                    // } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+                    // 	errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+                    // }
+                });// end fn_callApi
+                //END 면허종류============================================================
+
+
+            } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
+                errorAlert('API ERROR', '조회중 에러가 발생했습니다. \r\n 관리자에게 문의하세요.');
+            }
         }
     });// end fn_callApi
     //START 면허종류============================================================
@@ -531,7 +531,6 @@ function initDetailInfo(seq) {
     // openIziModal(MODEL_NAME);
 
 }//end initDetailInfo
-
 
 
 // validation
@@ -555,11 +554,10 @@ function detailValidation(save_type){
                 let userName 			= $("#userName").val();								//이름
                 let userContact1        = $("#userContact1").val();							//연락처
                 let joinChannel 		= $("#joinChannel").val();							//계정타입
-                let userBirthday 		= $("#userBirthday").val();							//생년월일
+                let userBirthday 		= formatDate(getUserBirthday());      	            //생년월일
                 let userRole 			= $("#sel_userRole option:selected").val();			//권한
                 let sel_userStatusCode 	= $("#sel_userStatusCode option:selected").val();	//회원상태코드
                 let userGender 			= $("#sel_userGender option:selected").val();		//성별
-
 
                 if(isEmpty(userId)) { //is not empty
                     errorAlert('아이디', '아이디는 필수 입력값 입니다.');
@@ -582,8 +580,6 @@ function detailValidation(save_type){
                 if(isEmpty(userBirthday)) { //is not empty
                     errorAlert('생년월일', '생년월일은 필수 입력값 입니다.');
                     return;
-                }else {
-                    userBirthday = removeHypen(userBirthday);
                 }
 
                 if(isEmpty(userContact1)) {
@@ -645,11 +641,10 @@ function detailValidation(save_type){
 
                 let licenseCode  		= $("#sel_LicenseCode option:selected").val();	// 면허코드
                 let licenseNumber  		= $("#licenseNumber").val();  					// 운전면허 번호
-                let licenseExpiration  	= $("#licenseExpiration").val();  				// 적성검사만료일
-                let licenseIssueDt  	= $("#licenseIssueDt").val();  					// 면허 발급일
+                let licenseExpiration  	= formatDate(getLicenseExpiration());  		    // 적성검사만료일
+                let licenseIssueDt  	= formatDate(getLicenseIssueDt());				// 면허 발급일
                 let userLicenseOwnYn 	= 'N';											//
                 let licenseLocation     = '';											// 면허지역
-                let useYn				= 'Y';											// 사용여부
 
                 if(isEmpty(urIdx)) {
                     errorAlert('회원정보', '회원정보를 먼저 저장하여 주세요.');
@@ -786,28 +781,28 @@ function detailSubmit(save_type, req){
         // 200이라면 페이징을 구한다.
         if (res.code == 200) {
 
-        if(res!=null){
-            swal("저장 성공", { icon: "success"});
-            switch (save_type) {
-                case 'saveUser'://회원정보
-                    if( CRUD === 'insert') {
-                        let urIdx = res.urIdx;
-                        $("#urIdx").val(urIdx);
-                    }
-                    break;
-                case 'INSERTuserLicenseInfo'://운전면허
-                    if( CRUD === 'insert') {
-                        // $("#"+MODAL_NAME).iziModal('close');
-                    }
-                    break;
-            }//end switch
+            if(res!=null){
+                swal("저장 성공", { icon: "success"});
+                switch (save_type) {
+                    case 'saveUser'://회원정보
+                        if( CRUD === 'insert') {
+                            let urIdx = res.urIdx;
+                            $("#urIdx").val(urIdx);
+                        }
+                        break;
+                    case 'INSERTuserLicenseInfo'://운전면허
+                        if( CRUD === 'insert') {
+                            // $("#"+MODAL_NAME).iziModal('close');
+                        }
+                        break;
+                }//end switch
 
 
-            //left_location("/static/viewContents/member/integratedMember.html" , "" , "");
-        }
+                //left_location("/static/viewContents/member/integratedMember.html" , "" , "");
+            }
         } else { // 200이 아닐때 empty처리 error처리 등을 기록한다.
-        	errorAlert('저장 실패', '관리자에게 문의하세요.');
-        	return;
+            errorAlert('저장 실패', '관리자에게 문의하세요.');
+            return;
         }
     });// end fn_callApi
 }
@@ -850,10 +845,6 @@ function openCreateMember(){
     $('#userLicenseOwnYn').val('');
     $('#licenseLocation').val('');
 
-//	initDatePicker('#userBirthday' , '0');
-//	initDatePicker('#licenseExpiration' , '0');
-//	initDatePicker('#licenseIssueDt' , '0');
-
     initModalSelectBox(null);
 
 }
@@ -879,9 +870,9 @@ function deleteUserInfo() {
         fn_callApi( method, target, req, function(response) {
             let res = response;
             if (res.code == 200) {
-            location.reload();
-            alert("회원 탈퇴가 완료되었습니다.");
-            self.close();
+                location.reload();
+                alert("회원 탈퇴가 완료되었습니다.");
+                self.close();
             }
         });
 

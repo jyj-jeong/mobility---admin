@@ -151,13 +151,6 @@
                                             <label>연락처</label>
                                             <input type="text" class="form-control"  placeholder="연락처" value="" id="staffContact1" onkeypress="inNumber();"/>
                                         </div>
-                                        <div class="col-lg-6 mb-3 float-l flex-1" >
-                                            <label>사용유무</label>
-                                            <select id="sel_staffdelYn" name="sel_staffdelYn" class="custom-select" >
-                                                <option value="N">예</option>
-                                                <option value="Y">아니요</option>
-                                            </select>
-                                        </div>
                                         <!-- <div class="col-lg-3 mb-3 float-l">
                                              <label>비밀번호</label>
                                         </div>	 -->
@@ -184,8 +177,34 @@
                                 <div class="card-body"><h5 class="card-title">수수료 (%)</h5>
                                     <div class="col-lg-12 mb-3 float-l flex-1">
                                         <label>부가세 포함 수수료</label>
-                                        <input type="text" class="form-control" placeholder="부가세 포함 수수료" value="" id="commissionPer" />
+                                        <input type="text" class="form-control" id="commissionPer" th:value="15.0" />
+                                        <div id="commissionPerText" class="invalid-feedback"></div>
                                     </div>
+                                    <script>
+                                        var commissionPer = $('#commissionPer');
+
+                                        commissionPer.keyup(function () {
+                                            var prev = "";
+                                            var regexp = /^\d*[.]\d{2}$/;
+
+                                            if (commissionPer.val() !== '' && !$.isNumeric(commissionPer.val())){
+                                                $('#commissionPerText').text('수수료는 숫자만 입력 가능합니다.');
+                                                commissionPer.addClass('is-invalid');
+                                            }else {
+                                                commissionPer.removeClass('is-invalid');
+
+                                                if(commissionPer.val().indexOf('.') !== -1){
+                                                    var str = commissionPer.val().substring(commissionPer.val().lastIndexOf(".")+1);
+                                                    if (str.length > 1){
+                                                        $('#commissionPerText').text('소숫점 첫째자리까지만 입력이 가능합니다.');
+                                                        commissionPer.addClass('is-invalid');
+                                                    }
+                                                }
+                                            }
+
+                                        });
+
+                                    </script>
                                     <!-- <div class="col-lg-3 mb-3 float-l flex-1">
                                          <label>세금계산서 발행주체</label>
                                          <input type="text" class="form-control"  placeholder="세금계산서발행주체" value="" id="taxInvoiceCode"/>
@@ -302,11 +321,11 @@
                                 <input type="hidden" id="minIdx" name="minIdx" />
                                 <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
-                                    <input type="date" id="minimumStartDt" class="form-control" />
+                                    <div id="minimumStartDt" name="minimumStartDt" class="btn form-control"></div>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
-                                    <input type="date" id="minimumEndDt" placeholder="종료일" value="" class="form-control" />
+                                    <div id="minimumEndDt" name="minimumEndDt" class="btn form-control"></div>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>최소시간</label>
@@ -346,11 +365,11 @@
                                 <input type="hidden" id="holIdx" name="minIdx" />
                                 <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
-                                    <input type="date" id="holidayStartDt" placeholder="시작일" value="" class="form-control" />
+                                    <div id="holidayStartDt" name="holidayStartDt" class="btn form-control"></div>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
-                                    <input type="date" id="holidayEndDt" placeholder="종료일" value="" class="form-control" />
+                                    <div id="holidayEndDt" name="holidayEndDt" class="btn form-control"></div>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>휴일명</label>
@@ -467,6 +486,67 @@
         initDetailInfo(rtIdx)
     }
 
+    var minimumStartDt = new WinkelCalendar({
+        container: 'minimumStartDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var minimumEndDt = new WinkelCalendar({
+        container: 'minimumEndDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var holidayStartDt = new WinkelCalendar({
+        container: 'holidayStartDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    var holidayEndDt = new WinkelCalendar({
+        container: 'holidayEndDt',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일"
+    });
+
+    function getMinimumStartDt() {
+        return minimumStartDt.date;
+    }
+
+    function getMinimumEndDt() {
+        return minimumEndDt.date;
+    }
+
+    function getHolidayStartDt() {
+        return holidayStartDt.date;
+    }
+
+    function getHolidayEndDt() {
+        return holidayEndDt.date;
+    }
+
+    function initDatePicker(id, value) {
+        switch (id) {
+            case 'minimumStartDt':
+                minimumStartDt.setDate(new Date(value));
+                break;
+            case 'minimumEndDt':
+                minimumEndDt.setDate(new Date(value));
+                break;
+            case 'holidayStartDt':
+                holidayStartDt.setDate(new Date(value));
+                break;
+            case 'holidayEndDt':
+                holidayEndDt.setDate(new Date(value));
+                break;
+
+        }
+    }
 
 </script>
 </body>

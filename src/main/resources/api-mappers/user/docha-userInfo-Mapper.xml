@@ -92,15 +92,15 @@
             <!-- 검색조건 START -->
             <!-- 회원번호 -->
             <if test="urIdx != null and urIdx != ''">
-                <![CDATA[  AND A.UR_IDX like #{urIdx} ]]>
+                <![CDATA[  AND A.UR_IDX = #{urIdx} ]]>
             </if>
             <!-- 아이디 -->
-            <if test="userId != null and userId != ''">
-                <![CDATA[   AND A.USER_ID like #{userId} ]]>
+            <if test="userId != null">
+                <![CDATA[   AND A.USER_ID = #{userId} ]]>
             </if>
             <!-- 이름 -->
             <if test="userName != null and userName != ''">
-                <![CDATA[	AND A.USER_NAME like #{userName} ]]>
+                <![CDATA[	AND A.USER_NAME = #{userName} ]]>
             </if>
             <!-- 생년월일 -->
             <if test="userBirthday != null and userBirthday != ''">
