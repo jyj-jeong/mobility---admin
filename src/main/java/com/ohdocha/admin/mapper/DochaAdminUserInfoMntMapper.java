@@ -1,5 +1,6 @@
 package com.ohdocha.admin.mapper;
 
+import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
 import com.ohdocha.admin.domain.user.*;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -34,6 +35,10 @@ public interface DochaAdminUserInfoMntMapper {
      * 사용자 면허정보 Update
      * */
     public int insertUserLicenseInfo(DochaAdminUserInfoUserLicenseInfoRequest reqParam);
+
+    public DochaAdminUserInfoUserLicenseInfoResponse selectLicenseImg(String ulIdx);
+
+    public int updateLicenseImg(DochaAdminUserInfoUserLicenseInfoRequest carModelDetailRequest);
 
 
     /*

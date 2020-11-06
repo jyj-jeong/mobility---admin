@@ -21,7 +21,8 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">회원사</h6>
+                        <h6 th:if="${CRUD == 'insert'}" class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')">회원사 - 신규등록</h6>
+                        <h6 th:if="${CRUD == 'modify'}" id="rentShopTitle" class="m-0 font-weight-bold text-primary" style="cursor: pointer" onclick="changeCardView('rentShopInfoCard')"></h6>
                     </div>
 
                     <div class="row">
@@ -162,12 +163,7 @@
                                         </div>
                                         <div class="col-lg-12 mb-3 float-l">
                                             <table id="rentStaffList" class="table table-hover" data-show-toggle="false" data-sorting="true">
-                                                <thead>
-
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
+                                                
                                             </table>
                                         </div>
                                     </div>
@@ -234,7 +230,7 @@
                                 </div>
                                 <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     평일 영업시간<br>
-                                    00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
+                                    00:00 ~ 00:00 이면 영업 하지 않음 , 00:00 ~ 24:00 24시간 영업
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l">
                                     <label>주말/공휴일 영업시간 시작</label>
@@ -248,7 +244,7 @@
                                 </div>
                                 <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     주말/공휴일 영업시간<br>
-                                    00시~23시 이면 24시간영업, 00시~00시 이면 영업하지 않음
+                                    00:00 ~ 00:00 이면 영업 하지 않음 , 00:00 ~ 24:00 24시간 영업
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>평일 왕복배달가능 시간 시작</label>
@@ -262,7 +258,7 @@
                                 </div>
                                 <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     평일 왕복배달가능 시간<br>
-                                    00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
+                                    00:00 ~ 00:00 이면 영업 하지 않음 , 00:00 ~ 24:00 24시간 영업
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l">
                                     <label>주말/공휴일 왕복배달가능 시작</label>
@@ -276,7 +272,7 @@
                                 </div>
                                 <div class="col-lg-6 mb-3 float-l flex-1" ><h5 class="card-title" style="color:blue">설명</h5>
                                     주말/공휴일 왕복배달가능 시간<br>
-                                    00시~23시 이면 24시간 배달, 00시~00시 이면 배달하지 않음
+                                    00:00 ~ 00:00 이면 영업 하지 않음 , 00:00 ~ 24:00 24시간 영업
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l " >
                                     <br><p>
@@ -321,11 +317,11 @@
                                 <input type="hidden" id="minIdx" name="minIdx" />
                                 <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
-                                    <div id="minimumStartDt" name="minimumStartDt" class="btn form-control"></div>
+                                    <a id="minimumStartDt" name="minimumStartDt" ></a>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
-                                    <div id="minimumEndDt" name="minimumEndDt" class="btn form-control"></div>
+                                    <a id="minimumEndDt" name="minimumEndDt"></a>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>최소시간</label>
@@ -365,11 +361,11 @@
                                 <input type="hidden" id="holIdx" name="minIdx" />
                                 <div class="col-lg-3 mb-3 float-l flex-1">
                                     <label>시작일</label>
-                                    <div id="holidayStartDt" name="holidayStartDt" class="btn form-control"></div>
+                                    <a id="holidayStartDt" name="holidayStartDt"></a>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>종료일</label>
-                                    <div id="holidayEndDt" name="holidayEndDt" class="btn form-control"></div>
+                                    <a id="holidayEndDt" name="holidayEndDt"></a>
                                 </div>
                                 <div class="col-lg-3 mb-3 float-l flex-1" >
                                     <label>휴일명</label>
@@ -430,7 +426,7 @@
                             <button class="btn btn-primary" type="button" onclick="movieMenu('calculate');" id="btnCalculate">정산관리</button>
                             <button class="btn btn-primary" type="button" onclick="movieMenu('regCar');">등록차량</button>
                             <button class="btn btn-primary" type="button" onclick="movieMenu('reserveMnt');">예약내역</button>
-                            <button class="btn btn-primary" type="button" onclick="movieMenu('');">후기</button>
+                            <button class="btn btn-primary" type="button" onclick="movieMenu('review');">후기</button>
                             <button class="btn btn-danger" type="button" onclick="self.close()">닫기</button>
                         </div>
                     </div>

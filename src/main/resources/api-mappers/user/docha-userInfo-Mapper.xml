@@ -73,6 +73,10 @@
 							,  IFNULL(C.LICENSE_NUMBER     , '' )  AS LICENSE_NUMBER                  /*   면허번호                     */
 							,  IFNULL(C.LICENSE_CODE       , '' )  AS LICENSE_CODE                    /*   면허코드                     */
 							,  IFNULL(C.LICENSE_LOCATION   , '' )  AS LICENSE_LOCATION                /*   면허지역                     */
+							,  IFNULL(C.LICENSE_IMG_NAME   , '' )  AS LICENSE_IMG_NAME                /*   면허사진                     */
+							,  IFNULL(C.LICENSE_NUMBER2   , '' )  AS LICENSE_NUMBER2                  /*   면허번호2                     */
+							,  IFNULL(C.LICENSE_USER_BIRTHDAY   , '' )  AS LICENSE_USER_BIRTHDAY      /*   면허자 생년월일                     */
+							,  IFNULL(C.LICENSE_USER_NAME   , '' )  AS LICENSE_USER_NAME      /*   면허자 이름                    */
 							,  IFNULL(C.LICENSE_EXPIRATION , '' )  AS LICENSE_EXPIRATION              /*   갱신기간                     */
 							,  IFNULL(C.LICENSE_ISSUE_DT   , '' )  AS LICENSE_ISSUE_DT                /*   발급일                        */
 							,  IFNULL(C.LICENSE_OWNER_NAME , '' )  AS LICENSE_OWNER_NAME              /*   면허소유자명                 */
@@ -199,6 +203,32 @@
 	]]>
     </insert>
 
+    <select id="selectLicenseImg" parameterType="String" resultType="userLicenseInfoResponse">
+        <![CDATA[
+				SELECT
+						  	   IFNULL(UR_IDX   , '') AS UR_IDX    /*모델 IDX*/
+							,  IFNULL(LICENSE_IMG_NAME   , '') AS LICENSE_IMG_NAME    /*이미지 IDX*/
+				  FROM DC_USER_LICENSE_INFO
+                      ]]>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <![CDATA[ AND UL_IDX =#{ulIdx}        ]]>
+
+        </trim>
+    </select>
+
+    <!-- 면허 사진정보 UPDATE -->
+    <update  id="updateLicenseImg" parameterType="userLicenseInfoRequest">
+        <![CDATA[ UPDATE DC_USER_LICENSE_INFO ]]>
+        <trim prefix="SET" suffixOverrides=",">
+            <!-- 차량 기본정보 -->
+            <if test="licenseImageName      != null"><![CDATA[   LICENSE_IMG_NAME          = #{licenseImageName}        ]]></if>    <!-- imgIDX -->
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="ulIdx != null and ulIdx != ''">
+                <![CDATA[ UL_IDX = #{ulIdx} ]]>
+            </if>
+        </trim>
+    </update>
 
     <select id="selectLicenseInfo" parameterType="userLicenseInfoRequest"
             resultType="userLicenseInfoResponse">
@@ -222,6 +252,7 @@
 					WHERE T1.UR_IDX = #{urIdx}
 			]]>
     </select>
+
     <select id="selectDuplicateLicenseInfo" parameterType="userLicenseInfoRequest"
             resultType="int">
         <![CDATA[
@@ -237,7 +268,7 @@
         </trim>
     </select>
 
-    <!-- 사용자 면허정보 INSERT -->
+    <!-- 사용자 정보 INSERT -->
     <insert  id="insertUserInfo" parameterType="insertUserInfoRequest">
 	<![CDATA[
 				INSERT INTO DC_USER_INFO

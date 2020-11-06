@@ -493,6 +493,7 @@ function initDetailInfo(seq){
 		$('#companyName').append(companyNameItem);
 		$('#companyName').attr('disabled', true);
 
+		$('#regCarTitle').text('차량등록 - ' + companyName + ' / ' + branchName);
 		$("#crIdx").val(crIdx);
 		$("#carNumber").val(carNumber);
 		$("#year").val(year);
