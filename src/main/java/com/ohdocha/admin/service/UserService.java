@@ -18,6 +18,10 @@ public interface UserService {
 
     void addUserLicenseInfo(ServiceMessage message);                // 회원 면허정보 추가
 
+    void addExtraUserLicenseInfo(ServiceMessage message);                // 회원 면허정보2 추가
+
+    void addUserLicenseImageInfo(ServiceMessage message);           // 회원 면허사진 추가
+
     void getUserLicenseInfo(ServiceMessage message);                // 회원 면허정보 조회
 
     void updateUserLicenseInfo(ServiceMessage message);             // 회원 면허정보 수정
@@ -27,6 +31,8 @@ public interface UserService {
     void getRentShopList(ServiceMessage message);                   // 회원사 리스트 조회
 
     void addRentShop(ServiceMessage message);                       // 회원사 등록
+
+    void updateDcRentCompany(ServiceMessage message);                       // 회원사 수정
 
     void getRentShopDetail(ServiceMessage message);                 // 회원사 조회
 

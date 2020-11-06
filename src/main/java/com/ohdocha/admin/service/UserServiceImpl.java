@@ -1,26 +1,34 @@
 package com.ohdocha.admin.service;
 
+import com.ohdocha.admin.config.Properties;
 import com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoRequest;
 import com.ohdocha.admin.domain.admin.DochaAdminAdminUserInfoResponse;
 import com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateRequest;
 import com.ohdocha.admin.domain.authTemplate.DochaAdminAuthTemplateResponse;
+import com.ohdocha.admin.domain.car.model.DochaAdminCarModelDetailRequest;
+import com.ohdocha.admin.domain.car.regcar.DochaAdminRegCarDetailRequest;
 import com.ohdocha.admin.domain.menu.DochaAdminMenuTemplateResponse;
 import com.ohdocha.admin.domain.rentCompany.*;
 import com.ohdocha.admin.domain.user.*;
+import com.ohdocha.admin.exception.BadRequestException;
 import com.ohdocha.admin.mapper.DochaAdminAdminUserInfoMntMapper;
 import com.ohdocha.admin.mapper.DochaAdminAuthTemplateMapper;
 import com.ohdocha.admin.mapper.DochaAdminRentCompanyInfoMapper;
 import com.ohdocha.admin.mapper.DochaAdminUserInfoMntMapper;
+import com.ohdocha.admin.util.FileHelper;
 import com.ohdocha.admin.util.KeyMaker;
 import com.ohdocha.admin.util.ServiceMessage;
 import com.ohdocha.admin.util.TextUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @AllArgsConstructor
@@ -31,6 +39,7 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     private final DochaAdminRentCompanyInfoMapper rentCompanyInfoMapper;
     private final DochaAdminAdminUserInfoMntMapper adminUserInfoMntMapper;
     private final DochaAdminAuthTemplateMapper adminAuthTemplateMapper;
+    private final Properties properties;
 
     @Override
     public void getIntegratedUserList(ServiceMessage message) {
@@ -181,6 +190,113 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     }
 
     @Override
+    public void addExtraUserLicenseInfo(ServiceMessage message) {
+        DochaAdminUserInfoUserLicenseInfoRequest insertUserLicenseInfo = message.getObject("insertUserLicenseInfo", DochaAdminUserInfoUserLicenseInfoRequest.class);
+
+        String ulIdx = TextUtils.getKeyDefault("UL");
+        insertUserLicenseInfo.setUlIdx(ulIdx);
+
+        int res = userInfoMntMapper.insertUserLicenseInfo(insertUserLicenseInfo);
+
+        if (res == 1){
+            message.addData("code", 200);
+        }else {
+            message.addData("code", 400);
+        }
+    }
+
+    @Override
+    public void addUserLicenseImageInfo(ServiceMessage message) {
+        String ulIdx = message.getString("ulIdx", "");
+        DochaAdminUserInfoUserLicenseInfoResponse licenseInfoResponse;
+
+        Object uploadImageObj = message.get("uploadImage");
+        if (!(uploadImageObj instanceof MultipartFile))
+            throw new BadRequestException(IMAGE_NOT_MULTIPART_FILE, IMAGE_NOT_MULTIPART_FILE_MSG);
+
+        MultipartFile uploadImage = (MultipartFile) uploadImageObj;
+
+        if (uploadImage.isEmpty())
+            throw new BadRequestException(IMAGE_IS_EMPTY, IMAGE_IS_EMPTY_MSG);
+
+        String uploadImageName = uploadImage.getOriginalFilename();
+        if (uploadImageName == null || uploadImageName.isEmpty())
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 파일이름이 없습니다.)");
+
+        String uploadImageMime = uploadImage.getContentType();
+        if (uploadImageMime == null || uploadImageMime.isEmpty() || !uploadImageMime.contains("image/"))
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 MIME 이 올바르지 않습니다.)");
+
+        int extensionIndexOf = uploadImageName.lastIndexOf('.');
+        if (extensionIndexOf == -1)
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(확장자가 존재하지 않습니다.)");
+
+        String uploadImageExtension = uploadImageName.substring(extensionIndexOf).replaceAll("\\.", "").toLowerCase();
+        if (!properties.getSupportImageExtension().contains(uploadImageExtension))
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(지원하지 않는 이미지 확장자 입니다.)");
+
+        long uploadImageSize = uploadImage.getSize();
+        if (uploadImageSize > properties.getUploadImageSize())
+            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 크기가 20MB를 초과 합니다.)");
+
+        // 파일 랜덤 UUID 생성 (파일 명 중복시 파일 생성 안됌)
+        String saveImgName = UUID.randomUUID().toString();
+        File file = new File(properties.getTempFolderPath() + "license/" + saveImgName + "." + uploadImageExtension);
+        FileHelper.makeFolder(file.getParentFile());
+
+        // 해당 면허 정보를 가져옴 ( 이미지 파일 체크하기 위함 )
+        licenseInfoResponse = userInfoMntMapper.selectLicenseImg(ulIdx);
+
+        // 이미 DB에 img 정보가 있는지 여부
+        if (licenseInfoResponse.getLicenseImgName() == null || licenseInfoResponse.getLicenseImgName().equals("")) {
+            // 저장된 이미지가 없을 경우
+            try {
+                // 바로 이미지 생성
+                file.createNewFile();
+                uploadImage.transferTo(file);
+            } catch (Exception e) {
+                throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+            }
+        } else {
+            // 현재 DB에 이미지가 있으면
+            File FileList = new File(properties.getTempFolderPath() + "license/");
+            String[] fileList = FileList.list();
+            for(int i = 0; i<fileList.length; i++){
+                // DB에서 파일 명을 가져와서 일치하는 것이 있는지 검사
+                String FileName = fileList[i];
+
+                if(FileName.contains(licenseInfoResponse.getLicenseImgName())){
+                    File deleteFile = new File(properties.getTempFolderPath() + "license/" + licenseInfoResponse.getLicenseImgName());
+                    // path에서 이미 있는 파일을 제거 후
+                    deleteFile.delete();
+                }
+            }
+            try {
+                // 이미지 생성
+                file.createNewFile();
+                uploadImage.transferTo(file);
+            } catch (Exception e) {
+                throw new BadRequestException(UNKNOWN_EXCEPTION, "파일 생성 실패");
+            }
+        }
+
+        DochaAdminUserInfoUserLicenseInfoRequest licenseInfoRequest = new DochaAdminUserInfoUserLicenseInfoRequest();
+        licenseInfoRequest.setUlIdx(ulIdx);
+        licenseInfoRequest.setLicenseImageName(saveImgName + "." + uploadImageExtension);
+
+        // 파일을 path에 저장 후, DB에 파일 명 저장
+        userInfoMntMapper.updateLicenseImg(licenseInfoRequest);
+
+//        DochaAdminRegCarDetailRequest regCarDetailRequest = new DochaAdminRegCarDetailRequest();
+//
+//        // 미리 등록되어있던 차량들의 이미지도 수정
+//        regCarDetailRequest.setImgIdx(saveImgName + "." + uploadImageExtension);
+//        regCarDetailRequest.setMdIdx(carModelDetailRequest.getMdIdx());
+//        regCarMapper.updateRegCarImgByMdIdx(regCarDetailRequest);
+
+    }
+
+    @Override
     public void addRentShop(ServiceMessage message) {
         DochaAdminRentCompanyDetailRequest rentCompanyDetailRequest = message.getObject("rentCompanyDetailRequest", DochaAdminRentCompanyDetailRequest.class);
 
@@ -195,6 +311,21 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
         }else {
             message.addData("code", 400);
             message.addData("errMsg", "회원사 정보 저장에 실패했습니다.");
+        }
+    }
+
+    @Override
+    public void updateDcRentCompany(ServiceMessage message) {
+        DochaAdminRentCompanyDetailRequest rentCompanyDetailRequest = message.getObject("rentCompanyDetailRequest", DochaAdminRentCompanyDetailRequest.class);
+
+        int res = rentCompanyInfoMapper.updateDcRentCompany(rentCompanyDetailRequest);
+
+        if (res == 1){
+            message.addData("code", 200);
+            message.addData("rtIdx",rentCompanyDetailRequest.getRtIdx());
+        }else {
+            message.addData("code", 400);
+            message.addData("errMsg", "회원사 정보 수정에 실패했습니다.");
         }
     }
 
@@ -365,9 +496,9 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     @Override
     public void selectRentCompanyHoliday(ServiceMessage message) {
         DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String today = simpleDateFormat.format(new Date());
-        rentCompanyHolidayRequest.setHolidayStartDt(today);
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String today = simpleDateFormat.format(new Date());
+//        rentCompanyHolidayRequest.setHolidayStartDt(today);
 
         List<DochaAdminRentCompanyHolidayResponse> rentCompanyHolidayResponseList = rentCompanyInfoMapper.selectRentCompanyHoliday(rentCompanyHolidayRequest);
 

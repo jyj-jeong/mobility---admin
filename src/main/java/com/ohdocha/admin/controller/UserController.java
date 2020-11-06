@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -137,6 +138,32 @@ public class UserController extends ControllerExtension {
         return serviceMessage;
     }
 
+    /* 회원 면허정보 2 등록 */
+    @PostMapping(value = "/api/v1.0/insertAdditionalLicenseInfo.do")
+    @ResponseBody
+    public Object insertAdditionalLicenseInfo(@RequestBody DochaAdminUserInfoUserLicenseInfoRequest insertUserLicenseInfo, HttpServletRequest request) {
+
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("insertUserLicenseInfo", insertUserLicenseInfo);
+
+        userService.addUserLicenseInfo(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 면허 사진 등록 */
+    @PostMapping(value = "/api/v1.0/uploadLicenseImage.do")
+    @ResponseBody
+    public Object uploadCarImage(@RequestParam("image") MultipartFile uploadImage, String ulIdx, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("uploadImage", uploadImage)
+                .addData("ulIdx", ulIdx);
+
+        userService.addUserLicenseImageInfo(serviceMessage);
+
+        return serviceMessage;
+    }
+
     /* 회원 면허정보 조회 */
     @PostMapping(value = "/api/v1.0/userLicenseInfo.json")
     @ResponseBody
@@ -193,6 +220,18 @@ public class UserController extends ControllerExtension {
         serviceMessage.addData("rentCompanyDetailRequest", rentCompanyDetailRequest);
 
         userService.addRentShop(serviceMessage);
+
+        return serviceMessage;
+    }
+
+    /* 회원사 수정 */
+    @PostMapping(value = "/api/v1.0/updateDcRentCompany.do")
+    @ResponseBody
+    public Object updateDcRentCompany(@RequestBody DochaAdminRentCompanyDetailRequest rentCompanyDetailRequest, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("rentCompanyDetailRequest", rentCompanyDetailRequest);
+
+        userService.updateDcRentCompany(serviceMessage);
 
         return serviceMessage;
     }

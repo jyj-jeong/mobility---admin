@@ -26,10 +26,10 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-6 mb-3">
-                                <div id="holiday" name="holiday" class="btn form-control"></div>
+                                <a id="holiday" name="holiday" class=""></a>
                             </div>
                             <div class="col-2 mb-3">
-                                <button id="btnSave" class="btn btn-primary" type="button" onclick="saveHoliday()">등록</button>
+                                <buttzon id="btnSave" class="btn btn-primary" type="button" onclick="saveHoliday()">등록</buttzon>
                             </div>
                         </div>
 
@@ -117,12 +117,12 @@
     });
 
     function saveHoliday() {
-        var holidayDt = holiday.date;
+        var holidayDt = formatDate(holiday.date);
 
         if (isEmpty(holidayDt)){
             errorAlert('전체휴일','날짜를 선택해주세요');
             return;
-        }else if (holidayDt < new Date()){
+        }else if (holiday.date < new Date()){
             errorAlert('전체휴일','전체휴무일은 과거가 될 수 없습니다.');
             return;
         }

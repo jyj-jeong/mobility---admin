@@ -422,10 +422,9 @@ function initDetailInfo(seq) {
             }
 
             $("#userContact1").val(userContact1);
-            $("#userRegDt").val(regDt);
 
+            initDatePicker('userRegDt' , userRegDt);
             initDatePicker('userBirthday' , userBirthday);
-            // $("#userBirthday").val(userBirthday);
 
             initModalSelectBox(data);
 
@@ -479,8 +478,8 @@ function initDetailInfo(seq) {
                 $('#licenseIssueDt').val(licenseIssueDt);
 
                 //면허정보 조회
-			initDatePicker('licenseExpiration' , licenseExpiration);
-			initDatePicker('licenseIssueDt' , licenseIssueDt);
+                initDatePicker('licenseExpiration' , licenseExpiration);
+                initDatePicker('licenseIssueDt' , licenseIssueDt);
 
                 //START 면허종류============================================================
                 let target = 'commonCodeInfo';
@@ -644,7 +643,6 @@ function detailValidation(save_type){
                 let licenseExpiration  	= formatDate(getLicenseExpiration());  		    // 적성검사만료일
                 let licenseIssueDt  	= formatDate(getLicenseIssueDt());				// 면허 발급일
                 let userLicenseOwnYn 	= 'N';											//
-                let licenseLocation     = '';											// 면허지역
 
                 if(isEmpty(urIdx)) {
                     errorAlert('회원정보', '회원정보를 먼저 저장하여 주세요.');
@@ -724,6 +722,71 @@ function detailValidation(save_type){
                     call_before_save(title, text, icon, cancel_text, save_type, req);
                 });// end fn_callApi
                 break;
+            case 'saveAdditionalLicenseInfo' :
+                let licenseLocation  		= $("#sel_LicenseLocation option:selected").val();	// 면허코드
+                let licenseNumber2  		= $("#licenseNumber2").val();  					// 운전면허 번호
+                let licenseUserBirthday  	= formatDate(getLicenseUserBirthday());  		    // 면허자 생년월일
+                let licenseUserName  	    = $("#licenseUserName").val(); 			        // 면허자 성명
+
+                if(isEmpty(licenseLocation)) { //is not empty
+                    errorAlert('면허코드', '면허코드는 필수 입력값 입니다.');
+                    $('#licenseLocation').focus();
+                    return;
+                }
+
+                if(isEmpty(licenseNumber2)) { //is not empty
+                    errorAlert('번호', '운전면허 번호는 필수 입력값 입니다.');
+                    $('#licenseNumber2').focus();
+                    return;
+                }
+
+                if(isEmpty(licenseUserBirthday)) { //is not empty
+                    errorAlert('생년월일', '생년월일은 필수 입력값 입니다.');
+                    $('#licenseUserBirthday').focus();
+                    return;
+                }
+
+                if(isEmpty(licenseUserName)) { //is not empty
+                    errorAlert('성명', '성명은 필수 입력값 입니다.');
+                    $('#licenseUserName').focus();
+                    return;
+                }
+
+                save_type = 'saveAdditionalLicenseInfo';
+
+                if(CRUD == 'modify') {
+                    if(isEmpty(urIdx)) {
+                        errorAlert('API ERROR', '회원정보가 존재하지 않습니다.');
+                        return;
+                    }
+                    req = {
+                        urIdx : urIdx,
+                        licenseLocation  	 : licenseLocation  	,
+                        licenseNumber2  	 : licenseNumber2  	,
+                        licenseUserBirthday  : licenseUserBirthday ,
+                        licenseUserName : licenseUserName,
+                        modId : urIdx
+                    };
+                }else if (CRUD == 'insert') {
+                    req = {
+                        urIdx : urIdx,
+                        licenseLocation  	 : licenseLocation  	,
+                        licenseNumber2  	 : licenseNumber2  	,
+                        licenseUserBirthday  : licenseUserBirthday ,
+                        licenseUserName : licenseUserName,
+                        regId : urIdx
+                    };
+                }
+
+
+                title = '면허정보 저장';
+                text = '저장하시겠습니까?'
+                icon = 'info';
+                cancel_text = '취소하셨습니다.';
+
+                call_before_save(title, text, icon, cancel_text, save_type, req);
+                break;
+
 
         }//end switch
     }//end save_type check
@@ -762,6 +825,10 @@ function detailSubmit(save_type, req){
         case 'INSERTuserLicenseInfo'://면허정보  INSERT
             target = 'insertUserLicenseInfo';
             method = 'insert';
+            break;
+        case 'saveAdditionalLicenseInfo':
+            target = 'insertAdditionalLicenseInfo';
+            method = "insert";
             break;
     }//end switch
 
@@ -896,10 +963,10 @@ function userContactAutoHyphen(){
     autoHyphenFromNumber('phone','userContact1', num);
 }
 
-function licenseNumAutoHyphen() {
-    let num = $("#licenseNumber").val();
+function licenseNumAutoHyphen(id) {
+    let num = $("#" + id).val();
 
-    autoHyphenFromNumber('license','licenseNumber', num);
+    autoHyphenFromNumber('license',id, num);
 }
 
 /*
