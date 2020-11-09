@@ -632,6 +632,7 @@
 			, 	IFNULL(HOLIDAY_NAME		, '') AS HOLIDAY_NAME       /*휴일명*/
 			, 	IFNULL(DEL_YN          	, '') AS DEL_YN             /*삭제여부*/
 			FROM DC_HOLIDAYS
+
 		  ]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rtIdx != null and rtIdx != ''">
@@ -647,6 +648,7 @@
 				AND <![CDATA[ HOLIDAY_START_DT >= #{holidayStartDt} ]]>
 			</if>
 		</trim>
+		<![CDATA[ ORDER BY HOLIDAY_START_DT ]]>
 	</select>
 
 	<update  id="updateRentCompanyHoliday" parameterType="RentCompanyHolidayRequest">

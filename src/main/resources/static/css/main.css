@@ -1,5 +1,9 @@
 html {
-    font-size: 14px; // 기본 폰트 사이즈 지정
+    font-size: 14px;
+}
+
+html, body{
+    height: 100%;
 }
 
 table > thead tr th{

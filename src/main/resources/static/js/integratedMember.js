@@ -26,22 +26,19 @@ var MODEL_WIDTH = 1500;
 var CRUD = '';
 var CURRENT_PAGE = 0;
 
-var GLOBAL_LOGIN_USER_ROLE = 'RA';
-var GLOBAL_LOGIN_USER_IDX = 'ur';
+var GLOBAL_LOGIN_USER_IDX;
+var GLOBAL_LOGIN_USER_ROLE;
+
+var today = new Date();
 
 function initializingPageData() {
     loadApi(null, null);
     initSelectBox();
     bindEvent();
+    bindEvent();
 }
 
 function loadApi(page, displayPageNum, division) {
-
-    let _rtIdx = '';
-
-    if (GLOBAL_LOGIN_USER_ROLE != 'RA') {
-        _rtIdx = GLOBAL_LOGIN_RT_IDX;
-    }
 
     let req = {
     };
@@ -367,24 +364,9 @@ function fn_search(){
 /* =========================== detail function start====================================== */
 
 // init
-function initDetailInfo(seq) {
+function initDetailInfo(urIdx) {
 
-//	swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
-//	if(true){
-//		return;
-//	}
-
-    let _urIdx = '';
-
-//	if(!isEmpty(sessionStorage.getItem('seq'))) {
-//		sessionStorage.removeItem('seq');
-//	} else {
-//		sessionStorage.setItem('seq', seq);
-//		
-//		seq = sessionStorage.getItem('seq');
-//	}
-
-    _urIdx = seq;
+    let _urIdx = urIdx;
 
     let req = {
         urIdx : _urIdx
@@ -407,9 +389,10 @@ function initDetailInfo(seq) {
             let userId 			= data.userId;
             let userName 		= data.userName;
             let joinChannel 	= data.joinChannel;
-            let userBirthday 	= YMDFormatter(data.userBirthday);
+            let userBirthday 	= data.userBirthday;
             let userContact1 	= phoneFomatter(data.userContact1);
-            let regDt 			= dateFormatter(data.regDt , "-");
+            let regDt 			= dateFormatter(data.regDt , "-") != null ? dateFormatter(data.regDt , "-") : new Date();
+            let useYn 			= data.useYn == 1? true : false ;
 
 
             $("#urIdx").val(urIdx);
@@ -423,8 +406,10 @@ function initDetailInfo(seq) {
 
             $("#userContact1").val(userContact1);
 
-            initDatePicker('userRegDt' , userRegDt);
+            initDatePicker('userRegDt' , regDt);
             initDatePicker('userBirthday' , userBirthday);
+
+            $('input:checkbox[id="useYn"]').prop("checked", useYn);
 
             initModalSelectBox(data);
 
@@ -451,33 +436,52 @@ function initDetailInfo(seq) {
 
             var data = res.result[0];
 
+            let ulIdx  		= '';        // 면허인덱스
             let licenseCode  		= '';// 면허코드
             let licenseNumber  		= '';// 운전면허 번호
             let licenseExpiration  	= '';// 적성검사만료일
             let licenseIssueDt  	= '';// 면허 발급일
             let userLicenseOwnYn 	= '';
             let licenseLocation     = '';// 면허지역
-            let useYn				= '';// 사용여부
+            let licenseImgName     = '';// 면허사진
+            let licenseUserBirthday     = '';// 면허자 생일
+            let licenseNumber2     = '';// 면허번호2
+            let licenseUserName     = '';// 면허자 이름
 
             if(CRUD =='modify') {
                 if (data != null) {
+                    ulIdx = data.ulIdx;
                     licenseCode = data.licenseCode;
                     licenseNumber = data.licenseNumber;
-                    licenseExpiration = data.licenseExpiration;
-                    licenseIssueDt = data.licenseIssueDt;
-                    userLicenseOwnYn = data.userLicenseOwnYn;
+                    licenseExpiration = data.licenseExpiration !== "" ? data.licenseExpiration : new Date();
+                    licenseIssueDt = data.licenseIssueDt !== "" ? data.licenseIssueDt : new Date();
                     licenseLocation = data.licenseLocation;
-                    useYn = data.useYn;
-
+                    licenseImgName = data.licenseImgName;
+                    licenseUserBirthday = data.licenseUserBirthday !== "" ? data.licenseUserBirthday : new Date() ;
+                    licenseNumber2 = data.licenseNumber2;
+                    licenseUserName = data.licenseUserName;
                 }
                 // }
 
-//			$('#licenseCode').val(licenseCode);
-                $('#licenseNumber').val(licenseNumber);
-                $('#licenseExpiration').val(licenseExpiration);
-                $('#licenseIssueDt').val(licenseIssueDt);
+                $('#ulIdx').val(ulIdx);
 
-                //면허정보 조회
+
+                $('#sel_LicenseLocation').val(licenseLocation);
+
+                // devleop
+                // var imgPath = 'C:/ohdocha/data/temp/license/' + licenseImgName;
+
+                //product
+                var imgPath = 'https://admin-ohdocha.sharenshare.kr/img/license/' + licenseImgName;
+
+                $('#licenseImg').attr('src', imgPath);
+
+                $('#licenseNumber').val(licenseNumber);
+                $('#licenseImgName').val(licenseImgName);
+                $('#licenseNumber2').val(licenseNumber2);
+                $('#licenseUserName').val(licenseUserName);
+
+                initDatePicker('licenseUserBirthday' , licenseUserBirthday);
                 initDatePicker('licenseExpiration' , licenseExpiration);
                 initDatePicker('licenseIssueDt' , licenseIssueDt);
 
@@ -531,9 +535,13 @@ function initDetailInfo(seq) {
 
 }//end initDetailInfo
 
-
 // validation
 function detailValidation(save_type){
+
+    var loginUser = getLoginUser();
+
+    GLOBAL_LOGIN_USER_IDX = loginUser.urIdx;
+    GLOBAL_LOGIN_USER_ROLE = loginUser.userRole;
 
     let req = {};
     let updateFlag = false;
@@ -557,6 +565,7 @@ function detailValidation(save_type){
                 let userRole 			= $("#sel_userRole option:selected").val();			//권한
                 let sel_userStatusCode 	= $("#sel_userStatusCode option:selected").val();	//회원상태코드
                 let userGender 			= $("#sel_userGender option:selected").val();		//성별
+                let useYn 	        = $('inpu:checkbox[id="useYn"]').is(":checked"); 	   //사용여부
 
                 if(isEmpty(userId)) { //is not empty
                     errorAlert('아이디', '아이디는 필수 입력값 입니다.');
@@ -569,6 +578,33 @@ function detailValidation(save_type){
                     $('#userId').focus();
                     return;
                 }
+
+                req = {
+                    userId: userId
+                };
+
+                var responseCode;
+
+                $.ajax({
+                    url: '/api/v1.0/userInfoListDetail.json',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(req),
+                    contentType: 'application/json;charset=UTF-8',
+                    cache: false,
+                    async: false
+                }).done(function (data, textStatus, jqXHR) {
+                    responseCode = data.code;
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                }).always(function () {
+                });
+
+                if (responseCode === 200){
+                    errorAlert('아이디', '이미 등록된 아이디 입니다.');
+                    $('#userId').focus();
+                    return;
+                }
+
 
                 if(isEmpty(userName)) { //is not empty
                     errorAlert('이름', '이름는 필수 입력값 입니다.');
@@ -588,8 +624,13 @@ function detailValidation(save_type){
                     userContact1 = removeHypen(userContact1);
                 }
 
+                if(isEmpty(userGender)) { //is not empty
+                    errorAlert('성별', '성별은 필수 입력값 입니다.');
+                    return;
+                }
+
                 if(isEmpty(userRole) || userRole == 0) { //is not empty
-                    errorAlert('권한 미설정', '사용자 권한을 설정하세요.');
+                    errorAlert('권한 미설정', '회원등급을 설정하세요.');
                     return;
                 }
 
@@ -597,7 +638,7 @@ function detailValidation(save_type){
 
                 if(CRUD == 'modify') {
                     if(isEmpty(urIdx)) {
-                        errorAlert('API ERROR', 'seq가 Null일 수 없습니다.');
+                        errorAlert('저장실패', '관리자에게 문의해주세요.');
                         return;
                     }
                     req = {
@@ -610,8 +651,9 @@ function detailValidation(save_type){
                         ,  userRole 			 :  userRole
                         ,  userStatusCode 	 	 :  sel_userStatusCode
                         ,  userGender 			 :  userGender
+                        ,  useYn                 : useYn
                         ,	modId : GLOBAL_LOGIN_USER_IDX
-                        ,	regId : GLOBAL_LOGIN_USER_IDX
+                        ,	modDt : new Date()
                     };
                 }else if (CRUD == 'insert') {
                     req = {
@@ -623,8 +665,9 @@ function detailValidation(save_type){
                         ,  userRole 			 :  userRole
                         ,  userStatusCode 	 	 :  sel_userStatusCode
                         ,  userGender 			 :  userGender
-                        // ,	modId : GLOBAL_LOGIN_USER_IDX
-                        // ,	regId : GLOBAL_LOGIN_USER_IDX
+                        ,  useYn                 : useYn
+                        ,	regId : GLOBAL_LOGIN_USER_IDX
+                        ,	regDt : today
                     };
                 }
 
@@ -642,7 +685,6 @@ function detailValidation(save_type){
                 let licenseNumber  		= $("#licenseNumber").val();  					// 운전면허 번호
                 let licenseExpiration  	= formatDate(getLicenseExpiration());  		    // 적성검사만료일
                 let licenseIssueDt  	= formatDate(getLicenseIssueDt());				// 면허 발급일
-                let userLicenseOwnYn 	= 'N';											//
 
                 if(isEmpty(urIdx)) {
                     errorAlert('회원정보', '회원정보를 먼저 저장하여 주세요.');
@@ -650,19 +692,19 @@ function detailValidation(save_type){
                 }
 
                 if(isEmpty(licenseCode) || licenseCode == 0) {
-                    errorAlert('면허코드', '면허코드를 선택');
+                    errorAlert('면허종류', '면허 종류를 선택해주세요.');
                     return;
                 }
 
                 if(isEmpty(licenseNumber)) {
-                    errorAlert('운전면허 번호', '운전면허 번호는 필수 입력값 입니다.');
+                    errorAlert('면허번호', '운전면허 번호는 필수 입력값 입니다.');
                     return;
                 }
 
-                //if(isEmpty(licenseExpiration)) {
-                //  errorAlert('적성검사만료일', '적성검사만료일은 필수 입력값 입니다.');
-                //  return;
-                //}
+                if(isEmpty(licenseExpiration)) {
+                 errorAlert('적성검사만료일', '적성검사만료일은 필수 입력값 입니다.');
+                 return;
+                }
 
                 if(isEmpty(licenseIssueDt)) {
                     errorAlert('면허 발급일', '면허 발급일은 필수 입력값 입니다.');
@@ -680,7 +722,7 @@ function detailValidation(save_type){
                 fn_callApi( method, target, req, function(response) {
                     let res = response;
                     if(isEmpty(urIdx)) {
-                        errorAlert('API ERROR', 'seq가 Null일 수 없습니다.');
+                        errorAlert('저장실패', '관리자에게 문의해주세요.');
                         return;
                     }
                     if(res.code == 200) {
@@ -692,11 +734,8 @@ function detailValidation(save_type){
                             ,  licenseNumber  		: licenseNumber
                             ,  licenseExpiration 	: licenseExpiration
                             ,  licenseIssueDt  	: licenseIssueDt
-                            ,  userLicenseOwnYn  	: userLicenseOwnYn
-                            ,  licenseLocation   	: licenseLocation
-                            ,	useYn				: 'Y'
                             ,	modId : GLOBAL_LOGIN_USER_IDX
-                            ,	regId : GLOBAL_LOGIN_USER_IDX
+                            ,	modDt : today
                         }
                     }else if (res.code == 400) {
                         save_type = 'INSERTuserLicenseInfo';
@@ -706,11 +745,8 @@ function detailValidation(save_type){
                             ,  licenseNumber  		: licenseNumber
                             ,  licenseExpiration 	: licenseExpiration
                             ,  licenseIssueDt  	: licenseIssueDt
-                            ,  userLicenseOwnYn  	: userLicenseOwnYn
-                            ,  licenseLocation   	: licenseLocation
-                            ,	useYn				: 'Y'
-                            ,	modId : GLOBAL_LOGIN_USER_IDX
                             ,	regId : GLOBAL_LOGIN_USER_IDX
+                            ,	regDt : today
                         }
                     }
 
@@ -723,6 +759,7 @@ function detailValidation(save_type){
                 });// end fn_callApi
                 break;
             case 'saveAdditionalLicenseInfo' :
+                let ulIdx  		= $("#ulIdx").val();	// 면허Idx
                 let licenseLocation  		= $("#sel_LicenseLocation option:selected").val();	// 면허코드
                 let licenseNumber2  		= $("#licenseNumber2").val();  					// 운전면허 번호
                 let licenseUserBirthday  	= formatDate(getLicenseUserBirthday());  		    // 면허자 생년월일
@@ -754,18 +791,20 @@ function detailValidation(save_type){
 
                 save_type = 'saveAdditionalLicenseInfo';
 
-                if(CRUD == 'modify') {
+                if(ulIdx != null) {
                     if(isEmpty(urIdx)) {
                         errorAlert('API ERROR', '회원정보가 존재하지 않습니다.');
                         return;
                     }
                     req = {
                         urIdx : urIdx,
+                        ulIdx : ulIdx,
                         licenseLocation  	 : licenseLocation  	,
                         licenseNumber2  	 : licenseNumber2  	,
                         licenseUserBirthday  : licenseUserBirthday ,
                         licenseUserName : licenseUserName,
-                        modId : urIdx
+                        modId : GLOBAL_LOGIN_USER_IDX,
+                        modDt : today
                     };
                 }else if (CRUD == 'insert') {
                     req = {
@@ -774,7 +813,8 @@ function detailValidation(save_type){
                         licenseNumber2  	 : licenseNumber2  	,
                         licenseUserBirthday  : licenseUserBirthday ,
                         licenseUserName : licenseUserName,
-                        regId : urIdx
+                        regId : GLOBAL_LOGIN_USER_IDX,
+                        regDt : today
                     };
                 }
 
@@ -859,6 +899,7 @@ function detailSubmit(save_type, req){
                         break;
                     case 'INSERTuserLicenseInfo'://운전면허
                         if( CRUD === 'insert') {
+                            $('#ulIdx').val(res.ulIdx);
                             // $("#"+MODAL_NAME).iziModal('close');
                         }
                         break;
@@ -877,8 +918,6 @@ function detailSubmit(save_type, req){
 $('#licenseExpiration input').click(function(event) {
     // $('#datetimepicker1 ').data("DateTimePicker").show();
 });
-
-
 
 $("#" + MODEL_NAME).iziModal({
     radius: 5,

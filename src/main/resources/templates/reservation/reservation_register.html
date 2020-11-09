@@ -37,11 +37,11 @@
                                 </div>
                                 <div class=" col-lg-3 float-l flex-1">
                                     <label>연락처</label>
-                                    <input type="text" class="form-control reserveUserInfo" id="reserveUserContact1" placeholder="" />
+                                    <input type="text" class="form-control reserveUserInfo" id="reserveUserContact1" onblur="userContactAutoHyphen('reserveUserContact1')" placeholder="" />
                                 </div>
                                 <div class=" col-lg-3 float-l flex-1">
                                     <label>생년월일</label>
-                                    <input type="date" class="form-control reserveUserInfo" id="reserveUserBirthDay" placeholder=""  />
+                                    <a id="reserveUserBirthDay" name="reserveUserBirthDay"></a>
                                 </div>
                             </div>
                         </div>
@@ -66,11 +66,11 @@
                             </div>
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>연락처</label>
-                                <input type="text" class="form-control" id="firstDriverContact" placeholder="" />
+                                <input type="text" class="form-control" id="firstDriverContact" onblur="userContactAutoHyphen('firstDriverContact')" placeholder="" />
                             </div>
                             <div class="col-lg-4 float-l" style="flex:1;">
                                 <label>생년월일</label>
-                                <input type="date" id="firstDriverBirthDay" class="form-control" value="">
+                                <a id="firstDriverBirthDay" name="firstDriverBirthDay"></a>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -85,11 +85,11 @@
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>적성검사 만료일</label>
-                                <input type="date" id="firstDriverExpirationDate" class="form-control" value="">
+                                <a id="firstDriverExpirationDate" name="firstDriverExpirationDate"></a>
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>발급일</label>
-                                <input type="date" id="firstDriverLicenseIsDate" class="form-control" value="">
+                                <a id="firstDriverLicenseIsDate" name="firstDriverLicenseIsDate"></a>
                             </div>
                         </div>
                     </div>
@@ -104,11 +104,11 @@
                             </div>
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>연락처</label>
-                                <input type="text" class="form-control" id="secondDriverContact" placeholder="" />
+                                <input type="text" class="form-control" id="secondDriverContact" onblur="userContactAutoHyphen('secondDriverContact')" placeholder="" />
                             </div>
                             <div class="col-lg-4 float-l" style="flex:1;">
                                 <label>생년월일</label>
-                                <input type="date" id="secondDriverBirthDay" class="form-control" value="">
+                                <a id="secondDriverBirthDay" name="secondDriverBirthDay"></a>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -123,11 +123,11 @@
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>적성검사 만료일</label>
-                                <input type="date" id="secondDriverExpirationDate" class="form-control" value="">
+                                <a id="secondDriverExpirationDate" name="secondDriverExpirationDate"></a>
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>발급일</label>
-                                <input type="date" id="secondDriverLicenseIsDate" class="form-control" value="">
+                                <a id="secondDriverLicenseIsDate" name="secondDriverLicenseIsDate"></a>
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>담당자 연락처</label>
-                                <input type="text" id="staffContact" class="form-control"  placeholder="" />
+                                <input type="text" id="staffContact" class="form-control" onblur="userContactAutoHyphen('staffContact')"  placeholder="" />
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -163,13 +163,38 @@
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">예약</h5>
                         <span class="top-right">
-                            <div class="position-relative form-check mb-3">
-                                <label class="mr-4 form-check-label mr-5" for="1">
-                                    <input type="checkbox" class="form-check-input" id="1" />배달대여</label>
-                                <label class="form-check-label" for="2">
-                                    <input type="checkbox" class="form-check-input" id="2" />지점방문</label>
+                                <div class="custom-control custom-radio custom-control-inline mb-3">
+                                <input type="radio" id="radioVisitCompany" name="deliveryTypeCode"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="radioVisitCompany">지점방문</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="radioDelivery" name="deliveryTypeCode"
+                                       class="custom-control-input">
+                                <label class="custom-control-label" for="radioDelivery">배달대여</label>
                             </div>
                         </span>
+                        <script>
+                            $('input:radio[id="radioVisitCompany"]').click(function () {
+                                $('#deliveryAddr').attr('readonly', 'readonly');
+                                $('#deliveryAddr').attr('placeholder', '지점방문');
+                                $('#returnAddr').attr('readonly', 'readonly');
+                                $('#returnAddr').attr('placeholder', '지점방문');
+
+                                $('#searchLocation1').addClass('d-none');
+                                $('#searchLocation2').addClass('d-none');
+                            });
+
+                            $('input:radio[id="radioDelivery"]').click(function () {
+                                $('#deliveryAddr').removeAttr('readonly', 'readonly');
+                                $('#deliveryAddr').attr('placeholder', '주소');
+                                $('#returnAddr').removeAttr('readonly', 'readonly');
+                                $('#returnAddr').attr('placeholder', '주소');
+
+                                $('#searchLocation1').removeClass('d-none');
+                                $('#searchLocation2').removeClass('d-none');
+                            });
+                        </script>
                         <div class="row mb-3">
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>대여일시</label>
@@ -181,19 +206,29 @@
                             </div>
                             <div class="col-lg-4 float-l flex-1" >
                                 <label>대여기간</label>
-                                <input type="text" class="form-control" id="periodDt" placeholder="'요금 계산'시 확인 가능" readonly/>
+                                <input type="text" class="form-control" id="periodDt" readonly/>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-12 float-l flex-1" >
                                 <label>대여위치</label>
-                                <input type="text" class="form-control" id="deliveryAddr" placeholder="" />
+                                <div class="input-group">
+                                    <input type="text"  class="form-control" placeholder="주소"  id="deliveryAddr">
+                                    <div id="searchLocation1" class="input-group-append">
+                                        <button class="btn btn-primary" onclick="openDaumAddrApi('companyAddress');" >주소찾기</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-12 float-l flex-1" >
                                 <label>반납위치</label>
-                                <input type="text" class="form-control" id="returnAddr" placeholder="" />
+                                <div class="input-group">
+                                    <input type="text"  class="form-control" placeholder="주소"  id="returnAddr">
+                                    <div id="searchLocation2" class="input-group-append">
+                                        <button class="btn btn-primary" onclick="openDaumAddrApi('companyAddress');" >주소찾기</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -212,7 +247,7 @@
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>연락처</label>
-                                <input type="text" id="staffContact1"  class="form-control " value="">
+                                <input type="text" id="staffContact1"  class="form-control" onblur="userContactAutoHyphen('staffContact1')" value="">
                             </div>
                             <div class="col-lg-3 float-l" style="flex:1;">
                                 <label>모델(번호)</label>
@@ -266,10 +301,6 @@
                                 <select id="sel_ciIdx" class="custom-select" onchange="selectInsuranceInfo();">
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
-                            <p><br></p>
-                            <button class="btn btn-primary" type="button" id="rentcalAmt" onclick="rentcal();">요금 계산</button>
                         </div>
                     </div>
                 </div>
@@ -373,7 +404,40 @@
 
     rtIdx = /*[[${rtIdx}]]*/'';
 
+    function getLoginUser() {
+        return /*[[${session.LOGIN_SESSION}]]*/ '';
+    }
+
     initDetailData('insert');
+
+    calendarList = [
+        'reserveUserBirthDay',
+        'firstDriverBirthDay',
+        'firstDriverExpirationDate',
+        'firstDriverLicenseIsDate',
+        'secondDriverBirthDay',
+        'secondDriverExpirationDate',
+        'secondDriverLicenseIsDate'
+    ];
+
+    calendarList.forEach(function (value) {
+        var value = new WinkelCalendar({
+            container: value,
+            bigBanner: true,
+            defaultDate: new Date(),
+            format: "YYYY년 MM월 DD일"
+        });
+    });
+
+    function getDatePickerValue(id) {
+        return id.date;
+    }
+
+    function initDatePicker(id, value) {
+        id.setDate(new Date(value));
+    }
+
+
 
 </script>
 </body>

@@ -1130,7 +1130,7 @@ function detailValidation(save_type){
 
 				if (CRUD_METHOD === 'modify') {
 					if(isEmpty(crIdx)) {
-						errorAlert('API ERROR', 'seq가 Null일 수 없습니다.');
+						errorAlert('저장실패', '관리자에게 문의해주세요.');
 						return;
 					}
 				}
