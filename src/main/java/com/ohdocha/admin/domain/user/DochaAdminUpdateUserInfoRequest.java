@@ -40,6 +40,7 @@ public class DochaAdminUpdateUserInfoRequest extends CommonRequestDto {
 	private String socialLoginEmail        ; //연동로그인메일
 	private String userWithdrawDate         ; //회원탈퇴일시
 	private int loginFailCount           ; //로그인시도횟수
+	private boolean useYn                   ; //접속허용
 	private String regDt                    ; //등록일시
 	private String regId                    ; //등록자
 	private String modDt                    ; //수정일시
@@ -254,7 +255,11 @@ public class DochaAdminUpdateUserInfoRequest extends CommonRequestDto {
 	public void setModId(String modId) {
 		this.modId = modId;
 	}
+	public boolean isUseYn() {
+		return useYn;
+	}
 
-
-
+	public void setUseYn(boolean useYn) {
+		this.useYn = useYn;
+	}
 }

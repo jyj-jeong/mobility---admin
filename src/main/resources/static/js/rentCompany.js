@@ -273,7 +273,7 @@ function initModalSelectBox(DetailData) {
 
 	// 반납정비시간
 	// 48시간 단위로 설정한다.
-	for (let i = 1; i <= 48; i++) {
+	for (let i = 1; i <= 24; i++) {
 		strOption += "<option value = '" + i + "'>" + i + "시간 이후 </option>";
 	}
 

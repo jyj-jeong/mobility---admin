@@ -72,7 +72,6 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         if (res == 1){
             message.addData("code", 200);
-            // TODO DB 저장된 urIdx 불러오도록 수정
             message.addData("urIdx", insertUserInfoRequest.getUrIdx());
         }else{
             message.addData("code", 400);
@@ -175,12 +174,16 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
     @Override
     public void addUserLicenseInfo(ServiceMessage message) {
-        DochaAdminUserInfoUserLicenseInfoRequest insertUserLicenseInfo = message.getObject("insertUserLicenseInfo", DochaAdminUserInfoUserLicenseInfoRequest.class);
+        DochaAdminUserInfoUserLicenseInfoRequest userLicenseInfo = message.getObject("insertUserLicenseInfo", DochaAdminUserInfoUserLicenseInfoRequest.class);
+        int res = 0;
+        if (!userLicenseInfo.getUlIdx().equals("")){
+            res = userInfoMntMapper.updateUserLicenseInfo(userLicenseInfo);
+        }else {
+            String ulIdx = TextUtils.getKeyDefault("UL");
+            userLicenseInfo.setUlIdx(ulIdx);
 
-        String ulIdx = TextUtils.getKeyDefault("UL");
-        insertUserLicenseInfo.setUlIdx(ulIdx);
-
-        int res = userInfoMntMapper.insertUserLicenseInfo(insertUserLicenseInfo);
+            res = userInfoMntMapper.insertUserLicenseInfo(userLicenseInfo);
+        }
 
         if (res == 1){
             message.addData("code", 200);
@@ -286,13 +289,6 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
 
         // 파일을 path에 저장 후, DB에 파일 명 저장
         userInfoMntMapper.updateLicenseImg(licenseInfoRequest);
-
-//        DochaAdminRegCarDetailRequest regCarDetailRequest = new DochaAdminRegCarDetailRequest();
-//
-//        // 미리 등록되어있던 차량들의 이미지도 수정
-//        regCarDetailRequest.setImgIdx(saveImgName + "." + uploadImageExtension);
-//        regCarDetailRequest.setMdIdx(carModelDetailRequest.getMdIdx());
-//        regCarMapper.updateRegCarImgByMdIdx(regCarDetailRequest);
 
     }
 
@@ -496,9 +492,9 @@ public class UserServiceImpl extends ServiceExtension implements UserService {
     @Override
     public void selectRentCompanyHoliday(ServiceMessage message) {
         DochaAdminRentCompanyHolidayRequest rentCompanyHolidayRequest = message.getObject("rentCompanyHolidayRequest", DochaAdminRentCompanyHolidayRequest.class);
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String today = simpleDateFormat.format(new Date());
-//        rentCompanyHolidayRequest.setHolidayStartDt(today);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String today = simpleDateFormat.format(new Date());
+        rentCompanyHolidayRequest.setHolidayStartDt(today);
 
         List<DochaAdminRentCompanyHolidayResponse> rentCompanyHolidayResponseList = rentCompanyInfoMapper.selectRentCompanyHoliday(rentCompanyHolidayRequest);
 

@@ -350,7 +350,9 @@ public class UserController extends ControllerExtension {
     @GetMapping(value = "/mem/rentshop/hoilday")
     public String rentShopRegisterHoildayView(HttpServletRequest request, ModelMap modelMap) {
         ServiceMessage serviceMessage = createServiceMessage(request);
-        serviceMessage.addData("rentCompanyHolidayRequest", new DochaAdminRentCompanyHolidayRequest());
+        DochaAdminRentCompanyHolidayRequest holidayRequest = new DochaAdminRentCompanyHolidayRequest();
+        holidayRequest.setRtIdx("all");
+        serviceMessage.addData("rentCompanyHolidayRequest", holidayRequest);
 
         userService.selectRentCompanyHoliday(serviceMessage);
 

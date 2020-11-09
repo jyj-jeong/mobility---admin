@@ -7,7 +7,7 @@
 <body id="page-top">
 
 <!-- Page Wrapper -->
-<div id="wrapper">
+<div id="wrapper" style="height: 100%">
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
@@ -25,18 +25,21 @@
                             <label class="form-label" for="holiday">휴일</label>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-6 mb-3">
+                            <div class="col-4 mb-3">
                                 <a id="holiday" name="holiday" class=""></a>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input id="holidayName" type="text" class="form-control" placeholder="설명">
                             </div>
                             <div class="col-2 mb-3">
                                 <buttzon id="btnSave" class="btn btn-primary" type="button" onclick="saveHoliday()">등록</buttzon>
                             </div>
                         </div>
 
-                        <div id="selectedHolidayData" class="row mb-3">
-                            <div class="col-md-3 mb-3" th:each="holiday, index : ${result}" th:data-value="${holiday.getHolIdx()}">
+                        <div id="selectedHolidayData" class="row ml-1 mb-3">
+                            <div class="flex mr-2 mb-3" th:each="holiday, index : ${result}" th:data-value="${holiday.getHolIdx()}">
                                 <div class="alert alert-primary" role="alert">
-                                    <span th:text="${holiday.getHolidayStartDt()}"></span>
+                                    <span th:text="${holiday.getHolidayStartDt() + ' (' + holiday.getHolidayName() + ')'}"></span>
                                     <button type="button" class="close" aria-label="Close" onclick="deleteHolidayDt(this)">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -108,6 +111,7 @@
     </div>
 </div>
 <script th:inline="javascript">
+    /*<![CDATA[*/
 
     var holiday = new WinkelCalendar({
         container: 'holiday',
@@ -117,13 +121,25 @@
     });
 
     function saveHoliday() {
+        var holidayName = $('#holidayName').val().trim();
         var holidayDt = formatDate(holiday.date);
+        var isDuplicated = false;
+
+        var holidayList = /*[[${result}]]*/ '';
+        for (var i in holidayList){
+            if (holidayList[i].holidayStartDt === formatDate(holidayDt)){
+                isDuplicated = true;
+            }
+        }
 
         if (isEmpty(holidayDt)){
             errorAlert('전체휴일','날짜를 선택해주세요');
             return;
-        }else if (holiday.date < new Date()){
+        }else if (parseInt(holiday.date.getTime()/100000) < parseInt(new Date().getTime()/100000)){
             errorAlert('전체휴일','전체휴무일은 과거가 될 수 없습니다.');
+            return;
+        }else if (isDuplicated){
+            errorAlert('전체휴일','이미 등록된 전체 휴무일 입니다.');
             return;
         }
 
@@ -133,7 +149,8 @@
         var req = {
             "holidayStartDt": holidayDt,
             "holidayEndDt" : holidayDt,
-            "holidayName" : "전체 휴무일"
+            "holidayName" : holidayName,
+            "rtIdx" : "all"
         };
 
         let title = '전체휴일 저장';
@@ -178,7 +195,7 @@
         });// end fn_callApi
     }
 
-
+    /*]]*/
 </script>
 </body>
 </html>

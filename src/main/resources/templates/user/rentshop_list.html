@@ -77,7 +77,7 @@
                                     <td th:text="${rentCompany.getCompanyAddressDetail()}"></td>
                                     <td th:text="${rentCompany.getStaffName()}"></td>
                                     <td th:text="${rentCompany.getStaffContact1()}"></td>
-                                    <td th:text="${rentCompany.getCarCount()}"></td>
+                                    <td th:text="${#numbers.formatInteger(rentCompany.getCarCount(), 0, 'COMMA')}"></td>
                                     <td th:text="${rentCompany.getRtIdx()}"></td>
                                 </tr>
                                 </tbody>
@@ -153,7 +153,7 @@
     function registerRentShopHoliday() {
         var url = 'rentshop/hoilday';
         var name = "test";
-        var option = "width = 900, height =800 ,location=no, left=500, top=50";
+        var option = "width = 900, height =600 ,location=no, left=500, top=50";
 
         window.open(url, name, option);
     }

@@ -27,9 +27,10 @@ var CALCULABLE_MOTH = 'N';	// 요금계산 적용 여부
 var RESERVE_STATUS = '';	// 상세 화면 진입시 대여 상태 
 var BROWSEYN = "";			// 브라우저에 따른 대여일시, 반납일시 입력 input 타입 변경 및 변수 값 처리
 
-// todo 임시 user Role
-var GLOBAL_LOGIN_USER_ROLE = 'RA';
-var GLOBAL_LINK_RTIDX = '3obbyRFE';
+var GLOBAL_LOGIN_USER_IDX;
+var GLOBAL_LOGIN_USER_ROLE;
+
+var today = new Date();
 
 function initializingPageData(){
     loadApi(drawTable, null, null );
@@ -189,7 +190,7 @@ function loadApi(fnc, page, displayPageNum, division){
     let _rtIdx = '';
 
     if(GLOBAL_LOGIN_USER_ROLE != 'RA'){
-        _rtIdx = GLOBAL_LOGIN_RT_IDX;
+        _rtIdx = getLoginUser().rtIdx;
     }
 
     // 회원사 링크 버튼 클릭 후 변수 사용
@@ -476,7 +477,7 @@ function initDetailInfo(seq){
         $("#reserveUserName").val(reserveUserName);
         $("#reserveUserId").val(reserveUserEmail);
         $("#reserveUserContact1").val(reserveUserContact1);
-        $("#reserveUserBirthDay").val(reserveUserBirthday);
+        initDatePicker('reserveUserBirthDay' , reserveUserBirthDay);
 
         // 운전자 정보
 //			let userFlag = nullCheck(data.;
@@ -493,9 +494,10 @@ function initDetailInfo(seq){
         $("#ulIdx1").val(ulIdx1);
         $("#firstDriverName").val(firstDriverName);
         $("#firstDriverContact").val(firstDriverContact);
-        $("#firstDriverBirthDay").val(firstDriverBirthDay);
+        initDatePicker('firstDriverBirthDay',firstDriverBirthDay);
         $("#sel_firstDriverLicenseCode").val(firstDriverLicenseCode);
         $("#firstDriverLicenseNumber").val(firstDriverLicenseNumber);
+        initDatePicker('firstDriverExpirationDate',firstDriverExpirationDate);
         $("#firstDriverExpirationDate").val(firstDriverExpirationDate);
         $("#firstDriverLicenseIsDate").val(firstDriverLicenseIsDate);
 
@@ -607,7 +609,7 @@ function initDetailInfo(seq){
         $("#reserveUserEmail").val(reserveUserEmail);
         $("#btnreserveUserEmail").hide();
         $("#reserveUserContact1").val(reserveUserContact1);
-        $("#reserveUserBirthDay").val(reserveUserBirthday);
+        initDatePicker('reserveUserBirthDay' , reserveUserBirthDay);
 
         let refundFee = nullCheck(data.refundFee) == ''?'':objectConvertToPriceFormat(data.refundFee);
         let miSu = nullCheck(data.miSu) == ''?'':objectConvertToPriceFormat(data.miSu);
@@ -1052,12 +1054,12 @@ function serachUserInfo(flag, urIdx) {
                 $("#reserveUserName").val(userName);
                 $("#reserveUserContact1").val(userContact1);
                 $("#reserveUserEmail").val(userId);
-                $("#reserveUserBirthday").val(userBirthday);
+                initDatePicker('reserveUserBirthday' , reserveUserBirthday);
             }else if(flag == 'first'){
                 $("#firstDriverId").val(userId);
                 $("#firstDriverName").val(userName);
                 $('#firstDriverContact').val(userContact1);
-                $('#firstDriverBirthDay').val(userBirthday);
+                initDatePicker('firstDriverBirthDay' , userBirthday);
                 DriverSetting(flag, urIdx);
             }else if(flag == 'second'){
                 $("#secondDriverId").val(userId);
@@ -1091,11 +1093,11 @@ function firstDriverSetting(target){
 
         let name = $('#reserveUserName').val();
         let contact1 = $('#reserveUserContact1').val();
-        let birthDay = $('#reserveUserBirthDay').val();
+        let birthDay = formatDate(getDatePickerValue('reserveUserBirthDay'));
 
         $('#firstDriverName').val(name);
         $('#firstDriverContact').val(contact1);
-        $('#firstDriverBirthDay').val(birthDay);
+        initDatePicker('firstDriverBirthDay' , birthDay);
 
         if(!isEmpty(urIdx)){
             DriverSetting('first', urIdx);
@@ -1388,6 +1390,10 @@ function detailValidation(){
 //		return;
 //	}
 
+    var loginUser = getLoginUser();
+    GLOBAL_LOGIN_USER_IDX = loginUser.urIdx;
+    GLOBAL_LOGIN_USER_ROLE = loginUser.userRole;
+
     let title, text, icon, cancel_text, save_type;
     let target = '';
     let method = '';
@@ -1594,9 +1600,6 @@ function detailValidation(){
         errorAlert('결제', '요금계산을 먼저 실행하여 주세요.');
         return;
     }
-
-    // todo 임시 로그인 idx
-    GLOBAL_LOGIN_USER_IDX = 'UR202001101910027';
 
     var req = {
         'rmIdx' : rmIdx
@@ -2035,3 +2038,22 @@ function applyDataMask(field) {
     field.addEventListener('click', changed)
     field.addEventListener('keyup', changed)
 };
+
+//input box auto hypen
+function userContactAutoHyphen(id){
+    let num = $("#" + id).val();
+
+    autoHyphenFromNumber('phone',id, num);
+}
+
+// 카드 변경
+function changeCardView(cardViewName) {
+    let cards = $('.card-body');
+
+    switch (cardViewName) {
+        case 'userReviewCard':
+            swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
+        default:
+            break;
+    }
+}

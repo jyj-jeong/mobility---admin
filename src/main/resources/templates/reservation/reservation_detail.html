@@ -135,12 +135,6 @@
                 </div>
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h5 class="card-title">예약</h5>
-                        <div class="row mb-3">
-                            <button class="btn btn-secondary ml-3" type="button">예약취소 및 환불</button>
-                            <button class="btn btn-secondary ml-3" type="button">예약상태 변경</button>
-                            <button class="btn btn-secondary ml-3" type="button">대여/반납일시 변경</button>
-                            <button class="btn btn-secondary ml-3" type="button">대여/반납위치 변경</button>
-                        </div>
                         <div class="row">
                             <div class="col-lg-3 mb-3 float-l flex-1" >
                                 <label>번호</label>
@@ -193,7 +187,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-5">
                             <div class="col-lg-12 float-l">
                                 <label>반납위치</label>
                                 <div class="input-group">
@@ -203,6 +197,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
+                            <button class="btn btn-secondary ml-3" type="button">예약취소 및 환불</button>
                         </div>
                     </div>
                 </div>
@@ -275,10 +272,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-12 float-l flex-1 text-right p-b-10">
-                            <p><br></p>
-                            <button class="btn btn-primary" type="button" id="rentcalAmt" onclick="rentcal();">요금 계산</button>
-                        </div>
                     </div>
                 </div>
                 <div class="main-card mb-3 card paymentDiv">
@@ -321,7 +314,7 @@
                     </div>
                 </div>
                 <div class="main-card mb-3 card paymentDiv" id="">
-                    <div class="card-body"><h5 class="card-title">결제내역 [<label id="lbl_rentmisu"></label>, <label id="lbl_refundFee"></label>]</h5>
+                    <div class="card-body"><h5 class="card-title">결제내역</h5>
                         <div class="col-lg-12">
                             <table id="paymentList" class="table table-hover" data-show-toggle="false" data-sorting="true">
                                 <thead>
@@ -424,17 +417,15 @@
                     <div class="text-right">
                         <div class="row mb-3">
                             <div class="mr-2 font-weight-bold" style="cursor: pointer"
-                                 onclick="changeCardView('regCarDetail')">역경매 이동
-                            </div>
-                            <div class="mr-2 font-weight-bold" style="cursor: pointer"
                                  onclick="changeCardView('userReviewCard')">계약서
                             </div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <button id="btnClose" class="btn btn-primary" type="button" onclick="detailValidation()">저장</button>
+                        <button id="btnReverse" class="btn btn-primary" type="button" onclick="">역경매 이동</button>
+                        <button id="btnSave" class="btn btn-primary" type="button" onclick="detailValidation()">저장</button>
                         <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">창 닫기</button>
-                        <button id="btnClose" class="btn btn-primary" type="button" onclick="self.close()">반납</button>
+                        <button id="btnReturn" class="btn btn-primary" type="button" onclick="self.close()">반납</button>
                     </div>
                 </div>
             </div>
@@ -478,6 +469,10 @@
 <script th:inline="javascript">
 
     // swal("상세화면은 순차적으로 오픈할 예정입니다.", { icon: "warning", });
+
+    function getLoginUser() {
+        return /*[[${session.LOGIN_SESSION}]]*/ '';
+    }
 
     rmIdx = /*[[${rmIdx}]]*/'';
     CRUD_METHOD = 'update';

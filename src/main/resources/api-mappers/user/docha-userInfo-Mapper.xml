@@ -142,6 +142,7 @@
             <if test="userGradeCode 	!= null"><![CDATA[  , USER_GRADE_CODE		= #{userGradeCode} ]]></if>	    <!-- 회원등급 -->
             <if test="userLicenseOwnYn 	!= null"><![CDATA[  , USER_LICENSE_OWN_YN 	= #{userLicenseOwnYn}  	]]></if> 	<!-- 면허정보 사용 여부 -->
             <if test="modId 			!= null"><![CDATA[  , MOD_ID 				= #{modId}			]]></if> 	<!-- 수정자 -->
+            <if test="useYn 			!= null"><![CDATA[  , USE_YN 				= #{useYn}			]]></if> 	<!-- 접속허용 -->
         </trim>
         , MOD_DT = NOW()
         <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -154,14 +155,17 @@
     <!-- 사욛자 면허정보 UPDATE -->
     <update  id="updateUserLicenseInfo" parameterType="userLicenseInfoRequest">
         <![CDATA[ UPDATE DC_USER_LICENSE_INFO ]]>
-        <trim prefix="SET" suffixOverrides=",">
+        <trim prefix="SET" prefixOverrides=",">
             <if test="licenseNumber    	!= null"><![CDATA[     LICENSE_NUMBER		= #{licenseNumber}  	]]></if>
             <if test="licenseCode      	!= null"><![CDATA[  ,  LICENSE_CODE			= #{licenseCode}  		]]></if>
             <if test="licenseLocation  	!= null"><![CDATA[  ,  LICENSE_LOCATION		= #{licenseLocation}  	]]></if>
             <if test="licenseExpiration	!= null"><![CDATA[  ,  LICENSE_EXPIRATION	= #{licenseExpiration}  ]]></if>
             <if test="licenseIssueDt   	!= null"><![CDATA[  ,  LICENSE_ISSUE_DT		= #{licenseIssueDt}  	]]></if>
             <if test="licenseOwnerName 	!= null"><![CDATA[  ,  LICENSE_OWNER_NAME	= #{licenseOwnerName}   ]]></if>
-            <if test="useYn				!= null"><![CDATA[  ,  USE_YN				= #{useYn}  			]]></if>
+            <if test="licenseImageName 	!= null"><![CDATA[  ,  LICENSE_IMG_NAME	= #{licenseImageName}   ]]></if>
+            <if test="licenseNumber2 	!= null"><![CDATA[  ,  LICENSE_NUMBER2	= #{licenseNumber2}   ]]></if>
+            <if test="licenseUserBirthday 	!= null"><![CDATA[  ,  LICENSE_USER_BIRTHDAY	= #{licenseUserBirthday}   ]]></if>
+            <if test="licenseUserName 	!= null"><![CDATA[  ,  LICENSE_USER_NAME	= #{licenseUserName}   ]]></if>
             <if test="modId 			!= null"><![CDATA[  ,  MOD_ID 				= #{modId}				]]></if> 	<!-- 수정자 -->
             , MOD_DT = NOW()
         </trim>
@@ -184,9 +188,11 @@
 			,  LICENSE_EXPIRATION
 			,  LICENSE_ISSUE_DT
 			,  LICENSE_OWNER_NAME
+			,  LICENSE_NUMBER2
+			,  LICENSE_USER_BIRTHDAY
+			,  LICENSE_USER_NAME
 			,  REG_DT
 			,  REG_ID
-			,  USE_YN
 		) VALUES (
 				#{ulIdx}
 			,	#{urIdx}
@@ -196,9 +202,11 @@
 			,  	#{licenseExpiration}
 			,  	#{licenseIssueDt}
 			,  	#{licenseOwnerName}
+			,  	#{licenseNumber2}
+			,  	#{licenseUserBirthday}
+			,  	#{licenseUserName}
 			,  	NOW()
 			,  	#{regId}
-			,  	#{useYn}
 		)
 	]]>
     </insert>
@@ -240,15 +248,17 @@
 							,  IFNULL(T1.LICENSE_LOCATION     , '' ) AS LICENSE_LOCATION       /*면허지역*/
 							,  IFNULL(T1.LICENSE_NUMBER       , '' ) AS LICENSE_NUMBER         /*면허번호*/
 							,  IFNULL(T1.LICENSE_OWNER_NAME   , '' ) AS LICENSE_OWNER_NAME     /*면허소유자명*/
+							,  IFNULL(T1.LICENSE_IMG_NAME   , '' ) AS LICENSE_IMG_NAME         /*면허 사진*/
+							,  IFNULL(T1.LICENSE_NUMBER2   , '' ) AS LICENSE_NUMBER2           /*면허 번호2*/
+							,  IFNULL(T1.LICENSE_USER_BIRTHDAY   , '' ) AS LICENSE_USER_BIRTHDAY /*면허자 생년월일*/
+							,  IFNULL(T1.LICENSE_USER_NAME   , '' ) AS LICENSE_USER_NAME       /*면허자 이름*/
 							,  IFNULL(T1.MOD_DT               , '' ) AS MOD_DT                 /*수정일시*/
 							,  IFNULL(T1.MOD_ID               , '' ) AS MOD_ID                 /*수정자*/
 							,  IFNULL(T1.REG_DT               , '' ) AS REG_DT                 /*등록일시*/
 							,  IFNULL(T1.REG_ID               , '' ) AS REG_ID                 /*등록자*/
 							,  IFNULL(T1.UL_IDX               , '' ) AS UL_IDX                 /*면허idx*/
 							,  IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                 /*회원iDX*/
-							,  IFNULL(T1.USE_YN			   , '' ) AS USE_YN					/*사용여부*/
-					FROM
-					DC_USER_LICENSE_INFO T1
+					FROM DC_USER_LICENSE_INFO T1
 					WHERE T1.UR_IDX = #{urIdx}
 			]]>
     </select>
@@ -304,6 +314,7 @@
 				,  SOCIAL_LOGIN_EMAIL
 				,  USER_WITHDRAW_DATE
 				,  LOGIN_FAIL_COUNT
+				,  USE_YN
 				,  REG_DT
 				,  REG_ID
 				,  MOD_DT
@@ -342,6 +353,7 @@
 				,  #{socialLoginEmail}
 				,  #{userWithdrawDate}
 				,  #{loginFailCount}
+				,  #{useYn}
 				,  NOW()
 				,  #{regId}
 				,  NOW()
