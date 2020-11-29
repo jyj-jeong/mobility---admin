@@ -457,6 +457,7 @@ function initDetailInfo(seq) {
 			if (getLoginUser().userRole !== 'RA'){
 				$('#companyName').attr('readonly', true);
 				$('#branchName').attr('readonly', true);
+				$('#companyContact1').attr('readonly', true);
 				$('#companyRegistrationName').attr('readonly', true);
 				$('#companyRegistrationNumber').attr('readonly', true);
 				$('#companyAddress').attr('readonly', true);
@@ -560,6 +561,8 @@ function initDetailInfo(seq) {
 			$('#branchName').val(branchName);
 			// 법인명
 			$('#companyRegistrationName').val(companyRegistrationName);
+			// 회사 대표번호
+			$('#companyContact1').val(companyContact1);
 
 			// 사업자등록번호
 			if (!isEmpty(companyRegistrationNumber)) {
@@ -926,6 +929,12 @@ function detailValidation(save_type) {
 				if (isEmpty(companyRegistrationName)) { // is not empty
 					errorAlert('회원사', '법인명 필드를 확인하세요.');
 					$('#companyRegistrationName').focus();
+					return;
+				}
+
+				if (isEmpty(companyContact1)) { // is not empty
+					errorAlert('대표번호', '대표번호 필드를 확인하세요.');
+					$('#companyContact1').focus();
 					return;
 				}
 

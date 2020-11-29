@@ -421,7 +421,7 @@ function initDetailInfo(seq){
         }
 
         let urIdx = nullCheck(data.urIdx);
-        let reserveUserName = nullCheck(data.reserveUserName);
+        let reserveUserName = nullCheck(data.reserveUserName) === ''? data.firstDriverName: data.reserveUserName;
         let reserveUserEmail = nullCheck(data.reserveUserEmail);
         let reserveUserContact1 = nullCheck(data.reserveUserContact1);
         let reserveUserBirthday =  nullCheck(data.reserveUserBirthday) != '' ? data.reserveUserBirthday : new Date();
@@ -482,8 +482,10 @@ function initDetailInfo(seq){
         let reserveStatusCode = nullCheck(data.reserveStatusCode);
         let reserveTypeCode = nullCheck(data.reserveTypeCode);
         let deliveryTypeCode = nullCheck(data.deliveryTypeCode);
-        let rentStartDay = new Date(nullCheck(data.rentStartDay)).toISOString().slice(0, -1);
-        let rentEndDay = new Date(nullCheck(data.rentEndDay)).toISOString().slice(0,-1);
+        let rentStartDay = nullCheck(data.rentStartDay);
+        rentStartDay = rentStartDay === '' ? '' : new Date(rentStartDay).toISOString().slice(0, -1);
+        let rentEndDay = nullCheck(data.rentEndDay);
+        rentEndDay = rentEndDay === '' ? '' : rentEndDay.toISOString().slice(0, -1);
         let periodDt = nullCheck(data.periodDt);
         let deliveryAddr = nullCheck(data.deliveryAddr);
         let returnAddr = nullCheck(data.returnAddr);
@@ -1201,7 +1203,7 @@ function rentcal(){
         let calRentFee = '0';
         let calInsuranceFee = '0';
         let calRentTotAmount = '0';
-//			let calCarssumRate = '0';
+//			let calDochaRate = '0';
         let calPaymentAmount = '0';
         let caldiscountFee = '0';
         let deliveryFee = '0';
@@ -1234,7 +1236,7 @@ function rentcal(){
         }
 
         calRentTotAmount = Number(calRentFee) + Number(calInsuranceFee) - Number(caldiscountFee) + Number(deliveryFee);
-//			calCarssumRate = calRentTotAmount*(Number(commissionPer)/100);
+//			calDochaRate = calRentTotAmount*(Number(commissionPer)/100);
         if(periodMm == 0){
             // 대여금액 = (할인전)대여금 + 보험금 - (할인후)대여금 + 배달금액
             calPaymentAmount = calRentTotAmount;
@@ -2063,7 +2065,7 @@ function calcPeriodDt() {
 
     is_same_day = endDate == startDate ? true : false;
 
-    // 마지막날은 30일 이하여야함 ( 28~30 ) 카썸정책
+    // 마지막날은 30일 이하여야함 ( 28~30 ) 두차정책
     var dayOfLast = Number((new Date(endYear, endMonth + 1, 0)).getDate()) != 31 ? 30 : Number((new Date(endYear, endMonth + 1, 0)).getDate());
     var startDate_dayOfLast = Number((new Date(startYear, startMonth + 1, 0)).getDate());
     var endDate_dayOfLast = Number((new Date(endYear, endMonth + 1, 0)).getDate());
