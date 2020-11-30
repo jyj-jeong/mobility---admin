@@ -641,7 +641,7 @@
     CRUD = /*[[${CRUD}]]*/'';
 
     req = {
-        rtIdx : $('#rtIdx').val() === "" ? '등록' : $('#rtIdx').val(),
+        rtIdx : rtIdx === null ? '등록' : $('#rtIdx').val(),
         raGbnCode : 'S'
     };
 
@@ -704,7 +704,7 @@
     } );
 
     var ltReq = {
-        rtIdx : $('#rtIdx').val() === "" ? '등록' : $('#rtIdx').val(),
+        rtIdx : rtIdx === null ? '등록' : $('#rtIdx').val(),
         raGbnCode : 'L'
     };
 

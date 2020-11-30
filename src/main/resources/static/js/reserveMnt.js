@@ -297,14 +297,18 @@ function drawData(paymentList){
 
         { "name": "paymentTypeName", "title": "결제수단" },
         { "name": "paymentKindName", "title": "결제구분" },
-        { "name": "paymentDate",  "title": "결제일시" },
+        { "name": "modDt",  "title": "결제일시" },
         { "name": "paymentAmount", "title": "결제금액" ,
             "formatter" : function(value, options, rowData){
                 var displayText = objectConvertToPriceFormat(nullCheck(value));
                 return displayText;
             }
         },
-        { "name": "", "title": "정산금액", "breakpoints": "xs"},
+        { "name": "sumPaymentAmount", "title": "정산금액","formatter" : function(value, options, rowData){
+                var displayText = objectConvertToPriceFormat(nullCheck(value));
+                return displayText;
+            }, "breakpoints": "xs"},
+
         { "name": "", "title": "정산예정일", "breakpoints": "xs"},
         { "name": "", "title": "정산완료일시", "breakpoints": "xs"}
     ];
