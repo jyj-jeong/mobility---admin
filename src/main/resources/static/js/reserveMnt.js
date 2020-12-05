@@ -449,11 +449,11 @@ function initDetailInfo(seq){
         let ulIdx1 = nullCheck(data.ulIdx1);
         let firstDriverName = nullCheck(data.firstDriverName);
         let firstDriverContact = nullCheck(data.firstDriverContact);
-        let firstDriverBirthDay =  nullCheck(data.firstDriverBirthDay) != '' ? data.firstDriverBirthDay : new Date();;
+        let firstDriverBirthDay =  nullCheck(data.firstDriverBirthDay) !== '' ? data.firstDriverBirthDay : new Date();;
         let firstDriverLicenseCode = nullCheck(data.firstDriverLicenseCode);
         let firstDriverLicenseNumber = nullCheck(data.firstDriverLicenseNumber);
-        let firstDriverExpirationDate = nullCheck(data.firstDriverExpirationDate) == ''?'':dateFormatter(data.firstDriverExpirationDate);
-        let firstDriverLicenseIsDate = nullCheck(data.firstDriverLicenseIsDate) == ''?'':dateFormatter(data.firstDriverLicenseIsDate);
+        let firstDriverExpirationDate = nullCheck(data.firstDriverExpirationDate) === ''?'':dateFormatter(data.firstDriverExpirationDate);
+        let firstDriverLicenseIsDate = nullCheck(data.firstDriverLicenseIsDate) === ''?'':dateFormatter(data.firstDriverLicenseIsDate);
 
         $("#ulIdx1").val(ulIdx1);
         $("#firstDriverName").val(firstDriverName);
