@@ -487,7 +487,7 @@ function initDetailInfo(seq) {
 			let accountHolder = data.accountHolder;
 			let alramYn = data.alarmYn;
 //			let taxInvoiceCode = data.taxInvoiceCode;
-			let commissionPer = data.commissionPer;
+			let commissionPer = isEmpty(data.commissionPer) ? 15.0 : data.commissionPer;
 			let accessYn = data.accessYn;
 
 			let ownerYn = data.ownerYn;
