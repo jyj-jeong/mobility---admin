@@ -93,13 +93,14 @@ public class PaymentInfoServiceImpl extends ServiceExtension implements PaymentI
 
     @Override
     public void reservationRefund(ServiceMessage message) throws Exception {
-        DochaMap param = message.getObject("reqParam", DochaMap.class);
+        DochaMap param = new DochaMap();
+        param.putAll(message.getObject("reqParam", DochaMap.class));
 
         Map<String, Object> result = null;
         Map<String, Object> payData = null;
 
-        List<DochaAdminPaymentInfoRequest> reserveInfoList = paymentInfoMapper.selectReserveInfo(param);
-        DochaAdminPaymentInfoRequest reserveInfo = reserveInfoList.get(0);
+        List<DochaAdminPaymentInfoResponse> reserveInfoList = paymentInfoMapper.selectReserveInfo(param);
+        DochaAdminPaymentInfoResponse reserveInfo = reserveInfoList.get(0);
 
         double cancelAmountDouble = param.getDouble("cancel_request_amount");
         int cancelAmount = (int) Math.floor(cancelAmountDouble);
