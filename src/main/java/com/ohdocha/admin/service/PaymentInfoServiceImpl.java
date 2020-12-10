@@ -115,7 +115,6 @@ public class PaymentInfoServiceImpl extends ServiceExtension implements PaymentI
         String impKey = properties.getImpKey();
         String impSecret = properties.getImpSecret();
 
-        // 결제 금액이 있어서 결제금액을 환불해야 할 경우
         String accessToken = getAccessToken(impKey, impSecret, url);
 
         // 헤더에 AccessToken 설정
