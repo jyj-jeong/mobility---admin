@@ -2,8 +2,6 @@
  * reserveMnt.js
 
  * 예약 > 예약관리
- * 
- * 2020-02-04 lws 최초생성
  *
  * */
 
@@ -506,6 +504,10 @@ function initDetailInfo(seq){
         let gbn = reserveYmdt+reserveChannel+landCode;
 
         RESERVE_STATUS = reserveStatusCode;
+
+        if(RESERVE_STATUS === '취소'){
+            $('#btnRefund').css('display', 'none');
+        }
 
         $("#rmIdx").val(rmIdx);
         $("#gbn").val(gbn);
