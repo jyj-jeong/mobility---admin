@@ -44,9 +44,10 @@ public class ReserveServiceImpl extends ServiceExtension implements ReserveServi
 
         int res;
 
-
         // 예약 체크
-        List<DochaMap> chkReserveInfo = reserveInfoMapper.reserveInfoCheck(reserveInfoDetailRequest);
+        DochaMap param = new DochaMap();
+
+        List<DochaMap> chkReserveInfo = reserveInfoMapper.reserveInfoCheck(param);
 
         res = reserveInfoMapper.insertReserveInfo(reserveInfoDetailRequest);
 
