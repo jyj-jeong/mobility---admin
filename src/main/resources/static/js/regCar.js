@@ -1423,9 +1423,9 @@ function detailValidation(save_type){
 			case 'savePaymentinfo':	// 기본요금정보
 				let pyTIdx 				= $("#sel_pyTIdx option:selected").val();
 				let dailyStandardPay 	= getPureText($('#dailyStandardPay').val().trim());
-				let dailyMaxRate 		= getPureText($('#dailyMaxRate').val().trim());
+				let dailyMaxRate 		= getPureText($('#dailyMaxRate').val().trim()).trim();
 				let monthlyStandardPay 	= getPureText($('#monthlyStandardPay').val().trim());
-				let monthlyMaxRate 		= getPureText($('#monthlyMaxRate').val().trim());
+				let monthlyMaxRate 		= getPureText($('#monthlyMaxRate').val().trim()).trim();
 				let month3Deposit 		= getPureText($('#month3Deposit').val().trim());
 				let month6Deposit 		= getPureText($('#month6Deposit').val().trim());
 				let month9Deposit 		= getPureText($('#month9Deposit').val().trim());
