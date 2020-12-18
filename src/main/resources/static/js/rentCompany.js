@@ -2086,6 +2086,14 @@ function selectLocationDetail(type) {
 }
 
 function saveDeliveryLocation(type) {
+
+    if (!($('#rtIdx').val().trim())) {
+        errorAlert('회원사', '회원사를 먼저 등록해 주세요\n');
+        $('#rtIdx').focus();
+        return;
+    }
+
+    
     var req = [];
     var size = $('#selectedLocationTable > tbody')[0].children.length;
     var deliveryLocation = $('#selectedLocationTable tbody tr');
