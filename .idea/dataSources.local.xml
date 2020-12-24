@@ -15,5 +15,22 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="ohdocha@139.150.79.210" uuid="833f2d32-aa7e-43e7-84c2-f6ed801c9f69">
+      <database-info product="MariaDB" version="5.5.65-MariaDB" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.6.0" dbms="MARIADB" exact-version="5.5.65" exact-driver-version="2.6">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema">
+            <name qname="@" />
+            <name qname="ohdocha" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
   </component>
 </project>
